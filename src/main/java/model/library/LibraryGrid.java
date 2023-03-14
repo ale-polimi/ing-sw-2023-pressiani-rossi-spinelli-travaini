@@ -1,4 +1,4 @@
-package model;
+package model.library;
 
 import model.library.LibrarySpace;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

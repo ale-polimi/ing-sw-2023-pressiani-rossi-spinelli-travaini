@@ -2,6 +2,7 @@ package model.player;
 
 import enumerations.PlayerState;
 import model.library.Library;
+import model.library.PersonalObjective;
 
 public class Player {
     private String nickname;
