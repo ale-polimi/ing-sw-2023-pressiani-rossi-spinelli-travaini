@@ -12,4 +12,19 @@ public class Player {
     private PlayerState playerState;
     private int points;
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public boolean isFirstPlayer() {
+        return firstPlayer;
+    }
+
+    public boolean isFirstToEnd() {
+        return firstToEnd;
+    }
+
+    public int getPoints() {
+        return points;
+    }
 }
