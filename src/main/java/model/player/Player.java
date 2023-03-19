@@ -13,6 +13,10 @@ public class Player {
     private PlayerState playerState;
     private int points;
 
+    public Player(String username){
+        this.nickname = username;
+    }
+
     public String getNickname() {
         return nickname;
     }
