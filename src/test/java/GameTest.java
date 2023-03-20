@@ -1,6 +1,9 @@
 import model.Game;
 import model.board.Board;
 import model.player.Player;
+import org.junit.Before;
+import org.junit.Test;
+
 
 import static junit.framework.Assert.*;
 
