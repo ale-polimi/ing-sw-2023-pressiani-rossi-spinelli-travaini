@@ -1,10 +1,13 @@
 package model.library;
 
+import com.google.gson.Gson;
 import enumerations.ObjectColour;
+import model.board.Board;
 import model.objects.ObjectCard;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static enumerations.ObjectColour.GREEN;
 
@@ -30,4 +33,11 @@ public final class PersonalObjective extends LibraryGrid {
         throw new NotImplementedException();
     }
 
+    public PersonalObjective(){
+        Random random = new Random();
+        String[] possiblePatterns = {};
+        Gson gson = new Gson();
+        String json = possiblePatterns[random.nextInt(possiblePatterns.length)];
+        this.librarygrid = gson.fromJson(json,LibrarySpace[][].class);
+    }
 }
