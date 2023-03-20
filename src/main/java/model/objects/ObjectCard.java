@@ -2,11 +2,17 @@ package model.objects;
 
 import enumerations.ObjectColour;
 
-public class ObjectCard {
-    private ObjectColour objectColour;
-    public ObjectCard(){
+import java.util.Random;
 
-        objectColour = getObjectColour()
+public class ObjectCard {
+    private final ObjectColour objectColour;
+    public ObjectCard(){
+        Random random = new Random();
+        objectColour = ObjectColour.values()[random.nextInt(ObjectColour.values().length)];
+    }
+
+    public ObjectCard(ObjectColour objectColour){
+        this.objectColour = objectColour;
     }
 
     public ObjectColour getObjectColour() {
