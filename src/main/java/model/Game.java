@@ -13,31 +13,72 @@ import java.util.ArrayList;
 
 public class Game {
     private Board board;
+    private GameState gameState;
     private ArrayList<Player> players;
     public static int MAX_PLAYERS = 4;
     private int chosenPlayersNumber;
     private ObjectsDeck objectsDeck;
     private Turn turn;
-    private GameState gameState;
 
+
+    /**
+     *
+     */
     public Game(){
         this.board = new Board();
-        this. objectsDeck = new ObjectsDeck();
-        this.gameState = GameState.LOGIN;
+        this.players = new ArrayList<>();
+        this.objectsDeck = new ObjectsDeck();
     }
 
+    /**
+     *
+     * @param chosenMaxPlayers
+     * @return
+     */
     public boolean setMaxPlayers(int chosenMaxPlayers) {
-        if ((chosenMaxPlayers > 1 && chosenMaxPlayers <= MAX_PLAYERS) && gameState.equals(GameState.LOGIN)) {
+        if ((chosenMaxPlayers > 1 && chosenMaxPlayers <= MAX_PLAYERS)) {
             this.chosenPlayersNumber = chosenMaxPlayers;
             return true;
         }
         return false;
     }
 
+    /**
+     *
+     */
+    public void setFirstPlayer(){
+        players.get(0).setAsFirst();
+    }
+
+    /**
+     *
+     * @param gameState
+     */
+    public void setGameState(GameState gameState){
+        this.gameState = gameState;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public GameState getGameState(){
+        return this.gameState;
+    }
+
+    /**
+     *
+     * @return
+     */
     public int getChosenPlayers(){
         return this.chosenPlayersNumber;
     }
 
+    /**
+     *
+     * @param player
+     * @throws TooManyPlayersException
+     */
     public void addToGame(Player player) throws TooManyPlayersException {
         if(players.size() > chosenPlayersNumber){
             throw new TooManyPlayersException();
@@ -48,10 +89,17 @@ public class Game {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int numOfPlayers(){
         return chosenPlayersNumber;
     }
 
+    /**
+     *
+     */
     public void startGame() {
 
         gameState = GameState.IN_GAME;
@@ -62,6 +110,11 @@ public class Game {
         }
     }
 
+    /**
+     *
+     * @param playerNickname
+     * @return
+     */
     public boolean isNicknameTaken(String playerNickname){
 
         for (int i=0; i < players.size(); i++){
@@ -71,6 +124,10 @@ public class Game {
         }return false;
     }
 
+    /**
+     *
+     * @param board
+     */
     public void restoreBoard(Board board){
         for(int x= 0; x <9; x++){
             for(int y = 0; y < 9; y++){

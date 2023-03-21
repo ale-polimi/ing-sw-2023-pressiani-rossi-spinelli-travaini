@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class Board {
     private BoardSpace[][] boardSpaces;
 
+    /**
+     *
+     */
     public Board(){
         boardSpaces = new BoardSpace[9][9];
 
@@ -27,16 +30,32 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public BoardSpace getSpace(int x, int y){
         return boardSpaces[x][y];
     }
 
+    /**
+     *
+     * @param boardSpace
+     * @return
+     */
     public ObjectCard pickupObjectFrom(BoardSpace boardSpace){
         ObjectCard objectPicked = boardSpace.getObject();
         boardSpace.removeObject();
         return objectPicked;
     }
 
+    /**
+     *
+     * @param boardSpace
+     * @param objectCard
+     */
     public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard){
         boardSpace.insertObject(objectCard);
     }

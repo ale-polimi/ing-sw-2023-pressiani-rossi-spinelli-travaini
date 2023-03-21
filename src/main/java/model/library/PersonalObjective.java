@@ -9,7 +9,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static enumerations.ObjectColour.GREEN;
+import static enumerations.ObjectColour.*;
 
 public final class PersonalObjective extends LibraryGrid {
     public PersonalObjective(){
