@@ -17,4 +17,8 @@ public class Turn {
     public Player nextPlayer(){
         throw new NotImplementedException();
     }
+
+    public void setPlayerInTurn(Player playerInTurn) {
+        this.playerInTurn = playerInTurn;
+    }
 }

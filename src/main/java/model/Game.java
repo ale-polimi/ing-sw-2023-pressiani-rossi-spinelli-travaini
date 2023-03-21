@@ -109,5 +109,6 @@ public class Game {
     public void endGame(){
         gameState = GameState.END;
     }
+
 }
 
