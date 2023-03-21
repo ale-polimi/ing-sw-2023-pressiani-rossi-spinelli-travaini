@@ -10,7 +10,7 @@ import java.util.Random;
 
 public final class PersonalObjective extends LibraryGrid {
     public PersonalObjective(){
-        librarygrid = new LibrarySpace[6][5];
+        libraryGrid = new LibrarySpace[6][5];
         ArrayList<ObjectCard> randomObjects = new ArrayList<ObjectCard>();
 
         /* Creates an array of one type of object in each space */
@@ -22,19 +22,12 @@ public final class PersonalObjective extends LibraryGrid {
             /* Create random i, create random j */
             /* Create 6 objects of different types */
 
-            librarygrid[x][y].addObject(randomObjects[i]);
+            /*libraryGrid[x][y].addObject(randomObjects[i]);*/
         }
 
     }
-    public void addObject(ObjectCard objectCard){
-        throw new NotImplementedException();
+    /*public void addObject(ObjectCard objectCard){
+        throw new NotImplementedException();*/
     }
 
-    public PersonalObjective(){
-        Random random = new Random();
-        String[] possiblePatterns = {};
-        Gson gson = new Gson();
-        String json = possiblePatterns[random.nextInt(possiblePatterns.length)];
-        this.librarygrid = gson.fromJson(json,LibrarySpace[][].class);
-    }
 }
