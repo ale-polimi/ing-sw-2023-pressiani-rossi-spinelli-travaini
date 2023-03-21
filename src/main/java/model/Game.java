@@ -20,23 +20,14 @@ public class Game {
     private Turn turn;
     private GameState gameState;
 
-
-    public void addToGame(Player player) throws TooManyPlayersException {
-        if(players.size() > MAX_PLAYERS){
-            throw new TooManyPlayersException();
-        } else if(player.getNickname().equals(null)) {
-            throw new NullPointerException();
-        } else {
-            players.add(player);
-        }
-    }
-
-    public int numOfPlayers(){
-        return players.size();
+    public Game(){
+        this.board = new Board();
+        this. objectsDeck = new ObjectsDeck();
+        this.gameState = GameState.LOGIN;
     }
 
     public boolean setMaxPlayers(int chosenMaxPlayers) {
-        if (chosenMaxPlayers > 0 && chosenMaxPlayers <= MAX_PLAYERS) {
+        if ((chosenMaxPlayers > 1 && chosenMaxPlayers <= MAX_PLAYERS) && gameState.equals(GameState.LOGIN)) {
             this.chosenPlayersNumber = chosenMaxPlayers;
             return true;
         }
@@ -47,12 +38,29 @@ public class Game {
         return this.chosenPlayersNumber;
     }
 
-    public void startGame(){
+    public void addToGame(Player player) throws TooManyPlayersException {
+        if(players.size() > chosenPlayersNumber){
+            throw new TooManyPlayersException();
+        } else if(player.getNickname().equals(null)) {
+            throw new NullPointerException();
+        } else {
+            players.add(player);
+        }
+    }
+
+    public int numOfPlayers(){
+        return chosenPlayersNumber;
+    }
+
+    public void startGame() {
 
         gameState = GameState.IN_GAME;
-       try { new ExecutionControl.NotImplementedException("not implemented");
-    }catch(Exception ex){new ExecutionControl.NotImplementedException("not implemented");
-    }}
+        try {
+            new ExecutionControl.NotImplementedException("not implemented");
+        } catch (Exception ex) {
+            new ExecutionControl.NotImplementedException("not implemented");
+        }
+    }
 
     public boolean isNicknameTaken(String playerNickname){
 
@@ -71,7 +79,7 @@ public class Game {
                         case FOR_FOUR_PLAYERS -> {
                             if(players.size()==4){
 
-                                board.putObjectIn();
+                                board.putObjectIn(board.getSpace(x,y),objectsDeck.removeFromDeck());
                             }
                         }
                         }

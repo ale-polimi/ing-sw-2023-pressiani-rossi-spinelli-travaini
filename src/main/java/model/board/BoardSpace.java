@@ -7,6 +7,11 @@ public class BoardSpace {
     private TypeSpace typeSpace;
     private ObjectCard objectContained;
 
+    public BoardSpace(TypeSpace typespace){
+        this.typeSpace = typespace;
+        this.objectContained = null;
+    }
+
     public TypeSpace getTypeSpace() {
         return typeSpace;
     }

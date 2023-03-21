@@ -6,7 +6,7 @@ public class ObjectCard {
     private ObjectColour objectColour;
     public ObjectCard(){
 
-        objectColour = getObjectColour()
+        objectColour = getObjectColour();
     }
 
     public ObjectColour getObjectColour() {
