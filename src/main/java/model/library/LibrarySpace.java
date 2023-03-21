@@ -6,21 +6,23 @@ public class LibrarySpace {
     private ObjectCard objectContained;
 
     public LibrarySpace(){
-        objectContained = null;
-    }
-    /**
-     *
-     * @param objectContained
-     */
-    public void setObjectContained(ObjectCard objectContained) {
-        this.objectContained = objectContained;
+        this.objectContained = null;
     }
 
     /**
      *
      * @return
      */
-    public ObjectCard getObjectContained() {
+    public ObjectCard getObject(){
         return objectContained;
     }
+
+    /**
+     *
+     * @param objectCard
+     */
+    public void putObject(ObjectCard objectCard){
+        objectContained = objectCard;
+    }
+
 }

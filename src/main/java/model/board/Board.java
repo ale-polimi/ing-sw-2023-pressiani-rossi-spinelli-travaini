@@ -7,7 +7,7 @@ import model.objects.ObjectCard;
 import java.util.ArrayList;
 
 public class Board {
-    private BoardSpace[][] boardSpaces;
+    private model.board.BoardSpace[][] boardSpaces;
 
     /**
      *

@@ -5,6 +5,7 @@ import enumerations.TypeSpace;
 import exceptions.game.TooManyPlayersException;
 import jdk.jshell.spi.ExecutionControl;
 import model.board.Board;
+import model.board.BoardSpace;
 import model.objects.ObjectsDeck;
 import model.player.Player;
 
@@ -136,12 +137,35 @@ public class Game {
                         case FOR_FOUR_PLAYERS -> {
                             if(players.size()==4){
 
-                                board.putObjectIn(board.getSpace(x,y),objectsDeck.removeFromDeck());
+                               if(board.getSpace(x,y).getObject()== null){
+                                board.putObjectIn(board.getSpace(x,y),objectsDeck.removeFromDeck());}
                             }
                         }
+                         case FOR_THREE_PLAYERS -> {
+                             if(players.size()==3){
+                                 if(board.getSpace(x,y).getObject()== null){
+                                 board.putObjectIn(board.getSpace(x,y),objectsDeck.removeFromDeck());}
+                             }
+
+                         }
+                        case FOR_TWO_PLAYERS -> {
+                            if(players.size()==2){
+                                if(board.getSpace(x,y).getObject()== null){
+                                board.putObjectIn(board.getSpace(x,y),objectsDeck.removeFromDeck());}
+                            }
                         }
                     }
             }
         }
     }
 }
+
+    public Turn getTurn() {
+        return turn;
+    }
+    public void endGame(){
+        gameState = GameState.END;
+    }
+
+}
+
