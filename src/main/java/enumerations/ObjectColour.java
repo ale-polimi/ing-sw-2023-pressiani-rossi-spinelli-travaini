@@ -7,4 +7,5 @@ public enum ObjectColour {
     BLUE,
     LIGHT_BLUE,
     PINK
+
 }
