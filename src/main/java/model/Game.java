@@ -23,7 +23,7 @@ public class Game {
 
 
     /**
-     *
+     * Custom constructor
      */
     public Game(){
         this.board = new Board();
@@ -32,9 +32,9 @@ public class Game {
     }
 
     /**
-     *
-     * @param chosenMaxPlayers
-     * @return
+     * This method will make it possible to set the maximum number of players in a game.
+     * @param chosenMaxPlayers is the number of players allowed in this game.
+     * @return will show if the method has worked correctly or not.
      */
     public boolean setMaxPlayers(int chosenMaxPlayers) {
         if ((chosenMaxPlayers > 1 && chosenMaxPlayers <= MAX_PLAYERS)) {
@@ -69,10 +69,18 @@ public class Game {
 
     /**
      *
-     * @return
+     * @return will return the number of this game maximum players.
      */
     public int getChosenPlayers(){
         return this.chosenPlayersNumber;
+    }
+
+    /**
+     *
+     * @return will return the board of this game.
+     */
+    public Board getBoard() {
+        return this.board;
     }
 
     /**

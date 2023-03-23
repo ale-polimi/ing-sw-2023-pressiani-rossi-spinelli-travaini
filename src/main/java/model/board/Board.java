@@ -7,7 +7,7 @@ import model.objects.ObjectCard;
 import java.util.ArrayList;
 
 public class Board {
-    private model.board.BoardSpace[][] boardSpaces;
+    private BoardSpace[][] boardSpaces;
 
     /**
      *
@@ -32,18 +32,18 @@ public class Board {
 
     /**
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x is the X coordinate of the tile in the board.
+     * @param y is the Y coordinate of the tile in the board.
+     * @return the tile at the requested (X,Y) coordinates.
      */
     public BoardSpace getSpace(int x, int y){
         return boardSpaces[x][y];
     }
 
     /**
-     *
-     * @param boardSpace
-     * @return
+     * This method allows players to pick up an object from a tile of the board.
+     * @param boardSpace is the tile where the player wants to pick up an object card from.
+     * @return the object contained in the tile.
      */
     public ObjectCard pickupObjectFrom(BoardSpace boardSpace){
         ObjectCard objectPicked = boardSpace.getObject();
@@ -52,9 +52,9 @@ public class Board {
     }
 
     /**
-     *
-     * @param boardSpace
-     * @param objectCard
+     * This method allows you to put an object in the specified tile.
+     * @param boardSpace is the tile the server wants to put the object card in.
+     * @param objectCard is the object card that will be in the tile.
      */
     public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard){
         boardSpace.insertObject(objectCard);
