@@ -36,7 +36,7 @@ public class GameTest {
     @Test
     public void setMaxPlayers_inRange() {
         assertTrue(instance.setMaxPlayers(3));
-        assertEquals(3, instance.getChosenPlayers());
+        assertEquals(3, instance.numOfPlayers());
     }
 
     @Test

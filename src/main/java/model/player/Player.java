@@ -99,4 +99,12 @@ public class Player {
             throw new EmptyDeckException();
         }
     }
+
+    /**
+     *
+     * @return the state of the player
+     */
+    public PlayerState getPlayerState(){
+        return this.playerState;
+    }
 }

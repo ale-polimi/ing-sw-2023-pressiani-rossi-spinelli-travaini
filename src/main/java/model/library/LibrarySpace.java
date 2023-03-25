@@ -10,8 +10,8 @@ public class LibrarySpace {
     }
 
     /**
-     *
-     * @return
+     * Getter method that returns the object contained in this library space.
+     * @return the object in this library space.
      */
     public ObjectCard getObject(){
         return objectContained;
@@ -19,7 +19,7 @@ public class LibrarySpace {
 
     /**
      *
-     * @param objectCard
+     * @param objectCard is the object that will be put in this library space.
      */
     public void putObject(ObjectCard objectCard){
         objectContained = objectCard;
