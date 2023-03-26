@@ -17,8 +17,8 @@ public class TwoByFour extends TwoEqualsInColumn {
         int countPink = 0;
         int countYellow = 0;
         ObjectCard tempCard = null;
-        for (int x = 0; x < 5; x++) {
-            for (int y = 0; y < 5; y++) {
+        for (int y = 0; y < 5; y = y+2) {
+            for (int x = 0; x < 5; x++) {
                 if (applyObjectiveRules(library, x, y)) {
                     if (library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x + 1, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
                         tempCard = library.getLibrarySpace(x, y).getObject();
@@ -61,12 +61,69 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 }
                             }
                         }
+                        x++;
                     }
                 }
 
             }
 
 
+        }
+        for (int y = 1; y <5; y = y+2) {
+            for (int x = 0; x < 5; x++) {
+                if (applyObjectiveRules(library, x, y)) {
+                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x + 1, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
+                        if((library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y-1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x +1, y-1).getObject().getObjectColour()))||
+                                (library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y+2).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x +1, y+2).getObject().getObjectColour()))){
+
+                        }else {
+                        tempCard = library.getLibrarySpace(x, y).getObject();
+                        switch (tempCard.getObjectColour()) {
+                            case BLUE1, BLUE2, BLUE3 -> {
+                                countBlue++;
+                                if (countBlue == 2) {
+                                    return true;
+                                }
+                            }
+                            case PINK1, PINK2, PINK3 -> {
+                                countPink++;
+                                if (countPink == 2) {
+                                    return true;
+                                }
+                            }
+                            case GREEN1, GREEN2, GREEN3 -> {
+                                countGreen++;
+                                if (countGreen == 2){
+                                    return true;
+                                }
+
+                            }
+                            case WHITE1, WHITE2, WHITE3 -> {
+                                countWhite ++;
+                                if(countWhite == 2){
+                                    return true;
+                                }
+                            }
+                            case YELLOW1,YELLOW2,YELLOW3 -> {
+                                countYellow ++;
+                                if (countYellow == 2){
+                                    return true;
+                                }
+                            }
+                            case LIGHT_BLUE1, LIGHT_BLUE2, LIGHT_BLUE3 -> {
+                                countLightBlue ++;
+                                if (countLightBlue == 2){
+                                    return true;
+                                }
+                            }
+                        }
+                            x++;
+                     }
+
+                    }
+                }
+
+            }
         }
         return false;
     }
