@@ -1,5 +1,6 @@
 package controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import enumerations.GameState;
 import exceptions.controller.IncompatibleStateException;
 import exceptions.controller.NotEnoughSpaceException;
@@ -8,6 +9,12 @@ import model.Game;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.Message;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Random;
 
 import static enumerations.PlayerState.*;
 import static enumerations.GameState.*;
@@ -20,13 +27,16 @@ public class Controller {
 
     private Player player;
 
-
+    private HashMap personalObjectives;
     /**
      * Constructor for the controller.
      */
-    public Controller(){
+    public Controller() throws IOException {
         this.game = new Game();
         game.setGameState(LOGIN);
+        byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
+        ObjectMapper objectMapper = new ObjectMapper();
+        personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
     }
 
     public void onMessageReceived(Message receivedMessage){
@@ -35,7 +45,8 @@ public class Controller {
                 if(receivedMessage.getType().equals(MAX_PLAYERS_FOR_GAME)){
                     game.setMaxPlayers(Integer.parseInt(receivedMessage.getPayload()));
                 } else if(receivedMessage.getType().equals(USER_INFO)){
-                    game.addToGame(new Player(receivedMessage.getPayload()));
+                    Random rand = new Random();
+                    game.addToGame(new Player(receivedMessage.getPayload(),(String)personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
                 }
                 break;
             case START ->
