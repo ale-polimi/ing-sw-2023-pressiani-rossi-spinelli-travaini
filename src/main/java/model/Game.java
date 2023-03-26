@@ -84,6 +84,22 @@ public class Game {
     }
 
     /**
+     * Getter method that returns the players in this game.
+     * @return the players in this game.
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Getter method that returns the deck of this game.
+     * @return the deck of this game.
+     */
+    public ObjectsDeck getObjectsDeck() {
+        return objectsDeck;
+    }
+
+    /**
      * This method will add a player to the game, if there's enough space.
      * @param player is the player that will be added to this game.
      * @throws TooManyPlayersException if the game has already enough players. The maximum number of players for this game has been set in {@link model.Game#setMaxPlayers(int) setMaxPlayers method}.

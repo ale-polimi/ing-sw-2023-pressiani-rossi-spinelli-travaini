@@ -1,3 +1,4 @@
+import enumerations.TypeSpace;
 import model.Game;
 import model.board.Board;
 import model.player.Player;
@@ -13,7 +14,6 @@ public class GameTest {
         this.instance = new Game();
         Player p1 = new Player("Alice");
         Player p2 = new Player("Bob");
-        Board board = new Board();
 
         instance.addToGame(p1);
         instance.addToGame(p2);
@@ -52,5 +52,23 @@ public class GameTest {
     @Test
     public void isNicknameTaken_False(){
         assertFalse(instance.isNicknameTaken("Anna"));
+    }
+
+    @Test
+    public void setFirstPlayer(){
+        instance.setFirstPlayer();
+        assertTrue(instance.getPlayers().get(0).isFirstPlayer() && !instance.getPlayers().get(1).isFirstPlayer());
+    }
+
+    @Test
+    public void restoreEmptyBoard(){
+        instance.restoreBoard(instance.getBoard());
+        for(int i = 0; i < 10; i++){
+            for (int j = 0; j < 10; j++){
+                if (instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_TWO_PLAYERS)){
+                    assertTrue((instance.getBoard().getSpace(i,j).getObject() != null) && (instance.getObjectsDeck().getAvailableObjects() == 132 - 29));
+                }
+            }
+        }
     }
 }

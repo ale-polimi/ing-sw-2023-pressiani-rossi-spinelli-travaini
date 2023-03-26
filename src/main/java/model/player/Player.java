@@ -52,7 +52,7 @@ public class Player {
 
     /**
      *
-     * @return if the player is the first player of the game.
+     * @return true if the player is the first player of the game.
      */
     public boolean isFirstPlayer() {
         return firstPlayer;
@@ -60,7 +60,7 @@ public class Player {
 
     /**
      *
-     * @return if the player is the first to have ended a game.
+     * @return true if the player is the first to have ended a game.
      */
     public boolean isFirstToEnd() {
         return firstToEnd;
