@@ -5,6 +5,9 @@ import model.objects.ObjectCard;
 public class LibrarySpace {
     private ObjectCard objectContained;
 
+    /**
+     * Constructor of the LibrarySpace class
+     */
     public LibrarySpace(){
         this.objectContained = null;
     }
@@ -18,7 +21,7 @@ public class LibrarySpace {
     }
 
     /**
-     *
+     *Put an objectCard in the librarySpace
      * @param objectCard is the object that will be put in this library space.
      */
     public void putObject(ObjectCard objectCard){
