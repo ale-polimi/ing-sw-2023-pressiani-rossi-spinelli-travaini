@@ -22,13 +22,14 @@ public class Player {
     private int points;
 
     /**
-     *
+     * Constructor of the Player class
      * @param username is the username of the player, given to the server by the player.
+     * @param json is the string containing the parameters of the personal objective, given to the player by the server
      */
-    public Player(String username){
+    public Player(String username, String json){
         this.nickname = username;
         this.library = new Library();
-        this.personalObjective = new PersonalObjective();
+        this.personalObjective = new PersonalObjective(json);
     }
 
     public void initObjectsInHand(){
@@ -44,7 +45,7 @@ public class Player {
     }
 
     /**
-     *
+     *Set the player as first player
      */
     public void setAsFirst(){
         this.firstPlayer = true;
