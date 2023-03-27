@@ -68,6 +68,14 @@ public class Player {
     }
 
     /**
+     * Setter
+     * @param firstToEnd
+     */
+    public void setFirstToEnd(boolean firstToEnd) {
+        this.firstToEnd = firstToEnd;
+    }
+
+    /**
      *
      * @return the points scored by the player.
      */

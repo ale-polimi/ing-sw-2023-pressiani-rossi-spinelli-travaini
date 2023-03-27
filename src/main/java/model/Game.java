@@ -16,6 +16,7 @@ public class Game {
     private Board board;
     private GameState gameState;
     private ArrayList<Player> players;
+    private Player playerInTurn;
     public static int MAX_PLAYERS = 4;
     private int chosenPlayersNumber;
     private ObjectsDeck objectsDeck;
@@ -45,6 +46,14 @@ public class Game {
     }
 
     /**
+     * Getter method that returns this game's max players.
+     * @return the number of players allowed in this game.
+     */
+    public int getMaxPlayers(){
+        return this.chosenPlayersNumber;
+    }
+
+    /**
      * This method sets the first player of the game.
      */
     public void setFirstPlayer(){
@@ -65,6 +74,14 @@ public class Game {
      */
     public GameState getGameState(){
         return this.gameState;
+    }
+
+    public Player getPlayerInTurn() {
+        return playerInTurn;
+    }
+
+    public void setPlayerInTurn(Player playerInTurn) {
+        this.playerInTurn = playerInTurn;
     }
 
     /**
@@ -111,19 +128,6 @@ public class Game {
             throw new NullPointerException();
         } else {
             players.add(player);
-        }
-    }
-
-    /**
-     *
-     */
-    public void startGame() {
-
-        gameState = GameState.IN_GAME;
-        try {
-            new ExecutionControl.NotImplementedException("not implemented");
-        } catch (Exception ex) {
-            new ExecutionControl.NotImplementedException("not implemented");
         }
     }
 

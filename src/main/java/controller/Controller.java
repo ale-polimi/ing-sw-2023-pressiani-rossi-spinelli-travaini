@@ -4,15 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import enumerations.GameState;
 import exceptions.controller.IncompatibleStateException;
 import exceptions.controller.NotEnoughSpaceException;
+import exceptions.game.TooManyPlayersException;
 import exceptions.player.TooManyObjectsInHandException;
 import model.Game;
 import model.objects.ObjectCard;
 import model.player.Player;
+import network.GenericErrorMessage;
 import network.Message;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -38,32 +41,77 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
     }
-
     public void onMessageReceived(Message receivedMessage){
         switch (game.getGameState()){
             case LOGIN ->
                 if(receivedMessage.getType().equals(MAX_PLAYERS_FOR_GAME)){
                     game.setMaxPlayers(Integer.parseInt(receivedMessage.getPayload()));
                 } else if(receivedMessage.getType().equals(USER_INFO)){
-                    Random rand = new Random();
-                    game.addToGame(new Player(receivedMessage.getPayload(),(String)personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
+
+                    if(game.isNicknameTaken(receivedMessage.getPayload()) == true){
+                        new GenericErrorMessage("Username is already taken.");
+                    } else {
+
+                        try {
+                            Random rand = new Random();
+                            game.addToGame(new Player(receivedMessage.getPayload(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
+                        } catch (TooManyPlayersException exception) {
+                            new GenericErrorMessage(exception.getMessage());
+                        }
+
+                        if (game.getPlayers().size() == game.getMaxPlayers()) {
+                            game.setGameState(GameState.START);
+                        }
+                    }
                 }
                 break;
             case START ->
-                ;
+                    game.restoreBoard(game.getBoard());
+                    game.setFirstPlayer();
+                    /* Manca la parte del common objective */
                 break;
             case IN_GAME ->
+
                 if(receivedMessage.getType().equals(PICK_OBJECT)){
                     pickObjectFromBoard(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)));
                 } else if(receivedMessage.getType().equals(PUT_OBJECT)){
                     addObjectToLibrary(receivedMessage.getPayload());
+                    if(checkLibrarySpaces() == 0){
+                        game.getPlayerInTurn().setFirstToEnd(true);
+                    }
                 }
+
+                if(isLastTurn()){
+                    game.setGameState(GameState.END);
+                }
+
                 break;
             case END ->
-                ;
+
                 break;
             default ->
-                out.println("Invalid game state.");
+                new GenericErrorMessage("Invalid game state.");
+        }
+    }
+
+    private boolean isLastTurn(){
+        for(int i = 0; i < game.getMaxPlayers(); i++){
+            if(game.getPlayers().get(i).isFirstToEnd()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int checkLibrarySpaces(){
+        int freeSpaces = 0;
+
+        for(int i = 0; i < 6; i++){
+            for(int j = 0; j < 5; j++){
+                if(game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, j)) == null){
+                    freeSpaces++;
+                }
+            }
         }
     }
 
@@ -80,7 +128,7 @@ public class Controller {
                 try {
                     player.addToObjectsInHand(game.getBoard().getSpace(coordX, coordY).getObject());
                 } catch (TooManyObjectsInHandException e) {
-                    /* Not implemented yet */
+                    /* TODO - Not implemented yet */
                 }
                 game.getBoard().getSpace(coordX, coordY).removeObject();
             }
