@@ -1,8 +1,7 @@
 package enumerations;
 
 public enum PlayerState {
-    START,
+    IDLE,
     PICKUP,
-    IN_LIBRARY,
-    END
+    IN_LIBRARY
 }

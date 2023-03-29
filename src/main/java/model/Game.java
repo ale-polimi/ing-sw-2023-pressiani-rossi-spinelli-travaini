@@ -18,7 +18,7 @@ public class Game {
     private ArrayList<Player> players;
     private Player playerInTurn;
     public static int MAX_PLAYERS = 4;
-    private int chosenPlayersNumber;
+    private int chosenPlayersNumber = 0;
     private ObjectsDeck objectsDeck;
     private Turn turn;
 
@@ -106,6 +106,22 @@ public class Game {
      */
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Player getNextPlayer(){
+        int currPlayerIndex = getPlayers().indexOf(playerInTurn);
+        return getPlayers().get((currPlayerIndex - 1) % getMaxPlayers());
+    }
+
+    /**
+     *
+     */
+    public void setNextPlayer(){
+        this.playerInTurn = getNextPlayer();
     }
 
     /**

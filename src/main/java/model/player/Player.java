@@ -15,7 +15,7 @@ public class Player {
     private boolean firstPlayer;
     private boolean firstToEnd;
     public static int MAX_OBJECTS_IN_HAND = 3;
-    private ArrayList<ObjectCard> objectsInHand;
+    private ArrayList<ObjectCard> objectsInHand = null;
     private Library library;
     private PersonalObjective personalObjective;
     private PlayerState playerState;
@@ -30,10 +30,6 @@ public class Player {
         this.nickname = username;
         this.library = new Library();
         this.personalObjective = new PersonalObjective(json);
-    }
-
-    public void initObjectsInHand(){
-        this.objectsInHand = new ArrayList<>();
     }
 
     /**
@@ -87,6 +83,38 @@ public class Player {
         return this.library;
     }
 
+
+    /**
+     *
+     */
+    public void initObjectsInHand(){
+        this.objectsInHand = new ArrayList<>();
+    }
+
+    /**
+     *
+     */
+    public void resetObjectsInHand(){
+        this.objectsInHand = null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean hasObjectsInHand(){
+       if(objectsInHand != null){
+           return true;
+       } else {
+           return false;
+       }
+    }
+
+    /**
+     *
+     * @param objectCard
+     * @throws TooManyObjectsInHandException
+     */
     public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
         if(objectsInHand.size() <= MAX_OBJECTS_IN_HAND){
             objectsInHand.add(objectCard);
@@ -103,10 +131,18 @@ public class Player {
      */
     public ObjectCard getObjectInHand(int positionInDeck) throws EmptyDeckException {
         if(!objectsInHand.isEmpty()){
-            return objectsInHand.remove(positionInDeck);
+            return objectsInHand.get(positionInDeck);
         } else {
             throw new EmptyDeckException();
         }
+    }
+
+    /**
+     *
+     * @param playerState
+     */
+    public void setPlayerState(PlayerState playerState){
+        this.playerState = playerState;
     }
 
     /**

@@ -59,4 +59,18 @@ public class Board {
     public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard){
         boardSpace.insertObject(objectCard);
     }
+
+    /**
+     * This method is a checker used in {@link controller.Controller#pickObjectFromBoard(int, int) the pick object method} in the controller.
+     * @param row is the row of the object.
+     * @param column is the column of the object.
+     * @return {@code true} if the space is surrounded by other objects, {@code false} otherwise.
+     */
+    public boolean isSpaceSurrounded(int row, int column){
+        if((getSpace(row + 1, column).getObject() == null) || (getSpace(row - 1, column).getObject() == null) || (getSpace(row, column + 1).getObject() == null) || (getSpace(row, column - 1).getObject() == null)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
