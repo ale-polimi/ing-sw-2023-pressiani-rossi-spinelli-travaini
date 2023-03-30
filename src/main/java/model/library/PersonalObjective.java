@@ -1,19 +1,11 @@
 package model.library;
 
-import com.google.gson.Gson;
-import enumerations.ObjectColour;
-import model.board.Board;
 import model.objects.ObjectCard;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-import static enumerations.ObjectColour.*;
 
 public final class PersonalObjective extends LibraryGrid {
 
     /**
-     * Constructor of the PersonalObjectivew class
+     * Constructor of the PersonalObjective class
      * @param json is the string containing the parameters of the personal objective
      */
     public PersonalObjective(String json){
