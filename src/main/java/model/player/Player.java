@@ -139,7 +139,15 @@ public class Player {
 
     /**
      *
-     * @param playerState
+     * @return the number of object cards this player currently has in hand.
+     */
+    public int getObjectsInHandSize(){
+        return objectsInHand.size();
+    }
+
+    /**
+     * Setter method to change the player's state.
+     * @param playerState is the new state for this player.
      */
     public void setPlayerState(PlayerState playerState){
         this.playerState = playerState;
@@ -147,7 +155,7 @@ public class Player {
 
     /**
      *
-     * @return the state of the player
+     * @return the state of the player.
      */
     public PlayerState getPlayerState(){
         return this.playerState;
