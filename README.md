@@ -15,7 +15,7 @@ Software Engineering project for the 2023 academic year
     <figcaption></figcaption>
 </figure>
 
-Recreate the board game [MyShelfie](https://craniointernational.com/products/my-shelfie/) published by Cranio Creations using the software engineering principle
+Recreate the board game [MyShelfie](https://craniointernational.com/products/my-shelfie/) published by Cranio Creations using the software engineering principles
 
 
 ## UML
