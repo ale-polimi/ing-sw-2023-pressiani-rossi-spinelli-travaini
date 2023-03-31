@@ -4,6 +4,8 @@ import enumerations.ObjectColour;
 import model.library.Library;
 
 public class EightEquals implements CommonObjective{
+
+    int count=0;
     /**
      *this method will check the presence of at least eight equal objects (they have the same colour)
      * @param library is the personal library of the players
@@ -14,7 +16,7 @@ public class EightEquals implements CommonObjective{
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x=0;
         y=0;
-        int count=0;
+
         for (ObjectColour o: ObjectColour.values()) {
             count=0;
             for (int i = 0; i < 6; i++) {
@@ -31,5 +33,9 @@ public class EightEquals implements CommonObjective{
             }
         }
         return false;
+    }
+
+    public int getCount(){
+        return count;
     }
 }
