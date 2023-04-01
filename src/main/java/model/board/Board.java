@@ -10,7 +10,7 @@ public class Board {
     private BoardSpace[][] boardSpaces;
 
     /**
-     *
+     *Board class custom constructor
      */
     public Board(){
         boardSpaces = new BoardSpace[9][9];
@@ -31,7 +31,7 @@ public class Board {
     }
 
     /**
-     *
+     *Returns the specified space in the board
      * @param x is the X coordinate of the tile in the board.
      * @param y is the Y coordinate of the tile in the board.
      * @return the tile at the requested (X,Y) coordinates.
