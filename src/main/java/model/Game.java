@@ -114,7 +114,7 @@ public class Game {
      */
     public Player getNextPlayer(){
         int currPlayerIndex = getPlayers().indexOf(playerInTurn);
-        return getPlayers().get((currPlayerIndex - 1) % getMaxPlayers());
+        return getPlayers().get((currPlayerIndex + 1) % getMaxPlayers());
     }
 
     /**
@@ -138,7 +138,7 @@ public class Game {
      * @throws TooManyPlayersException if the game has already enough players. The maximum number of players for this game has been set in {@link model.Game#setMaxPlayers(int) setMaxPlayers method}.
      */
     public void addToGame(Player player) throws TooManyPlayersException {
-        if(players.size() > chosenPlayersNumber){
+        if(players.size() >= chosenPlayersNumber){
             throw new TooManyPlayersException();
         } else if (player.getNickname() == null) {
             throw new NullPointerException();
@@ -154,11 +154,12 @@ public class Game {
      */
     public boolean isNicknameTaken(String playerNickname){
 
-        for (int i=0; i < players.size(); i++){
-            if(playerNickname.equals(players.get(i).getNickname())){
+        for (Player player : players) {
+            if (playerNickname.equals(player.getNickname())) {
                 return true;
             }
-        }return false;
+        }
+        return false;
     }
 
     /**
@@ -179,7 +180,7 @@ public class Game {
                             }
                         }
                         case FOR_THREE_PLAYERS -> {
-                            if (players.size() == 3) {
+                            if (players.size() >= 3) {
                                 if (board.getSpace(x, y).getObject() == null) {
                                     board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());
                                 }
@@ -187,7 +188,7 @@ public class Game {
 
                         }
                         case FOR_TWO_PLAYERS -> {
-                            if (players.size() == 2) {
+                            if (players.size() >= 2) {
                                 if (board.getSpace(x, y).getObject() == null) {
                                     board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());
                                 }
