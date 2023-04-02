@@ -4,9 +4,18 @@ import model.library.Library;
 
 public class FourByFour implements CommonObjective {
 
+    private int count = 0;
+
+    /**
+     * This method will check the presence of at least four columns or rows composed by four objects of the same colour
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
-        int count = 0;
+        count = 0;
+
 
         for ( x = 0; x < 6; x++) {
             for ( y = 0; y < 2; y++) {
@@ -88,24 +97,54 @@ public class FourByFour implements CommonObjective {
         return false;
     }
 
+    /**
+     * This method will check the presence of a row composed by four objects of the same colour
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     public boolean FourInLine(Library library, int x, int y){
         return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+2).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+3 ).getObject().getObjectColour());
     }
+
+    /**
+     * This method will check the presence of a column composed by four objects of the same colour
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     public boolean FourInColumn(Library library,int x, int y){
         return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+1, y).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+2 , y).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+3, y).getObject().getObjectColour());
     }
+
+    /**
+     * This method will check the presence of a row composed by four objects of the same colour starting from the second space
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     public boolean SecondFourLine(Library library,int x ,int y){
         return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y-1 ).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+2).getObject().getObjectColour());
     }
+
+    /**
+     * This method will check the presence of a row composed by four objects of the same colour starting from the third space
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     public boolean ThirdFourLine(Library library, int x, int y){
         return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y-2 ).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y-1).getObject().getObjectColour()) &&
                 library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+1 ).getObject().getObjectColour());
+    }
+    public int getCount(){
+        return count;
     }
 }
