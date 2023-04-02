@@ -30,10 +30,11 @@ public class Player {
         this.nickname = username;
         this.library = new Library();
         this.personalObjective = new PersonalObjective(json);
+        this.firstPlayer = false;
     }
 
     /**
-     *
+     *Returns the player's nickname
      * @return the nickname of the player.
      */
     public String getNickname() {
@@ -48,7 +49,7 @@ public class Player {
     }
 
     /**
-     *
+     *Returns if the player is the first player of the game
      * @return true if the player is the first player of the game.
      */
     public boolean isFirstPlayer() {
@@ -56,7 +57,7 @@ public class Player {
     }
 
     /**
-     *
+     *Returns if the player is the first to complete is library
      * @return true if the player is the first to have ended a game.
      */
     public boolean isFirstToEnd() {
@@ -64,43 +65,47 @@ public class Player {
     }
 
     /**
-     * Setter
-     * @param firstToEnd
+     * Setter of the first player to end the game
+     * @param firstToEnd is the player who finished the game first
      */
     public void setFirstToEnd(boolean firstToEnd) {
         this.firstToEnd = firstToEnd;
     }
 
     /**
-     *
+     *Returns the total points scored by the player
      * @return the points scored by the player.
      */
     public int getPoints() {
-        return points;
+        return points + personalObjective.compareTo(library);
     }
 
+    /**
+     * Returns the player's library
+     * @return the player's library
+     */
     public Library getLibrary(){
         return this.library;
     }
 
 
     /**
-     *
+     *Initialize the player's hand
      */
     public void initObjectsInHand(){
         this.objectsInHand = new ArrayList<>();
     }
 
     /**
-     *
+     *Reset the player's hand
      */
     public void resetObjectsInHand(){
         this.objectsInHand = null;
     }
 
     /**
-     *
-     * @return
+     *Returns if the player has a hand
+     * @return true if objectsInHand isn't null, false otherwise
      */
     public boolean hasObjectsInHand(){
        if(objectsInHand != null){
@@ -111,12 +116,12 @@ public class Player {
     }
 
     /**
-     *
-     * @param objectCard
-     * @throws TooManyObjectsInHandException
+     *Insert an objectCard in the player's hand
+     * @param objectCard is the card that has to be added to the hand
+     * @throws TooManyObjectsInHandException if the hand is already full
      */
     public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
-        if(objectsInHand.size() <= MAX_OBJECTS_IN_HAND){
+        if(objectsInHand.size() < MAX_OBJECTS_IN_HAND){
             objectsInHand.add(objectCard);
         } else {
             throw new TooManyObjectsInHandException(MAX_OBJECTS_IN_HAND);
@@ -124,7 +129,7 @@ public class Player {
     }
 
     /**
-     *
+     *Returns the object in the specified position of the player's hand
      * @param positionInDeck is the position of the card in the player's turn deck.
      * @return the object in the specified position.
      * @throws EmptyDeckException if the hand deck does not contain any card.
@@ -138,7 +143,7 @@ public class Player {
     }
 
     /**
-     *
+     *Return the number of objects in the player's hand
      * @return the number of object cards this player currently has in hand.
      */
     public int getObjectsInHandSize(){
@@ -154,7 +159,7 @@ public class Player {
     }
 
     /**
-     *
+     *Returns the player's state
      * @return the state of the player.
      */
     public PlayerState getPlayerState(){

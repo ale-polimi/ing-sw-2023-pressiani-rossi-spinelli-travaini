@@ -140,7 +140,7 @@ public class Game {
     public void addToGame(Player player) throws TooManyPlayersException {
         if(players.size() > chosenPlayersNumber){
             throw new TooManyPlayersException();
-        } else if(player.getNickname() == null)) {
+        } else if (player.getNickname() == null) {
             throw new NullPointerException();
         } else {
             players.add(player);
