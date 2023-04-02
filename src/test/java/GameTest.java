@@ -241,6 +241,7 @@ public class GameTest {
         }
     }
 
+
     /**
      *  Test the restoring of the board when the number of players is 3
      */
