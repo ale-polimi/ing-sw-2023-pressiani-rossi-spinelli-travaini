@@ -3,6 +3,13 @@ package model.commonobjective;
 import model.library.Library;
 
 public class FourCorners implements CommonObjective{
+
+    /**
+     * This method will check if the four spaces placed in the four corners of the library are the same colour
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x = 0;
