@@ -109,8 +109,8 @@ public class Game {
     }
 
     /**
-     *
-     * @return
+     *Returns the player who has to play next
+     * @return the next player in the game
      */
     public Player getNextPlayer(){
         int currPlayerIndex = getPlayers().indexOf(playerInTurn);
@@ -118,7 +118,7 @@ public class Game {
     }
 
     /**
-     *
+     *Setter of the playerInTurn with the player who has to play next
      */
     public void setNextPlayer(){
         this.playerInTurn = getNextPlayer();
@@ -200,13 +200,6 @@ public class Game {
         }
     }
 
-    /**
-     * Getter method to return the turn in the game.
-     * @return the turn that is currently playing in the game.
-     */
-    public Turn getTurn() {
-        return turn;
-    }
 
     /**
      * Ends the game.

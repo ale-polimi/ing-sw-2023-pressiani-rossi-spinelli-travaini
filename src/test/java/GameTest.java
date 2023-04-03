@@ -116,14 +116,6 @@ public class GameTest {
     }
 
     /**
-     * Test that getTurn doesn't return null
-     */
-    @Test
-    public void getTurnNotNull(){
-        assertNotNull(instance.getTurn());
-    }
-
-    /**
      * Test that getMaxPlayer set the number of players to 2 when 2 is in input
      */
     @Test
