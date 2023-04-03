@@ -273,6 +273,22 @@ public class GameTest {
     }
 
     /**
+     * Test the restoreBoard method when the objectsDeck is empty
+     */
+    @Test
+    public void restoreEmptyBoardEmptyDeck(){
+        for(int i = 0; i < 132; i++)instance.getObjectsDeck().removeFromDeck();
+        instance.restoreBoard(instance.getBoard());
+        assertEquals(0,instance.getObjectsDeck().getAvailableObjects());
+        for(int i =0;i<9;i++){
+            for(int j = 0; j<9;j++){
+                if(!instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE))
+                    assertTrue((instance.getBoard().getSpace(i,j).getObject() == null));
+            }
+        }
+    }
+
+    /**
      * Test the correctly setting of GameState to END
      */
     @Test
