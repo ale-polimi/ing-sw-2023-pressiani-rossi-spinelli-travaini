@@ -3,11 +3,15 @@ package model.commonobjective;
 import enumerations.ObjectColour;
 import model.library.Library;
 
-import junit.framework.TestCase;
+
+import model.library.LibrarySpace;
+import model.objects.ObjectCard;
 import org.junit.*;
 
+import static org.junit.Assert.*;
 
-public class FiveXTest extends TestCase {
+
+public class FiveXTest  {
        private Library instance;
        private FiveX fiveX;
     @Before
@@ -15,6 +19,13 @@ public class FiveXTest extends TestCase {
         fiveX = new FiveX();
 
         instance = new Library();
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                instance.getLibraryGrid()[i][j] = new LibrarySpace();
+                instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(i,j));
+            }
+        }
 
     }
 

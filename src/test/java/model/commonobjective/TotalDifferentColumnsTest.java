@@ -1,11 +1,14 @@
 package model.commonobjective;
 
-import junit.framework.TestCase;
+
 
 import model.library.*;
+import model.objects.ObjectCard;
 import org.junit.*;
 
-public class TotalDifferentColumnsTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class TotalDifferentColumnsTest  {
 
     private TotalDifferentColumns totalDifferentColumns;
 
@@ -17,6 +20,13 @@ public class TotalDifferentColumnsTest extends TestCase {
         totalDifferentColumns = new TotalDifferentColumns();
 
         instance = new Library();
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                instance.getLibraryGrid()[i][j] = new LibrarySpace();
+                instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(i,j));
+            }
+        }
     }
 
     @After

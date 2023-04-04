@@ -3,6 +3,8 @@ package model.commonobjective;
 import enumerations.ObjectColour;
 import model.library.Library;
 
+import model.library.LibrarySpace;
+import model.objects.ObjectCard;
 import org.junit.*;
 
 import enumerations.ObjectColour;
@@ -19,6 +21,13 @@ public class DiagonalTest {
 
         instance = new Library();
 
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                instance.getLibraryGrid()[i][j] = new LibrarySpace();
+                instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(i,j));
+            }
+        }
+
 
     }
 
@@ -33,7 +42,7 @@ public class DiagonalTest {
         int y=0;
         diagonal.applyObjectiveRules(instance, 0, 0);
         for (int i = 0; i < 4; i++) {
-            if (instance.getLibrarySpace(x+i,y+i).getObject().getObjectColour().equals(instance.getLibrarySpace(x+i+1,y+i+1).getObject().getObjectColour()))
+            if (!instance.getLibrarySpace(x+i,y+i).getObject().getObjectColour().equals(instance.getLibrarySpace(x+i+1,y+i+1).getObject().getObjectColour()))
                 assertFalse(diagonal.applyObjectiveRules(instance, 0, 0));
         }
     }
