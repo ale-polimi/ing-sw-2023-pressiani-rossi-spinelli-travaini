@@ -10,6 +10,8 @@ public class FiveX implements CommonObjective{
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
+
+    private final String description= "five tiles of the same type forming an X.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
 
@@ -23,5 +25,9 @@ public class FiveX implements CommonObjective{
         else
             return false;
 
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

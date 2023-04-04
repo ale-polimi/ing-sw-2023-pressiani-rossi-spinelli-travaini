@@ -9,11 +9,15 @@ public class TotalDifferentRows implements CommonObjective{
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
+
+    private final String description = "Two lines each formed by 5 different types of tiles. One line can show the same or a different combination of the other line.";
+
+   private int count=0;
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x=0;
         y=0;
-        int count=0;
+
         boolean different=true;
 
         for (int k = 0; k < 5; k++) {
@@ -34,5 +38,14 @@ public class TotalDifferentRows implements CommonObjective{
         }
         return false;
     }
+
+    public int getCount(){
+        return count;
+    }
+    public String getDescription() {
+        return description;
+    }
+
+
 
 }

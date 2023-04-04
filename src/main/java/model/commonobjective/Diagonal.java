@@ -10,6 +10,8 @@ public class Diagonal implements CommonObjective{
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
+
+    private final String description= "Five tiles of the same type forming a diagonal";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         ObjectColour colour = library.getLibrarySpace(x, y).getObject().getObjectColour();
@@ -33,5 +35,9 @@ public class Diagonal implements CommonObjective{
                 return true;
             }
         return false;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
