@@ -1,24 +1,25 @@
 package model.commonobjective;
 
 import junit.framework.TestCase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 
 import model.library.*;
-import org.junit.jupiter.api.Test;
+import org.junit.*;
 
 public class TotalDifferentColumnsTest extends TestCase {
 
-    TotalDifferentColumns totalDifferentColumns;
+    private TotalDifferentColumns totalDifferentColumns;
 
-    Library instance;
+    private Library instance;
 
 
-    @BeforeEach
+    @Before
     public void setUp() {
+        totalDifferentColumns = new TotalDifferentColumns();
+
+        instance = new Library();
     }
 
-    @AfterEach
+    @After
     public void tearDown() {
         totalDifferentColumns=null;
     }

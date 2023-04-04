@@ -1,11 +1,10 @@
 package model.commonobjective;
 
 import junit.framework.TestCase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.*;
 
 import model.library.Library;
-import org.junit.jupiter.api.Test;
+
 
 
 public class StairsTest extends TestCase {
@@ -14,11 +13,14 @@ public class StairsTest extends TestCase {
 
     Stairs stairs;
 
-    @BeforeEach
+    @Before
     public void setUp() {
+        stairs = new Stairs();
+
+        instance = new Library();
     }
 
-    @AfterEach
+    @After
     public void tearDown() {
         stairs = null;
     }

@@ -2,23 +2,33 @@ package model.commonobjective;
 
 import enumerations.ObjectColour;
 import model.library.*;
-import junit.framework.TestCase;
+
 import model.library.Library;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import model.objects.ObjectCard;
+import org.junit.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EightEqualsTest extends TestCase {
+public class EightEqualsTest {
 
-    EightEquals  eightEquals;
-    Library instance;
-    @BeforeEach
+    private EightEquals  eightEquals;
+    private Library instance;
+    @Before
     public void setUp() {
+        eightEquals = new EightEquals();
+
+        instance = new Library();
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                instance.getLibraryGrid()[i][j] = new LibrarySpace();
+                instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(i,j));
+            }
+        }
+
     }
 
-    @AfterEach
+    @After
     public void tearDown() {
         eightEquals=null;
     }

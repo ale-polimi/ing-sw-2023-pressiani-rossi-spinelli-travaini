@@ -4,20 +4,21 @@ import enumerations.ObjectColour;
 import model.library.Library;
 
 import junit.framework.TestCase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class FiveXTest extends TestCase {
-        Library instance;
-        FiveX fiveX;
-    @BeforeEach
+       private Library instance;
+       private FiveX fiveX;
+    @Before
     public void setUp() {
+        fiveX = new FiveX();
+
+        instance = new Library();
+
     }
 
-    @AfterEach
+    @After
     public void tearDown() {
         fiveX=null;
     }

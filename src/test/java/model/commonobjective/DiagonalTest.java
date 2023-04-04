@@ -3,24 +3,26 @@ package model.commonobjective;
 import enumerations.ObjectColour;
 import model.library.Library;
 
-import junit.framework.TestCase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.*;
 
 import enumerations.ObjectColour;
 import model.library.Library;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DiagonalTest extends TestCase {
-    Library instance;
-    Diagonal diagonal;
-    @BeforeEach
+public class DiagonalTest {
+    private Library instance;
+    private Diagonal diagonal;
+    @Before
     public void setUp() {
+        diagonal = new Diagonal();
+
+        instance = new Library();
+
+
     }
 
-    @AfterEach
+    @After
     public void tearDown() {
         diagonal=null;
     }

@@ -13,7 +13,10 @@ public class EightEquals implements CommonObjective{
      * @param y is the column coordinate
      */
 
+
     private final String description ="Eight tiles of the same type. There's no restriction about the position oh these tiles.";
+
+
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x=0;
