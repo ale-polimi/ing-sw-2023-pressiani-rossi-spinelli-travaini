@@ -25,3 +25,5 @@ hs_err_pid*
 #IntelliJ IDEA
 .idea/
 *.iml
+#Perr Review Folder
+peer_review_players/
