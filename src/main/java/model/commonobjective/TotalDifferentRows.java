@@ -24,7 +24,7 @@ public class TotalDifferentRows implements CommonObjective{
             different=true;
             for (int i = 0; i < 5 && different; i++) {
                 for (int j = i+1; j < 5; j++) {
-                    if (library.getLibrarySpace(k, i).getObject().getObjectColour().equals(library.getLibrarySpace(k, i+1).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(k, i).getObject().getObjectColour().isEquals(library.getLibrarySpace(k, i+1).getObject().getObjectColour())) {
                         different = false;
                         break;
                     }

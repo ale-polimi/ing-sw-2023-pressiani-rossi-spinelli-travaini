@@ -27,7 +27,7 @@ public class EightEquals implements CommonObjective{
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
                     if (library.getLibrarySpace(i,j)!= null){
-                        if (library.getLibrarySpace(i,j).getObject().getObjectColour().equals(o)){
+                        if (library.getLibrarySpace(i,j).getObject().getObjectColour().isEquals(o)){
                             count++;
                         }
                         if (count==8)

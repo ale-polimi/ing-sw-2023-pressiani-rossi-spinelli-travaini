@@ -17,10 +17,10 @@ public class FiveX implements CommonObjective{
 
         ObjectColour colour= library.getLibrarySpace(x,y).getObject().getObjectColour();
 
-        if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().equals(colour) &&
-                library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().equals(colour)&&
-                library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().equals(colour)&&
-                library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().equals(colour))
+        if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().isEquals(colour) &&
+                library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().isEquals(colour)&&
+                library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().isEquals(colour)&&
+                library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().isEquals(colour))
             return true;
         else
             return false;
