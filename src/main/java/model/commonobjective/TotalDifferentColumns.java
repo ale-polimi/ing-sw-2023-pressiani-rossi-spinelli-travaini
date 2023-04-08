@@ -25,7 +25,7 @@ public class TotalDifferentColumns implements CommonObjective{
             different=true;
             for (int i = 0; i < 4 && different; i++) {
                 for (int j = i+1; j < 4; j++) {
-                    if (library.getLibrarySpace(i, k).getObject().getObjectColour().equals(library.getLibrarySpace(i + 1, k).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(i, k).getObject().getObjectColour().isEquals(library.getLibrarySpace(i + 1, k).getObject().getObjectColour())) {
                         different = false;
                         break;
                     }

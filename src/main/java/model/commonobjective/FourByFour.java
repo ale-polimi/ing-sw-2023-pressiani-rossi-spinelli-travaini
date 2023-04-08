@@ -104,9 +104,9 @@ public class FourByFour implements CommonObjective {
      * @param y is the column coordinate
      */
     public boolean FourInLine(Library library, int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+2).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+3 ).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+2).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+3 ).getObject().getObjectColour());
     }
 
     /**
@@ -116,9 +116,9 @@ public class FourByFour implements CommonObjective {
      * @param y is the column coordinate
      */
     public boolean FourInColumn(Library library,int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+1, y).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+2 , y).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+3, y).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+1, y).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+2 , y).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+3, y).getObject().getObjectColour());
     }
 
     /**
@@ -128,9 +128,9 @@ public class FourByFour implements CommonObjective {
      * @param y is the column coordinate
      */
     public boolean SecondFourLine(Library library,int x ,int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y-1 ).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+2).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y-1 ).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+2).getObject().getObjectColour());
     }
 
     /**
@@ -140,9 +140,9 @@ public class FourByFour implements CommonObjective {
      * @param y is the column coordinate
      */
     public boolean ThirdFourLine(Library library, int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y-2 ).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y-1).getObject().getObjectColour()) &&
-                library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+1 ).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y-2 ).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y-1).getObject().getObjectColour()) &&
+                library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1 ).getObject().getObjectColour());
     }
     public int getCount(){
         return count;

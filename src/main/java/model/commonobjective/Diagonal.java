@@ -19,7 +19,7 @@ public class Diagonal implements CommonObjective{
         if (y == 0 && x <=1) {
             int k=0;
             for (int i = x + 1, j = y + 1; k < 4; k++, j++, i++) {
-                if (!library.getLibrarySpace(i, j).getObject().getObjectColour().equals(colour))
+                if (!library.getLibrarySpace(i, j).getObject().getObjectColour().isEquals(colour))
                     break;
             }
             if (k==4)
@@ -28,7 +28,7 @@ public class Diagonal implements CommonObjective{
         else if (y==4 && x<=1){
             int k=0;
                 for (int i = x + 1, j = y - 1; k < 4; k++, j--, i++) {
-                    if (!library.getLibrarySpace(i, j).getObject().getObjectColour().equals(colour))
+                    if (!library.getLibrarySpace(i, j).getObject().getObjectColour().isEquals(colour))
                         break;
                 }
             if (k==4)

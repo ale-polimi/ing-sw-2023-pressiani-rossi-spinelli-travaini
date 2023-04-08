@@ -23,10 +23,10 @@ public class GameController {
                 startState();
                 break;
             case IN_GAME:
-                inGameState();
+                //inGameState();
                 break;
             case END:
-                endState();
+                //endState();
                 break;
             default:
                 break;
@@ -34,7 +34,7 @@ public class GameController {
     }
 
     private void loginState(){
-        game.setMaxPlayers();
+        game.setMaxPlayers(3);
         game.setFirstPlayer();
     }
 
