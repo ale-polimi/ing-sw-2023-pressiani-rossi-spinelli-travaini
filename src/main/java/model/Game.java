@@ -1,16 +1,21 @@
 package model;
 
+import controller.Controller;
 import enumerations.GameState;
 import enumerations.TypeSpace;
 import exceptions.game.TooManyPlayersException;
 import jdk.jshell.spi.ExecutionControl;
 import model.board.Board;
 import model.board.BoardSpace;
+import model.commonobjective.CommonObjective;
 import model.objects.ObjectsDeck;
 import model.player.Player;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class Game {
     private Board board;
@@ -20,16 +25,46 @@ public class Game {
     public static int MAX_PLAYERS = 4;
     private int chosenPlayersNumber = 0;
     private ObjectsDeck objectsDeck;
+    private HashMap<CommonObjective, ArrayList<Integer>> commonObjectivesPoints;
     private Turn turn;
 
 
     /**
      * Custom constructor.
      */
-    public Game(){
+    public Game() {
         this.board = new Board();
         this.players = new ArrayList<>();
         this.objectsDeck = new ObjectsDeck();
+        this.commonObjectivesPoints = new HashMap<>(2);
+    }
+
+    /**
+     * This method adds a common objective and its points to the game.
+     * @param commonObjective is a common objective created by the {@link Controller controller} in the {@link Controller#setupCommonObjectives() appropriate method}.
+     */
+    public void addCommonObjective(CommonObjective commonObjective){
+        switch(players.size()){
+            case 2:
+                commonObjectivesPoints.put(commonObjective, new ArrayList<>(Arrays.asList(8,4)));
+                break;
+            case 3:
+                commonObjectivesPoints.put(commonObjective, new ArrayList<>(Arrays.asList(8,6,4)));
+                break;
+            case 4:
+                commonObjectivesPoints.put(commonObjective, new ArrayList<>(Arrays.asList(8,6,4,2)));
+                break;
+            default:
+                /* TODO - ECCEZIONE */
+        }
+    }
+
+    /**
+     * Getter method to return the common objectives for this game.
+     * @return the map of common objectives and relative available points.
+     */
+    public HashMap<CommonObjective, ArrayList<Integer>> getCommonObjectives() {
+        return commonObjectivesPoints;
     }
 
     /**

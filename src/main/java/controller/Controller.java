@@ -7,6 +7,7 @@ import exceptions.controller.NotEnoughSpaceException;
 import exceptions.game.TooManyPlayersException;
 import exceptions.player.TooManyObjectsInHandException;
 import model.Game;
+import model.commonobjective.*;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.GenericErrorMessage;
@@ -15,24 +16,19 @@ import network.Message;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static enumerations.GameState.IN_GAME;
 import static enumerations.GameState.LOGIN;
 import static enumerations.PlayerState.IN_LIBRARY;
 import static enumerations.PlayerState.PICKUP;
-import static model.player.Player.MAX_OBJECTS_IN_HAND;
-import static network.MessageType.*;
 
 public class Controller {
 
     private Game game;
     private HashMap<String, Integer> playersPoints;
-
     private HashMap personalObjectives;
+    private HashMap<Integer, CommonObjective> availableCommonObjectives;
     int firstX, firstY, secondX, secondY, thirdX, thirdY = 0;
 
     /**
@@ -44,6 +40,22 @@ public class Controller {
         byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
         personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
+
+        /* Creating all the common objectives, when the game starts we will randomly select only two */
+        availableCommonObjectives = new HashMap<>();
+        availableCommonObjectives.put(0, new Diagonal());
+        availableCommonObjectives.put(1, new EightEquals());
+        availableCommonObjectives.put(2, new FiveX());
+        availableCommonObjectives.put(3, new FourByFour());
+        availableCommonObjectives.put(4, new FourCorners());
+        availableCommonObjectives.put(5, new FourRowsMaxThreeDifferent());
+        availableCommonObjectives.put(6, new SixByTwo());
+        availableCommonObjectives.put(7, new Stairs());
+        availableCommonObjectives.put(8, new ThreeColumnsMaxThreeDifferent());
+        availableCommonObjectives.put(9, new TotalDifferentColumns());
+        availableCommonObjectives.put(10, new TotalDifferentRows());
+        availableCommonObjectives.put(11, new TwoByFour());
+        availableCommonObjectives.put(12, new TwoEqualsInColumn());
     }
 
 
@@ -180,7 +192,8 @@ public class Controller {
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
 
                                     /* Check if the player has completed a common objective */
-
+                                    /* TODO - How do I check if a player has completed an objective? */
+                                    checkCommonObjectives();
 
                                     if (checkLibrarySpaces() == 0) {
                                         game.getPlayerInTurn().setFirstToEnd(true);
@@ -263,8 +276,38 @@ public class Controller {
     private void initGame(Game game){
         game.restoreBoard(game.getBoard());
         game.setFirstPlayer();
-        /* TODO - Init common objectives */
+        setupCommonObjectives();
         game.setGameState(IN_GAME);
+    }
+
+    /**
+     * This method will create the two common objectives for the game.
+     */
+    private void setupCommonObjectives(){
+        Random rand1 = new Random();
+        Random rand2;
+        do {
+            rand2 = new Random();
+        } while (rand2 == rand1);
+
+        game.addCommonObjective(availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size())));
+        game.addCommonObjective(availableCommonObjectives.remove(rand2.nextInt(availableCommonObjectives.size())));
+    }
+
+
+    /**
+     * This method will add the common objective points to the player's points.
+     */
+    private void checkCommonObjectives() {
+        for (CommonObjective commonObjective : game.getCommonObjectives().keySet()) {
+            /* We apply the common objective only if it still has some points left */
+            if(game.getCommonObjectives().get(commonObjective).size() > 0) {
+                if(commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), /* TODO X */, /* TODO - Y */) == true){
+                    int points = game.getCommonObjectives().get(commonObjective).remove(0);
+                    game.getPlayerInTurn().addPoints(points);
+                }
+            }
+        }
     }
 
     /**

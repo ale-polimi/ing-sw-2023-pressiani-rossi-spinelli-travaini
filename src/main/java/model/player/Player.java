@@ -81,6 +81,14 @@ public class Player {
     }
 
     /**
+     * This method will add points to the player.
+     * @param points is calculated by the {@link controller.Controller controller} in the appropriate methods.
+     */
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    /**
      * Returns the player's library
      * @return the player's library
      */
