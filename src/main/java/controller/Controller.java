@@ -15,12 +15,15 @@ import network.Message;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
-import static enumerations.PlayerState.*;
-import static enumerations.GameState.*;
-import static java.lang.System.out;
+import static enumerations.GameState.IN_GAME;
+import static enumerations.GameState.LOGIN;
+import static enumerations.PlayerState.IN_LIBRARY;
+import static enumerations.PlayerState.PICKUP;
 import static model.player.Player.MAX_OBJECTS_IN_HAND;
 import static network.MessageType.*;
 

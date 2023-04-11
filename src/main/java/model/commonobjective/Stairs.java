@@ -9,6 +9,9 @@ public class Stairs implements CommonObjective{
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
+
+    private final String description ="five columns of increasing or decreasing height. Starting from the first column " +
+            "on the left or on the right, each next column must be made of exactly one one more tile. Tiles cane be of any type";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         for (int i = x; i < x+5 ; i++) {
@@ -26,5 +29,9 @@ public class Stairs implements CommonObjective{
         }
 
         return true;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

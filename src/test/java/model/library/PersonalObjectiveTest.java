@@ -77,6 +77,13 @@ public class PersonalObjectiveTest {
   }
 
   /**
+   * Test that compareTo returns 0 if the json in input is null
+   */
+  @Test
+  public void compareToNull(){
+    Assert.assertEquals(0,pO.compareTo(librarySetup[0]));
+  }
+  /**
    * Test the correct execution of the compareTo method when the library has one match
    */
   @Test

@@ -4,9 +4,17 @@ import model.library.Library;
 import model.objects.ObjectCard;
 
 public class ThreeColumnsMaxThreeDifferent implements CommonObjective{
+    private int countObj;
+
+    /**
+     * This method will check the presence of three columns where each column can have a maximum of three different colour
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
-        int countObj = 0;
+         countObj = 0;
 
         for ( y = 0; y < 5; y++) {
             int countColours = 0;
@@ -54,5 +62,9 @@ public class ThreeColumnsMaxThreeDifferent implements CommonObjective{
         }
 
         return false;
+    }
+
+    public int getCountObj() {
+        return countObj;
     }
 }

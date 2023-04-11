@@ -9,13 +9,24 @@ public class TwoByFour extends TwoEqualsInColumn {
         return super.applyObjectiveRules(library, x, y);
     }
 
+    private int countBlue = 0;
+    private int countLightBlue = 0;
+    private int countGreen = 0;
+    private int countWhite = 0;
+    private int countPink = 0;
+    private int countYellow = 0;
+
+    /**
+     * This method will check the presence of two squares composed by four spaces containing objects of the same colour(the two squares must be the same colour)
+     * @param library is the personal library of the players
+     */
     public boolean controlObjective(Library library) {
-        int countBlue = 0;
-        int countLightBlue = 0;
-        int countGreen = 0;
-        int countWhite = 0;
-        int countPink = 0;
-        int countYellow = 0;
+         countBlue = 0;
+         countLightBlue = 0;
+         countGreen = 0;
+         countWhite = 0;
+         countPink = 0;
+         countYellow = 0;
         ObjectCard tempCard = null;
         for (int x = 0; x < 5; x = x+2) {
             for (int y = 0; y < 5; y++) {
@@ -126,5 +137,29 @@ public class TwoByFour extends TwoEqualsInColumn {
             }
         }
         return false;
+    }
+
+    public int getCountBlue() {
+        return countBlue;
+    }
+
+    public int getCountGreen() {
+        return countGreen;
+    }
+
+    public int getCountLightBlue() {
+        return countLightBlue;
+    }
+
+    public int getCountPink() {
+        return countPink;
+    }
+
+    public int getCountWhite() {
+        return countWhite;
+    }
+
+    public int getCountYellow() {
+        return countYellow;
     }
 }

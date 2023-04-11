@@ -72,5 +72,42 @@ public enum ObjectColour {
     /**
      * PINK3 is Piante1.3.png
      */
-    PINK3
-}
+    PINK3;
+
+    public boolean isEquals(ObjectColour objectColour){
+        switch (this){
+            case GREEN1,GREEN2,GREEN3 -> {
+                if(objectColour==ObjectColour.GREEN1||objectColour==ObjectColour.GREEN2||objectColour==ObjectColour.GREEN3){
+                    return true;
+                }
+            }
+            case BLUE1,BLUE2,BLUE3 -> {
+                if(objectColour==ObjectColour.BLUE1||objectColour==ObjectColour.BLUE2||objectColour==ObjectColour.BLUE3){
+                    return true;
+                }
+            }
+            case WHITE1,WHITE2,WHITE3 -> {
+                if(objectColour==ObjectColour.WHITE1||objectColour==ObjectColour.WHITE2||objectColour==ObjectColour.WHITE3){
+                    return true;
+                }
+            }
+            case YELLOW1,YELLOW2,YELLOW3 -> {
+                if(objectColour==ObjectColour.YELLOW1||objectColour==ObjectColour.YELLOW2||objectColour==ObjectColour.YELLOW3){
+                    return true;
+                }
+            }
+            case LIGHT_BLUE1,LIGHT_BLUE2,LIGHT_BLUE3 -> {
+                if(objectColour==ObjectColour.LIGHT_BLUE1||objectColour==ObjectColour.LIGHT_BLUE2||objectColour==ObjectColour.LIGHT_BLUE3){
+                    return true;
+                }
+            }
+            case PINK1,PINK2,PINK3 -> {
+                if(objectColour==ObjectColour.PINK1||objectColour==ObjectColour.PINK2||objectColour==ObjectColour.PINK3){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    }

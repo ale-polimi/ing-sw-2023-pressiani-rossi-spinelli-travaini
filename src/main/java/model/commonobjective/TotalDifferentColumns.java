@@ -9,18 +9,23 @@ public class TotalDifferentColumns implements CommonObjective{
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
+
+    private int count=0;
+
+    private final String description = "two columns each formed by 6 different types of tiles";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x=0;
         y=0;
-        int count=0;
+
         boolean different=true;
+
 
         for (int k = 0; k < 4; k++) {
             different=true;
             for (int i = 0; i < 4 && different; i++) {
                 for (int j = i+1; j < 4; j++) {
-                    if (library.getLibrarySpace(i, k).getObject().getObjectColour().equals(library.getLibrarySpace(i + 1, k).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(i, k).getObject().getObjectColour().isEquals(library.getLibrarySpace(i + 1, k).getObject().getObjectColour())) {
                         different = false;
                         break;
                     }
@@ -33,5 +38,13 @@ public class TotalDifferentColumns implements CommonObjective{
 
         }
         return false;
+    }
+     /** this method return the result of the count in the method applyObjectiveRules*/
+    public int getCount() {
+        return count;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

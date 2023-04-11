@@ -14,7 +14,6 @@ public class Board {
      */
     public Board(){
         boardSpaces = new BoardSpace[9][9];
-
         for(int i = 0; i <= 8; i++){
             for(int j = 0; j <= 8; j++){
                 if((i == 0 && j == 4) || (i == 1 && j == 5) || (i == 3 && j == 1) || (i == 4 && j == 0) || (i == 4 && j == 8) || (i == 5 && j == 7) || (i == 7 && j == 3) || (i == 8 && j == 4)){
@@ -56,9 +55,7 @@ public class Board {
      * @param boardSpace is the tile the server wants to put the object card in.
      * @param objectCard is the object card that will be in the tile.
      */
-    public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard){
-        boardSpace.insertObject(objectCard);
-    }
+    public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard){boardSpace.insertObject(objectCard);}
 
     /**
      * This method is a checker used in {@link controller.Controller#pickObjectFromBoard(int, int) the pick object method} in the controller.
@@ -66,11 +63,19 @@ public class Board {
      * @param column is the column of the object.
      * @return {@code true} if the space is surrounded by other objects, {@code false} otherwise.
      */
-    public boolean isSpaceSurrounded(int row, int column){
-        if((getSpace(row + 1, column).getObject() == null) || (getSpace(row - 1, column).getObject() == null) || (getSpace(row, column + 1).getObject() == null) || (getSpace(row, column - 1).getObject() == null)){
-            return true;
+    public boolean isSpaceSurrounded(int row, int column) {
+        if (row == 0) {
+            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null) || (getSpace(row, column + 1).getObject() != null) || (getSpace(row, column - 1).getObject() != null));
+        } else if (row == 8) {
+            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row - 1, column).getObject() != null || (getSpace(row, column + 1).getObject() != null) || (getSpace(row, column - 1).getObject() != null)));
+        } else if (column == 0) {
+            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null || (getSpace(row, column + 1).getObject() != null) || (getSpace(row - 1, column).getObject() != null)));
+        } else if (column == 8) {
+            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null || (getSpace(row - 1, column).getObject() != null) || (getSpace(row, column - 1).getObject() != null)));
         } else {
-            return false;
+            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null || (getSpace(row, column + 1).getObject() != null) || (getSpace(row, column - 1).getObject() != null) || (getSpace(row - 1, column).getObject() != null)));
         }
     }
+
+
 }

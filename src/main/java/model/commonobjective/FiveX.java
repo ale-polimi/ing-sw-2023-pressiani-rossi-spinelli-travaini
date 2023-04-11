@@ -10,18 +10,24 @@ public class FiveX implements CommonObjective{
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
+
+    private final String description= "five tiles of the same type forming an X.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
 
         ObjectColour colour= library.getLibrarySpace(x,y).getObject().getObjectColour();
 
-        if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().equals(colour) &&
-                library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().equals(colour)&&
-                library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().equals(colour)&&
-                library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().equals(colour))
+        if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().isEquals(colour) &&
+                library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().isEquals(colour)&&
+                library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().isEquals(colour)&&
+                library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().isEquals(colour))
             return true;
         else
             return false;
 
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

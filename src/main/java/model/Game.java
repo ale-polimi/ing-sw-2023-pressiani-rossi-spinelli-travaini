@@ -20,7 +20,7 @@ public class Game {
     public static int MAX_PLAYERS = 4;
     private int chosenPlayersNumber = 0;
     private ObjectsDeck objectsDeck;
-    /*private Turn turn;*/
+    private Turn turn;
 
 
     /**
@@ -109,8 +109,8 @@ public class Game {
     }
 
     /**
-     *
-     * @return
+     *Returns the player who has to play next
+     * @return the next player in the game
      */
     public Player getNextPlayer(){
         int currPlayerIndex = getPlayers().indexOf(playerInTurn);
@@ -118,7 +118,7 @@ public class Game {
     }
 
     /**
-     *
+     *Setter of the playerInTurn with the player who has to play next
      */
     public void setNextPlayer(){
         this.playerInTurn = getNextPlayer();
@@ -138,7 +138,7 @@ public class Game {
      * @throws TooManyPlayersException if the game has already enough players. The maximum number of players for this game has been set in {@link model.Game#setMaxPlayers(int) setMaxPlayers method}.
      */
     public void addToGame(Player player) throws TooManyPlayersException {
-        if(players.size() > chosenPlayersNumber){
+        if(players.size() >= chosenPlayersNumber){
             throw new TooManyPlayersException();
         } else if (player.getNickname() == null) {
             throw new NullPointerException();
@@ -154,11 +154,12 @@ public class Game {
      */
     public boolean isNicknameTaken(String playerNickname){
 
-        for (int i=0; i < players.size(); i++){
-            if(playerNickname.equals(players.get(i).getNickname())){
+        for (Player player : players) {
+            if (playerNickname.equals(player.getNickname())) {
                 return true;
             }
-        }return false;
+        }
+        return false;
     }
 
     /**
@@ -168,6 +169,7 @@ public class Game {
     public void restoreBoard(Board board) {
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {
+                if(objectsDeck.getAvailableObjects()==0)return;
                 if (!board.getSpace(x, y).getTypeSpace().equals(TypeSpace.UNUSABLE)) {
                     switch (board.getSpace(x, y).getTypeSpace()) {
                         case FOR_FOUR_PLAYERS -> {
@@ -179,7 +181,7 @@ public class Game {
                             }
                         }
                         case FOR_THREE_PLAYERS -> {
-                            if (players.size() == 3) {
+                            if (players.size() >= 3) {
                                 if (board.getSpace(x, y).getObject() == null) {
                                     board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());
                                 }
@@ -187,7 +189,7 @@ public class Game {
 
                         }
                         case FOR_TWO_PLAYERS -> {
-                            if (players.size() == 2) {
+                            if (players.size() >= 2) {
                                 if (board.getSpace(x, y).getObject() == null) {
                                     board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());
                                 }
@@ -199,16 +201,6 @@ public class Game {
         }
     }
 
-
-    /**
-     * Getter method to return the turn in the game.
-     * @return the turn that is currently playing in the game.
-     */
-    /*
-    public Turn getTurn() {
-        return turn;
-    }
-    */
 
     /**
      * Ends the game.

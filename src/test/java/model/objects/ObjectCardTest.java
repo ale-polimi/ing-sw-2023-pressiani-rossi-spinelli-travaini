@@ -1,3 +1,5 @@
+package model.objects;
+
 import enumerations.ObjectColour;
 import model.objects.ObjectCard;
 import org.junit.Test;

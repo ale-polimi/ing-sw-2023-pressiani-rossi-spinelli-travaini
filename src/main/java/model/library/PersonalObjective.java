@@ -10,10 +10,12 @@ public final class PersonalObjective extends LibraryGrid {
      */
     public PersonalObjective(String json){
         this.libraryGrid = new LibrarySpace[6][5];
-        for(int i = 0; i < 6; i++){
+        if(json != null){
             String[] tmp = json.split(",");
-            libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])]= new LibrarySpace();
-            libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])].putObject(new ObjectCard(tmp[3*i+2]));
+            for(int i = 0; i < 6; i++){
+                libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])]= new LibrarySpace();
+                libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])].putObject(new ObjectCard(tmp[3*i+2]));
+            }
         }
     }
 
