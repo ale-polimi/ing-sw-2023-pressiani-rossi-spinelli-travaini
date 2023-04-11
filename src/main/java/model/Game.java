@@ -20,7 +20,7 @@ public class Game {
     public static int MAX_PLAYERS = 4;
     private int chosenPlayersNumber = 0;
     private ObjectsDeck objectsDeck;
-    private Turn turn;
+    /*private Turn turn;*/
 
 
     /**
@@ -114,7 +114,7 @@ public class Game {
      */
     public Player getNextPlayer(){
         int currPlayerIndex = getPlayers().indexOf(playerInTurn);
-        return getPlayers().get((currPlayerIndex - 1) % getMaxPlayers());
+        return getPlayers().get((currPlayerIndex + 1) % getMaxPlayers());
     }
 
     /**
@@ -199,13 +199,16 @@ public class Game {
         }
     }
 
+
     /**
      * Getter method to return the turn in the game.
      * @return the turn that is currently playing in the game.
      */
+    /*
     public Turn getTurn() {
         return turn;
     }
+    */
 
     /**
      * Ends the game.

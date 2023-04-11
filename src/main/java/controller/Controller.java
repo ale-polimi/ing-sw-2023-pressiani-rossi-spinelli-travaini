@@ -44,22 +44,28 @@ public class Controller {
     }
 
 
+    /**
+     *
+     * @param receivedMessage
+     */
+    public void onMessageReceived(Message receivedMessage) {
+        switch (receivedMessage.getType()) {
+            case MAX_PLAYERS_FOR_GAME:
 
-
-    public void onMessageReceived(Message receivedMessage){
-        switch (game.getGameState()){
-            case LOGIN:
-
-                if(receivedMessage.getType().equals(MAX_PLAYERS_FOR_GAME)){
-                    if(game.getMaxPlayers() > 0){
+                if (game.getGameState().equals(LOGIN)) {
+                    if (game.getMaxPlayers() > 0) {
                         new GenericErrorMessage("The players for this game are already set.");
-                    } else if(game.setMaxPlayers(Integer.parseInt(receivedMessage.getPayload())) == false){
+                    } else if (game.setMaxPlayers(Integer.parseInt(receivedMessage.getPayload())) == false) {
                         new GenericErrorMessage("The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS);
                     }
+                } else {
+                    /* Eccezione o messaggio d'errore? */
+                }
 
-                } else if(receivedMessage.getType().equals(USER_INFO)){
+            case USER_INFO:
 
-                    if(game.isNicknameTaken(receivedMessage.getPayload()) == true){
+                if (game.getGameState().equals(LOGIN)) {
+                    if (game.isNicknameTaken(receivedMessage.getPayload()) == true) {
                         new GenericErrorMessage("Username is already taken.");
                     } else {
 
@@ -75,175 +81,175 @@ public class Controller {
                         }
                     }
                 } else {
-                    new GenericErrorMessage("You are not allowed to do that in " + game.getGameState() + " state.");
+                    /* TODO - Invalid game state */
                 }
-                break;
-            case IN_GAME:
 
-                if(!(game.getPlayerInTurn().getNickname().equals(receivedMessage.getSender()))){
-                    new GenericErrorMessage("This is not your turn!");
-                } else {
-                    if (receivedMessage.getType().equals(PICK_OBJECT)) {
+            case PICK_OBJECT:
 
-                        if (!(game.getPlayerInTurn().hasObjectsInHand())) {
-                            game.getPlayerInTurn().initObjectsInHand();
-                        }
+                if (game.getGameState().equals(IN_GAME)) {
 
-                        switch(receivedMessage.getPayload().length()) {
-                            case 2:
-                                firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
-                                firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
+                    if (!(game.getPlayerInTurn().hasObjectsInHand())) {
+                        game.getPlayerInTurn().initObjectsInHand();
+                    }
+
+                    switch (receivedMessage.getPayload().length()) {
+
+                        case 2:
+                            firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
+                            firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
+                            try {
+                                pickObjectFromBoard(firstX, firstY);
+                            } catch (IncompatibleStateException e) {
+                                new GenericErrorMessage(e.getMessage());
+                            }
+                            break;
+                        case 4:
+                            firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
+                            firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
+                            secondX = Character.getNumericValue(receivedMessage.getPayload().charAt(2));
+                            secondY = Character.getNumericValue(receivedMessage.getPayload().charAt(3));
+
+                            if (secondX != firstX || secondY != firstY) {
+                                new GenericErrorMessage("You must pick objects from the same row or column!");
+                            } else {
+
                                 try {
                                     pickObjectFromBoard(firstX, firstY);
+                                    pickObjectFromBoard(secondX, secondY);
                                 } catch (IncompatibleStateException e) {
                                     new GenericErrorMessage(e.getMessage());
                                 }
-                                break;
-                            case 4:
-                                firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
-                                firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
-                                secondX = Character.getNumericValue(receivedMessage.getPayload().charAt(2));
-                                secondY = Character.getNumericValue(receivedMessage.getPayload().charAt(3));
 
-                                if (secondX != firstX || secondY != firstY) {
-                                    new GenericErrorMessage("You must pick objects from the same row or column!");
-                                } else {
-
-                                    try {
-                                        pickObjectFromBoard(firstX, firstY);
-                                        pickObjectFromBoard(secondX, secondY);
-                                    } catch (IncompatibleStateException e) {
-                                        new GenericErrorMessage(e.getMessage());
-                                    }
-
-                                }
-                                break;
-                            case 6:
-                                firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
-                                firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
-                                secondX = Character.getNumericValue(receivedMessage.getPayload().charAt(2));
-                                secondY = Character.getNumericValue(receivedMessage.getPayload().charAt(3));
-                                thirdX = Character.getNumericValue(receivedMessage.getPayload().charAt(4));
-                                thirdY = Character.getNumericValue(receivedMessage.getPayload().charAt(5));
-
-
-                                if (!((firstX == secondX && firstX == thirdX && secondX == thirdX) || (firstY == secondY && firstY == thirdY && secondY == thirdY))) {
-                                    new GenericErrorMessage("You must pick objects from the same row or column!");
-                                } else {
-                                    try {
-                                        pickObjectFromBoard(firstX, firstY);
-                                        pickObjectFromBoard(secondX, secondY);
-                                        pickObjectFromBoard(thirdX, thirdY);
-                                    } catch (IncompatibleStateException e) {
-                                        new GenericErrorMessage(e.getMessage());
-                                    }
-                                }
-                                break;
-                            default:
-                                new GenericErrorMessage("Coordinates must be in pairs.");
-                        }
-
-                        /* After picking up the objects, the player will go to his library */
-                        game.getPlayerInTurn().setPlayerState(IN_LIBRARY);
-
-                    } else if (receivedMessage.getType().equals(PUT_OBJECT)) {
-                        /* Resetting the coordinate values for the next player */
-                        resetCoordinateValues();
-
-                        if(receivedMessage.getPayload().length() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
-                            new GenericErrorMessage("You must put all the objects you have in hand in the library.");
-                        } else if(receivedMessage.getPayload().length() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
-                            int value = receivedMessage.getPayload().length() - 1;
-                            new GenericErrorMessage("You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize());
-                        } else if(receivedMessage.getPayload().length() - 1 == game.getPlayerInTurn().getObjectsInHandSize()){
-                            switch (receivedMessage.getPayload().length()) {
-                                case 2 -> {
-                                    try {
-                                        addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)));
-
-                                        /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                        game.getPlayerInTurn().resetObjectsInHand();
-
-                                        /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
-                                        game.getPlayerInTurn().setPlayerState(PICKUP);
-
-                                        if (checkLibrarySpaces() == 0) {
-                                            game.getPlayerInTurn().setFirstToEnd(true);
-                                        }
-
-                                        if (isLastTurn()) {
-                                            endGame(game);
-                                        }
-
-                                        game.setNextPlayer();
-
-                                    } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                        new GenericErrorMessage(e.getMessage());
-                                    }
-                                }
-                                case 3 -> {
-                                    try {
-                                        addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)));
-
-                                        /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                        game.getPlayerInTurn().resetObjectsInHand();
-
-                                        /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
-                                        game.getPlayerInTurn().setPlayerState(PICKUP);
-
-                                        if (checkLibrarySpaces() == 0) {
-                                            game.getPlayerInTurn().setFirstToEnd(true);
-                                        }
-
-                                        if (isLastTurn()) {
-                                            endGame(game);
-                                        }
-
-                                        game.setNextPlayer();
-
-                                    } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                        new GenericErrorMessage(e.getMessage());
-                                    }
-                                }
-                                case 4 -> {
-                                    try {
-                                        addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)), Character.getNumericValue(receivedMessage.getPayload().charAt(3)));
-
-                                        /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                        game.getPlayerInTurn().resetObjectsInHand();
-
-                                        /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
-                                        game.getPlayerInTurn().setPlayerState(PICKUP);
-
-                                        if (checkLibrarySpaces() == 0) {
-                                            game.getPlayerInTurn().setFirstToEnd(true);
-                                        }
-
-                                        if (isLastTurn()) {
-                                            endGame(game);
-                                        }
-
-                                        game.setNextPlayer();
-
-                                    } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                        new GenericErrorMessage(e.getMessage());
-                                    }
-                                }
-                                default -> new GenericErrorMessage("Invalid number of objects.");
                             }
-                        }
+                            break;
+                        case 6:
+                            firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
+                            firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
+                            secondX = Character.getNumericValue(receivedMessage.getPayload().charAt(2));
+                            secondY = Character.getNumericValue(receivedMessage.getPayload().charAt(3));
+                            thirdX = Character.getNumericValue(receivedMessage.getPayload().charAt(4));
+                            thirdY = Character.getNumericValue(receivedMessage.getPayload().charAt(5));
 
-                    } else {
-                        new GenericErrorMessage("You are not allowed to do that in " + game.getGameState() + " state.");
+
+                            if (!((firstX == secondX && firstX == thirdX && secondX == thirdX) || (firstY == secondY && firstY == thirdY && secondY == thirdY))) {
+                                new GenericErrorMessage("You must pick objects from the same row or column!");
+                            } else {
+                                try {
+                                    pickObjectFromBoard(firstX, firstY);
+                                    pickObjectFromBoard(secondX, secondY);
+                                    pickObjectFromBoard(thirdX, thirdY);
+                                } catch (IncompatibleStateException e) {
+                                    new GenericErrorMessage(e.getMessage());
+                                }
+                            }
+                            break;
+                        default:
+                            new GenericErrorMessage("Coordinates must be in pairs.");
                     }
+
+                    /* After picking up the objects, the player will go to his library */
+                    game.getPlayerInTurn().setPlayerState(IN_LIBRARY);
+
+                } else {
+                    /* TODO - Invalid game state */
                 }
 
-                break;
-            case END:
-                ;
-                break;
+            case PUT_OBJECT:
+
+                if (game.getGameState().equals(IN_GAME)) {
+                    resetCoordinateValues();
+
+                    if (receivedMessage.getPayload().length() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
+                        new GenericErrorMessage("You must put all the objects you have in hand in the library.");
+                    } else if (receivedMessage.getPayload().length() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
+                        int value = receivedMessage.getPayload().length() - 1;
+                        new GenericErrorMessage("You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize());
+                    } else if (receivedMessage.getPayload().length() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
+                        switch (receivedMessage.getPayload().length()) {
+                            case 2 -> {
+                                try {
+                                    addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)));
+
+                                    /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
+                                    game.getPlayerInTurn().resetObjectsInHand();
+
+                                    /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
+                                    game.getPlayerInTurn().setPlayerState(PICKUP);
+
+                                    /* Check if the player has completed a common objective */
+
+
+                                    if (checkLibrarySpaces() == 0) {
+                                        game.getPlayerInTurn().setFirstToEnd(true);
+                                    }
+
+                                    if (isLastTurn()) {
+                                        endGame(game);
+                                    }
+
+                                    game.setNextPlayer();
+
+                                } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                    new GenericErrorMessage(e.getMessage());
+                                }
+                            }
+                            case 3 -> {
+                                try {
+                                    addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)));
+
+                                    /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
+                                    game.getPlayerInTurn().resetObjectsInHand();
+
+                                    /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
+                                    game.getPlayerInTurn().setPlayerState(PICKUP);
+
+                                    if (checkLibrarySpaces() == 0) {
+                                        game.getPlayerInTurn().setFirstToEnd(true);
+                                    }
+
+                                    if (isLastTurn()) {
+                                        endGame(game);
+                                    }
+
+                                    game.setNextPlayer();
+
+                                } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                    new GenericErrorMessage(e.getMessage());
+                                }
+                            }
+                            case 4 -> {
+                                try {
+                                    addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)), Character.getNumericValue(receivedMessage.getPayload().charAt(3)));
+
+                                    /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
+                                    game.getPlayerInTurn().resetObjectsInHand();
+
+                                    /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
+                                    game.getPlayerInTurn().setPlayerState(PICKUP);
+
+                                    if (checkLibrarySpaces() == 0) {
+                                        game.getPlayerInTurn().setFirstToEnd(true);
+                                    }
+
+                                    if (isLastTurn()) {
+                                        endGame(game);
+                                    }
+
+                                    game.setNextPlayer();
+
+                                } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                    new GenericErrorMessage(e.getMessage());
+                                }
+                            }
+                            default -> new GenericErrorMessage("Invalid number of objects.");
+                        }
+                    }
+                } else {
+                    /* TODO - Invalid game state */
+                }
+
             default:
-                new GenericErrorMessage("Invalid game state. The game will end now!");
+                /* TODO - INVALID MESSAGE TYPE */
         }
     }
 
@@ -291,9 +297,15 @@ public class Controller {
                                                          .toList();
 
         if(usernames.size() > 1){
-            /* TODO - Find the furthest player from first player */
             /* This means that there are players with the same number of points */
             int furthestPlayerIndex = 0;
+            for(int i = 0; i < game.getMaxPlayers(); i++){
+                if(usernames.contains(game.getPlayers().get(i).getNickname())){
+                    if(i > furthestPlayerIndex){
+                        furthestPlayerIndex = i;
+                    }
+                }
+            }
 
             return usernames.get(furthestPlayerIndex);
         } else {
@@ -356,7 +368,6 @@ public class Controller {
         if(game.getPlayerInTurn().getPlayerState().equals(PICKUP)) {
             if (game.getBoard().getSpace(coordX, coordY).getObject() != null) {
                 if(game.getBoard().isSpaceSurrounded(coordX, coordY)){
-                    new GenericErrorMessage("You can't pick that object as it's surrounded by others. The object must have at least one side free.");
                     return false;
                 } else {
 
@@ -365,13 +376,11 @@ public class Controller {
                         game.getBoard().getSpace(coordX, coordY).removeObject();
                         return true;
                     } catch (TooManyObjectsInHandException e) {
-                        new GenericErrorMessage("You can't pick up more than " + MAX_OBJECTS_IN_HAND + " objects per turn!");
                         return false;
                     }
 
                 }
             } else {
-                new GenericErrorMessage("Nothing to pick here, this space is empty.");
                 return false;
             }
         } else {

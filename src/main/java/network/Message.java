@@ -1,5 +1,7 @@
 package network;
 
+import controller.Controller;
+
 public abstract class Message {
 
     private final String sender;
@@ -40,4 +42,6 @@ public abstract class Message {
     public MessageType getType(){
         return this.messageType;
     }
+
+    abstract void executeOnController(Controller controller);
 }
