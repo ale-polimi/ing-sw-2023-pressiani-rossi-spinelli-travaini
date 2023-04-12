@@ -5,6 +5,7 @@ import model.objects.ObjectCard;
 
 public class ThreeColumnsMaxThreeDifferent implements CommonObjective{
     private int countObj;
+    private final String description = "Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column.";
 
     /**
      * This method will check the presence of three columns where each column can have a maximum of three different colour
@@ -66,5 +67,9 @@ public class ThreeColumnsMaxThreeDifferent implements CommonObjective{
 
     public int getCountObj() {
         return countObj;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

@@ -5,6 +5,8 @@ import model.library.Library;
 public class FourByFour implements CommonObjective {
 
     private int count = 0;
+    private final String description = "Four groups each containing at least 4 tiles of the same type (row or column)\n" +
+            "The tiles of one group can be different from those of another group.";
 
     /**
      * This method will check the presence of at least four columns or rows composed by four objects of the same colour
@@ -146,5 +148,9 @@ public class FourByFour implements CommonObjective {
     }
     public int getCount(){
         return count;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

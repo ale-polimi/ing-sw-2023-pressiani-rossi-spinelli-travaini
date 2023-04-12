@@ -5,6 +5,9 @@ import model.library.Library;
 
 public class SixByTwo extends TwoEqualsInColumn{
 
+    private final String description ="Six groups each containing at least 2 tiles of the same type \n" +
+            "The tiles of one group can be different from those of another group";
+
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         return super.applyObjectiveRules(library, x, y);
@@ -22,7 +25,7 @@ public class SixByTwo extends TwoEqualsInColumn{
 
         for (int x = 0; x < 6; x++) {
             for (int y = 0; y < 4; y++) {
-                if(library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour())){
+                if(library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour())){
                     count++;
                     y++;
                     if(count==6){
@@ -82,7 +85,7 @@ public class SixByTwo extends TwoEqualsInColumn{
      * @param y is the column coordinate
      */
     private boolean checkLDown(Library library,int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+1, y+1 ).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+1, y+1 ).getObject().getObjectColour());
     }
 
     /**
@@ -92,7 +95,7 @@ public class SixByTwo extends TwoEqualsInColumn{
      * @param y is the column coordinate
      */
     private boolean checkReverseLUp(Library library, int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y-1 ).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y-1 ).getObject().getObjectColour());
     }
 
     /**
@@ -102,7 +105,7 @@ public class SixByTwo extends TwoEqualsInColumn{
      * @param y is the column coordinate
      */
     private boolean checkReverseLDown(Library library, int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+1, y-1 ).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+1, y-1 ).getObject().getObjectColour());
     }
 
     /**
@@ -112,10 +115,14 @@ public class SixByTwo extends TwoEqualsInColumn{
      * @param y is the column coordinate
      */
     private boolean checkLUp(Library library, int x, int y){
-        return library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour());
+        return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y+1 ).getObject().getObjectColour());
     }
 
     public int getCount(){
         return count;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
