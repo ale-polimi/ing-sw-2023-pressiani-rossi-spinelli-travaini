@@ -2,7 +2,7 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public class TotalDifferentRows implements CommonObjective{
+public class TotalDifferentRows extends CommonObjective {
     /**
      *this method will check the presence of at least two rows with all different objects
      * @param library is the personal library of the players

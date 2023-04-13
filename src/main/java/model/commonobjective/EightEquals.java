@@ -3,7 +3,7 @@ package model.commonobjective;
 import enumerations.ObjectColour;
 import model.library.Library;
 
-public class EightEquals implements CommonObjective{
+public class EightEquals extends CommonObjective {
 
    private int count=0;
     /**

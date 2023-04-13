@@ -3,6 +3,7 @@ package model.player;
 import enumerations.PlayerState;
 import exceptions.player.EmptyDeckException;
 import exceptions.player.TooManyObjectsInHandException;
+import model.commonobjective.CommonObjective;
 import model.library.Library;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
@@ -18,6 +19,7 @@ public class Player {
     private ArrayList<ObjectCard> objectsInHand = null;
     private Library library;
     private PersonalObjective personalObjective;
+    boolean[] completedCommonObjectives = {false, false};
     private PlayerState playerState;
     private int points;
 
@@ -86,6 +88,18 @@ public class Player {
      */
     public void addPoints(int points) {
         this.points += points;
+    }
+
+    /**
+     * This method will tell which common objectives the player has already done.
+     * @param commonObjective is the completed common objective.
+     */
+    public void setCompletedCommonObjectiveType(CommonObjective commonObjective){
+        completedCommonObjectives[commonObjective.getObjectiveNumeral()] = true;
+    }
+
+    public boolean[] getCompletedCommonObjectives() {
+        return completedCommonObjectives;
     }
 
     /**

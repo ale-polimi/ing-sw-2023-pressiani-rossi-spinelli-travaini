@@ -3,7 +3,7 @@ package model.commonobjective;
 import model.library.Library;
 import model.objects.ObjectCard;
 
-public class FourRowsMaxThreeDifferent implements CommonObjective{
+public class FourRowsMaxThreeDifferent extends CommonObjective {
     private int countObj;
 
     /**

@@ -2,7 +2,7 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public class TwoEqualsInColumn implements CommonObjective {
+public class TwoEqualsInColumn extends CommonObjective {
 
     /**
      * This method will check the presence of two spaces in column containing objects of the same colour

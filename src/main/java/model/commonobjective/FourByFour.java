@@ -2,7 +2,7 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public class FourByFour implements CommonObjective {
+public class FourByFour extends CommonObjective {
 
     private int count = 0;
 

@@ -2,7 +2,7 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public class Stairs implements CommonObjective{
+public class Stairs extends CommonObjective {
     /**
      *this method will check that the objects are in a position which forms a stair
      * @param library is the personal library of the players

@@ -2,7 +2,7 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public class FourCorners implements CommonObjective{
+public class FourCorners extends CommonObjective {
 
     /**
      * This method will check if the four spaces placed in the four corners of the library are the same colour

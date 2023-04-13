@@ -3,7 +3,7 @@ package model.commonobjective;
 import enumerations.ObjectColour;
 import model.library.Library;
 
-public class FiveX implements CommonObjective{
+public class FiveX extends CommonObjective {
     /**
      *this method will check the presence of at least five objects of the same colour, that form an x
      * @param library is the personal library of the players

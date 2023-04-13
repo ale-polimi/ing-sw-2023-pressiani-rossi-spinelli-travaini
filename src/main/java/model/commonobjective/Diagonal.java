@@ -3,7 +3,7 @@ package model.commonobjective;
 import enumerations.ObjectColour;
 import model.library.Library;
 
-public class Diagonal implements CommonObjective{
+public class Diagonal extends CommonObjective {
     /**
      *this method will check the presence of at least one diagonal with all equal objects (they have the same colour)
      * @param library is the personal library of the players

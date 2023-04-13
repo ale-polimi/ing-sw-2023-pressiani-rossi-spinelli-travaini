@@ -192,7 +192,7 @@ public class Controller {
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
 
                                     /* Check if the player has completed a common objective */
-                                    /* TODO - How do I check if a player has completed an objective? */
+                                    /* TODO - How do I check if a player has already completed an objective? */
                                     checkCommonObjectives();
 
                                     if (checkLibrarySpaces() == 0) {
@@ -281,7 +281,7 @@ public class Controller {
     }
 
     /**
-     * This method will create the two common objectives for the game.
+     * This method will create the common objectives for the game.
      */
     private void setupCommonObjectives(){
         Random rand1 = new Random();
@@ -289,9 +289,17 @@ public class Controller {
         do {
             rand2 = new Random();
         } while (rand2 == rand1);
+        /* First I get the objectives from the hashmap */
+        CommonObjective objective1 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
+        CommonObjective objective2 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
 
-        game.addCommonObjective(availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size())));
-        game.addCommonObjective(availableCommonObjectives.remove(rand2.nextInt(availableCommonObjectives.size())));
+        /* Then I set their numeral */
+        objective1.setObjectiveNumeral(ObjectiveNumeral.ONE);
+        objective2.setObjectiveNumeral(ObjectiveNumeral.TWO);
+
+        /* Finally I add the objectives to the game */
+        game.addCommonObjective(objective1);
+        game.addCommonObjective(objective2);
     }
 
 
@@ -302,9 +310,13 @@ public class Controller {
         for (CommonObjective commonObjective : game.getCommonObjectives().keySet()) {
             /* We apply the common objective only if it still has some points left */
             if(game.getCommonObjectives().get(commonObjective).size() > 0) {
-                if(commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), /* TODO X */, /* TODO - Y */) == true){
-                    int points = game.getCommonObjectives().get(commonObjective).remove(0);
-                    game.getPlayerInTurn().addPoints(points);
+                /* If the player hasn't already completed the objective, it will get the points */
+                if(game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()] == false) {
+                    if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), /* TODO X */, /* TODO - Y */) == true) {
+                        int points = game.getCommonObjectives().get(commonObjective).remove(0);
+                        game.getPlayerInTurn().addPoints(points);
+                        game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective);
+                    }
                 }
             }
         }

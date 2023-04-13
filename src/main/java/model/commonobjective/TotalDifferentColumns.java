@@ -2,7 +2,7 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public class TotalDifferentColumns implements CommonObjective{
+public class TotalDifferentColumns extends CommonObjective {
     /**
      *this method will check the presence of at least two columns with all different objects
      * @param library is the personal library of the players
