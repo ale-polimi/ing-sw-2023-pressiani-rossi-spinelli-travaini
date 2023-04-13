@@ -4,6 +4,8 @@ import model.library.Library;
 import model.objects.ObjectCard;
 
 public class TwoByFour extends TwoEqualsInColumn {
+
+    private final String description = "Two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         return super.applyObjectiveRules(library, x, y);
@@ -31,7 +33,7 @@ public class TwoByFour extends TwoEqualsInColumn {
         for (int x = 0; x < 5; x = x+2) {
             for (int y = 0; y < 5; y++) {
                 if (applyObjectiveRules(library, x, y)) {
-                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
                         tempCard = library.getLibrarySpace(x, y).getObject();
                         switch (tempCard.getObjectColour()) {
                             case BLUE1, BLUE2, BLUE3 -> {
@@ -83,9 +85,9 @@ public class TwoByFour extends TwoEqualsInColumn {
         for (int x = 1; x <5; x = x+2) {
             for (int y = 0; y < 5; y++) {
                 if (applyObjectiveRules(library, x, y)) {
-                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
-                        if((library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x-1, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x +1, y-1).getObject().getObjectColour()))||
-                                (library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x+2, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().equals(library.getLibrarySpace(x +2, y+1).getObject().getObjectColour()))){
+                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
+                        if((library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x-1, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x -1, y+1).getObject().getObjectColour()))||
+                                (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+2, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x +2, y+1).getObject().getObjectColour()))){
 
                         }else {
                         tempCard = library.getLibrarySpace(x, y).getObject();
@@ -161,5 +163,9 @@ public class TwoByFour extends TwoEqualsInColumn {
 
     public int getCountYellow() {
         return countYellow;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

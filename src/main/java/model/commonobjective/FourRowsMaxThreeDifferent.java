@@ -5,6 +5,7 @@ import model.objects.ObjectCard;
 
 public class FourRowsMaxThreeDifferent extends CommonObjective {
     private int countObj;
+    private final String description = "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or a different combination of another line.";
 
     /**
      * This method will check the presence of four rows where each row can have a maximum of three different colours
@@ -65,5 +66,9 @@ public class FourRowsMaxThreeDifferent extends CommonObjective {
 
     public int getCountObj() {
         return countObj;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
