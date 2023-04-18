@@ -1,5 +1,6 @@
 package model.player;
 
+import enumerations.ObjectColour;
 import enumerations.PlayerState;
 import exceptions.player.EmptyDeckException;
 import exceptions.player.TooManyObjectsInHandException;
@@ -79,7 +80,7 @@ public class Player {
      * @return the points scored by the player.
      */
     public int getPoints() {
-        return points + personalObjective.compareTo(library);
+        return points;
     }
 
     /**
@@ -88,6 +89,14 @@ public class Player {
      */
     public void addPoints(int points) {
         this.points += points;
+    }
+
+    /**
+     * This method will return the points made by a group of adjacent tiles.
+     * @return the points made from this type of object cards.
+     */
+    public int getBoardPoints(ObjectColour objectColour) {
+        /* TODO */
     }
 
     /**
@@ -100,6 +109,14 @@ public class Player {
 
     public boolean[] getCompletedCommonObjectives() {
         return completedCommonObjectives;
+    }
+
+    /**
+     * Getter method for the personal objective of this player.
+     * @return the player's personal objective.
+     */
+    public PersonalObjective getPersonalObjective() {
+        return personalObjective;
     }
 
     /**

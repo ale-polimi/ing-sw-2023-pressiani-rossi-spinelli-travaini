@@ -42,6 +42,4 @@ public abstract class Message {
     public MessageType getType(){
         return this.messageType;
     }
-
-    abstract void executeOnController(Controller controller);
 }

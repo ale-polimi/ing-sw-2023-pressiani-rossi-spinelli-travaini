@@ -2,6 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import enumerations.GameState;
+import enumerations.ObjectColour;
 import exceptions.controller.IncompatibleStateException;
 import exceptions.controller.NotEnoughSpaceException;
 import exceptions.game.TooManyPlayersException;
@@ -60,11 +61,12 @@ public class Controller {
 
 
     /**
-     *
-     * @param receivedMessage
+     * Main method for the controller that will manage the course of the game.
+     * @param receivedMessage is the message received from the "client".
      */
     public void onMessageReceived(Message receivedMessage) {
         switch (receivedMessage.getType()) {
+            /* TODO - Controllo se il client che manda (message.getsender) è il giocatore che deve giocare (game.getcurrentplayer) */
             case MAX_PLAYERS_FOR_GAME:
 
                 if (game.getGameState().equals(LOGIN)) {
@@ -74,7 +76,7 @@ public class Controller {
                         new GenericErrorMessage("The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS);
                     }
                 } else {
-                    /* Eccezione o messaggio d'errore? */
+                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
 
             case USER_INFO:
@@ -96,7 +98,7 @@ public class Controller {
                         }
                     }
                 } else {
-                    /* TODO - Invalid game state */
+                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
 
             case PICK_OBJECT:
@@ -166,7 +168,7 @@ public class Controller {
                     game.getPlayerInTurn().setPlayerState(IN_LIBRARY);
 
                 } else {
-                    /* TODO - Invalid game state */
+                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
 
             case PUT_OBJECT:
@@ -192,7 +194,6 @@ public class Controller {
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
 
                                     /* Check if the player has completed a common objective */
-                                    /* TODO - How do I check if a player has already completed an objective? */
                                     checkCommonObjectives();
 
                                     if (checkLibrarySpaces() == 0) {
@@ -219,6 +220,9 @@ public class Controller {
                                     /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
 
+                                    /* Check if the player has completed a common objective */
+                                    checkCommonObjectives();
+
                                     if (checkLibrarySpaces() == 0) {
                                         game.getPlayerInTurn().setFirstToEnd(true);
                                     }
@@ -243,6 +247,9 @@ public class Controller {
                                     /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
 
+                                    /* Check if the player has completed a common objective */
+                                    checkCommonObjectives();
+
                                     if (checkLibrarySpaces() == 0) {
                                         game.getPlayerInTurn().setFirstToEnd(true);
                                     }
@@ -261,11 +268,10 @@ public class Controller {
                         }
                     }
                 } else {
-                    /* TODO - Invalid game state */
+                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
-
             default:
-                /* TODO - INVALID MESSAGE TYPE */
+                new GenericErrorMessage("Message type: " + receivedMessage.getType().toString() + " is not valid.");
         }
     }
 
@@ -312,7 +318,7 @@ public class Controller {
             if(game.getCommonObjectives().get(commonObjective).size() > 0) {
                 /* If the player hasn't already completed the objective, it will get the points */
                 if(game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()] == false) {
-                    if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), /* TODO X */, /* TODO - Y */) == true) {
+                    if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0) == true) {
                         int points = game.getCommonObjectives().get(commonObjective).remove(0);
                         game.getPlayerInTurn().addPoints(points);
                         game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective);
@@ -329,15 +335,41 @@ public class Controller {
     private void endGame(Game game){
         if(game.getNextPlayer().equals(game.getPlayers().get(0))){
             game.setGameState(GameState.END);
-            checkPoints();
-            declareWinner();
+            calcPoints();
+            getPointsAndUsernames();
+            String winner = declareWinner();
+
+            /* Broadcast message of winner username */
+
+        }
+    }
+
+    /**
+     * This method will calculate the points each player has made in the game.
+     */
+    private void calcPoints(){
+        int personalObjectivePoints = 0;
+        int boardPoints = 0;
+
+        for (Player player : game.getPlayers()) {
+
+            /* Points for the personal objective */
+            personalObjectivePoints = player.getPersonalObjective().compareTo(player.getLibrary());
+
+
+            for(int i = 0; i < ObjectColour.values().length; i += 3){
+                /* Points for the adjacent objects cards */
+                boardPoints += player.getBoardPoints(ObjectColour.values()[i]);
+            }
+
+            player.addPoints(personalObjectivePoints + boardPoints);
         }
     }
 
     /**
      * This method checks the points of this game.
      */
-    private void checkPoints(){
+    private void getPointsAndUsernames(){
         for(int i = 0; i < game.getMaxPlayers(); i++){
             playersPoints.put(game.getPlayers().get(i).getNickname(), game.getPlayers().get(i).getPoints());
         }
