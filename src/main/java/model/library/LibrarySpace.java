@@ -4,6 +4,7 @@ import model.objects.ObjectCard;
 
 public class LibrarySpace {
     private ObjectCard objectContained;
+    private int group = 0;
 
     /**
      * Constructor of the LibrarySpace class
@@ -28,4 +29,11 @@ public class LibrarySpace {
         objectContained = objectCard;
     }
 
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public int getGroup() {
+        return group;
+    }
 }
