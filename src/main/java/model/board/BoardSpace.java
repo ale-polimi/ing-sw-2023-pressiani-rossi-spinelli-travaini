@@ -33,7 +33,7 @@ public class BoardSpace {
     }
 
     /**
-     *
+     *Set to null the parameter objectContained. Useful for {@link Board#pickupObjectFrom(BoardSpace) pickupObjectFrom} method
      */
     public void removeObject(){
         objectContained = null;
