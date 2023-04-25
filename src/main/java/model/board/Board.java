@@ -4,10 +4,13 @@ import enumerations.TypeSpace;
 import model.Game;
 import model.objects.ObjectCard;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 public class Board {
     private BoardSpace[][] boardSpaces;
+    PropertyChangeListener listener;
 
     /**
      *Board class custom constructor
@@ -47,6 +50,8 @@ public class Board {
     public ObjectCard pickupObjectFrom(BoardSpace boardSpace){
         ObjectCard objectPicked = boardSpace.getObject();
         boardSpace.removeObject();
+        PropertyChangeEvent event = new PropertyChangeEvent(this, "BOARD_CHANGED", this.boardSpaces, boardSpaces);
+        this.listener.propertyChange(event);
         return objectPicked;
     }
 
@@ -55,7 +60,12 @@ public class Board {
      * @param boardSpace is the tile the server wants to put the object card in.
      * @param objectCard is the object card that will be in the tile.
      */
-    public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard){boardSpace.insertObject(objectCard);}
+    public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard) {
+        /* --- LISTENER ---- */
+        PropertyChangeEvent event = new PropertyChangeEvent(this, "BOARD_CHANGED", this.boardSpaces, boardSpaces);
+        boardSpace.insertObject(objectCard);
+        this.listener.propertyChange(event);
+    }
 
     /**
      * This method is a checker used in {@link controller.Controller#pickObjectFromBoard(int, int) the pick object method} in the controller.

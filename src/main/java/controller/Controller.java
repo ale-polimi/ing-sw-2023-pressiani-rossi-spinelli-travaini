@@ -42,7 +42,7 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
 
-        /* Creating all the common objectives, when the game starts we will randomly select only two */
+        /* Creating all the common objectives; when the game starts we will randomly select only two */
         availableCommonObjectives = new HashMap<>();
         availableCommonObjectives.put(0, new Diagonal());
         availableCommonObjectives.put(1, new EightEquals());
@@ -188,7 +188,7 @@ public class Controller {
                                     addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)));
 
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                    game.getPlayerInTurn().resetObjectsInHand();
+                                    game.getPlayerInTurn().initObjectsInHand();
 
                                     /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
@@ -215,7 +215,7 @@ public class Controller {
                                     addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)));
 
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                    game.getPlayerInTurn().resetObjectsInHand();
+                                    game.getPlayerInTurn().initObjectsInHand();
 
                                     /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
@@ -242,7 +242,7 @@ public class Controller {
                                     addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)), Character.getNumericValue(receivedMessage.getPayload().charAt(3)));
 
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                    game.getPlayerInTurn().resetObjectsInHand();
+                                    game.getPlayerInTurn().initObjectsInHand();
 
                                     /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
                                     game.getPlayerInTurn().setPlayerState(PICKUP);
@@ -340,7 +340,7 @@ public class Controller {
             String winner = declareWinner();
 
             /* Broadcast message of winner username */
-
+            /* TODO */
         }
     }
 
@@ -482,11 +482,10 @@ public class Controller {
      * The player can select in which order the object cards have to be put in the specified column
      * @param cardID1 is the first card to be put in the specified column.
      * @param column is the player specified column.
-     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
-    private boolean addObjectToLibrary(int cardID1, int column) throws IncompatibleStateException, NotEnoughSpaceException{
+    private void addObjectToLibrary(int cardID1, int column) throws IncompatibleStateException, NotEnoughSpaceException{
         if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {
             ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);
             int firstEmpty = 0;
@@ -498,8 +497,7 @@ public class Controller {
                 }
             }
             if (firstEmpty != 0) {
-                game.getPlayerInTurn().getLibrary().addObject(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
-                return true;
+                game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
             } else {
                 throw new NotEnoughSpaceException(column);
             }
@@ -513,11 +511,10 @@ public class Controller {
      * @param cardID1 is the first card to be put in the specified column.
      * @param cardID2 is the second card to be put in the specified column.
      * @param column is the player specified column.
-     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
-    private boolean addObjectToLibrary(int cardID1, int cardID2, int column) throws IncompatibleStateException, NotEnoughSpaceException{
+    private void addObjectToLibrary(int cardID1, int cardID2, int column) throws IncompatibleStateException, NotEnoughSpaceException{
         if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {
             ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);
             ObjectCard objectCard2 = game.getPlayerInTurn().getObjectInHand(cardID2);
@@ -530,9 +527,8 @@ public class Controller {
                 }
             }
             if (!((firstEmpty - 1 < 0) || (firstEmpty - 2 < 0))) {
-                game.getPlayerInTurn().getLibrary().addObject(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
-                game.getPlayerInTurn().getLibrary().addObject(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));
-                return true;
+                game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
+                game.getPlayerInTurn().addObjectToLibrary(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));
             } else {
                 throw new NotEnoughSpaceException(column);
             }
@@ -547,11 +543,10 @@ public class Controller {
      * @param cardID2 is the second card to be put in the specified column.
      * @param cardID3 is the third card to be put in the specified column.
      * @param column is the player specified column.
-     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
-    private boolean addObjectToLibrary(int cardID1, int cardID2, int cardID3, int column) throws IncompatibleStateException, NotEnoughSpaceException{
+    private void addObjectToLibrary(int cardID1, int cardID2, int cardID3, int column) throws IncompatibleStateException, NotEnoughSpaceException{
         if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {
             ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);
             ObjectCard objectCard2 = game.getPlayerInTurn().getObjectInHand(cardID2);
@@ -565,10 +560,9 @@ public class Controller {
                 }
             }
             if (!((firstEmpty - 1 < 0) || (firstEmpty - 2 < 0))) {
-                game.getPlayerInTurn().getLibrary().addObject(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
-                game.getPlayerInTurn().getLibrary().addObject(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));
-                game.getPlayerInTurn().getLibrary().addObject(objectCard3, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 2 , column));
-                return true;
+                game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
+                game.getPlayerInTurn().addObjectToLibrary(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));
+                game.getPlayerInTurn().addObjectToLibrary(objectCard3, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 2, column));
             } else {
                 throw new NotEnoughSpaceException(column);
             }
