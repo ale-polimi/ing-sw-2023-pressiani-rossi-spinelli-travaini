@@ -32,7 +32,7 @@ public class FourByFourNew extends CommonObjective{
                     ObjectColour colour = library.getLibrarySpace(i,j).getObject().getObjectColour();
                     if (colour != null) {
 
-                        List<int[]> group = getAdjacentCells(i, j, colour, new boolean[6][5]);
+                        List<int[]> group = getAdjacentCells(i, j, colour);
                         if (group.size() >= MIN_GROUP_SIZE) {
 
                             if (isUniqueGroup(group)) {
@@ -48,6 +48,7 @@ public class FourByFourNew extends CommonObjective{
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
                     library.getLibrarySpace(i,j).setGroup(0);
+                    library.getLibrarySpace(i,j).setVisited(false);
                 }
 
             }
@@ -58,17 +59,17 @@ public class FourByFourNew extends CommonObjective{
             return false;
         }
 
-        private List<int[]> getAdjacentCells(int i, int j, ObjectColour colour, boolean[][] visited) {
+        private List<int[]> getAdjacentCells(int i, int j, ObjectColour colour) {
             List<int[]> group = new ArrayList<>();
-            if (i >= 0 && i < 6 && j >= 0 && j < 5 && !visited[i][j]) {
+            if (i >= 0 && i < 6 && j >= 0 && j < 5 && !library.getLibrarySpace(i, j).isVisited()) {
                 ObjectColour currentColour = library.getLibrarySpace(i,j).getObject().getObjectColour();
                 if (currentColour != null && currentColour.isEquals(colour)) {
-                    visited[i][j] = true;
+                    library.getLibrarySpace(i,j).setVisited(true);
                     group.add(new int[] {i, j});
-                    group.addAll(getAdjacentCells(i-1, j, colour, visited));
-                    group.addAll(getAdjacentCells(i+1, j, colour, visited));
-                    group.addAll(getAdjacentCells(i, j-1, colour, visited));
-                    group.addAll(getAdjacentCells(i, j+1, colour, visited));
+                    group.addAll(getAdjacentCells(i-1, j, colour));
+                    group.addAll(getAdjacentCells(i+1, j, colour));
+                    group.addAll(getAdjacentCells(i, j-1, colour));
+                    group.addAll(getAdjacentCells(i, j+1, colour));
                 }
             }
             return group;

@@ -5,6 +5,7 @@ import model.objects.ObjectCard;
 public class LibrarySpace {
     private ObjectCard objectContained;
     private int group = 0;
+    private boolean visited = false;
 
     /**
      * Constructor of the LibrarySpace class
@@ -35,5 +36,13 @@ public class LibrarySpace {
 
     public int getGroup() {
         return group;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }

@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.List;
 
 public class Player {
     private String nickname;
@@ -114,7 +115,105 @@ public class Player {
      * @return the points made from this type of object cards.
      */
     public int getBoardPoints(ObjectColour objectColour) {
-        /* TODO */
+        int groupCount = 0;
+        int boardPoints = 0;
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                if(library.getLibrarySpace(i,j).getObject().getObjectColour()!= null &&
+                        library.getLibrarySpace(i,j).getObject().getObjectColour().isEquals(objectColour)) {
+
+
+                        List<int[]> group = getAdjacentCells(i, j, objectColour);
+
+                            if (isUniqueGroup(group)) {
+
+                                groupCount = countGroup(group);
+
+                                switch (group.size()){
+                                    case  1,2 ->{
+
+                                    }
+                                    case 3 -> {
+                                        boardPoints += 2;
+                                    }
+                                    case 4 -> {
+                                        boardPoints += 3;
+                                    }
+                                    case 5 -> {
+                                        boardPoints += 5;
+                                    }
+                                    case 6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 -> {
+                                        boardPoints += 8;
+                                    }
+                                }
+
+                            }
+
+
+                }
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                library.getLibrarySpace(i,j).setGroup(0);
+                library.getLibrarySpace(i,j).setVisited(false);
+            }
+
+        }
+
+        return boardPoints;
+
+    }
+
+    /**
+     * this method will return a group of adjacent tiles
+     * @param i represents the X coordinate
+     * @param j represents the Y coordinate
+     * @param objectColour is the colour of the first tile of the group
+     * @return a group of adjacent tiles
+     */
+    private List<int[]> getAdjacentCells(int i, int j, ObjectColour objectColour) {
+        List<int[]> group = new ArrayList<>();
+        if (i >= 0 && i < 6 && j >= 0 && j < 5 && !library.getLibrarySpace(i, j).isVisited()) {
+            ObjectColour currentColour = library.getLibrarySpace(i,j).getObject().getObjectColour();
+            if (currentColour != null && currentColour.isEquals(objectColour)) {
+                library.getLibrarySpace(i,j).setVisited(true);
+                group.add(new int[] {i, j});
+                group.addAll(getAdjacentCells(i-1, j, objectColour));
+                group.addAll(getAdjacentCells(i+1, j, objectColour));
+                group.addAll(getAdjacentCells(i, j-1, objectColour));
+                group.addAll(getAdjacentCells(i, j+1, objectColour));
+            }
+        }
+        return group;
+    }
+
+    /**
+     * this method will check if the group has already been counted or not
+     * @param group is the list containing adjacent cells
+     * @return if the group has already been counted or not
+     */
+    private boolean isUniqueGroup(List<int[]> group) {
+        int row = group.get(0)[0];
+        int col = group.get(0)[1];
+        return library.getLibrarySpace(row,col).getGroup() == 0;
+    }
+
+    /**
+     * this method will set the group number to all adjacent tiles of the group
+     * @param group is the list containing adjacent cells
+     * @return the number of groups + 1
+     */
+    private int countGroup(List<int[]> group) {
+        int count = 1;
+        for (int i = 0; i < group.size(); i++) {
+            int[] cell = group.get(i);
+            int row = cell[0];
+            int col = cell[1];
+            library.getLibrarySpace(row, col).setGroup(count);
+        }
+        return ++count; //
     }
 
     /**
