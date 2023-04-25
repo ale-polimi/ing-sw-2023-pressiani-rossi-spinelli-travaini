@@ -15,15 +15,24 @@ public class FiveX extends CommonObjective {
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
 
-        ObjectColour colour= library.getLibrarySpace(x,y).getObject().getObjectColour();
 
-        if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().isEquals(colour) &&
-                library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().isEquals(colour)&&
-                library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().isEquals(colour)&&
-                library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().isEquals(colour))
-            return true;
-        else
-            return false;
+        for ( x = 1; x < 5; x++) {
+            for ( y = 1; y < 4; y++) {
+
+                ObjectColour colour= library.getLibrarySpace(x,y).getObject().getObjectColour();
+
+                if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().isEquals(colour) &&
+                        library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().isEquals(colour)&&
+                        library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().isEquals(colour)&&
+                        library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().isEquals(colour))
+                    return true;
+
+
+            }
+
+        }
+
+        return false;
 
     }
 
