@@ -1,7 +1,9 @@
 package network.structure;
 
+import network.MaxPlayersMessage;
 import network.Message;
 import network.MessageType;
+import network.UserInfoForLoginMessage;
 import view.UI;
 
 
@@ -85,7 +87,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client{
 
     public void requestNickname() throws RemoteException {
         String nickname= view.getNickname();
-        Message message = new Message(this.toString(), nickname, MessageType.USER_INFO);
+        Message message = new UserInfoForLoginMessage(this.toString(), nickname);
 
         try {
             listener.nicknameInput(message);
@@ -101,7 +103,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client{
 
     public void requestMaxPlayer() throws RemoteException{
         int numPlayers= view.getNumPlayers();
-        Message message = new Message(this.toString(),String.valueOf(numPlayers), MessageType.MAX_PLAYERS_FOR_GAME);
+        Message message = new MaxPlayersMessage(this.toString(),numPlayers);
 
         try {
             listener.setMaxPlayer(message);
