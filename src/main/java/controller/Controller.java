@@ -11,8 +11,7 @@ import model.Game;
 import model.commonobjective.*;
 import model.objects.ObjectCard;
 import model.player.Player;
-import network.GenericErrorMessage;
-import network.Message;
+import network.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,28 +68,32 @@ public class Controller {
             /* TODO - Controllo se il client che manda (message.getsender) è il giocatore che deve giocare (game.getcurrentplayer) */
             case MAX_PLAYERS_FOR_GAME:
 
+                MaxPlayersMessage maxPlayersMessage = (MaxPlayersMessage) receivedMessage;
+
                 if (game.getGameState().equals(LOGIN)) {
                     if (game.getMaxPlayers() > 0) {
-                        new GenericErrorMessage("The players for this game are already set.");
-                    } else if (game.setMaxPlayers(Integer.parseInt(receivedMessage.getPayload())) == false) {
-                        new GenericErrorMessage("The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS);
+                        new GenericErrorMessage("Controller","The players for this game are already set.");
+                    } else if (game.setMaxPlayers(maxPlayersMessage.getPlayers()) == false) {
+                        new GenericErrorMessage("Controller","The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS);
                     }
                 } else {
-                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
 
             case USER_INFO:
 
+                UserInfoForLoginMessage userInfoForLoginMessage = (UserInfoForLoginMessage) receivedMessage;
+
                 if (game.getGameState().equals(LOGIN)) {
-                    if (game.isNicknameTaken(receivedMessage.getPayload()) == true) {
-                        new GenericErrorMessage("Username is already taken.");
+                    if (game.isNicknameTaken(userInfoForLoginMessage.getUsername()) == true) {
+                        new GenericErrorMessage("Controller","Username is already taken.");
                     } else {
 
                         try {
                             Random rand = new Random();
-                            game.addToGame(new Player(receivedMessage.getPayload(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
+                            game.addToGame(new Player(userInfoForLoginMessage.getUsername(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
                         } catch (TooManyPlayersException exception) {
-                            new GenericErrorMessage(exception.getMessage());
+                            new GenericErrorMessage("Controller",exception.getMessage());
                         }
 
                         if (game.getPlayers().size() == game.getMaxPlayers()) {
@@ -98,10 +101,12 @@ public class Controller {
                         }
                     }
                 } else {
-                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
 
             case PICK_OBJECT:
+
+                PickObjectMessage pickObjectMessage = (PickObjectMessage) receivedMessage;
 
                 if (game.getGameState().equals(IN_GAME)) {
 
@@ -109,83 +114,85 @@ public class Controller {
                         game.getPlayerInTurn().initObjectsInHand();
                     }
 
-                    switch (receivedMessage.getPayload().length()) {
+                    switch (pickObjectMessage.getCoordinates().size()) {
 
                         case 2:
-                            firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
-                            firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
+                            firstX = pickObjectMessage.getCoordinates().get(0);
+                            firstY = pickObjectMessage.getCoordinates().get(1);
                             try {
                                 pickObjectFromBoard(firstX, firstY);
                             } catch (IncompatibleStateException e) {
-                                new GenericErrorMessage(e.getMessage());
+                                new GenericErrorMessage("Controller",e.getMessage());
                             }
                             break;
                         case 4:
-                            firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
-                            firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
-                            secondX = Character.getNumericValue(receivedMessage.getPayload().charAt(2));
-                            secondY = Character.getNumericValue(receivedMessage.getPayload().charAt(3));
+                            firstX = pickObjectMessage.getCoordinates().get(0);
+                            firstY = pickObjectMessage.getCoordinates().get(1);
+                            secondX = pickObjectMessage.getCoordinates().get(2);
+                            secondY = pickObjectMessage.getCoordinates().get(3);
 
                             if (secondX != firstX || secondY != firstY) {
-                                new GenericErrorMessage("You must pick objects from the same row or column!");
+                                new GenericErrorMessage("Controller","You must pick objects from the same row or column!");
                             } else {
 
                                 try {
                                     pickObjectFromBoard(firstX, firstY);
                                     pickObjectFromBoard(secondX, secondY);
                                 } catch (IncompatibleStateException e) {
-                                    new GenericErrorMessage(e.getMessage());
+                                    new GenericErrorMessage("Controller",e.getMessage());
                                 }
 
                             }
                             break;
                         case 6:
-                            firstX = Character.getNumericValue(receivedMessage.getPayload().charAt(0));
-                            firstY = Character.getNumericValue(receivedMessage.getPayload().charAt(1));
-                            secondX = Character.getNumericValue(receivedMessage.getPayload().charAt(2));
-                            secondY = Character.getNumericValue(receivedMessage.getPayload().charAt(3));
-                            thirdX = Character.getNumericValue(receivedMessage.getPayload().charAt(4));
-                            thirdY = Character.getNumericValue(receivedMessage.getPayload().charAt(5));
+                            firstX = pickObjectMessage.getCoordinates().get(0);
+                            firstY = pickObjectMessage.getCoordinates().get(1);
+                            secondX = pickObjectMessage.getCoordinates().get(2);
+                            secondY = pickObjectMessage.getCoordinates().get(3);
+                            thirdX = pickObjectMessage.getCoordinates().get(4);
+                            thirdY = pickObjectMessage.getCoordinates().get(5);
 
 
                             if (!((firstX == secondX && firstX == thirdX && secondX == thirdX) || (firstY == secondY && firstY == thirdY && secondY == thirdY))) {
-                                new GenericErrorMessage("You must pick objects from the same row or column!");
+                                new GenericErrorMessage("Controller","You must pick objects from the same row or column!");
                             } else {
                                 try {
                                     pickObjectFromBoard(firstX, firstY);
                                     pickObjectFromBoard(secondX, secondY);
                                     pickObjectFromBoard(thirdX, thirdY);
                                 } catch (IncompatibleStateException e) {
-                                    new GenericErrorMessage(e.getMessage());
+                                    new GenericErrorMessage("Controller",e.getMessage());
                                 }
                             }
                             break;
                         default:
-                            new GenericErrorMessage("Coordinates must be in pairs.");
+                            new GenericErrorMessage("Controller","Coordinates must be in pairs.");
                     }
 
                     /* After picking up the objects, the player will go to his library */
                     game.getPlayerInTurn().setPlayerState(IN_LIBRARY);
 
                 } else {
-                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
 
             case PUT_OBJECT:
 
+                PutObjectInLibraryMessage putObjectInLibraryMessage = (PutObjectInLibraryMessage) receivedMessage;
+
                 if (game.getGameState().equals(IN_GAME)) {
                     resetCoordinateValues();
 
-                    if (receivedMessage.getPayload().length() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
-                        new GenericErrorMessage("You must put all the objects you have in hand in the library.");
-                    } else if (receivedMessage.getPayload().length() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
-                        int value = receivedMessage.getPayload().length() - 1;
-                        new GenericErrorMessage("You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize());
-                    } else if (receivedMessage.getPayload().length() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
-                        switch (receivedMessage.getPayload().length()) {
+                    if (putObjectInLibraryMessage.getOrderArray().size() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
+                        new GenericErrorMessage("Controller","You must put all the objects you have in hand in the library.");
+                    } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
+                        int value = putObjectInLibraryMessage.getOrderArray().size() - 1;
+                        new GenericErrorMessage("Controller", "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize());
+                    } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
+                        switch (putObjectInLibraryMessage.getOrderArray().size()) {
                             case 2 -> {
                                 try {
-                                    addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)));
+                                    addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1));
 
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
                                     game.getPlayerInTurn().initObjectsInHand();
@@ -207,12 +214,12 @@ public class Controller {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    new GenericErrorMessage(e.getMessage());
+                                    new GenericErrorMessage("Controller",e.getMessage());
                                 }
                             }
                             case 3 -> {
                                 try {
-                                    addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)));
+                                    addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2));
 
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
                                     game.getPlayerInTurn().initObjectsInHand();
@@ -234,12 +241,12 @@ public class Controller {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    new GenericErrorMessage(e.getMessage());
+                                    new GenericErrorMessage("Controller",e.getMessage());
                                 }
                             }
                             case 4 -> {
                                 try {
-                                    addObjectToLibrary(Character.getNumericValue(receivedMessage.getPayload().charAt(0)), Character.getNumericValue(receivedMessage.getPayload().charAt(1)), Character.getNumericValue(receivedMessage.getPayload().charAt(2)), Character.getNumericValue(receivedMessage.getPayload().charAt(3)));
+                                    addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2), putObjectInLibraryMessage.getOrderArray().get(3));
 
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
                                     game.getPlayerInTurn().initObjectsInHand();
@@ -261,17 +268,17 @@ public class Controller {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    new GenericErrorMessage(e.getMessage());
+                                    new GenericErrorMessage("Controller",e.getMessage());
                                 }
                             }
-                            default -> new GenericErrorMessage("Invalid number of objects.");
+                            default -> new GenericErrorMessage("Controller","Invalid number of objects.");
                         }
                     }
                 } else {
-                    new GenericErrorMessage("This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
                 }
             default:
-                new GenericErrorMessage("Message type: " + receivedMessage.getType().toString() + " is not valid.");
+                new GenericErrorMessage("Controller","Message type: " + receivedMessage.getType().toString() + " is not valid.");
         }
     }
 

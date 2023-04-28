@@ -2,6 +2,9 @@ package model.library;
 
 import model.objects.ObjectCard;
 
+/**
+ * This class represents the personal objective given to a player.
+ */
 public final class PersonalObjective extends LibraryGrid {
 
     /**

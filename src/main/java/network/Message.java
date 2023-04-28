@@ -2,20 +2,23 @@ package network;
 
 import controller.Controller;
 
+/**
+ * Abstract message class which must be extended by each message type.
+ * Both server and clients will communicate using this generic type of message.
+ * This avoids the usage of the "instance of" primitive.
+ */
 public abstract class Message {
 
     private final String sender;
-    private final String payload;
     private final MessageType messageType;
 
     /**
      * Constructor for abstract class Message.
-     * @param payload is the payload of the message.
+     * @param sender is the sender of the message.
      * @param messageType is the type of the message.
      */
-    public Message(String sender, String payload, MessageType messageType){
+    public Message(String sender, MessageType messageType){
         this.sender = sender;
-        this.payload = payload;
         this.messageType = messageType;
     }
 
@@ -25,14 +28,6 @@ public abstract class Message {
      */
     public String getSender(){
         return this.sender;
-    }
-
-    /**
-     * Getter method to return the payload of the message.
-     * @return the payload as a String object.
-     */
-    public String getPayload(){
-        return this.payload;
     }
 
     /**
