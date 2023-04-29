@@ -3,102 +3,87 @@ package network.structure;
 import network.*;
 import view.UI;
 
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
+
 /**
- * this class represents a generic client. There are methods for the initialization and the methods for the UI
+ * this class represents an RMI client and the method for the connection
  */
 
-public class ClientRMI extends UnicastRemoteObject implements Client{
+public class ClientSocket implements Client {
 
-   UI view = new UI();
+    private ObjectOutputStream oos ;
+    private ObjectInputStream ois;
 
-   private Server server;
+    private Socket socket;
 
-   //default RMI port
-   private int port= 1099;
+    private UI view = new UI();
+
+
+    private final int port;
+    private Server server;
+
 
 
     /**
-     * constructor for the connection with the server
+     * constructor for a RNI client
      * @param server is the server which the client is connecting to
-     * @throws RemoteException when the connection is not possible
+     * @param port is he connection port
      */
-
-    public ClientRMI(Server server) throws RemoteException {
-        this.server=server;
-        initialize(server);
+    public ClientSocket(Server server, int port){
+        this.server = server;
+        this.port = port;
     }
 
     /**
-     * is the constructor with the connection with the server
-     * @param server is the server which the client is connecting to
-     * @param port is the port where the connection is
-     * @throws RemoteException because needs to
+     * method for the connection socket with the server
+     * @throws IOException when there are problems with the communication with the sever
+     * @throws RemoteException when there are problems with the connection
      */
-    public ClientRMI(Server server, int port) throws RemoteException {
-        this.server=server;
-        this.port=port;
-        initialize(server);
-    }
+    public void connectionSocket() throws IOException, RemoteException {
 
+       try {
+           Socket echoSocket= new Socket(server.toString(), port);
+           oos = new ObjectOutputStream(echoSocket.getOutputStream());
+           ois= new ObjectInputStream(echoSocket.getInputStream());
 
-
-    /**
-     * method for register a client to a game
-     * @param server is the server which the client connects to for starting the game
-     * @throws RemoteException if the connection is not possible
-     */
-    private void initialize(Server server) throws RemoteException {
-            try {
-                server.registry(this);
-            } catch (RemoteException e) {
-                System.err.println("connection unable");
-            }
-        }
-
-
-    /**
-     * method that returns the client port
-     * @return the port
-     */
-    public int getPort() {
-        return port;
-    }
-
-
-    /**
-     * method for the actual connection to the server
-     * @throws RemoteException when the connection is not possible
-     * @throws NotBoundException when there is not a server named like in the lookup function
-     */
-
-    public void connectionRMI() throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(getPort());
-        this.server = (Server) registry.lookup("server");
+       }
+       catch (IOException e){
+           System.err.println("couldn't get IO for the connection");
+       }
     }
 
 
     /**
      * notify the client a change
-     * @throws RemoteException when the update isn't possible
+     * throws RemoteException
      */
-    public void update(/*TypeView typeView, Type type*/) throws RemoteException {
+    @Override
+    public void update(/*TypeView typeViews, Type types*/) throws RemoteException {
+        /*TODO*/
+    }
+
+    /**
+     * receive a message from this server
+     * @param server is the server that sends the message to the client
+     * @throws RemoteException when the message is null
+     */
+    public void receive(Server server) throws RemoteException{
 
     }
+
 
     /**
      * method that asks, using the UI, the nickname to the client and send it to the server
      * @throws RemoteException when is not possible to send the message
      */
 
+    @Override
     public void requestNickname() throws RemoteException {
         String nickname= view.getNickname();
         Message message = new UserInfoForLoginMessage(this.toString(), nickname);
@@ -115,7 +100,8 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
      * @throws RemoteException when is not possible to send the message
      */
 
-    public void requestMaxPlayer() throws RemoteException{
+    @Override
+    public void requestMaxPlayer() throws RemoteException {
         int numPlayers= view.getNumPlayers();
         Message message = new MaxPlayersMessage(this.toString(),numPlayers);
 
@@ -123,6 +109,7 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
             listener.setMaxPlayer(message);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
+
         }
     }
 
@@ -131,6 +118,7 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
      * @throws RemoteException when is not possible to send the message
      */
 
+    @Override
     public void requestBoardMove() throws RemoteException {
         ArrayList boardMove = new ArrayList<int[][]>(view.getBoardMove());
         Message message= new PickObjectMessage(this.toString(), boardMove);
@@ -140,6 +128,7 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     /**
@@ -147,7 +136,9 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
      * @throws RemoteException when is not possible to send the message
      */
 
+    @Override
     public void requestLibraryMove() throws RemoteException {
+
         ArrayList libraryMove = new ArrayList<int[][]>(view.getLibraryMove());
         Message message= new PutObjectInLibraryMessage(this.toString(), libraryMove);
 
@@ -163,6 +154,7 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
      * @throws RemoteException when is not possible to send the message
      */
 
+    @Override
     public void waitTurn() throws RemoteException {
 
 
@@ -172,20 +164,37 @@ public class ClientRMI extends UnicastRemoteObject implements Client{
      * tells the user who is the winner and sends the message to the server
      * @throws RemoteException when is not possible to send the message
      */
+
+    @Override
     public void whoIsWinner() throws RemoteException {
+
 
     }
 
     /**
-     * method for the disconnection from the server
-     * @throws RemoteException when there are problems with the connection
+     * method for sending a serialized message to the server
+     * @param message is the message to send
+     * @throws IOException if there are communication problems
      */
-    public void closeConnectionRMI(Server server) throws RemoteException{
+    public void sendMessageToServer(Message message) throws IOException {
 
-        /*TODO disconnection method in the server*/
+        oos.writeObject(message);
+        oos.flush();
+        oos.reset();
 
-        server=null;
     }
 
+
+    /**
+     * close the connection between the client and the server
+     * @param server is the server which the client is disconnecting to
+     * @throws IOException if the connection is not open
+     */
+    public void closeConnectionSocket(Server server) throws IOException {
+        /*
+        TODO add a method "disconnection" in the server
+         */
+        server = null;
+    }
 
 }

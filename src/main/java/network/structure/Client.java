@@ -11,7 +11,6 @@ import java.rmi.RemoteException;
  */
 
 public interface Client extends Remote, GameListener {
-    
     PlayerListener listener = null;
 
     /**
