@@ -100,7 +100,7 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
     }
 
     private static void startSocket(ServerRMI serverRMI) throws RemoteException {
-        serverSocket = new ServerSocket(serverRMI,, 1234);
+        serverSocket = new ServerSocket(serverRMI, 1234);
     }
     /*TODO: Handler of messages from clients*/
 
