@@ -8,6 +8,8 @@ import network.Message;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
@@ -16,7 +18,10 @@ import java.util.HashMap;
 
 public class ServerRMI extends UnicastRemoteObject implements Server{
 
+    private static ServerRMI serverRMI;
+    private static ServerSocket serverSocket;
     private final HashMap<Integer, Tuple> games = new HashMap<>();
+    private static final ArrayList<GameHandler> gameHandlers = new ArrayList<>();
 
     /**
      * Custom constructor of ServerRMI class
@@ -46,7 +51,57 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         super(port, csf, ssf);
     }
 
+    /**
+     * Main method,create the instance of the server
+     * @param args arguments given by command line
+     */
+    public static void main(String[] args) {
+        //Start RMI server instance
+        Thread rmiThread = new Thread() {
+            @Override
+            public void run() {
+                try {startRMI();}
+                catch (RemoteException e) {System.err.println("Cannot start RMI instance, disabling protocol");}
+            }
+        };
+        rmiThread.start();
 
+        //Start Socket server instance
+        Thread socketThread = new Thread() {
+            @Override
+            public void run(){
+                try{startSocket(serverRMI);}
+                catch(RemoteException e) {System.err.println("Cannot connect to socket server, disabling protocol");}
+            }
+        };
+        socketThread.start();
+    }
+
+    /**
+     * Return the instance of the server
+     * @return the serverRMI
+     * @throws RemoteException Threw when the creation of a server fails
+     */
+    private static ServerRMI getServerRMI() throws RemoteException {
+        if(serverRMI == null) serverRMI = new ServerRMI(1234);
+        return serverRMI;
+    }
+
+    /**
+     * Start the server RMI thread
+     * @throws RemoteException Threw when the server cannot be reached
+     */
+    private static void startRMI() throws RemoteException {
+        ServerRMI serverRMI = getServerRMI();
+        LocateRegistry.createRegistry(1234);
+        Registry registry = LocateRegistry.getRegistry(1234);
+        registry.rebind("server", serverRMI);
+        System.out.println("RMI server started, waiting for clients...");
+    }
+
+    private static void startSocket(ServerRMI serverRMI) throws RemoteException {
+        serverSocket = new ServerSocket(serverRMI,, 1234);
+    }
     /*TODO: Handler of messages from clients*/
 
     /**
@@ -54,23 +109,29 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
      * @param client the client that tries to connect to the server
      */
     @Override
-    public synchronized void registry(Client client) {
+    public void registry(Client client) throws RemoteException {
         for(Tuple t: games.values()){
             if (t.getController().getGame().getPlayers().size() < t.getController().getGame().getMaxPlayers()) {
                 t.addClient(client);
-                /*TODO Procedura di inizializzazione client*/
+                client.login();
+                if (t.getController().getGame().getMaxPlayers()==t.getController().getGame().getMaxPlayers()){
+                    gameHandlers.add(new GameHandler(t));
+                    gameHandlers.get(gameHandlers.size()-1).start();
+                }
                 return;
             }
         }
         // Initialise a new game
         try{games.put(games.size(),new Tuple(new Controller(), new ArrayList<>()));}
         catch(IOException e){System.err.println("ERROR: cannot create a controller");}
-        games.get(games.size()-1).addClient(client);
+        games.get(games.size() - 1).addClient(client);
         /*TODO Chiamata al client per settare il nickname e numero di partecipanti*/
+        client.login();
+        client.setMaxPlayer();
     }
 
     /**
-     * Returns the oontroller related to the current client
+     * Returns the controller related to the current client
      * @param nickname The nickname related to the client
      * @return The controller of the game where the player is in
      */
