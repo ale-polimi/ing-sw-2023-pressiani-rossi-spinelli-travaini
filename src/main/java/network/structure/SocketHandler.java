@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketHandler implements Runnable {
+public class SocketHandler implements Runnable,ClientHandler {
 
     private final SocketServer socketServer;
     private final Socket socket;
@@ -63,4 +63,13 @@ public class SocketHandler implements Runnable {
         }
     }
 
+    @Override
+    public void isConnected() {
+
+    }
+
+    @Override
+    public void disconnect() {
+
+    }
 }
