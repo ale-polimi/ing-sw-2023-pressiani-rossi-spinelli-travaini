@@ -1,6 +1,8 @@
 package view;
 
+import model.board.Board;
 import model.board.BoardSpace;
+import model.library.Library;
 import model.library.LibrarySpace;
 
 import java.util.List;
@@ -52,4 +54,8 @@ public interface View {
      * Tells the player it isn't his/her turn
      */
     public void waitTurn();
+
+    void showBoard(Board gameBoard);
+
+    void showLibrary(Library playerLibrary);
 }
