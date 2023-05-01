@@ -7,6 +7,7 @@ import network.Message;
 
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,13 +16,16 @@ import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerRMI extends UnicastRemoteObject implements Server{
 
     private static ServerRMI serverRMI;
-    private static ServerSocket serverSocket;
     private final HashMap<Integer, Tuple> games = new HashMap<>();
     private static final ArrayList<GameHandler> gameHandlers = new ArrayList<>();
+    private static ServerSocket serverSocket;
+    private static ExecutorService executor;
 
     /**
      * Custom constructor of ServerRMI class
@@ -55,26 +59,22 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
      * Main method,create the instance of the server
      * @param args arguments given by command line
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        executor = Executors.newCachedThreadPool();
         //Start RMI server instance
-        Thread rmiThread = new Thread() {
-            @Override
-            public void run() {
-                try {startRMI();}
-                catch (RemoteException e) {System.err.println("Cannot start RMI instance, disabling protocol");}
-            }
-        };
-        rmiThread.start();
+        startRMI();
 
         //Start Socket server instance
-        Thread socketThread = new Thread() {
-            @Override
-            public void run(){
-                try{startSocket(serverRMI);}
-                catch(RemoteException e) {System.err.println("Cannot connect to socket server, disabling protocol");}
-            }
-        };
-        socketThread.start();
+        serverSocket = new ServerSocket(8080);
+        SocketServer socketServer = new SocketServer(serverRMI, 12000);
+        executor.submit(socketServer);
+
+
+        while(true) try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            System.err.println("Server thread has been interrupted");
+        }
     }
 
     /**
@@ -99,21 +99,16 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         System.out.println("RMI server started, waiting for clients...");
     }
 
-    private static void startSocket(ServerRMI serverRMI) throws RemoteException {
-        serverSocket = new ServerSocket(serverRMI, 1234);
-    }
-    /*TODO: Handler of messages from clients*/
-
     /**
      * Add the client to the list of known clients
-     * @param client the client that tries to connect to the server
+     * @param clientHandler  the client handler that tries to connect to the server
      */
     @Override
-    public void registry(Client client) throws RemoteException {
+    public void registry(ClientHandler clientHandler) throws RemoteException {
         for(Tuple t: games.values()){
             if (t.getController().getGame().getPlayers().size() < t.getController().getGame().getMaxPlayers()) {
-                t.addClient(client);
-                client.login();
+                t.addClientHandler(clientHandler);
+                clientHandler.login();
                 if (t.getController().getGame().getMaxPlayers()==t.getController().getGame().getMaxPlayers()){
                     gameHandlers.add(new GameHandler(t));
                     gameHandlers.get(gameHandlers.size()-1).start();
@@ -124,10 +119,10 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         // Initialise a new game
         try{games.put(games.size(),new Tuple(new Controller(), new ArrayList<>()));}
         catch(IOException e){System.err.println("ERROR: cannot create a controller");}
-        games.get(games.size() - 1).addClient(client);
+        games.get(games.size() - 1).addClientHandler(clientHandler);
         /*TODO Chiamata al client per settare il nickname e numero di partecipanti*/
-        client.login();
-        client.setMaxPlayer();
+        clientHandler.login();
+        clientHandler.setMaxPlayer();
     }
 
     /**
@@ -183,4 +178,6 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
     public void playerLibraryMove(Message message) throws RemoteException {
         getController(message.getSender()).onMessageReceived(message);
     }
+
+  public static ExecutorService getExecutor(){return executor;}
 }

@@ -8,11 +8,11 @@ public class Tuple {
     //Controller of the game related to the clients
     private final Controller controller;
     //Clients which correspond to the players of the game
-    private ArrayList<Client> clients;
+    private ArrayList<ClientHandler> clientHandlers;
 
-    public Tuple(Controller controller, ArrayList<Client> clients){
+    public Tuple(Controller controller, ArrayList<ClientHandler> clientHandlers){
         this.controller = controller;
-        this.clients = clients;
+        this.clientHandlers = clientHandlers;
     }
 
     /**
@@ -25,11 +25,11 @@ public class Tuple {
      * Getter of clients parameter
      * @return the clients parameter of the Tuple object
      */
-    public ArrayList<Client> getClients() {return clients;}
+    public ArrayList<ClientHandler> getClientHandlers() {return clientHandlers;}
 
     /**
      * Add a client to the clients list
-     * @param client The client that has to be added to the clients parameter
+     * @param clientHandler The client handler that has to be added to the clientHandlers parameter
      */
-    public void addClient(Client client){clients.add(client);}
+    public void addClientHandler(ClientHandler clientHandler){clientHandlers.add(clientHandler);}
 }
