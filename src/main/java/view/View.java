@@ -1,6 +1,8 @@
 package view;
 
+import model.board.Board;
 import model.board.BoardSpace;
+import model.library.Library;
 import model.library.LibrarySpace;
 
 import java.util.List;
