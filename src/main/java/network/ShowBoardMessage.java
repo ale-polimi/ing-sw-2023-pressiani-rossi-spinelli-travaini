@@ -2,6 +2,7 @@ package network;
 
 import model.board.Board;
 
+@Deprecated
 public class ShowBoardMessage extends Message{
     private final Board gameBoard;
 

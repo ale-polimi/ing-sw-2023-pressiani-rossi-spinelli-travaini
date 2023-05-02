@@ -4,6 +4,7 @@ import model.objects.ObjectCard;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class ShowObjectsInHandMessage extends Message{
     private final ArrayList<ObjectCard> objectsInHand;
 

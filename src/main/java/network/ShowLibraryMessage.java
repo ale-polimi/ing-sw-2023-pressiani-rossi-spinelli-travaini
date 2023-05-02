@@ -5,6 +5,7 @@ import model.library.Library;
 /**
  * Message which contains the player's library. USed to send the updated library after a move to the player.
  */
+@Deprecated
 public class ShowLibraryMessage extends Message{
     private final Library playerLibrary;
 
