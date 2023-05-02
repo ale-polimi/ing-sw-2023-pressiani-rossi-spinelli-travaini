@@ -12,6 +12,7 @@ import view.View;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -154,10 +155,34 @@ public class Cli extends ViewObservable implements View {
         int numOfPlayers;
 
         try {
-            out.print("How many players are going to play?" +
-                    "Minimum: 2" +
-                    "Maximum: 4");
+            out.print("How many players are going to play?\n" +
+                    "Minimum: 2\n" +
+                    "Maximum: 4\n");
             numOfPlayers = Integer.parseInt(readLine());
+            notifyObserver(viewObserver -> viewObserver.onMaxPlayers(numOfPlayers));
+        } catch (ExecutionException e){
+            out.println(STR_INPUT_CANCELED);
+        }
+    }
+
+    /**
+     * This method asks the user which cards he wants to pick from the board.
+     */
+    @Override
+    public void askBoardMove(){
+        try{
+            out.print("Which cards do you want to pick?\n" +
+                      "You can pick up to 3 cards as: X1,Y1,X2,Y2,X3,Y3\n" +
+                      "(Separate the coordinates with a comma)\n");
+            String coordinates = readLine();
+
+            String[] parsedCoordinates = coordinates.split(",");
+            ArrayList<Integer> coordinatesToSend = new ArrayList<>();
+            for(int i = 0; i < parsedCoordinates.length; i++){
+                coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
+            }
+
+            notifyObserver(viewObserver -> viewObserver.onUdpateBoardMove());
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }

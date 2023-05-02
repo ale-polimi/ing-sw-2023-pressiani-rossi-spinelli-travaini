@@ -8,4 +8,5 @@ import java.util.Map;
 public interface ViewObserver {
     void onUpdateServerInfo(Map<String, String> serverInfo);
     void onUpdateNickname(String nickname);
+    void onMaxPlayers(int numOfPlayers);
 }

@@ -46,6 +46,10 @@ public class ClientController implements ViewObserver {
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
     }
 
+    public void onMaxPlayers(int maxPlayers){
+        client.sendMessage(new MaxPlayersMessage(this.nickname, maxPlayers));
+    }
+
     /**
      * This method checks if the ip is valid as in it follows the <a href="https://en.wikipedia.org/wiki/Dot-decimal_notation">dot-decimal notation</a>.
      * @param ip is the ip to verify.
