@@ -6,6 +6,7 @@ public enum MessageType {
     PICK_OBJECT,
     PUT_OBJECT,
     GENERIC_ERROR,
+    SHOW_TURN,
     SHOW_LIBRARY,
     SHOW_BOARD,
     SHOW_PERSONAL_OBJECTIVE,

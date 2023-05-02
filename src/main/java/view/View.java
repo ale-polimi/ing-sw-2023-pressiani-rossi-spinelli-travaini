@@ -4,7 +4,9 @@ import model.board.Board;
 import model.board.BoardSpace;
 import model.library.Library;
 import model.library.LibrarySpace;
+import model.objects.ObjectCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface View {
@@ -54,8 +56,8 @@ public interface View {
      * Tells the player it isn't his/her turn
      */
     public void waitTurn();
+    
+    void showGenericError(String payload);
 
-    void showBoard(Board gameBoard);
-
-    void showLibrary(Library playerLibrary);
+    void showTurn(Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
 }

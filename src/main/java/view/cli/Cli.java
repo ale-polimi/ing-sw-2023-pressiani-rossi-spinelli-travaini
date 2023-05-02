@@ -5,9 +5,13 @@ import enumerations.ObjectColour;
 import enumerations.TypeSpace;
 import model.board.Board;
 import model.library.Library;
+import model.objects.ObjectCard;
+import network.Message;
+import observer.ViewObservable;
 import view.View;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -16,7 +20,7 @@ import java.util.concurrent.FutureTask;
 /**
  * Command line interface (CLI) for the game.
  */
-public class Cli implements View {
+public class Cli extends ViewObservable implements View {
 
     private static final String STR_INPUT_CANCELED = "User input canceled.";
     private final PrintStream out;
@@ -113,7 +117,7 @@ public class Cli implements View {
             }
         } while (validInput == false);
 
-        /* TODO - Update server info with observers */
+        notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
     }
 
     /**
@@ -134,7 +138,7 @@ public class Cli implements View {
                     validInput = false;
                 }  else {
                     validInput = true;
-                    /* TODO - Notify observers */
+                    notifyObserver(viewObserver -> viewObserver.onUpdateNickname(nickname));
                 }
             } while (validInput == false);
         } catch (ExecutionException e){
@@ -146,7 +150,7 @@ public class Cli implements View {
      * This method asks the user the number of players for the game.
      */
     @Override
-    public void askPlayersNumber() {
+    public void askMaxPlayer() {
         int numOfPlayers;
 
         try {
@@ -160,13 +164,28 @@ public class Cli implements View {
     }
 
     /**
+     * This method shows the turn to the player.
+     * @param rcvGameBoard is the {@link Board game board}.
+     * @param rcvPlayerLibrary
+     * @param rcvObjectsInHand
+     */
+    public void showTurn(Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand){
+        clearCli();
+
+        showBoard(rcvGameBoard);
+        showObjInHand(rcvObjectsInHand);
+        showLibrary(rcvPlayerLibrary);
+    }
+
+
+
+    /**
      * This method prints the board.
      * @param gameBoard is the board passed by the {@link ClientController}.
      */
-    public void showBoard(Board gameBoard){
-        clearCli();
+    private void showBoard(Board gameBoard){
 
-        out.print(printColumnNumbers());
+        out.print(printColumnNumbers(9));
         out.print(Colours.RESET);
         for(int row = 0; row < 9; row++){
             out.print(printRowNumber(row));
@@ -174,19 +193,47 @@ public class Cli implements View {
                 if(gameBoard.getSpace(row,col).getTypeSpace().equals(TypeSpace.UNUSABLE) || gameBoard.getSpace(row,col).getObject().equals(null)){
                     out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 } else {
-                    if(gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.GREEN1) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.GREEN2) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.GREEN3)){
+                    if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){
                         out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.WHITE1) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.WHITE2) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.WHITE3)){
+                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.WHITE1)){
                         out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.YELLOW1) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.YELLOW2) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.YELLOW3)){
+                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)){
                         out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.BLUE1) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.BLUE2) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.BLUE3)){
+                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.BLUE1)){
                         out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.LIGHT_BLUE1) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.LIGHT_BLUE2) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.LIGHT_BLUE3)){
+                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){
                         out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.PINK1) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.PINK2) || gameBoard.getSpace(row,col).getObject().getObjectColour().equals(ObjectColour.PINK3)){
+                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.PINK1)){
                         out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                     }
+                }
+            }
+        }
+
+        out.println(Colours.RESET);
+    }
+
+    private void showObjInHand(ArrayList<ObjectCard> rcvObjectsInHand) {
+
+        printColumnNumbers(3);
+        out.println(Colours.RESET);
+        printRowNumber(0);
+        for(int i = 0; i < 3; i++){
+            if(rcvObjectsInHand.get(i).equals(null)){
+                out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+            } else {
+                if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.GREEN1)){
+                    out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.WHITE1)){
+                    out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.YELLOW1)){
+                    out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.BLUE1)){
+                    out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){
+                    out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.PINK1)){
+                    out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 }
             }
         }
@@ -198,9 +245,9 @@ public class Cli implements View {
      * This method prints the player's library.
      * @param playerLibrary is the library passed by the {@link ClientController}.
      */
-    public void showLibrary(Library playerLibrary){
+    private void showLibrary(Library playerLibrary){
 
-        out.print(printColumnNumbers());
+        out.print(printColumnNumbers(5));
         out.print(Colours.RESET);
         for(int row = 0; row < 6; row++){
             out.print(printRowNumber(row));
@@ -208,17 +255,17 @@ public class Cli implements View {
                 if(playerLibrary.getLibrarySpace(row, col).getObject().equals(null)){
                     out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 } else {
-                    if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.GREEN1) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.GREEN2) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.GREEN3)){
+                    if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){
                         out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.WHITE1) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.WHITE2) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.WHITE3)){
+                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.WHITE1)){
                         out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.YELLOW1) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.YELLOW2) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.YELLOW3)){
+                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)){
                         out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.BLUE1) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.BLUE2) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.BLUE3)){
+                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.BLUE1)){
                         out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.LIGHT_BLUE1) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.LIGHT_BLUE2) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.LIGHT_BLUE3)){
+                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){
                         out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
-                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.PINK1) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.PINK2) || playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.PINK3)){
+                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.PINK1)){
                         out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                     }
                 }
@@ -226,6 +273,16 @@ public class Cli implements View {
         }
 
         out.println(Colours.RESET);
+    }
+
+    /**
+     * This method prints an error.
+     * @param errorString is the explanation of the error as shown in most {@link exceptions.MyShelfieRuntimeExceptions runtime exceptions}.
+     */
+    public void showGenericError(String errorString){
+        clearCli();
+
+        out.println(errorString);
     }
 
     /**
@@ -244,9 +301,9 @@ public class Cli implements View {
      * This method prints the column numbers for both the board and the library.
      * @return the formatted string.
      */
-    private String printColumnNumbers() {
+    private String printColumnNumbers(int maxColumns) {
         StringBuilder strIndexBld = new StringBuilder("   " + Colours.UNDERLINED);
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < maxColumns; i++) {
             strIndexBld.append(" ").append(i).append(" |");
         }
         return strIndexBld.toString();

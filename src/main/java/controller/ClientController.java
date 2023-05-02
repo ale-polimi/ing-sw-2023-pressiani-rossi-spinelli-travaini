@@ -1,9 +1,12 @@
 package controller;
 
 import network.*;
-import observer.Observer;
+import network.structure.Client;
+import observer.ViewObserver;
 import view.View;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,8 +14,9 @@ import java.util.concurrent.Executors;
  * Controller for the client.
  * It stays client side.
  */
-public class ClientController implements Observer {
+public class ClientController implements ViewObserver {
     private final View view;
+    private final Client client;
     private String nickname;
     private final ExecutorService taskQueue;
 
@@ -21,9 +25,25 @@ public class ClientController implements Observer {
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
+    public void onUpdateServerInfo(Map<String, String> serverInfo) {
+        try {
+            client = new SocketClient(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
+            client.addObserver(this);
+            client.readMessage(); // Starts an asynchronous reading from the server.
+            client.enablePinger(true);
+            taskQueue.execute(view::askNickname);
+        } catch (IOException e) {
+            taskQueue.execute(() -> view.showLoginResult(false, false, this.nickname));
+        }
+    }
+
+    /**
+     * This method will send the username on the network.
+     * @param nickname is the nickname passed by the {@link View}.
+     */
     public void onUpdateNickname(String nickname){
         this.nickname = nickname;
-        Client.sendMessage(new UserInfoForLoginMessage(this.nickname,this.nickname));
+        client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
     }
 
     /**
@@ -60,15 +80,9 @@ public class ClientController implements Observer {
     @Override
     public void update(Message message) {
         switch (message.getType()){
-            case SHOW_BOARD:
-                ShowBoardMessage boardMessage = (ShowBoardMessage) message;
-                view.showBoard(boardMessage.getGameBoard());
-                break;
-            case SHOW_LIBRARY:
-                ShowLibraryMessage libraryMessage = (ShowLibraryMessage) message;
-                view.showLibrary(libraryMessage.getPlayerLibrary());
-                break;
-            case SHOW_OBJECTS_IN_HAND:
+            case SHOW_TURN:
+                ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                view.showTurn(turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
