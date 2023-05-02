@@ -27,3 +27,8 @@ hs_err_pid*
 *.iml
 #Perr Review Folder
 peer_review_players/
+
+#Ignored messages
+src/main/java/network/ShowBoardMessage.java
+src/main/java/network/ShowLibraryMessage.java
+src/main/java/network/ShowObjectsInHandMessage.java
