@@ -4,6 +4,7 @@ import model.library.Library;
 
 public abstract class CommonObjective {
     ObjectiveNumeral objectiveNumeral;
+    String description;
 
     /**
      * This method will be overridden by the more specific common objectives.
@@ -30,4 +31,5 @@ public abstract class CommonObjective {
         this.objectiveNumeral = objectiveNumeral;
     }
 
+    public abstract String getDescription();
 }

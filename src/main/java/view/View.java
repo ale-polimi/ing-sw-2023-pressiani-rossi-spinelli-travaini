@@ -2,8 +2,10 @@ package view;
 
 import model.board.Board;
 import model.board.BoardSpace;
+import model.commonobjective.CommonObjective;
 import model.library.Library;
 import model.library.LibrarySpace;
+import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 
 import java.util.ArrayList;
@@ -22,15 +24,13 @@ public interface View {
 
     /**
      * Ask to insert a move regarding the board
-     * @param board It is the current game board
      */
-    public void askBoardMove(BoardSpace[][] board);
+    public void askBoardMove();
 
     /**
      * Ask to insert a move regarding the library
-     * @param library It is the current player's library
      */
-    public void askLibraryMove(LibrarySpace[][] library);
+    public void askLibraryMove();
 
     /**
      * Show a message from the game
@@ -60,4 +60,8 @@ public interface View {
     void showGenericError(String payload);
 
     void showTurn(Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
+
+    void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2);
+
+    void showPersonalObjective(PersonalObjective personalObjective);
 }

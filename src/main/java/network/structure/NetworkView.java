@@ -48,7 +48,7 @@ public class NetworkView implements View {
      * @param board It gives the player a view of the current board in the game
      */
     @Override
-    public void askBoardMove(BoardSpace[][] board) {
+    public void askBoardMove() {
         try{client.requestBoardMove(board);}
         catch (RemoteException e ){System.err.println("Player cannot insert his/her board move");}
     }

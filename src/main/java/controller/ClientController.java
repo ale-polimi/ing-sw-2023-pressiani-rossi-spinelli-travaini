@@ -6,6 +6,7 @@ import observer.ViewObserver;
 import view.View;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +19,8 @@ public class ClientController implements ViewObserver {
     private final View view;
     private final Client client;
     private String nickname;
+    private boolean inLibrary = false;
+    private boolean inPickup = true;
     private final ExecutorService taskQueue;
 
     public ClientController(View view){
@@ -41,14 +44,31 @@ public class ClientController implements ViewObserver {
      * This method will send the username on the network.
      * @param nickname is the nickname passed by the {@link View}.
      */
+    @Override
     public void onUpdateNickname(String nickname){
         this.nickname = nickname;
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
     }
 
+    @Override
     public void onMaxPlayers(int maxPlayers){
         client.sendMessage(new MaxPlayersMessage(this.nickname, maxPlayers));
     }
+
+    @Override
+    public void onUdpateBoardMove(ArrayList<Integer> coordinatesToSend) {
+        inPickup = false;
+        inLibrary = true;
+        client.sendMessage(new PickObjectMessage(this.nickname, coordinatesToSend));
+    }
+
+    @Override
+    public void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend) {
+        inPickup = true;
+        inLibrary = false;
+        client.sendMessage(new PickObjectMessage(this.nickname, orderAndColumnToSend));
+    }
+
 
     /**
      * This method checks if the ip is valid as in it follows the <a href="https://en.wikipedia.org/wiki/Dot-decimal_notation">dot-decimal notation</a>.
@@ -85,8 +105,15 @@ public class ClientController implements ViewObserver {
     public void update(Message message) {
         switch (message.getType()){
             case SHOW_TURN:
-                ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                view.showTurn(turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                if(inLibrary == true && inPickup == false){
+                    ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                    view.showTurn(turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                    view.askLibraryMove();
+                } else if(inLibrary == false && inPickup == true){
+                    ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                    view.showTurn(turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                    view.askBoardMove();
+                }
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;

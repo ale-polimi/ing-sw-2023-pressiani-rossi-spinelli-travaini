@@ -11,8 +11,7 @@ public class PickObjectMessage extends Message{
     /**
      * Default contructor.
      * @param sender is the sender of the message.
-     * @param x is the X coordinate of the object.
-     * @param y is the Y coordinate of the object.
+     * @param coordinates are the coordinates sent as an {@link ArrayList}
      */
     public PickObjectMessage(String sender, ArrayList<Integer> coordinates){
         super(sender, MessageType.PICK_OBJECT);

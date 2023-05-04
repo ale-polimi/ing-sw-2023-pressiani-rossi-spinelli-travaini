@@ -11,7 +11,7 @@ public class FiveX extends CommonObjective {
      * @param y is the column coordinate
      */
 
-    private final String description= "five tiles of the same type forming an X.";
+    private final String description= "Five tiles of the same type forming an X.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
 

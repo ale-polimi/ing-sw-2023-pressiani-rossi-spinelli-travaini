@@ -4,15 +4,16 @@ import controller.ClientController;
 import enumerations.ObjectColour;
 import enumerations.TypeSpace;
 import model.board.Board;
+import model.commonobjective.CommonObjective;
 import model.library.Library;
+import model.library.LibraryGrid;
+import model.library.PersonalObjective;
 import model.objects.ObjectCard;
-import network.Message;
 import observer.ViewObservable;
 import view.View;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -22,7 +23,6 @@ import java.util.concurrent.FutureTask;
  * Command line interface (CLI) for the game.
  */
 public class Cli extends ViewObservable implements View {
-
     private static final String STR_INPUT_CANCELED = "User input canceled.";
     private final PrintStream out;
     private Thread inputThread;
@@ -182,7 +182,29 @@ public class Cli extends ViewObservable implements View {
                 coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
             }
 
-            notifyObserver(viewObserver -> viewObserver.onUdpateBoardMove());
+            notifyObserver(viewObserver -> viewObserver.onUdpateBoardMove(coordinatesToSend));
+        } catch (ExecutionException e){
+            out.println(STR_INPUT_CANCELED);
+        }
+    }
+
+    /**
+     * This method asks the user the order and column in which to put the cards.
+     */
+    @Override
+    public void askLibraryMove() {
+        try{
+            out.print("In what order do you want to put the cards in? In which column?\n" +
+                      "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n");
+            String orderAndColumn = readLine();
+
+            String[] parsedCoordinates = orderAndColumn.split(",");
+            ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
+            for(int i = 0; i < parsedCoordinates.length; i++){
+                orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
+            }
+
+            notifyObserver(viewObserver -> viewObserver.onUdpateLibraryMove(orderAndColumnToSend));
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -238,6 +260,10 @@ public class Cli extends ViewObservable implements View {
         out.println(Colours.RESET);
     }
 
+    /**
+     * This method prints the objects in hand for a player.
+     * @param rcvObjectsInHand is the array of objects that a player currently has in hand.
+     */
     private void showObjInHand(ArrayList<ObjectCard> rcvObjectsInHand) {
 
         printColumnNumbers(3);
@@ -301,6 +327,27 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
+     * This method prints the current {@link CommonObjective common objectives}.
+     * @param commonObjective1 is the first common objective of the game.
+     * @param commonObjective2 is the second common objective of the game.
+     */
+    @Override
+    public void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2) {
+
+        out.println(commonObjective1.getDescription());
+        out.println(commonObjective2.getDescription());
+    }
+
+    /**
+     * This method shows the current {@link PersonalObjective personal objective} of the player.
+     * @param personalObjective is the personal objective of the player.
+     */
+    @Override
+    public void showPersonalObjective(PersonalObjective personalObjective) {
+        printPersonalObjective(personalObjective);
+    }
+
+    /**
      * This method prints an error.
      * @param errorString is the explanation of the error as shown in most {@link exceptions.MyShelfieRuntimeExceptions runtime exceptions}.
      */
@@ -308,6 +355,42 @@ public class Cli extends ViewObservable implements View {
         clearCli();
 
         out.println(errorString);
+    }
+
+    /**
+     * This method prints the current {@link PersonalObjective personal objective} of the player.
+     * @param personalObjective is the personal objective of the player.
+     */
+    private void printPersonalObjective(PersonalObjective personalObjective) {
+
+        out.print(printColumnNumbers(5));
+        out.print(Colours.RESET);
+        for(int row = 0; row < 6; row++) {
+            out.print(printRowNumber(row));
+            for (int col = 0; col < 5; col++) {
+                if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().equals(null)) {
+                    out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                } else {
+                    if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.GREEN1)) {
+                        out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.WHITE1)) {
+                        out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)) {
+                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.BLUE1)) {
+                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)) {
+                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.PINK1)) {
+                        out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    }
+                }
+            }
+        }
+        out.println(Colours.RESET);
+
+        out.print("  ☑\t" + Colours.UNDERLINED + "1 | 2 | 3 | 4 | 5 | 6 \n" + Colours.RESET +
+                  " Pts.\t" + Colours.UNDERLINED + "1 | 2 | 4 | 6 | 9 | 12\n" + Colours.RESET);
     }
 
     /**

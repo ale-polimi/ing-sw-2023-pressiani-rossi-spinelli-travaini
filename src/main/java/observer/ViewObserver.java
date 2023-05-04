@@ -1,5 +1,6 @@
 package observer;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -9,4 +10,6 @@ public interface ViewObserver {
     void onUpdateServerInfo(Map<String, String> serverInfo);
     void onUpdateNickname(String nickname);
     void onMaxPlayers(int numOfPlayers);
+    void onUdpateBoardMove(ArrayList<Integer> coordinatesToSend);
+    void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend);
 }
