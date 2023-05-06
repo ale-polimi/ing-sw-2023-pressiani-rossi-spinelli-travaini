@@ -2,6 +2,7 @@ package model.commonobjective;
 
 import enumerations.ObjectColour;
 import model.library.Library;
+import view.cli.Colours;
 
 public class Diagonal extends CommonObjective {
     /**
@@ -11,7 +12,12 @@ public class Diagonal extends CommonObjective {
      * @param y is the column coordinate
      */
 
-    private final String description= "Five tiles of the same type forming a diagonal";
+    private final String description= " " + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+            "  |" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+            "    |" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "     Five tiles of the same type forming a diagonal.\n" +
+            "      |" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+            "        |" + Colours.UNDERLINED + "■" + Colours.RESET + "|";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         ObjectColour colour = library.getLibrarySpace(x, y).getObject().getObjectColour();

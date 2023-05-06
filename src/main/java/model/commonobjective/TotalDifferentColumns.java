@@ -1,6 +1,7 @@
 package model.commonobjective;
 
 import model.library.Library;
+import view.cli.Colours;
 
 public class TotalDifferentColumns extends CommonObjective {
     /**
@@ -12,7 +13,14 @@ public class TotalDifferentColumns extends CommonObjective {
 
     private int count=0;
 
-    private final String description = "two columns each formed by 6 different types of tiles";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Two columns each formed by 6\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  different types of tiles.\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            " x2";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x=0;

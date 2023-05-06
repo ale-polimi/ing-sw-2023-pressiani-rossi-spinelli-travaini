@@ -2,10 +2,14 @@ package model.commonobjective;
 
 import model.library.Library;
 import model.objects.ObjectCard;
+import view.cli.Colours;
 
 public class FourRowsMaxThreeDifferent extends CommonObjective {
     private int countObj;
-    private final String description = "Four lines each formed by 5 tiles of maximum three different types. One line can show the same or a different combination of another line.";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Four lines each formed by 5 tiles of\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  maximum three different types. One\n" +
+            "    x4     line can show the same or a different\n" +
+            " Max 3 =   combination of another line.";
 
     /**
      * This method will check the presence of four rows where each row can have a maximum of three different colours

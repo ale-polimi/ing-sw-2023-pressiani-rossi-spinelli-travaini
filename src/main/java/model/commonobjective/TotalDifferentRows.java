@@ -1,6 +1,7 @@
 package model.commonobjective;
 
 import model.library.Library;
+import view.cli.Colours;
 
 public class TotalDifferentRows extends CommonObjective {
     /**
@@ -10,7 +11,10 @@ public class TotalDifferentRows extends CommonObjective {
      * @param y is the column coordinate
      */
 
-    private final String description = "Two lines each formed by 5 different types of tiles. One line can show the same or a different combination of the other line.";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Two lines each formed by 5 different\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  types of tiles. One line can show the\n" +
+            "     x2      same or a different combination of the\n" +
+            "             other line.";
 
    private int count=0;
     @Override

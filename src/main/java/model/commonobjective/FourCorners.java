@@ -1,9 +1,16 @@
 package model.commonobjective;
 
 import model.library.Library;
+import view.cli.Colours;
 
 public class FourCorners extends CommonObjective {
-    private final String description = "Four tiles of the same type in the four corners of the bookshelf. ";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|     |" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            "|         |\n" +
+            "|         |  Four tiles of the same type in the four\n" +
+            "|         |  corners of the bookshelf.\n" +
+            "|" + Colours.UNDERLINED + " " + Colours.RESET + "       " + Colours.UNDERLINED + " " + Colours.RESET + "|\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|";
 
     /**
      * This method will check if the four spaces placed in the four corners of the library are the same colour

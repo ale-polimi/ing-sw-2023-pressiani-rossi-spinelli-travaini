@@ -2,10 +2,19 @@ package model.commonobjective;
 
 import model.library.Library;
 import model.objects.ObjectCard;
+import view.cli.Colours;
 
 public class ThreeColumnsMaxThreeDifferent extends CommonObjective {
     private int countObj;
-    private final String description = "Three columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column.";
+    private final String description = "  " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     Three columns each formed by 6 tiles\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     of maximum three different types. One\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     column can show the same or a different\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     Three columns each formed by 6 tiles\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+            "  x3\n" +
+            "Max 3 =";
 
     /**
      * This method will check the presence of three columns where each column can have a maximum of three different colour

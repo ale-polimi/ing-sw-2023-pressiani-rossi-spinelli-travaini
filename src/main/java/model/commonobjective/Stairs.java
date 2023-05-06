@@ -1,6 +1,7 @@
 package model.commonobjective;
 
 import model.library.Library;
+import view.cli.Colours;
 
 public class Stairs extends CommonObjective {
     /**
@@ -10,8 +11,12 @@ public class Stairs extends CommonObjective {
      * @param y is the column coordinate
      */
 
-    private final String description ="five columns of increasing or decreasing height. Starting from the first column " +
-            "on the left or on the right, each next column must be made of exactly one one more tile. Tiles cane be of any type";
+    private final String description =" " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "         Five columns of increasing or decreasing\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "       height. Starting from the first column on\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "     the left or on the right, each next column\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "   must be made of exactly one more tile.\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Tiles can be of any type.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         for (int i = x; i < x+5 ; i++) {

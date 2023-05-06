@@ -2,10 +2,14 @@ package model.commonobjective;
 
 import model.library.Library;
 import model.objects.ObjectCard;
+import view.cli.Colours;
 
 public class TwoByFour extends TwoEqualsInColumn {
 
-    private final String description = "Two groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of the other square.";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Two groups each containing 4 tiles of\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  the same type in a 2x2 square. The tiles\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  of one square can be different from\n" +
+            "  x2   those of the other square.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         return super.applyObjectiveRules(library, x, y);

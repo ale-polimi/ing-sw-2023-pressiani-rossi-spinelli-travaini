@@ -1,7 +1,8 @@
 package controller;
 
 import network.*;
-import network.structure.Client;
+import network.client.SocketClient;
+import network.client.*
 import observer.ViewObserver;
 import view.View;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.Executors;
  */
 public class ClientController implements ViewObserver {
     private final View view;
-    private final Client client;
+    private Client client;
     private String nickname;
     private boolean inLibrary = false;
     private boolean inPickup = true;
@@ -34,7 +35,7 @@ public class ClientController implements ViewObserver {
             client.addObserver(this);
             client.readMessage(); // Starts an asynchronous reading from the server.
             client.enablePinger(true);
-            taskQueue.execute(view::askNickname);
+            taskQueue.execute(view::askMaxPlayer);
         } catch (IOException e) {
             taskQueue.execute(() -> view.showLoginResult(false, false, this.nickname));
         }
@@ -66,7 +67,7 @@ public class ClientController implements ViewObserver {
     public void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend) {
         inPickup = true;
         inLibrary = false;
-        client.sendMessage(new PickObjectMessage(this.nickname, orderAndColumnToSend));
+        client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
     }
 
 

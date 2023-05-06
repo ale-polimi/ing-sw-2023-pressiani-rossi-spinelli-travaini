@@ -1,12 +1,16 @@
 package model.commonobjective;
 
 import model.library.Library;
+import view.cli.Colours;
 
 
 public class SixByTwo extends TwoEqualsInColumn{
 
-    private final String description ="Six groups each containing at least 2 tiles of the same type \n" +
-            "The tiles of one group can be different from those of another group";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "   Six groups each containing at least\n" +
+                                       "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  2 tiles of the same type (not necessarily\n" +
+                                       "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  in the depicted shape).\n" +
+                                       " x6  The tiles of one group can be different\n" +
+                                       "     from those of another group.";
 
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {

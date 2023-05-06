@@ -1,12 +1,17 @@
 package model.commonobjective;
 
 import model.library.Library;
+import view.cli.Colours;
 
 public class FourByFour extends CommonObjective {
 
     private int count = 0;
-    private final String description = "Four groups each containing at least 4 tiles of the same type (row or column)\n" +
-            "The tiles of one group can be different from those of another group.";
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Four groups each containing at least\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  4 tiles of the same type (not necessarily\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  in the depicted shape).\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  The tiles of one group can be different\n" +
+            " x4  from those of another group.";
 
     /**
      * This method will check the presence of at least four columns or rows composed by four objects of the same colour
