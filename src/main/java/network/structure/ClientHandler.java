@@ -1,6 +1,10 @@
 package network.structure;
 
+import network.Message;
+
 public interface ClientHandler {
-    void isConnected();
+    boolean isConnected();
     void disconnect();
+
+    void receivedMessage(Message message);
 }
