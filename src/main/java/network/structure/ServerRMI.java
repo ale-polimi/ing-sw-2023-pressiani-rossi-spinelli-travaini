@@ -3,7 +3,10 @@ package network.structure;
 import controller.Controller;
 import exceptions.player.ClientNotRegisteredException;
 import model.player.Player;
+import network.GameClosedMessage;
+import network.MaxPlayersMessage;
 import network.Message;
+import network.MessageType;
 
 
 import java.io.IOException;
@@ -108,7 +111,6 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         for(Tuple t: games.values()){
             if (t.getController().getGame().getPlayers().size() < t.getController().getGame().getMaxPlayers()) {
                 t.addClientHandler(clientHandler);
-                clientHandler.login();
                 if (t.getController().getGame().getMaxPlayers()==t.getController().getGame().getMaxPlayers()){
                     gameHandlers.add(new GameHandler(t));
                     gameHandlers.get(gameHandlers.size()-1).start();
@@ -117,12 +119,20 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
             }
         }
         // Initialise a new game
-        try{games.put(games.size(),new Tuple(new Controller(), new ArrayList<>()));}
-        catch(IOException e){System.err.println("ERROR: cannot create a controller");}
+        if(games.size() != 0) {
+            try {
+                games.put((Integer)games.keySet().toArray()[games.size()-1]+1, new Tuple(new Controller(), new ArrayList<>()));
+            } catch (IOException e) {
+                System.err.println("ERROR: cannot create a controller");
+            }
+        }else{
+            try {
+                games.put(0, new Tuple(new Controller(), new ArrayList<>()));
+            } catch (IOException e) {
+                System.err.println("ERROR: cannot create a controller");
+            }
+        }
         games.get(games.size() - 1).addClientHandler(clientHandler);
-        /*TODO Chiamata al client per settare il nickname e numero di partecipanti*/
-        clientHandler.login();
-        clientHandler.setMaxPlayer();
     }
 
     /**
@@ -136,48 +146,47 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         }
         throw new ClientNotRegisteredException("You are not registered in a current game");
     }
+@Override
+ public void receiveMessage(Message message){getController(message.getSender()).onMessageReceived(message);}
 
     /**
-     * Listener that execute the actions related to the input of a new nickname
-     * @param message the message containing the player's nickname
-     * @throws RemoteException Threw when the server is unreachable
+     * Send a message to the clients
+     * @param message The message that has to be forwarded
      */
     @Override
-    public void nicknameInput(Message message) throws RemoteException {
-        for(Tuple t : games.values()){
-            t.getController().onMessageReceived(message);
+    public void sendMessage(Message message){
+        for(Tuple t: games.values()){
+            if(t.getController().equals(getController(message.getSender()))){
+                for(ClientHandler c : t.getClientHandlers()){c.receivedMessage(message);}
+                return;
+            }
         }
     }
 
     /**
-     * Listener that execute the actions related to the setting of the maximum number of players in a game
-     * @param message the message containing the maximum number of players
-     * @throws RemoteException Threw when the server is unreachable
+     * End a game when a player disconnect from a game
+     * @param clientHandler The clientHandler connected to the player who wants to disconnect
      */
     @Override
-    public void setMaxPlayer(Message message) throws RemoteException {
-        games.get(games.size()-1).getController().onMessageReceived(message);
+    public void disconnect(ClientHandler clientHandler) {
+        for(Tuple t : games.values()){
+            if(t.getClientHandlers().contains(clientHandler)){
+                for(ClientHandler c : t.getClientHandlers()){
+                    c.receivedMessage(new GameClosedMessage("Server", MessageType.GAME_CLOSED));
+                }
+                for(Integer i : games.keySet() ){
+                    if(games.get(i).equals(t)){
+                        games.remove(i);
+                    return;
+                    }
+                }
+            }
+        }
     }
 
     /**
-     * Listener that execute the actions related to a player's move on the board
-     * @param message the message containing the coordinates of the cards chosen by the player
-     * @throws RemoteException Threw when the server is unreachable
+     * Return the thread pool executor
+     * @return The Executor service related to the server
      */
-    @Override
-    public void playerBoardMove(Message message) throws RemoteException {
-        getController(message.getSender()).onMessageReceived(message);
-    }
-
-    /**
-     * Listener that execute the actions related to a player's move on the library
-     * @param message is the message containing the column chosen by the player and the order of the cards to insert in the libraty
-     * @throws RemoteException Threw when the server is unreachable
-     */
-    @Override
-    public void playerLibraryMove(Message message) throws RemoteException {
-        getController(message.getSender()).onMessageReceived(message);
-    }
-
-  public static ExecutorService getExecutor(){return executor;}
+    public static ExecutorService getExecutor(){return executor;}
 }
