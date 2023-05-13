@@ -10,6 +10,11 @@ import model.board.BoardSpace;
 import model.commonobjective.CommonObjective;
 import model.objects.ObjectsDeck;
 import model.player.Player;
+import network.AddedPlayerMessage;
+import network.GenericModelChangeMessage;
+import network.MaxPlayersMessage;
+import network.NextTurnMessage;
+import observer.Observable;
 
 
 import java.lang.reflect.Array;
@@ -17,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Game {
+public class Game extends Observable {
     private Board board;
     private GameState gameState;
     private ArrayList<Player> players;
@@ -26,7 +31,6 @@ public class Game {
     private int chosenPlayersNumber = 0;
     private ObjectsDeck objectsDeck;
     private HashMap<CommonObjective, ArrayList<Integer>> commonObjectivesPoints;
-    private Turn turn;
 
 
     /**
@@ -157,6 +161,7 @@ public class Game {
      */
     public void setNextPlayer(){
         this.playerInTurn = getNextPlayer();
+        notifyObserver(new NextTurnMessage());
     }
 
     /**
@@ -179,6 +184,7 @@ public class Game {
             throw new NullPointerException();
         } else {
             players.add(player);
+            notifyObserver(new AddedPlayerMessage());
         }
     }
 
@@ -234,6 +240,7 @@ public class Game {
                 }
             }
         }
+        notifyObserver(new GenericModelChangeMessage());
     }
 
 

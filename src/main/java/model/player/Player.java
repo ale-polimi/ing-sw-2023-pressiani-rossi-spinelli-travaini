@@ -9,25 +9,27 @@ import model.library.Library;
 import model.library.LibrarySpace;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
+import network.GenericModelChangeMessage;
+import observer.Observable;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class Player {
-    private String nickname;
+public class Player extends Observable {
+    private final String nickname;
     private boolean firstPlayer;
     private boolean firstToEnd;
     public static int MAX_OBJECTS_IN_HAND = 3;
     private ArrayList<ObjectCard> objectsInHand = null;
-    private Library library;
-    private PersonalObjective personalObjective;
+    private final Library library;
+    private final PersonalObjective personalObjective;
     boolean[] completedCommonObjectives = {false, false};
     private PlayerState playerState;
     private int points;
-    PropertyChangeListener listener;
 
     /**
      * Constructor of the Player class
@@ -42,14 +44,6 @@ public class Player {
     }
 
     /**
-     * Setter method for the listener of the Player.
-     * @param listener is the listener that will be updated when the player model changes.
-     */
-    public void setListener(PropertyChangeListener listener) {
-        this.listener = listener;
-    }
-
-    /**
      *Returns the player's nickname
      * @return the nickname of the player.
      */
@@ -61,12 +55,8 @@ public class Player {
      *Set the player as first player
      */
     public void setAsFirst(){
-        /* ---- LISTENER ---- */
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "SET_AS_FIRST", this.isFirstPlayer(), true);
-
         this.firstPlayer = true;
-
-        this.listener.propertyChange(event);
+        notifyObserver(new GenericModelChangeMessage());
     }
 
     /**
@@ -250,11 +240,8 @@ public class Player {
      * @param librarySpace is the space the {@code objectCard} will occupy.
      */
     public void addObjectToLibrary(ObjectCard objectCard, LibrarySpace librarySpace){
-        /* ---- LISTENER ---- */
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "LIBRARY_CHANGED", this.getLibrary(), this.getLibrary());
         this.library.addObject(objectCard, librarySpace);
-
-        this.listener.propertyChange(event);
+        notifyObserver(new GenericModelChangeMessage());
     }
 
 
@@ -262,9 +249,8 @@ public class Player {
      * Initialize the player's hand
      */
     public void initObjectsInHand(){
-        this.objectsInHand = new ArrayList<>();
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "OBJECTS_IN_HAND", this.objectsInHand, objectsInHand);
-        listener.propertyChange(event);
+        this.objectsInHand = new ArrayList<>(Arrays.asList(new ObjectCard(ObjectColour.EMPTY), new ObjectCard(ObjectColour.EMPTY), new ObjectCard(ObjectColour.EMPTY)));
+        notifyObserver(new GenericModelChangeMessage());
     }
 
     /**
@@ -273,9 +259,8 @@ public class Player {
      */
     @Deprecated
     public void resetObjectsInHand(){
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "OBJECTS_IN_HAND", this.objectsInHand, null);
-        listener.propertyChange(event);
         this.objectsInHand = null;
+        notifyObserver(new GenericModelChangeMessage());
     }
 
     /**
@@ -298,9 +283,7 @@ public class Player {
     public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
         if(objectsInHand.size() < MAX_OBJECTS_IN_HAND){
             objectsInHand.add(objectCard);
-            /* ---- LISTENER ---- */
-            PropertyChangeEvent event = new PropertyChangeEvent(this, "OBJECTS_IN_HAND", this.objectsInHand, objectsInHand);
-            listener.propertyChange(event);
+            notifyObserver(new GenericModelChangeMessage());
         } else {
             throw new TooManyObjectsInHandException(MAX_OBJECTS_IN_HAND);
         }
@@ -329,6 +312,14 @@ public class Player {
     }
 
     /**
+     * This method returns the {@link ArrayList} of objects in hand;
+     * @return the objects in hand as an {@link ArrayList}.
+     */
+    public ArrayList<ObjectCard> getObjectsInHand() {
+        return objectsInHand;
+    }
+
+    /**
      * Setter method to change the player's state.
      * @param playerState is the new state for this player.
      */
@@ -343,4 +334,6 @@ public class Player {
     public PlayerState getPlayerState(){
         return this.playerState;
     }
+
+
 }

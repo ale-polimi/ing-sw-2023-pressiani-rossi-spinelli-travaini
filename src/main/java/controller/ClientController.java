@@ -3,6 +3,7 @@ package controller;
 import network.*;
 import network.client.SocketClient;
 import network.client.*
+import observer.Observer;
 import observer.ViewObserver;
 import view.View;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.Executors;
  * Controller for the client.
  * It stays client side.
  */
-public class ClientController implements ViewObserver {
+public class ClientController implements ViewObserver, Observer {
     private final View view;
     private Client client;
     private String nickname;

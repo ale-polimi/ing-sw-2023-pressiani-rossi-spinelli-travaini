@@ -1,8 +1,21 @@
 package model.library;
 
+import enumerations.ObjectColour;
 import model.objects.ObjectCard;
 
 public class Library extends LibraryGrid {
+
+    /**
+     * Custom constructor to initialize an empty library. Needed for the {@link view.cli.Cli CLI}.
+     */
+    public Library() {
+        for(int row = 0; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                this.getLibrarySpace(row,col).putObject(new ObjectCard(ObjectColour.EMPTY));
+            }
+        }
+    }
+
     /**
      * This method will add an object in the selected library space.
      * @param objectCard is the object card that will be added to the library.
