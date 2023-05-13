@@ -64,4 +64,5 @@ public interface View {
     void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2);
 
     void showPersonalObjective(PersonalObjective personalObjective);
+    void showLobby(ArrayList<String> players);
 }

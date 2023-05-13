@@ -72,7 +72,11 @@ public enum ObjectColour {
     /**
      * PINK3 is Piante1.3.png
      */
-    PINK3;
+    PINK3,
+    /**
+     * Fake colour used in the View.
+     */
+    EMPTY
 
     public boolean isEquals(ObjectColour objectColour){
         switch (this){

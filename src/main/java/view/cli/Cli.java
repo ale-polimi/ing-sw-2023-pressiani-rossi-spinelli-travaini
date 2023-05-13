@@ -133,7 +133,7 @@ public class Cli extends ViewObservable implements View {
                 out.print("Enter your nickname: ");
                 String nickname = readLine();
 
-                if(nickname.equals("Controller")){
+                if(nickname.equals("Controller") || nickname.equals("Model")){
                     out.println("The nickname \"" + nickname + "\" is not permitted.");
                     clearCli();
                     validInput = false;
@@ -224,7 +224,18 @@ public class Cli extends ViewObservable implements View {
         showLibrary(rcvPlayerLibrary);
     }
 
-
+    /**
+     * This method show the lobby to the user.
+     * @param players are the usernames of the players currently connected to the game.
+     */
+    @Override
+    public void showLobby(ArrayList<String> players) {
+        out.println("Connected players:");
+        for (String playerName:
+             players) {
+            out.println(playerName);
+        }
+    }
 
     /**
      * This method prints the board.
@@ -270,7 +281,7 @@ public class Cli extends ViewObservable implements View {
         out.println(Colours.RESET);
         printRowNumber(0);
         for(int i = 0; i < 3; i++){
-            if(rcvObjectsInHand.get(i).equals(null)){
+            if(rcvObjectsInHand.get(i).getObjectColour().equals(ObjectColour.EMPTY)){
                 out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
             } else {
                 if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.GREEN1)){
@@ -303,7 +314,7 @@ public class Cli extends ViewObservable implements View {
         for(int row = 0; row < 6; row++){
             out.print(printRowNumber(row));
             for(int col = 0; col < 5; col++){
-                if(playerLibrary.getLibrarySpace(row, col).getObject().equals(null)){
+                if(playerLibrary.getLibrarySpace(row, col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
                     out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 } else {
                     if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){
