@@ -10,3 +10,4 @@ public class PingMessage  extends Message{
         super(sender, messageType);
     }
 }
+

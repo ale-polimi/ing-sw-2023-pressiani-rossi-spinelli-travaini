@@ -11,3 +11,4 @@ public class GameClosedMessage extends Message{
         super(sender, messageType);
     }
 }
+

@@ -14,5 +14,7 @@ public enum MessageType {
     SHOW_OBJECTS_IN_HAND,
     NEXT_TURN,
     GENERIC_MODEL_CHANGE,
-    ADDED_PLAYER
+    ADDED_PLAYER,
+    PING,
+    GAME_CLOSED
 }
