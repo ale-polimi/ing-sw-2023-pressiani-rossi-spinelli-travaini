@@ -48,15 +48,15 @@ public interface View {
      * Show the current game information
      * @param players It is a list of the players' nicknames
      * @param board It is the current board
-     * @param playersLibrary It is a list of the current players' library
+     * @param playerLibrary It is the player's library
      */
-    public void showMatchInfo(List<String> players, BoardSpace[][] board, List<LibrarySpace[][]> playersLibrary);
+    public void showMatchInfo(List<String> players, Board board, Library playerLibrary, ArrayList<CommonObjective> commonObjective, PersonalObjective personalObjective);
 
     /**
      * Tells the player it isn't his/her turn
      */
     public void waitTurn();
-    
+
     void showGenericError(String payload);
 
     void showTurn(Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
