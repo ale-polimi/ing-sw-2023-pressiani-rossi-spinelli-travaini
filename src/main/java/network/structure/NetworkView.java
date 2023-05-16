@@ -18,60 +18,51 @@ import java.util.List;
 
 // This clas hides the network to the controller
 public class NetworkView implements View {
-    private final Server server;
+    private final StartServerImpl server;
 
     /**
      * Custom constructor of NetworkView
      * @param server is the server who is handling the client connection
      */
-    public NetworkView(Server server) {this.server = server;}
+    public NetworkView(StartServerImpl server) {this.server = server;}
 
     /**
      * Gives the client related to the NetworkView
      * @return The server parameter of the NetworkView object
      */
-    public Server getServer(){return server;}
+    public StartServerImpl getServer(){return server;}
 
     /**
      * Send the update of the model to the clients
      * @param message It is the message containing the update of the model
      */
    public void sendMessageTo(Message message) {
-        try{server.sendMessage(message);}
-        catch(RemoteException e){System.err.println("Cannot send the message to the view");}
+       server.sendMessage(message);
    }
 
     @Override
     public void showLobby(ArrayList<String> players) {
-        try{
-            server.sendMessage(new ShowLobbyMessage(players));
-        } catch (RemoteException e){
-            System.err.println("Cannot send the message to the view");
-        }
+        server.sendMessage(new ShowLobbyMessage(players));
     }
 
     @Override
     public void askNickname() {
-       try{server.sendMessage(new AskNicknameMessage("Controller"));}
-       catch(RemoteException e){System.err.println("Cannot reach the player for nickname");}
+        server.sendMessage(new AskNicknameMessage("Controller"));
     }
 
     @Override
     public void askMaxPlayer() {
-       try{server.sendMessage(new AskMaxPlayerMessage("Controller") );}
-       catch(RemoteException e){System.err.println("Cannot reach the view for max players action");}
+        server.sendMessage(new AskMaxPlayerMessage("Controller") );
     }
 
     @Override
     public void askBoardMove() {
-       try{server.sendMessage(new AskBoardMoveMessage("Controller"));}
-       catch(RemoteException e){System.err.println("Cannot reach the view for board move");}
+        server.sendMessage(new AskBoardMoveMessage("Controller"));
     }
 
     @Override
     public void askLibraryMove() {
-       try{server.sendMessage(new AskLibraryMoveMessage("Controller"));}
-       catch(RemoteException e){System.err.println("Cannot reach the view for library move");}
+        server.sendMessage(new AskLibraryMoveMessage("Controller"));
     }
 
     /**
@@ -83,11 +74,7 @@ public class NetworkView implements View {
      */
     @Override
     public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand) {
-        try{
-            server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand));
-        } catch (RemoteException e){
-            System.err.println("Cannot send the message to the view");
-        }
+        server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand));
     }
 
     /**
@@ -97,11 +84,7 @@ public class NetworkView implements View {
      */
     @Override
     public void showWinner(String winner, HashMap<String, Integer> leaderboard) {
-        try {
-            server.sendMessage(new EndGameMessage(winner, leaderboard));
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        server.sendMessage(new EndGameMessage(winner, leaderboard));
     }
 
     /**
@@ -111,8 +94,7 @@ public class NetworkView implements View {
      */
     @Override
     public void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2) {
-        try{ server.sendMessage(new ShowCommonObjectiveMessage("Game",commonObjective1,commonObjective2));}
-        catch(RemoteException e){System.err.println("Cannot reach the view for the common objectives");}
+        server.sendMessage(new ShowCommonObjectiveMessage("Game",commonObjective1,commonObjective2));
     }
 
     /**
@@ -121,16 +103,11 @@ public class NetworkView implements View {
      */
     @Override
     public void showPersonalObjective(PersonalObjective personalObjective) {
-        try{server.sendMessage(new ShowPersonalObjectiveMessage("Game",personalObjective));}
-        catch(RemoteException e){System.err.println("Cannot send the personal objective to the view");}
+        server.sendMessage(new ShowPersonalObjectiveMessage("Game",personalObjective));
     }
 
     @Override
     public void showGenericError(String player, String payload) {
-        try {
-            server.sendMessage(new GenericErrorMessage(player, payload));
-        } catch (RemoteException e) {
-            System.err.println("Cannot send the message to the view");
-        }
+        server.sendMessage(new GenericErrorMessage(player, payload));
     }
 }
