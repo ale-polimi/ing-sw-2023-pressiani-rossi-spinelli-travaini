@@ -1,13 +1,21 @@
 package network.structure;
 
 
+import java.awt.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import controller.ClientController;
 import network.Message;
+import network.MessageType;
+import network.PingMessage;
 import observer.Observable;
 
 /**
@@ -24,6 +32,8 @@ public class ClientRMI extends Observable implements Client{
     boolean getConnected =false;
 
     ClientController clientController;
+
+    ScheduledExecutorService timer;
 
     /**
      * is the constructor with the connection with the server
@@ -46,6 +56,7 @@ public class ClientRMI extends Observable implements Client{
             Registry registry = LocateRegistry.getRegistry(port);
             server = (ServerRMI) registry.lookup("server");
             initialize(server);
+            this.timer = Executors.newSingleThreadScheduledExecutor();
             getConnected=true;
         }
         catch (RemoteException e){
@@ -116,6 +127,18 @@ public class ClientRMI extends Observable implements Client{
     @Override
     public void disconnect() {
         server=null;
+    }
+    @Override
+    public void ping() {
+
+        timer.scheduleAtFixedRate(() -> {
+            try {
+                sendMessage(new PingMessage(null, MessageType.PING));
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }, 0, 1000, TimeUnit.MILLISECONDS);
+
     }
 
 }
