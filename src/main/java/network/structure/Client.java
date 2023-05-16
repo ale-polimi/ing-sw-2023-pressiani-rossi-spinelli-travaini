@@ -1,21 +1,27 @@
 package network.structure;
 
-import network.listeners.GameListener;
-import network.listeners.PlayerListener;
+import network.Message;
+import observer.Observable;
+import observer.Observer;
 
+import java.io.IOException;
 import java.rmi.Remote;
-import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * this interface represents a generic client
  */
 
-public interface Client extends Remote, GameListener {
-    PlayerListener listener = null;
+public interface Client extends Remote, ClientHandler{
 
-    /**
-     * notify the client a change
-     * @throws RemoteException
-     */
-    void update(/*TypeView typeViews, Type types*/) throws RemoteException;
+    final List<Observer> observers = new ArrayList<>();
+    public default void addObserver(Observer obs) {
+        observers.add(obs);
+    }
+    void connection() throws IOException;
+
+    void closeConnection() throws IOException;
+
+    void sendMessage(Message message) throws IOException;
 }
