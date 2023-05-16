@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class SocketServer implements Runnable, Server{
-    private final ServerRMI server;
+    private final StartServerImpl server;
     private final int port;
+
+    private final ArrayList<SocketHandler> clients;
     ServerSocket serverSocket;
 
     /**
@@ -17,9 +20,10 @@ public class SocketServer implements Runnable, Server{
      * @param server The main server
      * @param port The port where the message will be sent
      */
-    public SocketServer(ServerRMI server, int port){
+    public SocketServer(StartServerImpl server, int port){
         this.server = server;
         this.port = port;
+        this.clients = new ArrayList<>();
     }
 
 
@@ -64,7 +68,8 @@ public class SocketServer implements Runnable, Server{
      */
     @Override
     public void disconnect(ClientHandler clientHandler) {
-        server.disconnect(clientHandler);
+        clients.remove((SocketHandler) clientHandler);
+        /*TODO distruzione partita*/
     }
 
     /**
@@ -73,7 +78,5 @@ public class SocketServer implements Runnable, Server{
      * @throws RemoteException Threw when the server is unreachable
      */
     @Override
-    public void registry(ClientHandler clientHandler) throws RemoteException {
-        server.registry(clientHandler);
-    }
+    public void registry(ClientHandler clientHandler) throws RemoteException {clients.add((SocketHandler) clientHandler);}
 }
