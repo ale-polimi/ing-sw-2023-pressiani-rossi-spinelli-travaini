@@ -6,13 +6,15 @@ import model.library.Library;
 import model.library.LibrarySpace;
 import model.library.PersonalObjective;
 import network.Message;
+import view.View;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 // This clas hides the network to the controller
-public class NetworkView{
+public class NetworkView implements View {
     private final Server server;
 
     /**
@@ -35,4 +37,13 @@ public class NetworkView{
         try{server.sendMessage(message);}
         catch(RemoteException e){System.err.println("Cannot send the message to the view");}
    }
+
+    @Override
+    public void showLobby(ArrayList<String> players) {
+        try{
+            server.sendMessage(new ShowLobbyMessage(players));
+        } catch (RemoteException e){
+            System.err.println("Cannot send the message to the view");
+        }
+    }
 }
