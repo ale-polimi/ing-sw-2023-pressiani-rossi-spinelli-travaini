@@ -28,6 +28,11 @@ hs_err_pid*
 #Perr Review Folder
 peer_review_players/
 
+# Experimental netowrk stuff
+src/main/java/view/VirtualView.java
+src/main/java/network/client
+src/main/java/network/server
+
 #Ignored messages
 src/main/java/network/ShowBoardMessage.java
 src/main/java/network/ShowLibraryMessage.java
