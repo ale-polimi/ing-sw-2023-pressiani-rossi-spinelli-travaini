@@ -18,5 +18,9 @@ public enum MessageType {
     PING,
     GAME_CLOSED,
     SHOW_LOBBY,
-    END_GAME
+    END_GAME,
+    ASK_MAX_PLAYER,
+    ASK_BOARD_MOVE,
+    ASK_LIBRARY_MOVE,
+    ASK_NICKNAME
 }
