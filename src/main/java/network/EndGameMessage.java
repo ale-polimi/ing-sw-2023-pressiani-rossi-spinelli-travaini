@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class EndGameMessage extends Message{
     private String winner;
-    HashMap<String, Integer> playersPoints
+    HashMap<String, Integer> playersPoints;
+
     /**
      * Constructor for class EndGameMessage
      * @param winner is the winner of the game.

@@ -13,6 +13,7 @@ import view.View;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 // This clas hides the network to the controller
@@ -72,11 +73,6 @@ public class NetworkView implements View {
        try{server.sendMessage(new AskLibraryMoveMessage("Controller"));}
        catch(RemoteException e){System.err.println("Cannot reach the view for library move");}
     }
-    @Override
-    public void endGame(String winner) {
-      try{ server.sendMessage(new EndGameMessage("",winner));}
-      catch(RemoteException e){System.err.println("Cannot send the message to the view");}
-    }
 
     /**
      * Show the current turn of the game
@@ -91,6 +87,20 @@ public class NetworkView implements View {
             server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand));
         } catch (RemoteException e){
             System.err.println("Cannot send the message to the view");
+        }
+    }
+
+    /**
+     * This method shows the winner at the end of the game.
+     * @param winner is the username of the winner.
+     * @param leaderboard is the leaderboard of the game.
+     */
+    @Override
+    public void showWinner(String winner, HashMap<String, Integer> leaderboard) {
+        try {
+            server.sendMessage(new EndGameMessage(winner, leaderboard));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 

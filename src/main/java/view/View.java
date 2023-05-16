@@ -32,11 +32,6 @@ public interface View {
      * Ask to insert a move regarding the library
      */
     public void askLibraryMove();
-    /**
-     * Show the winner of the game
-     * @param winner It is the nicname of the winner
-     */
-    public void endGame(String winner);
 
     void showGenericError(String player, String payload);
 
