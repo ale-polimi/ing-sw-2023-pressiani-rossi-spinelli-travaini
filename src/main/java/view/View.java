@@ -9,6 +9,7 @@ import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface View {
@@ -37,7 +38,7 @@ public interface View {
      */
     public void endGame(String winner);
 
-    void showGenericError(String payload);
+    void showGenericError(String player, String payload);
 
     void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
 
