@@ -1,11 +1,15 @@
 package network.structure;
 
+import model.board.Board;
 import model.board.BoardSpace;
 import model.commonobjective.CommonObjective;
 import model.library.Library;
 import model.library.LibrarySpace;
 import model.library.PersonalObjective;
+import model.objects.ObjectCard;
 import network.Message;
+import network.ShowLobbyMessage;
+import network.ShowTurnMessage;
 import view.View;
 
 import java.rmi.Remote;
@@ -42,6 +46,15 @@ public class NetworkView implements View {
     public void showLobby(ArrayList<String> players) {
         try{
             server.sendMessage(new ShowLobbyMessage(players));
+        } catch (RemoteException e){
+            System.err.println("Cannot send the message to the view");
+        }
+    }
+
+    @Override
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand) {
+        try{
+            server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand));
         } catch (RemoteException e){
             System.err.println("Cannot send the message to the view");
         }

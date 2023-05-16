@@ -612,11 +612,11 @@ public class Controller implements Observer {
 
                 break;
             case NEXT_TURN:
-                networkView.showTurn(game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case GENERIC_MODEL_CHANGE:
-                networkView.showTurn(game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             default:

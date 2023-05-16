@@ -16,5 +16,6 @@ public enum MessageType {
     GENERIC_MODEL_CHANGE,
     ADDED_PLAYER,
     PING,
-    GAME_CLOSED
+    GAME_CLOSED,
+    SHOW_LOBBY
 }

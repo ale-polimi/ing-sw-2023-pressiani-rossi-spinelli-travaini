@@ -59,7 +59,7 @@ public interface View {
 
     void showGenericError(String payload);
 
-    void showTurn(Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
+    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
 
     void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2);
 

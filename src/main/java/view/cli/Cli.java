@@ -216,7 +216,7 @@ public class Cli extends ViewObservable implements View {
      * @param rcvPlayerLibrary
      * @param rcvObjectsInHand
      */
-    public void showTurn(Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand){
+    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand){
         clearCli();
 
         showBoard(rcvGameBoard);

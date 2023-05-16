@@ -106,28 +106,39 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void update(Message message) {
         switch (message.getType()){
+            case SHOW_LOBBY:
+                ShowLobbyMessage lobbyMessage = (ShowLobbyMessage) message;
+                view.showLobby(lobbyMessage.getLobbyPlayers());
             case SHOW_TURN:
-                if(inLibrary == true && inPickup == false){
-                    ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                    view.showTurn(turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
-                    view.askLibraryMove();
-                } else if(inLibrary == false && inPickup == true){
-                    ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                    view.showTurn(turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
-                    view.askBoardMove();
+                if(message.getSender().equals(nickname)) {
+                    if (inLibrary == true && inPickup == false) {
+                        ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                        view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                        view.askLibraryMove();
+                    } else if (inLibrary == false && inPickup == true) {
+                        ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                        view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                        view.askBoardMove();
+                    }
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
-                ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
-                view.showCommonObjectives(commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
+                if(message.getSender().equals(nickname)) {
+                    ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
+                    view.showCommonObjectives(commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
+                }
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
-                ShowPersonalObjectiveMessage personalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
-                view.showPersonalObjective(personalObjectiveMessage.getPersonalObjective());
+                if(message.getSender().equals(nickname)) {
+                    ShowPersonalObjectiveMessage personalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
+                    view.showPersonalObjective(personalObjectiveMessage.getPersonalObjective());
+                }
                 break;
             case GENERIC_ERROR:
-                GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
-                view.showGenericError(genericErrorMessage.getPayload());
+                if(message.getSender().equals(nickname)) {
+                    GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
+                    view.showGenericError(genericErrorMessage.getPayload());
+                }
                 break;
             default:
                 break;
