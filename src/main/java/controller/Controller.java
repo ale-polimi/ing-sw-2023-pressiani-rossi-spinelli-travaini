@@ -12,11 +12,11 @@ import model.commonobjective.*;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.*;
-import network.server.Server;
 import network.structure.ClientSocket;
 import network.structure.NetworkView;
+import network.structure.Server;
+import network.structure.StartServerImpl;
 import observer.Observer;
-import view.VirtualView;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,15 +37,17 @@ public class Controller implements Observer {
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
     int firstX, firstY, secondX, secondY, thirdX, thirdY = 0;
+    private final NetworkView networkView;
 
     /**
      * Constructor for the controller.
      */
-    public Controller() throws IOException {
+    public Controller(StartServerImpl server) throws IOException {
         this.game = new Game();
         /* Subscribing the Controller to the Model (Game) */
         game.addObserver(this);
 
+        networkView = new NetworkView(server);
         game.setGameState(LOGIN);
         byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
@@ -306,6 +308,7 @@ public class Controller implements Observer {
             player.addObserver(this);
         }
         game.setGameState(IN_GAME);
+        game.setPlayerInTurn(game.getPlayers().get(0));
     }
 
     /**
@@ -502,6 +505,7 @@ public class Controller implements Observer {
      * The player can select in which order the object cards have to be put in the specified column
      * @param cardID1 is the first card to be put in the specified column.
      * @param column is the player specified column.
+     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
@@ -531,6 +535,7 @@ public class Controller implements Observer {
      * @param cardID1 is the first card to be put in the specified column.
      * @param cardID2 is the second card to be put in the specified column.
      * @param column is the player specified column.
+     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
@@ -563,6 +568,7 @@ public class Controller implements Observer {
      * @param cardID2 is the second card to be put in the specified column.
      * @param cardID3 is the third card to be put in the specified column.
      * @param column is the player specified column.
+     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
@@ -597,7 +603,6 @@ public class Controller implements Observer {
      */
     @Override
     public void update(Message message){
-        NetworkView networkView = new NetworkView();
         switch(message.getType()){
             case ADDED_PLAYER:
 
@@ -628,4 +633,10 @@ public class Controller implements Observer {
                 ;
         }
     }
+
+    /**
+     * Return the game which is controlled by the controller
+     * @return the game controlled by the controller
+     */
+    public Game getGame(){return game;}
 }
