@@ -212,10 +212,12 @@ public class Cli extends ViewObservable implements View {
 
     /**
      * This method shows the turn to the player.
+     * @param player is the {@link model.player.Player player's nickname}, used in {@link ClientController} to check whether the message is for this user.
      * @param rcvGameBoard is the {@link Board game board}.
-     * @param rcvPlayerLibrary
-     * @param rcvObjectsInHand
+     * @param rcvPlayerLibrary is the {@link Library player's library}.
+     * @param rcvObjectsInHand is the {@link ArrayList} of objects that a player currently has in hand.
      */
+    @Override
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand){
         clearCli();
 
@@ -225,11 +227,22 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
+     * This method shows the board when it's not my turn, so that the current user does not see an outdated game board.
+     * @param rcvGameBoard is the {@link Board game board}.
+     */
+    public void showNotMyTurn(Board rcvGameBoard){
+        clearCli();
+        showBoard(rcvGameBoard);
+    }
+
+    /**
      * This method show the lobby to the user.
      * @param players are the usernames of the players currently connected to the game.
      */
     @Override
     public void showLobby(ArrayList<String> players) {
+        clearCli();
+
         out.println("Connected players:");
         for (String playerName:
              players) {
@@ -343,7 +356,7 @@ public class Cli extends ViewObservable implements View {
      * @param commonObjective2 is the second common objective of the game.
      */
     @Override
-    public void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2) {
+    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2) {
 
         out.println(commonObjective1.getDescription());
         out.println(commonObjective2.getDescription());
@@ -354,7 +367,7 @@ public class Cli extends ViewObservable implements View {
      * @param personalObjective is the personal objective of the player.
      */
     @Override
-    public void showPersonalObjective(PersonalObjective personalObjective) {
+    public void showPersonalObjective(String player, PersonalObjective personalObjective) {
         printPersonalObjective(personalObjective);
     }
 
@@ -362,10 +375,25 @@ public class Cli extends ViewObservable implements View {
      * This method prints an error.
      * @param errorString is the explanation of the error as shown in most {@link exceptions.MyShelfieRuntimeExceptions runtime exceptions}.
      */
-    public void showGenericError(String errorString){
+    @Override
+    public void showGenericError(String player, String errorString){
         clearCli();
 
         out.println(errorString);
+    }
+
+    /**
+     * This method shows the winner at the end of the game.
+     * @param winner is the username of the winner.
+     * @param leaderboard is the leaderboard of the game (Username: Points).
+     */
+    @Override
+    public void showWinner(String winner, HashMap<String, Integer> leaderboard) {
+        clearCli();
+
+        out.println("Player: \"" + winner + "\" has won!");
+        out.println("Leaderboard:\n");
+        leaderboard.forEach((username, points) -> out.println("Player: " + username + " || Points: " + points));
     }
 
     /**

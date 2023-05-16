@@ -9,6 +9,7 @@ import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface View {
@@ -57,12 +58,14 @@ public interface View {
      */
     public void waitTurn();
 
-    void showGenericError(String payload);
+    void showGenericError(String player, String payload);
 
     void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
 
-    void showCommonObjectives(CommonObjective commonObjective1, CommonObjective commonObjective2);
+    void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2);
 
-    void showPersonalObjective(PersonalObjective personalObjective);
+    void showPersonalObjective(String player, PersonalObjective personalObjective);
     void showLobby(ArrayList<String> players);
+    void showNotMyTurn(Board gameBoard);
+    void showWinner(String winner, HashMap<String, Integer> leaderboard);
 }

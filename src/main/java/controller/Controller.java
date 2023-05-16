@@ -33,6 +33,7 @@ public class Controller implements Observer {
 
     private Game game;
     private HashMap<String, Integer> playersPoints;
+    private String winner;
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
     int firstX, firstY, secondX, secondY, thirdX, thirdY = 0;
@@ -81,12 +82,12 @@ public class Controller implements Observer {
 
                 if (game.getGameState().equals(LOGIN)) {
                     if (game.getMaxPlayers() > 0) {
-                        new GenericErrorMessage("Controller","The players for this game are already set.");
+                        this.update(new GenericErrorMessage(maxPlayersMessage.getSender(),"The players for this game are already set."));
                     } else if (game.setMaxPlayers(maxPlayersMessage.getPlayers()) == false) {
-                        new GenericErrorMessage("Controller","The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS);
+                        this.update(new GenericErrorMessage(maxPlayersMessage.getSender(), "The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS));
                     }
                 } else {
-                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    this.update(new GenericErrorMessage(maxPlayersMessage.getSender(), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
 
             case USER_INFO:
@@ -95,14 +96,14 @@ public class Controller implements Observer {
 
                 if (game.getGameState().equals(LOGIN)) {
                     if (game.isNicknameTaken(userInfoForLoginMessage.getUsername()) == true) {
-                        new GenericErrorMessage("Controller","Username is already taken.");
+                        this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(), "Username is already taken."));
                     } else {
 
                         try {
                             Random rand = new Random();
                             game.addToGame(new Player(userInfoForLoginMessage.getUsername(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
                         } catch (TooManyPlayersException exception) {
-                            new GenericErrorMessage("Controller",exception.getMessage());
+                            this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(), exception.getMessage()));
                         }
 
                         if (game.getPlayers().size() == game.getMaxPlayers()) {
@@ -110,7 +111,7 @@ public class Controller implements Observer {
                         }
                     }
                 } else {
-                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(),"This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
 
             case PICK_OBJECT:
@@ -131,7 +132,7 @@ public class Controller implements Observer {
                             try {
                                 pickObjectFromBoard(firstX, firstY);
                             } catch (IncompatibleStateException e) {
-                                new GenericErrorMessage("Controller",e.getMessage());
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                             }
                             break;
                         case 4:
@@ -141,14 +142,14 @@ public class Controller implements Observer {
                             secondY = pickObjectMessage.getCoordinates().get(3);
 
                             if (secondX != firstX || secondY != firstY) {
-                                new GenericErrorMessage("Controller","You must pick objects from the same row or column!");
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"You must pick objects from the same row or column!"));
                             } else {
 
                                 try {
                                     pickObjectFromBoard(firstX, firstY);
                                     pickObjectFromBoard(secondX, secondY);
                                 } catch (IncompatibleStateException e) {
-                                    new GenericErrorMessage("Controller",e.getMessage());
+                                    this.update(GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                                 }
 
                             }
@@ -163,26 +164,26 @@ public class Controller implements Observer {
 
 
                             if (!((firstX == secondX && firstX == thirdX && secondX == thirdX) || (firstY == secondY && firstY == thirdY && secondY == thirdY))) {
-                                new GenericErrorMessage("Controller","You must pick objects from the same row or column!");
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"You must pick objects from the same row or column!"));
                             } else {
                                 try {
                                     pickObjectFromBoard(firstX, firstY);
                                     pickObjectFromBoard(secondX, secondY);
                                     pickObjectFromBoard(thirdX, thirdY);
                                 } catch (IncompatibleStateException e) {
-                                    new GenericErrorMessage("Controller",e.getMessage());
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),e.getMessage()));
                                 }
                             }
                             break;
                         default:
-                            new GenericErrorMessage("Controller","Coordinates must be in pairs.");
+                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"Coordinates must be in pairs."));
                     }
 
                     /* After picking up the objects, the player will go to his library */
                     game.getPlayerInTurn().setPlayerState(IN_LIBRARY);
 
                 } else {
-                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
 
             case PUT_OBJECT:
@@ -193,10 +194,10 @@ public class Controller implements Observer {
                     resetCoordinateValues();
 
                     if (putObjectInLibraryMessage.getOrderArray().size() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
-                        new GenericErrorMessage("Controller","You must put all the objects you have in hand in the library.");
+                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"You must put all the objects you have in hand in the library."));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
                         int value = putObjectInLibraryMessage.getOrderArray().size() - 1;
-                        new GenericErrorMessage("Controller", "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize());
+                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize()));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
                         switch (putObjectInLibraryMessage.getOrderArray().size()) {
                             case 2 -> {
@@ -223,7 +224,7 @@ public class Controller implements Observer {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    new GenericErrorMessage("Controller",e.getMessage());
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),e.getMessage()));
                                 }
                             }
                             case 3 -> {
@@ -250,7 +251,7 @@ public class Controller implements Observer {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    new GenericErrorMessage("Controller",e.getMessage());
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),e.getMessage()));
                                 }
                             }
                             case 4 -> {
@@ -277,17 +278,17 @@ public class Controller implements Observer {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    new GenericErrorMessage("Controller",e.getMessage());
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                                 }
                             }
-                            default -> new GenericErrorMessage("Controller","Invalid number of objects.");
+                            default -> this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"Invalid number of objects."));
                         }
                     }
                 } else {
-                    new GenericErrorMessage("Controller","This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString());
+                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
             default:
-                new GenericErrorMessage("Controller","Message type: " + receivedMessage.getType().toString() + " is not valid.");
+                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"Message type: " + receivedMessage.getType().toString() + " is not valid."));
         }
     }
 
@@ -358,10 +359,8 @@ public class Controller implements Observer {
             game.setGameState(GameState.END);
             calcPoints();
             getPointsAndUsernames();
-            String winner = declareWinner();
-
-            /* Broadcast message of winner username */
-            /* TODO */
+            this.winner = declareWinner();
+            this.update(new EndGameMessage(winner, playersPoints));
         }
     }
 
@@ -619,6 +618,12 @@ public class Controller implements Observer {
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
+            case END_GAME:
+                EndGameMessage endGameMessage = (EndGameMessage) message;
+                networkView.showWinner(endGameMessage.getWinner(), endGameMessage.getPlayersPoints());
+            case GENERIC_ERROR:
+                GenericErrorMessage errorMessage = (GenericErrorMessage) message;
+                networkView.showGenericError(errorMessage.getSender(), errorMessage.getPayload());
             default:
                 ;
         }

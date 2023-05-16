@@ -8,10 +8,10 @@ import observer.ViewObserver;
 import view.View;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the client.
@@ -120,28 +120,54 @@ public class ClientController implements ViewObserver, Observer {
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askBoardMove();
                     }
+                } else {
+                    ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                    view.showNotMyTurn(turnMessage.getGameBoard());
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 if(message.getSender().equals(nickname)) {
                     ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
-                    view.showCommonObjectives(commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
+                    view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
                 }
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 if(message.getSender().equals(nickname)) {
                     ShowPersonalObjectiveMessage personalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
-                    view.showPersonalObjective(personalObjectiveMessage.getPersonalObjective());
+                    view.showPersonalObjective(personalObjectiveMessage.getSender(), personalObjectiveMessage.getPersonalObjective());
                 }
                 break;
+            case END_GAME:
+                EndGameMessage endGameMessage = (EndGameMessage) message;
+                HashMap<String, Integer> sortedLeaderboard = sortLeaderboard(endGameMessage.getPlayersPoints(), false); /* False = ordine decrescente */
+                                                                                                                              /* True = ordine crescente */
+                view.showWinner(endGameMessage.getWinner(), sortedLeaderboard);
             case GENERIC_ERROR:
                 if(message.getSender().equals(nickname)) {
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
-                    view.showGenericError(genericErrorMessage.getPayload());
+                    view.showGenericError(genericErrorMessage.getSender(), genericErrorMessage.getPayload());
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * This method will sort the leaderboard points in descending order.
+     * @param playersPoints is the {@link HashMap} containing this game's leaderboard.
+     * @param order is set to {@code true} for ascending order, {@code false} for descending order.
+     * @return the new sorted leaderboard.
+     */
+    private HashMap<String, Integer> sortLeaderboard(HashMap<String, Integer> playersPoints, boolean order) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(playersPoints.entrySet());
+
+        // Sorting the list based on values
+        list.sort((o1, o2) -> order ? o1.getValue().compareTo(o2.getValue()) == 0
+                ? o1.getKey().compareTo(o2.getKey())
+                : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
+                ? o2.getKey().compareTo(o1.getKey())
+                : o2.getValue().compareTo(o1.getValue()));
+        return list.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
     }
 }

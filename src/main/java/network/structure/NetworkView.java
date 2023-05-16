@@ -7,6 +7,7 @@ import model.library.Library;
 import model.library.LibrarySpace;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
+import network.GenericErrorMessage;
 import network.Message;
 import network.ShowLobbyMessage;
 import network.ShowTurnMessage;
@@ -56,6 +57,15 @@ public class NetworkView implements View {
         try{
             server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand));
         } catch (RemoteException e){
+            System.err.println("Cannot send the message to the view");
+        }
+    }
+
+    @Override
+    public void showGenericError(String player, String payload) {
+        try {
+            server.sendMessage(new GenericErrorMessage(player, payload));
+        } catch (RemoteException e) {
             System.err.println("Cannot send the message to the view");
         }
     }
