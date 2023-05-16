@@ -12,6 +12,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -25,8 +28,11 @@ public class ClientSocket extends Observable implements Client {
     private ObjectInputStream ois;
     private Socket socket;
     private final int port;
+
+    Server server;
     final String address;
     boolean getConnected =false;
+    ScheduledExecutorService timer;
 
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
@@ -52,6 +58,7 @@ public class ClientSocket extends Observable implements Client {
            socket= new Socket(address, port);
            this.oos = new ObjectOutputStream(socket.getOutputStream());
            this.ois= new ObjectInputStream(socket.getInputStream());
+           this.timer = Executors.newSingleThreadScheduledExecutor();
            getConnected=true;
 
        }
@@ -86,7 +93,6 @@ public class ClientSocket extends Observable implements Client {
 
     /**
      * Receives a message and reads it
-     * @throws RemoteException when the message is null
      */
     public void receivedMessage(Message message) {
 
@@ -135,10 +141,28 @@ public class ClientSocket extends Observable implements Client {
     public void disconnect() {
         try{
             closeConnection();
+            server.disconnect(this);
         }
         catch (IOException e){
             Logger.getLogger("client").severe(e.getMessage());
         }
+
+    }
+
+    /**
+     * notifies client connection
+     */
+    @Override
+    public void ping() {
+        timer.scheduleAtFixedRate(() -> {
+            try {
+                sendMessage(new PingMessage(null, MessageType.PING));
+            } catch (RemoteException e) {
+                notifyObserver(new GenericErrorMessage(null, "connection lost"));
+            } catch (IOException e) {
+                notifyObserver(new GenericErrorMessage(null, "connection lost"));
+            }
+        }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }
 }

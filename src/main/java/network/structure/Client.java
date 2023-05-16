@@ -1,7 +1,6 @@
 package network.structure;
 
 import network.Message;
-import observer.Observable;
 import observer.Observer;
 
 import java.io.IOException;
@@ -15,8 +14,8 @@ import java.util.List;
 
 public interface Client extends Remote, ClientHandler{
 
-    final List<Observer> observers = new ArrayList<>();
-    public default void addObserver(Observer obs) {
+    List<Observer> observers = new ArrayList<>();
+     default void addObserver(Observer obs) {
         observers.add(obs);
     }
     void connection() throws IOException;
@@ -24,4 +23,6 @@ public interface Client extends Remote, ClientHandler{
     void closeConnection() throws IOException;
 
     void sendMessage(Message message) throws IOException;
+
+    void ping();
 }
