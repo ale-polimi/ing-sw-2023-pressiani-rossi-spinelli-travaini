@@ -17,5 +17,6 @@ public enum MessageType {
     ADDED_PLAYER,
     PING,
     GAME_CLOSED,
-    SHOW_LOBBY
+    SHOW_LOBBY,
+    END_GAME
 }
