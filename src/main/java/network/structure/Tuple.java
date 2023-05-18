@@ -4,11 +4,11 @@ import controller.Controller;
 import java.util.ArrayList;
 
 
-public class Tuple {
+public class Tuple implements Runnable{
     //Controller of the game related to the clients
     private final Controller controller;
     //Clients which correspond to the players of the game
-    private ArrayList<ClientHandler> clientHandlers;
+    private final ArrayList<ClientHandler> clientHandlers;
 
     public Tuple(Controller controller, ArrayList<ClientHandler> clientHandlers){
         this.controller = controller;
@@ -32,4 +32,9 @@ public class Tuple {
      * @param clientHandler The client handler that has to be added to the clientHandlers parameter
      */
     public void addClientHandler(ClientHandler clientHandler){clientHandlers.add(clientHandler);}
+
+    @Override
+    public void run() {
+        /*TODO implementare la connessione al gioco*/
+    }
 }
