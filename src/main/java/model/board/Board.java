@@ -6,9 +6,10 @@ import model.objects.ObjectCard;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Serializable {
     private BoardSpace[][] boardSpaces;
     PropertyChangeListener listener;
 

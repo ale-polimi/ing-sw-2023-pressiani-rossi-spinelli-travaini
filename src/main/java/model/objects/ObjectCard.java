@@ -2,9 +2,10 @@ package model.objects;
 
 import enumerations.ObjectColour;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class ObjectCard {
+public class ObjectCard implements Serializable {
     private final ObjectColour objectColour;
 
     /**

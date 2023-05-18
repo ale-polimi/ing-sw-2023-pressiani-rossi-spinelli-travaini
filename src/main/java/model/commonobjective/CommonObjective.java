@@ -2,7 +2,9 @@ package model.commonobjective;
 
 import model.library.Library;
 
-public abstract class CommonObjective {
+import java.io.Serializable;
+
+public abstract class CommonObjective implements Serializable {
     ObjectiveNumeral objectiveNumeral;
     String description;
 

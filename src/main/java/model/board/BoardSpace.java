@@ -2,8 +2,11 @@ package model.board;
 
 import enumerations.TypeSpace;
 import model.objects.ObjectCard;
+import network.structure.Server;
 
-public class BoardSpace {
+import java.io.Serializable;
+
+public class BoardSpace implements Serializable {
     private TypeSpace typeSpace;
     private ObjectCard objectContained;
 

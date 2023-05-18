@@ -3,7 +3,9 @@ package model.library;
 import model.library.LibrarySpace;
 import model.objects.ObjectCard;
 
-public class LibraryGrid {
+import java.io.Serializable;
+
+public class LibraryGrid implements Serializable {
     protected LibrarySpace[][] libraryGrid = new LibrarySpace[6][5];
 
     /**

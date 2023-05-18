@@ -2,7 +2,10 @@ package model.library;
 
 import model.objects.ObjectCard;
 
-public class LibrarySpace {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class LibrarySpace implements Serializable {
     private ObjectCard objectContained;
     private int group = 0;
     private boolean visited = false;
