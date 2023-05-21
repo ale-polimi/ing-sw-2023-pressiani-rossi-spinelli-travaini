@@ -3,6 +3,7 @@ import enumerations.GameState;
 import enumerations.ObjectColour;
 import enumerations.PlayerState;
 import model.library.Library;
+import model.library.LibrarySpace;
 import model.objects.ObjectCard;
 import network.MaxPlayersMessage;
 import network.PickObjectMessage;
@@ -85,7 +86,7 @@ public class ControllerTest {
      * After the pickup the player must be in the IN_LIBRARY state, so that he can no longer pick more objects from the board.
      */
     @Test
-    public void onPickupMove(){
+    public void onPickupMoveOK(){
         controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
         controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
         controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
@@ -94,6 +95,24 @@ public class ControllerTest {
         assertEquals(1, controller.getGame().getPlayerInTurn().getObjectsInHandSize());
         assertEquals(pickedObject, controller.getGame().getPlayerInTurn().getObjectInHand(0));
         assertEquals(PlayerState.IN_LIBRARY, controller.getGame().getPlayerInTurn().getPlayerState());
+    }
+
+    /**
+     * Test to check if the controller correctly handles a wrong pickup from the player.
+     * In this case the player tries to pick up from a tile marked as unusable.
+     * After this, the player's objects in hand must not have changed and the unusable empty tile must not be in the
+     * objects in hand.
+     */
+    @Test
+    public void onPickupMoveUnusableSpace(){
+        controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
+        ObjectCard pickedObject = controller.getGame().getBoard().getSpace(0,0).getObject();
+        ArrayList<ObjectCard> oldObjectsInHand = controller.getGame().getPlayerInTurn().getObjectsInHand();
+        controller.onMessageReceived(new PickObjectMessage("Alice", new ArrayList<>(Arrays.asList(0,0))));
+        assertNotEquals(pickedObject, controller.getGame().getPlayerInTurn().getObjectInHand(0));
+        assertEquals(oldObjectsInHand, controller.getGame().getPlayerInTurn().getObjectsInHand());
     }
 
     /**
@@ -117,13 +136,14 @@ public class ControllerTest {
     }
 
     /**
-     * Test to check if the controller correctly handles a player's incorrect move.
+     * Test to check if the controller correctly handles a player's incorrect move. In this case the player does not
+     * have enough objects in his hand.
      * After the move, the player's objectsInHand must not have changed.
      * After the move, the player's library must not have changed.
-     * After the move, the player must not have changed.
+     * After the move, the player in turn must not have changed.
      */
     @Test
-    public void onPutInLibraryMoveNotOK(){
+    public void onPutInLibraryMoveNotEnoughObjectsInhand(){
         controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
         controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
         controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
@@ -132,6 +152,36 @@ public class ControllerTest {
         ArrayList<ObjectCard> oldObjectsInHand = controller.getGame().getPlayerInTurn().getObjectsInHand();
         Library oldPlayerLibrary = controller.getGame().getPlayerInTurn().getLibrary();
         controller.onMessageReceived(new PutObjectInLibraryMessage("Alice", new ArrayList<>(Arrays.asList(0,1,0))));
+        assertEquals(oldObjectsInHand, controller.getGame().getPlayerInTurn().getObjectsInHand());
+        assertEquals(oldPlayerLibrary, controller.getGame().getPlayerInTurn().getLibrary());
+        assertEquals("Alice", controller.getGame().getPlayerInTurn().getNickname());
+        assertEquals("Bob", controller.getGame().getNextPlayer().getNickname());
+    }
+
+    /**
+     * Test to check if the controller correctly handles a player's incorrect move. In this case the column chosen by
+     * the player does not have enough space for the additional object.
+     * After the move, the player's objectsInHand must not have changed.
+     * After the move, the player's library must not have changed.
+     * After the move, the player in turn must not have changed.
+     */
+    @Test
+    public void onPutInLibraryMoveNotEnoughSpace(){
+        controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
+
+        Library aliceLibrary = controller.getGame().getPlayerInTurn().getLibrary();
+        /* The first column in the player's library is full */
+        for(int row = 0; row < 6; row++){
+            aliceLibrary.addObject(new ObjectCard(ObjectColour.PINK1), aliceLibrary.getLibrarySpace(row, 0));
+        }
+
+        ObjectCard pickedObject = controller.getGame().getBoard().getSpace(4,2).getObject();
+        controller.onMessageReceived(new PickObjectMessage("Alice", new ArrayList<>(Arrays.asList(4,2))));
+        ArrayList<ObjectCard> oldObjectsInHand = controller.getGame().getPlayerInTurn().getObjectsInHand();
+        Library oldPlayerLibrary = controller.getGame().getPlayerInTurn().getLibrary();
+        controller.onMessageReceived(new PutObjectInLibraryMessage("Alice", new ArrayList<>(Arrays.asList(0,0))));
         assertEquals(oldObjectsInHand, controller.getGame().getPlayerInTurn().getObjectsInHand());
         assertEquals(oldPlayerLibrary, controller.getGame().getPlayerInTurn().getLibrary());
         assertEquals("Alice", controller.getGame().getPlayerInTurn().getNickname());

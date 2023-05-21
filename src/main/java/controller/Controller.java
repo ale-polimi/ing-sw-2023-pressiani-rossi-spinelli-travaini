@@ -3,6 +3,7 @@ package controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import enumerations.GameState;
 import enumerations.ObjectColour;
+import enumerations.TypeSpace;
 import exceptions.controller.IncompatibleStateException;
 import exceptions.controller.NotEnoughSpaceException;
 import exceptions.game.TooManyPlayersException;
@@ -151,7 +152,7 @@ public class Controller implements Observer {
                                     pickObjectFromBoard(firstX, firstY);
                                     pickObjectFromBoard(secondX, secondY);
                                 } catch (IncompatibleStateException e) {
-                                    this.update(GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                                 }
 
                             }
@@ -479,7 +480,8 @@ public class Controller implements Observer {
      */
     public boolean pickObjectFromBoard(int coordX, int coordY) throws IncompatibleStateException{
         if(game.getPlayerInTurn().getPlayerState().equals(PICKUP)) {
-            if (game.getBoard().getSpace(coordX, coordY).getObject() != null) {
+            /* TODO - CORRECT THIS !!!!! */
+            if (game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().equals(ObjectColour.EMPTY) || game.getBoard().getSpace(coordX, coordY).getTypeSpace().equals(TypeSpace.UNUSABLE)) {
                 if(game.getBoard().isSpaceSurrounded(coordX, coordY)){
                     return false;
                 } else {
