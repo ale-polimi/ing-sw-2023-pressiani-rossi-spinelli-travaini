@@ -127,4 +127,8 @@ public class NetworkView implements View {
     public void showGenericError(String player, String payload) {
         server.sendMessage(new GenericErrorMessage(player, payload));
     }
+
+    public void disconnect(){
+        server.disconnect();
+    }
 }
