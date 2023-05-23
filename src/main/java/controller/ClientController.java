@@ -1,5 +1,7 @@
 package controller;
 
+import model.commonobjective.CommonObjective;
+import model.library.PersonalObjective;
 import network.*;
 import network.client.SocketClient;
 import network.client.*
@@ -21,6 +23,9 @@ public class ClientController implements ViewObserver, Observer {
     private final View view;
     private Client client;
     private String nickname;
+    private CommonObjective commonObjective1;
+    private CommonObjective commonObjective2;
+    private PersonalObjective personalObjective;
     private boolean inLibrary = false;
     private boolean inPickup = true;
     private final ExecutorService taskQueue;
@@ -71,6 +76,15 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
     }
 
+    @Override
+    public void onRequestCommonObjectives() {
+        view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2);
+    }
+
+    @Override
+    public void onRequestPersonalObjective() {
+        view.showPersonalObjective(this.nickname, this.personalObjective);
+    }
 
     /**
      * This method checks if the ip is valid as in it follows the <a href="https://en.wikipedia.org/wiki/Dot-decimal_notation">dot-decimal notation</a>.
@@ -128,13 +142,20 @@ public class ClientController implements ViewObserver, Observer {
             case SHOW_COMMON_OBJECTIVE:
                 if(message.getSender().equals(nickname)) {
                     ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
+                    this.commonObjective1 = commonObjectiveMessage.getCommonObjective1();
+                    this.commonObjective2 = commonObjectiveMessage.getCommonObjective2();
+                    /*
                     view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
+                     */
                 }
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 if(message.getSender().equals(nickname)) {
                     ShowPersonalObjectiveMessage personalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
+                    this.personalObjective = personalObjectiveMessage.getPersonalObjective();
+                    /*
                     view.showPersonalObjective(personalObjectiveMessage.getSender(), personalObjectiveMessage.getPersonalObjective());
+                     */
                 }
                 break;
             case END_GAME:

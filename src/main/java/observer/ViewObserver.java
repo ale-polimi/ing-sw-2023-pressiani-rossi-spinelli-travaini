@@ -12,4 +12,6 @@ public interface ViewObserver {
     void onMaxPlayers(int numOfPlayers);
     void onUdpateBoardMove(ArrayList<Integer> coordinatesToSend);
     void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend);
+    void onRequestCommonObjectives();
+    void onRequestPersonalObjective();
 }

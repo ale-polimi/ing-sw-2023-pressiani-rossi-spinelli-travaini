@@ -198,6 +198,15 @@ public class Cli extends ViewObservable implements View {
                       "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n");
             String orderAndColumn = readLine();
 
+            /*
+            Only when the player is in the library, he can ask to see its personal objective and the game's common objectives.
+             */
+            if(orderAndColumn.equals("-showcommon")){
+                notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
+            } else if (orderAndColumn.equals("-showpersonal")){
+                notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+            }
+
             String[] parsedCoordinates = orderAndColumn.split(",");
             ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
             for(int i = 0; i < parsedCoordinates.length; i++){
@@ -357,7 +366,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2) {
-
+        out.println("The common objectives are:");
         out.println(commonObjective1.getDescription());
         out.println(commonObjective2.getDescription());
     }
@@ -368,6 +377,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void showPersonalObjective(String player, PersonalObjective personalObjective) {
+        out.println("Your personal objective is:");
         printPersonalObjective(personalObjective);
     }
 

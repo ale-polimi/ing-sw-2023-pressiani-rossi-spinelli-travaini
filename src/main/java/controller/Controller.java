@@ -308,6 +308,12 @@ public class Controller implements Observer {
              game.getPlayers()) {
             player.addObserver(this);
         }
+        /* Sends the common objectives and the personal objectives to all the connected players. */
+        for(Player player: game.getPlayers()){
+            this.update(new ShowCommonObjectiveMessage(player.getNickname(), (CommonObjective) game.getCommonObjectives().keySet().toArray()[0],(CommonObjective) game.getCommonObjectives().keySet().toArray()[0]));
+            this.update(new ShowPersonalObjectiveMessage(player.getNickname(), player.getPersonalObjective()));
+        }
+
         game.setGameState(IN_GAME);
         game.setPlayerInTurn(game.getPlayers().get(0));
     }
@@ -625,6 +631,13 @@ public class Controller implements Observer {
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
+            case SHOW_COMMON_OBJECTIVE:
+                ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;
+                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2());
+                break;
+            case SHOW_PERSONAL_OBJECTIVE:
+                ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
+                networkView.showPersonalObjective(showPersonalObjectiveMessage.getSender(), showPersonalObjectiveMessage.getPersonalObjective());
             case END_GAME:
                 EndGameMessage endGameMessage = (EndGameMessage) message;
                 networkView.showWinner(endGameMessage.getWinner(), endGameMessage.getPlayersPoints());

@@ -42,4 +42,5 @@ public interface View {
     void showPersonalObjective(String player, PersonalObjective personalObjective);
     void showLobby(ArrayList<String> players);
     void showWinner(String winner, HashMap<String, Integer> leaderboard);
+    void showNotMyTurn(Board gameBoard);
 }
