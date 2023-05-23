@@ -655,3 +655,4 @@ public class Controller implements Observer {
      */
     public Game getGame(){return game;}
 }
+

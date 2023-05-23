@@ -99,6 +99,10 @@ public class NetworkView implements View {
         server.sendMessage(new EndGameMessage(winner, leaderboard));
     }
 
+
+    @Override
+    public void showNotMyTurn(Board gameBoard) {}
+
     /**
      * Show the common objective of the game
      * @param commonObjective1 The first common objective
@@ -128,6 +132,9 @@ public class NetworkView implements View {
         server.sendMessage(new GenericErrorMessage(player, payload));
     }
 
+    /**
+     * Call the disconnection to the game
+     */
     public void disconnect(){
         server.disconnect();
     }
