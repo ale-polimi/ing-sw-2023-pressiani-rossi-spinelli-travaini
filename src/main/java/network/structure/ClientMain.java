@@ -27,6 +27,7 @@ public class ClientMain {
             Cli view = new Cli();
             ClientController clientController = new ClientController(view);
             view.addObserver(clientController);
+            view.initCli();
         }
 
         //launch a GUI

@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-// This clas hides the network to the controller
+/**
+ * This class hides the network to the controller.
+ */
 public class NetworkView implements View {
     private final StartServerImpl server;
 
@@ -40,7 +42,11 @@ public class NetworkView implements View {
        server.sendMessage(message);
    }
 
-    @Override
+    /**
+     * This method
+      * @param players
+     */
+   @Override
     public void showLobby(ArrayList<String> players) {
         server.sendMessage(new ShowLobbyMessage(players));
     }

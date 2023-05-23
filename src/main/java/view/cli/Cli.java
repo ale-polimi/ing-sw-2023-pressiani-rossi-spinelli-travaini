@@ -26,9 +26,11 @@ public class Cli extends ViewObservable implements View {
     private final PrintStream out;
     private Thread inputThread;
 
+    /**
+     * Constructor for the CLI.
+     */
     public Cli() {
         out = System.out;
-        initCli();
     }
 
     /**
@@ -53,6 +55,9 @@ public class Cli extends ViewObservable implements View {
         return input;
     }
 
+    /**
+     * This method will start the CLI.
+     */
     public void initCli(){
         out.println(""+
                 "8888ba.88ba              .d88888b  dP                dP .8888b oo         \n" +
