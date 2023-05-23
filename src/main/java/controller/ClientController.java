@@ -3,9 +3,8 @@ package controller;
 import model.commonobjective.CommonObjective;
 import model.library.PersonalObjective;
 import network.*;
-import network.structure.*;
-
-
+import network.structure.Client;
+import network.structure.ClientSocket;
 import observer.Observer;
 import observer.ViewObserver;
 import view.View;
@@ -49,13 +48,13 @@ public class ClientController implements ViewObserver, Observer {
      * @param nickname is the nickname passed by the {@link View}.
      */
     @Override
-    public void onUpdateNickname(String nickname) throws IOException{
+    public void onUpdateNickname(String nickname) {
         this.nickname = nickname;
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
     }
 
     @Override
-    public void onMaxPlayers(int maxPlayers) throws IOException{
+    public void onMaxPlayers(int maxPlayers) {
         client.sendMessage(new MaxPlayersMessage(this.nickname, maxPlayers));
     }
 
