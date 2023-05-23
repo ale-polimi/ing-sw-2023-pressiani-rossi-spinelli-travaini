@@ -11,6 +11,8 @@ public class FourByFourNew extends CommonObjective{
     private Library library ;
     private static final int MIN_GROUP_SIZE = 4;
     private static final int MIN_GROUP_COUNT = 5;
+    int groupCount;
+    int count = 1;
 
     private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
             "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Four groups each containing at least\n" +
@@ -31,7 +33,7 @@ public class FourByFourNew extends CommonObjective{
 
 
     public boolean hasValidGroups() {
-            int groupCount = 0;
+             groupCount = 0;
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
                     ObjectColour colour = library.getLibrarySpace(i,j).getObject().getObjectColour();
@@ -89,7 +91,7 @@ public class FourByFourNew extends CommonObjective{
 
 
         private int countGroup(List<int[]> group) {
-            int count = 1;
+
             for (int i = 0; i < group.size(); i++) {
                 int[] cell = group.get(i);
                 int row = cell[0];

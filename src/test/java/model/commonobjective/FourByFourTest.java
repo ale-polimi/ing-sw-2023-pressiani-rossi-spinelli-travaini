@@ -13,12 +13,12 @@ import model.library.Library;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class FourByFourTest {
-    FourByFour  fourByFour;
+    FourByFourNew  fourByFour;
     Library instance;
     @Before
     public void setUp() {
         instance=new Library();
-        fourByFour= new FourByFour();
+        fourByFour= new FourByFourNew();
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
@@ -48,12 +48,12 @@ public class FourByFourTest {
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,4));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,0));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,1));
-        instance.addObject(new ObjectCard("GREEN3"),instance.getLibrarySpace(4,2));
+        instance.addObject(new ObjectCard("BLUE3"),instance.getLibrarySpace(4,2));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,3));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,1));
-        instance.addObject(new ObjectCard("GREEN2"),instance.getLibrarySpace(5,2));
+        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(5,0));
+        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(5,1));
+        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(5,2));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,3));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,4));
 
@@ -71,7 +71,8 @@ public class FourByFourTest {
         int x = 0;
         int y = 0;
         fourByFour.applyObjectiveRules(instance,x,y);
-        if(fourByFour.getCount()==4){
+        System.out.println(fourByFour.groupCount);
+        if(fourByFour.groupCount >=5){
             System.out.print("fourbyfour");
             assertTrue(fourByFour.applyObjectiveRules(instance,x,y));}
     }
@@ -81,7 +82,8 @@ public class FourByFourTest {
         int x = 0;
         int y = 0;
         fourByFour.applyObjectiveRules(instance,x,y);
-        if(fourByFour.getCount()<4){
+        System.out.println(fourByFour.groupCount);
+        if(fourByFour.groupCount<5){
             System.out.print("notfourbyfour");
             assertFalse(fourByFour.applyObjectiveRules(instance,x,y));}
     }
