@@ -1,31 +1,18 @@
 package network.structure;
 
-import controller.Controller;
-import exceptions.player.ClientNotRegisteredException;
-import model.player.Player;
 import network.GameClosedMessage;
-import network.MaxPlayersMessage;
 import network.Message;
 import network.MessageType;
 
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.RMIClientSocketFactory;
-import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ServerRMI extends UnicastRemoteObject implements Server{
 
     private ArrayList<ClientHandler> clients;
-    private StartServerImpl startServer;
+    private final StartServerImpl startServer;
     /**
      * Custom constructor of ServerRMI class
      * @throws RemoteException Threw when the server is unreachable
@@ -34,26 +21,6 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         super();
         this.startServer = startServer;
         this.clients = new ArrayList<>();
-    }
-
-    /**
-     * Custom constructor of ServerRMI class
-     * @param port is the port of the server
-     * @throws RemoteException Threw when the server is unreachable
-     */
-    public ServerRMI(int port) throws RemoteException {
-        super(port);
-    }
-
-    /**
-     * Custom constructor of ServerRMI class
-     * @param port is the port of the server
-     * @param csf
-     * @param ssf
-     * @throws RemoteException Threw when the server is unreachable
-     */
-    public ServerRMI(int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
-        super(port, csf, ssf);
     }
 
     /**

@@ -11,7 +11,7 @@ public class ObjectsDeck {
     public ObjectsDeck (){
         objectsDeck = new ArrayList<>();
         availableObjects = 132;
-        int[] tempCards = {7,7,8,7,7,8,7,7,8,7,7,8,7,7,8,7,7,8};
+        int[] tempCards = {7,7,8,7,7,8,7,7,8,7,7,8,7,7,8,7,7,8,0};
         for (int i = 0; i < 132; i++){
             ObjectCard tempCard;
             do {

@@ -61,8 +61,8 @@ public class StartServerImpl{
     private void startRMI() throws RemoteException {
         //Start RMI server instance
         serverRMI = new ServerRMI(this);
-        LocateRegistry.createRegistry(1234);
-        Registry registry = LocateRegistry.getRegistry(1234);
+        LocateRegistry.createRegistry(12345);
+        Registry registry = LocateRegistry.getRegistry(12345);
         registry.rebind("server", serverRMI);
         System.out.println("RMI server started, waiting for clients...");
     }
