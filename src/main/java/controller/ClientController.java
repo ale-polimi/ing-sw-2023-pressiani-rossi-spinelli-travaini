@@ -59,14 +59,14 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateBoardMove(ArrayList<Integer> coordinatesToSend) throws IOException{
+    public void onUpdateBoardMove(ArrayList<Integer> coordinatesToSend){
         inPickup = false;
         inLibrary = true;
         client.sendMessage(new PickObjectMessage(this.nickname, coordinatesToSend));
     }
 
     @Override
-    public void onUpdateLibraryMove(ArrayList<Integer> orderAndColumnToSend) throws IOException {
+    public void onUpdateLibraryMove(ArrayList<Integer> orderAndColumnToSend){
         inPickup = true;
         inLibrary = false;
         client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
