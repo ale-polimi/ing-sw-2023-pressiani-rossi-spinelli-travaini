@@ -10,8 +10,8 @@ public interface ViewObserver {
     void onUpdateServerInfo(Map<String, String> serverInfo);
     void onUpdateNickname(String nickname);
     void onMaxPlayers(int numOfPlayers);
-    void onUdpateBoardMove(ArrayList<Integer> coordinatesToSend);
-    void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend);
+    void onUpdateBoardMove(ArrayList<Integer> coordinatesToSend);
+    void onUpdateLibraryMove(ArrayList<Integer> orderAndColumnToSend);
     void onRequestCommonObjectives();
     void onRequestPersonalObjective();
 }
