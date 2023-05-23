@@ -87,7 +87,7 @@ public class ClientSocket extends Observable implements Client {
         catch (IOException e){
             closeConnection();
             getConnected=false;
-            notifyObserver(new GenericErrorMessage(null, "Impossible send message"));
+            notifyObserver(new GenericErrorMessage("client", "Impossible send message"));
         }
     }
 
@@ -141,7 +141,7 @@ public class ClientSocket extends Observable implements Client {
     public void disconnect() {
         try{
             closeConnection();
-            server.disconnect(this);
+            server.disconnect();
         }
         catch (IOException e){
             Logger.getLogger("client").severe(e.getMessage());
@@ -158,9 +158,9 @@ public class ClientSocket extends Observable implements Client {
             try {
                 sendMessage(new PingMessage(null, MessageType.PING));
             } catch (RemoteException e) {
-                notifyObserver(new GenericErrorMessage(null, "connection lost"));
+                notifyObserver(new GenericErrorMessage("client", "connection lost"));
             } catch (IOException e) {
-                notifyObserver(new GenericErrorMessage(null, "connection lost"));
+                notifyObserver(new GenericErrorMessage("client", "connection lost"));
             }
         }, 0, 1000, TimeUnit.MILLISECONDS);
 

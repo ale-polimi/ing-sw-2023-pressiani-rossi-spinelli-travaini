@@ -15,4 +15,10 @@ public class TwoEqualsInColumn extends CommonObjective {
 
         return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+1, y ).getObject().getObjectColour());
     }
+
+
+    @Override
+    public String getDescription(){
+        return description;
+    }
 }

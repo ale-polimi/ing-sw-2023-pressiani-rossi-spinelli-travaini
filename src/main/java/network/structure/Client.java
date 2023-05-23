@@ -14,10 +14,6 @@ import java.util.List;
 
 public interface Client extends Remote, ClientHandler{
 
-    List<Observer> observers = new ArrayList<>();
-     default void addObserver(Observer obs) {
-        observers.add(obs);
-    }
     void connection() throws IOException;
 
     void closeConnection() throws IOException;
