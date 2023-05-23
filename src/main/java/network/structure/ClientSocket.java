@@ -76,7 +76,7 @@ public class ClientSocket extends Observable implements Client {
      * @throws IOException if there are communication problems
      */
     @Override
-    public void sendMessage(Message message) throws IOException {
+    public void sendMessage(Message message) {
 
         try{
             oos.writeObject(message);
@@ -85,7 +85,11 @@ public class ClientSocket extends Observable implements Client {
         }
 
         catch (IOException e){
-            closeConnection();
+            try{
+                closeConnection();
+            } catch (IOException exception){
+                System.exit(1);
+            }
             getConnected=false;
             notifyObserver(new GenericErrorMessage("client", "Impossible send message"));
         }
