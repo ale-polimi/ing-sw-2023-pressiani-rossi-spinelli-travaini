@@ -1,10 +1,10 @@
 package network.structure;
 
-//import javafx.*;
 import controller.ClientController;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import view.Gui;
 import view.cli.*;
-import java.util.logging.Level;
-import network.structure.*;
 
 
 
@@ -31,10 +31,11 @@ public class ClientMain {
         }
 
         //launch a GUI
-        if (!isCli){
-            //Application.launch(gui.class);
+      if (!isCli){
+          //Application.launch(Gui.class);
         }
 
     }
+
 }
 

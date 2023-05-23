@@ -36,7 +36,7 @@ public class ClientRMI extends Observable implements Client{
      * @param address is the IP client
      * @param port is the port where the connection is
      */
-    public ClientRMI(String address, int port) throws RemoteException {
+    public ClientRMI(String address, int port) {
         this.address=address;
         this.port=port;
 
@@ -128,6 +128,10 @@ public class ClientRMI extends Observable implements Client{
     public void disconnect() {
         server=null;
     }
+
+    /**
+     * check the presence of problems in the connection between client and server
+     */
     @Override
     public void ping() {
 
