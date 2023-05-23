@@ -1,12 +1,9 @@
 package network.structure;
 
 import network.Message;
-import observer.Observer;
-
 import java.io.IOException;
 import java.rmi.Remote;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * this interface represents a generic client
@@ -14,11 +11,26 @@ import java.util.List;
 
 public interface Client extends Remote, ClientHandler{
 
+    /**
+     * makes the connection between client and server
+     * @throws IOException when the server is unreachable
+     */
     void connection() throws IOException;
 
+    /**
+     * closes the connection between client and server
+     * @throws IOException when the connection is already closed
+     */
     void closeConnection() throws IOException;
 
+    /**
+     * forwards a message
+     * @param message is the sending message
+     */
     void sendMessage(Message message);
 
+    /**
+     * check the presence of problems in the connection between client and server
+     */
     void ping();
 }

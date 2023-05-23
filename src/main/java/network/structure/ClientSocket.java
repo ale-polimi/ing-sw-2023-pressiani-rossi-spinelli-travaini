@@ -96,7 +96,8 @@ public class ClientSocket extends Observable implements Client {
     }
 
     /**
-     * Receives a message and reads it
+     * when called, it reads the message
+     * @param message is the message that has to be read
      */
     public void receivedMessage(Message message) {
 
@@ -154,13 +155,12 @@ public class ClientSocket extends Observable implements Client {
     }
 
     /**
-     * notifies client connection
+     * check the presence of problems in the connection between client and server
      */
     @Override
     public void ping() {
         timer.scheduleAtFixedRate(() -> {
             sendMessage(new PingMessage(null, MessageType.PING));
         }, 0, 1000, TimeUnit.MILLISECONDS);
-
     }
 }
