@@ -80,6 +80,10 @@ public class SocketHandler implements Runnable,ClientHandler {
         return true;
     }
 
+
+    /**
+     * close the connection
+     */
     @Override
     public void disconnect() {
         socketServer.disconnect();

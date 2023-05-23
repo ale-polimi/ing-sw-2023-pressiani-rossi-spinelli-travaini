@@ -10,6 +10,11 @@ public class Tuple implements Runnable{
     //Clients which correspond to the players of the game
     private final ArrayList<ClientHandler> clientHandlers;
 
+    /**
+     * constructor
+     * @param controller is the controller of the game
+     * @param clientHandlers is the list of clients
+     */
     public Tuple(Controller controller, ArrayList<ClientHandler> clientHandlers){
         this.controller = controller;
         this.clientHandlers = clientHandlers;
@@ -33,6 +38,9 @@ public class Tuple implements Runnable{
      */
     public void addClientHandler(ClientHandler clientHandler){clientHandlers.add(clientHandler);}
 
+    /**
+     * connection to the game
+     */
     @Override
     public void run() {
         /*TODO implementare la connessione al gioco*/

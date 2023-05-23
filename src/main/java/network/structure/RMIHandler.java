@@ -30,6 +30,10 @@ public class RMIHandler implements ClientHandler{
         return true;
     }
 
+
+    /**
+     * disconnect the server
+     */
     @Override
     public void disconnect() {server.disconnect();}
 

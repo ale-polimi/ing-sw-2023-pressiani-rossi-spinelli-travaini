@@ -32,8 +32,13 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
         if(!clients.contains(clientHandler))clients.add(clientHandler);
     }
 
+    /**
+     * when called, reads the message
+     * @param message is the message that has to be read
+     * @throws RemoteException when the server is unreachable
+     */
     @Override
- public void receiveMessage(Message message){startServer.receiveMessage(message);}
+     public void receiveMessage(Message message){startServer.receiveMessage(message);}
 
     /**
      * Send a message to the clients

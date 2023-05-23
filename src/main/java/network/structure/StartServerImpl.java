@@ -67,6 +67,11 @@ public class StartServerImpl{
         System.out.println("RMI server started, waiting for clients...");
     }
 
+
+    /**
+     * Start the server socket thread
+     * @throws RemoteException when the server cannot be reached
+     */
     private void startSocket(){
         //Start Socket server instance
         socketServer = new SocketServer(this, 12000);
