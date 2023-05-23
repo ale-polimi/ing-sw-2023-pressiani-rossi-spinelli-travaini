@@ -6,7 +6,6 @@ import enumerations.TypeSpace;
 import model.board.Board;
 import model.commonobjective.CommonObjective;
 import model.library.Library;
-import model.library.LibraryGrid;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
@@ -29,6 +28,7 @@ public class Cli extends ViewObservable implements View {
 
     public Cli() {
         out = System.out;
+        initCli();
     }
 
     /**
@@ -182,7 +182,7 @@ public class Cli extends ViewObservable implements View {
                 coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
             }
 
-            notifyObserver(viewObserver -> viewObserver.onUdpateBoardMove(coordinatesToSend));
+            notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -213,7 +213,7 @@ public class Cli extends ViewObservable implements View {
                 orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
             }
 
-            notifyObserver(viewObserver -> viewObserver.onUdpateLibraryMove(orderAndColumnToSend));
+            notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
