@@ -80,9 +80,13 @@ public class ClientRMI extends Observable implements Client{
      * @throws RemoteException when the server is unreachable
      */
     @Override
-    public void sendMessage(Message message) throws RemoteException{
+    public void sendMessage(Message message) {
 
-        server.receiveMessage(message);
+        try{
+            server.receiveMessage(message);
+        } catch (RemoteException e){
+            System.exit(1);
+        }
         //notifyObserver(new Message("client", message.getType()));
 
     }
@@ -128,11 +132,7 @@ public class ClientRMI extends Observable implements Client{
     public void ping() {
 
         timer.scheduleAtFixedRate(() -> {
-            try {
-                sendMessage(new PingMessage("client", MessageType.PING));
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+            sendMessage(new PingMessage("client", MessageType.PING));
         }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }

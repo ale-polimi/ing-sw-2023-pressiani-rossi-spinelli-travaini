@@ -159,13 +159,7 @@ public class ClientSocket extends Observable implements Client {
     @Override
     public void ping() {
         timer.scheduleAtFixedRate(() -> {
-            try {
-                sendMessage(new PingMessage(null, MessageType.PING));
-            } catch (RemoteException e) {
-                notifyObserver(new GenericErrorMessage("client", "connection lost"));
-            } catch (IOException e) {
-                notifyObserver(new GenericErrorMessage("client", "connection lost"));
-            }
+            sendMessage(new PingMessage(null, MessageType.PING));
         }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }

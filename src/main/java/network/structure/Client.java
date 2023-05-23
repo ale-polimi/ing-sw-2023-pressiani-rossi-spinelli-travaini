@@ -18,7 +18,7 @@ public interface Client extends Remote, ClientHandler{
 
     void closeConnection() throws IOException;
 
-    void sendMessage(Message message) throws IOException;
+    void sendMessage(Message message);
 
     void ping();
 }
