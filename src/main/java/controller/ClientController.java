@@ -35,6 +35,7 @@ public class ClientController implements ViewObserver, Observer {
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
+    @Override
     public void onUpdateServerInfo(Map<String, String> serverInfo) {
         client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
         ((ClientSocket)client).addObserver(this);
@@ -43,10 +44,6 @@ public class ClientController implements ViewObserver, Observer {
         taskQueue.execute(view::askMaxPlayer);
     }
 
-    /**
-     * This method will send the username on the network.
-     * @param nickname is the nickname passed by the {@link View}.
-     */
     @Override
     public void onUpdateNickname(String nickname) {
         this.nickname = nickname;

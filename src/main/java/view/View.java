@@ -57,15 +57,36 @@ public interface View {
     void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
 
     /**
-     * This method will send the {@link CommonObjective common objectives} to the player.
-     * @param player is the
-     * @param commonObjective1
-     * @param commonObjective2
+     * This method will show the {@link CommonObjective common objectives} to the player.
+     * @param player is the player currently playing.
+     * @param commonObjective1 is the first common objective.
+     * @param commonObjective2 is the second common objective.
      */
     void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2);
 
+    /**
+     * This method will show the {@link PersonalObjective personal objective} to the player.
+     * @param player is the player currently playing.
+     * @param personalObjective is the player's personal objective.
+     */
     void showPersonalObjective(String player, PersonalObjective personalObjective);
+
+    /**
+     * This method will show the lobby while all the players are connecting to the game.
+     * @param players is an {@link ArrayList} containing the usernames of the currently connected players.
+     */
     void showLobby(ArrayList<String> players);
+
+    /**
+     * This method will show the winner and the leaderboard when the game ends.
+     * @param winner is the username of the winner.
+     * @param leaderboard is a {@link HashMap} containing the pairs (username, points).
+     */
     void showWinner(String winner, HashMap<String, Integer> leaderboard);
+
+    /**
+     * This method will show the board when the player currently in its turn.
+     * @param gameBoard is the board of the game.
+     */
     void showNotMyTurn(Board gameBoard);
 }
