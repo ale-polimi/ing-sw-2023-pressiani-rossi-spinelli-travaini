@@ -6,6 +6,9 @@ import model.objects.ObjectCard;
 
 import java.util.ArrayList;
 
+/**
+ * Message used each turn to send to the clients the state of the game.
+ */
 public class ShowTurnMessage extends Message{
 
     private final Board gameBoard;

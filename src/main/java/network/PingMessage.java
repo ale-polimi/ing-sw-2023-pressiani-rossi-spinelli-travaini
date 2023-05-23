@@ -1,5 +1,8 @@
 package network;
 
+/**
+ * Message used to ping the server and keep the connection alive.
+ */
 public class PingMessage  extends Message{
     /**
      *Custom constructor for class PingMessage

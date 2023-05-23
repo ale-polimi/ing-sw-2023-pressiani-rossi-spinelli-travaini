@@ -2,6 +2,9 @@ package network;
 
 import java.util.HashMap;
 
+/**
+ * Message containing the winner of the game and the leaderboard.
+ */
 public class EndGameMessage extends Message{
     private String winner;
     HashMap<String, Integer> playersPoints;

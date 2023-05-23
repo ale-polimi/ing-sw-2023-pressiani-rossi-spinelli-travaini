@@ -1,5 +1,8 @@
 package network;
 
+/**
+ * Message that contains the information of the player (username) for the login.
+ */
 public class UserInfoForLoginMessage extends Message{
     private final String username;
     public UserInfoForLoginMessage(String sender, String username){

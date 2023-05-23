@@ -1,5 +1,8 @@
 package network;
 
+/**
+ * Message containing the info for the game closure.
+ */
 public class GameClosedMessage extends Message{
 
     /**
