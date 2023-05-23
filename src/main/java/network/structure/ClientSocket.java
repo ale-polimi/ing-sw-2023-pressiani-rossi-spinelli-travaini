@@ -43,8 +43,11 @@ public class ClientSocket extends Observable implements Client {
      * @param port is he connection port
      */
     public ClientSocket(String address, int port){
+        System.out.println("Entrato in client");
         this.address=address;
         this.port = port;
+        try{connection();}
+        catch(IOException e){System.err.println("Erron connecting to the socket"); System.exit(1);}
     }
 
     /**
@@ -57,10 +60,10 @@ public class ClientSocket extends Observable implements Client {
        try {
            socket= new Socket(address, port);
            this.oos = new ObjectOutputStream(socket.getOutputStream());
+           System.out.println(socket.getInputStream());
            this.ois= new ObjectInputStream(socket.getInputStream());
            this.timer = Executors.newSingleThreadScheduledExecutor();
            getConnected=true;
-
        }
        catch (IOException e){
            System.err.println("couldn't get IO for the connection");

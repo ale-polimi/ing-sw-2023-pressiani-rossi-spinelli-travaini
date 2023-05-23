@@ -124,7 +124,9 @@ public class Cli extends ViewObservable implements View {
         } while (validInput == false);
 
         notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
+        out.println("Inviato indirizzo e porte");
     }
+
 
     /**
      * This method asks the user the username that will be used in the game.

@@ -29,8 +29,8 @@ public class SocketHandler implements Runnable,ClientHandler {
         this.inputReader = new Object();
         this.outputWriter = new Object();
         try {
-            this.ois = (ObjectInputStream) socket.getInputStream();
-            this.oos = (ObjectOutputStream) socket.getOutputStream();
+            this.oos = new ObjectOutputStream(socket.getOutputStream()) ;
+            this.ois = new ObjectInputStream(socket.getInputStream());
         }catch(IOException e){System.err.println("Cannot connect to the socket streams");}
     }
 
@@ -51,18 +51,13 @@ public class SocketHandler implements Runnable,ClientHandler {
     private void clientCommunication() throws IOException {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                synchronized (inputReader) {
-                    Message message = (Message) ois.readObject();
-                    if(message.getType().equals(MessageType.USER_INFO)) {
-                        socketServer.registry(this);
-                    }
-                        socketServer.receiveMessage(message);
-                    }
-                }
-            } catch (ClassCastException | ClassNotFoundException e) {
+                Message message = (Message) ois.readObject();
+                if(message != null) socketServer.receiveMessage(message);
+            }
+        } catch (ClassCastException | ClassNotFoundException e) {
             System.err.println("Client thread malfunction");
         }
-        socket.close();
+        //socket.close();
     }
     /**
      * Check that a client is still connected

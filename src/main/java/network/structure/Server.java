@@ -1,7 +1,6 @@
 package network.structure;
 
 import network.Message;
-import network.listeners.PlayerListener;
 import java.rmi.RemoteException;
 
 public interface Server {

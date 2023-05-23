@@ -1,9 +1,9 @@
 package network.structure;
 
 import controller.ClientController;
-import javafx.application.Application;
-import javafx.stage.Stage;
-import view.Gui;
+//import javafx.application.Application;
+//import javafx.stage.Stage;
+//import view.Gui;
 import view.cli.*;
 
 

@@ -1,8 +1,6 @@
 package network.structure;
 
-import network.GameClosedMessage;
-import network.Message;
-import network.MessageType;
+import network.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -26,6 +24,8 @@ public class SocketServer implements Runnable, Server{
         this.server = server;
         this.port = port;
         this.clients = new ArrayList<>();
+        try {serverSocket = new ServerSocket(port);}
+        catch ( IOException e) {System.err.println("Server could not start!");}
     }
 
 
@@ -34,16 +34,15 @@ public class SocketServer implements Runnable, Server{
      */
     @Override
     public void run() {
-        try {serverSocket = new ServerSocket(port);}
-        catch ( IOException e) {System.err.println("Server could not start!");}
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Socket socket = serverSocket.accept();
-                socket.setSoTimeout(5000);
                 SocketHandler clientHandler = new SocketHandler(this, socket);
-                Thread thread = new Thread(clientHandler, "ss_handler" + socket.getInetAddress());
-                thread.start();
+                //Thread thread = new Thread(clientHandler, "ss_handler" + socket.getInetAddress());
+                server.getExecutor().submit(clientHandler);
+                //thread.start();
                 registry(clientHandler);
+                System.out.println("Client connected");
             } catch (IOException e) {
                 System.err.println("Server socket unreachable ");
             }
@@ -81,5 +80,10 @@ public class SocketServer implements Runnable, Server{
      * @throws RemoteException Threw when the server is unreachable
      */
     @Override
-    public void registry(ClientHandler clientHandler) throws RemoteException {if(!clients.contains((SocketHandler) clientHandler))clients.add((SocketHandler) clientHandler);}
+    public void registry(ClientHandler clientHandler) throws RemoteException {
+        if(!clients.contains((SocketHandler) clientHandler)){
+            clients.add((SocketHandler) clientHandler);
+            clientHandler.receivedMessage(new AskNicknameMessage("Controller"));
+        }
+    }
 }

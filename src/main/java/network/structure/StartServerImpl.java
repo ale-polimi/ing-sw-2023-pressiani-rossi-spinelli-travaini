@@ -61,8 +61,8 @@ public class StartServerImpl{
     private void startRMI() throws RemoteException {
         //Start RMI server instance
         serverRMI = new ServerRMI(this);
-        LocateRegistry.createRegistry(12345);
-        Registry registry = LocateRegistry.getRegistry(12345);
+        LocateRegistry.createRegistry(12000);
+        Registry registry = LocateRegistry.getRegistry(12000);
         registry.rebind("server", serverRMI);
         System.out.println("RMI server started, waiting for clients...");
     }
@@ -74,7 +74,7 @@ public class StartServerImpl{
      */
     private void startSocket(){
         //Start Socket server instance
-        socketServer = new SocketServer(this, 12000);
+        socketServer = new SocketServer(this, 12345);
         getExecutor().submit(socketServer);
         System.out.println("Server socket up, waiting for client");
     }
@@ -110,18 +110,19 @@ public class StartServerImpl{
      * Return the thread pool executor
      * @return The Executor service related to the server
      */
-    public static ExecutorService getExecutor(){return executor;}
+    public ExecutorService getExecutor(){return executor;}
 
     /**
      * Send a message received from the clients to the controller
      * @param message The message to forward
      */
     public void receiveMessage(Message message){
-        if(!message.getType().equals(MessageType.USER_INFO))
-            getController(message.getSender()).onMessageReceived(message);
-        else {
-            addToGame().onMessageReceived(message);
-        }
+        //if(!message.getType().equals(MessageType.USER_INFO))
+            //getController(message.getSender()).onMessageReceived(message);
+          //  controller.onMessageReceived(message);
+        //else {
+         controller.onMessageReceived(message);
+        //}
     }
 
     /**

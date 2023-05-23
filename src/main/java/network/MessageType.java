@@ -1,6 +1,8 @@
 package network;
 
-public enum MessageType {
+import java.io.Serializable;
+
+public enum MessageType implements Serializable {
     MAX_PLAYERS_FOR_GAME,
     USER_INFO,
     PICK_OBJECT,
