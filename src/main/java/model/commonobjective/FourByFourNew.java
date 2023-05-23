@@ -2,6 +2,7 @@ package model.commonobjective;
 
 import enumerations.ObjectColour;
 import model.library.Library;
+import view.cli.Colours;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,22 +11,26 @@ public class FourByFourNew extends CommonObjective{
     private Library library ;
     private static final int MIN_GROUP_SIZE = 4;
     private static final int MIN_GROUP_COUNT = 5;
+
+    private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Four groups each containing at least\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  4 tiles of the same type (not necessarily\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  in the depicted shape).\n" +
+            "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  The tiles of one group can be different\n" +
+            " x4  from those of another group.";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         this.library= library;
        return hasValidGroups();
     }
 
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
 
-
-
-
-
-
-
-
-        public boolean hasValidGroups() {
+    public boolean hasValidGroups() {
             int groupCount = 0;
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
