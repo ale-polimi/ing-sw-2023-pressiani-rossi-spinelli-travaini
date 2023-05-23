@@ -1,6 +1,8 @@
 package network.structure;
 
+import network.GameClosedMessage;
 import network.Message;
+import network.MessageType;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -64,12 +66,13 @@ public class SocketServer implements Runnable, Server{
 
     /**
      * Handles the disconnection request from the players
-     * @param clientHandler The clientHandler related to the player
      */
     @Override
-    public void disconnect(ClientHandler clientHandler) {
-        clients.remove((SocketHandler) clientHandler);
-        /*TODO distruzione partita*/
+    public void disconnect() {
+        for(ClientHandler c: clients){
+            c.receivedMessage(new GameClosedMessage("Controller", MessageType.GAME_CLOSED));
+            clients.remove(c);
+        }
     }
 
     /**
@@ -78,5 +81,5 @@ public class SocketServer implements Runnable, Server{
      * @throws RemoteException Threw when the server is unreachable
      */
     @Override
-    public void registry(ClientHandler clientHandler) throws RemoteException {clients.add((SocketHandler) clientHandler);}
+    public void registry(ClientHandler clientHandler) throws RemoteException {if(!clients.contains((SocketHandler) clientHandler))clients.add((SocketHandler) clientHandler);}
 }

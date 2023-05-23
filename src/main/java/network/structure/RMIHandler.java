@@ -26,13 +26,12 @@ public class RMIHandler implements ClientHandler{
      */
     @Override
     public boolean isConnected() {
-        try{client.receivedMessage(new PingMessage("Server", MessageType.PING));}
-        catch(RemoteException e){return false;}
+        client.receivedMessage(new PingMessage("Server", MessageType.PING));
         return true;
     }
 
     @Override
-    public void disconnect() {server.disconnect(this);}
+    public void disconnect() {server.disconnect();}
 
     /**
      * Send the message from the server to the client
@@ -40,7 +39,6 @@ public class RMIHandler implements ClientHandler{
      */
     @Override
     public void receivedMessage(Message message) {
-        try{client.receivedMessage(message);}
-        catch(RemoteException e){System.err.println("Client unreachable to receive a message");}
+        client.receivedMessage(message);
     }
 }

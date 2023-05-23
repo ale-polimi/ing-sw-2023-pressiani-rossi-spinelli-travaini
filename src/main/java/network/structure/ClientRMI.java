@@ -1,13 +1,9 @@
 package network.structure;
 
-
-import java.awt.*;
-import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -74,7 +70,7 @@ public class ClientRMI extends Observable implements Client{
      */
     @Override
     public void closeConnection() throws RemoteException {
-        server.disconnect(this);
+        server.disconnect();
         disconnect();
     }
 
@@ -87,7 +83,7 @@ public class ClientRMI extends Observable implements Client{
     public void sendMessage(Message message) throws RemoteException{
 
         server.receiveMessage(message);
-        notifyObserver(new Message(null, message.getType()));
+        notifyObserver(new Message("client", message.getType()));
 
     }
 
@@ -133,12 +129,11 @@ public class ClientRMI extends Observable implements Client{
 
         timer.scheduleAtFixedRate(() -> {
             try {
-                sendMessage(new PingMessage(null, MessageType.PING));
+                sendMessage(new PingMessage("client", MessageType.PING));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }
-
 }

@@ -28,6 +28,10 @@ public class SocketHandler implements Runnable,ClientHandler {
         this.socket = socket;
         this.inputReader = new Object();
         this.outputWriter = new Object();
+        try {
+            this.ois = (ObjectInputStream) socket.getInputStream();
+            this.oos = (ObjectOutputStream) socket.getOutputStream();
+        }catch(IOException e){System.err.println("Cannot connect to the socket streams");}
     }
 
     /**
@@ -78,7 +82,7 @@ public class SocketHandler implements Runnable,ClientHandler {
 
     @Override
     public void disconnect() {
-        socketServer.disconnect(this);
+        socketServer.disconnect();
         try{socket.close();}
         catch(IOException e){System.err.println("Cannot close the socket");}
     }

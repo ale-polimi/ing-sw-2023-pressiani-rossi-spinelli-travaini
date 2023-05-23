@@ -76,7 +76,7 @@ public enum ObjectColour {
     /**
      * Fake colour used in the View.
      */
-    EMPTY
+    EMPTY;
 
     public boolean isEquals(ObjectColour objectColour){
         switch (this){

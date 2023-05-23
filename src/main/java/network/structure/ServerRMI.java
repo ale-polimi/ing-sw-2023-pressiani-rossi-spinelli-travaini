@@ -62,7 +62,7 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
      */
     @Override
     public void registry(ClientHandler clientHandler) throws RemoteException {
-        clients.add(clientHandler);
+        if(!clients.contains(clientHandler))clients.add(clientHandler);
     }
 
     @Override
@@ -78,23 +78,12 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
     }
     /**
      * End a game when a player disconnect from a game
-     * @param clientHandler The clientHandler connected to the player who wants to disconnect
      */
-    /*TODO gestire la disconnessione del client riferito alla multipartita*/
     @Override
-    public void disconnect(ClientHandler clientHandler) {
-        for(Tuple t : games.values()){
-            if(t.getClientHandlers().contains(clientHandler)){
-                for(ClientHandler c : t.getClientHandlers()){
-                    c.receivedMessage(new GameClosedMessage("Server", MessageType.GAME_CLOSED));
-                }
-                for(Integer i : games.keySet() ){
-                    if(games.get(i).equals(t)){
-                        games.remove(i);
-                    return;
-                    }
-                }
-            }
+    public void disconnect() {
+        for(ClientHandler c: clients){
+            c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
+            clients.remove(c);
         }
     }
 }

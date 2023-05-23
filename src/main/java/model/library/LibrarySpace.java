@@ -1,5 +1,6 @@
 package model.library;
 
+import enumerations.ObjectColour;
 import model.objects.ObjectCard;
 
 import java.io.Serial;
@@ -14,7 +15,7 @@ public class LibrarySpace implements Serializable {
      * Constructor of the LibrarySpace class
      */
     public LibrarySpace(){
-        this.objectContained = null;
+        this.objectContained = new ObjectCard(ObjectColour.EMPTY);
     }
 
     /**

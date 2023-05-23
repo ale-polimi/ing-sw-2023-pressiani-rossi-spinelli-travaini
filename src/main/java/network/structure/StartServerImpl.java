@@ -3,39 +3,38 @@ package network.structure;
 import controller.Controller;
 import exceptions.player.ClientNotRegisteredException;
 import model.player.Player;
+import network.GameClosedMessage;
 import network.Message;
+import network.MessageType;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class StartServerImpl {
+public class StartServerImpl{
     private ServerRMI serverRMI;
     private SocketServer socketServer;
-
-    private static StartServerImpl startServer;
-    private final HashMap<Integer, Tuple> games = new HashMap<>();
-    private static ServerSocket serverSocket;
+    //private final ArrayList<Tuple> games = new ArrayList<>();
+    private Controller controller;
     private static ExecutorService executor;
     public StartServerImpl() throws IOException {
         startRMI();
-        serverSocket = new ServerSocket(8080);
         startSocket();
+        controller = new Controller(this);
     }
 
     /**
      * Main method,create the instance of the server
      * @param args arguments given by command line
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         executor = Executors.newCachedThreadPool();
-        startServer = new StartServerImpl();
+        try {new StartServerImpl();}
+        catch(IOException e){System.err.println("Cannot instantiate the server structure"); System.exit(-1);}
         while(true) try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -70,36 +69,24 @@ public class StartServerImpl {
 
     private void startSocket(){
         //Start Socket server instance
-        SocketServer socketServer = new SocketServer(startServer, 12000);
+        socketServer = new SocketServer(this, 12000);
         getExecutor().submit(socketServer);
+        System.out.println("Server socket up, waiting for client");
     }
 
-
-/*TODO eliminare ed aggiungere la connessione alla partita*/
-    public void registry(ClientHandler clientHandler) throws RemoteException {
-        for(Tuple t: games.values()){
-            if (t.getClientHandlers().size() !=  t.getController().getGame().getPlayers().size() && t.getController().getGame().getPlayers().size() < t.getController().getGame().getMaxPlayers()) {
-                t.addClientHandler(clientHandler);
-                return;
-            }
-        }
+    /**
+     * Add a player to a game, if there aren't free spaces create a new game
+     * @return The controller of the game where the player will be assigned
+     */
+    private Controller addToGame(){return controller;
         // Initialise a new game
-        if(games.size() != 0) {
-            try {
-                games.put((Integer)games.keySet().toArray()[games.size()-1]+1, new Tuple(new Controller(this), new ArrayList<>()));
+            /*try {
+                games.add(new Tuple(new Controller(this),new ArrayList<>()));
             } catch (IOException e) {
-                System.err.println("ERROR: cannot create a controller");
+                System.err.println("ERROR: cannot create a game instance");
             }
-        }else{
-            try {
-                Tuple tuple = new Tuple(new Controller(this), new ArrayList<>());
-                games.put(0, tuple);
-                getExecutor().submit(tuple);
-            } catch (IOException e) {
-                System.err.println("ERROR: cannot create a controller");
-            }
-        }
-        games.get(games.size() - 1).addClientHandler(clientHandler);
+            getExecutor().submit(games.get(0));
+            return games.get(0).getController();*/
     }
 
     /**
@@ -108,12 +95,12 @@ public class StartServerImpl {
      * @return The controller of the game where the player is in
      */
     private Controller getController(String nickname){
-        for(Tuple t: games.values()){
-            for(Player p : t.getController().getGame().getPlayers()){if(p.getNickname().equals(nickname))return t.getController();}
-        }
-        throw new ClientNotRegisteredException("You are not registered in a current game");
+        /*for(Tuple t : games){*/
+            for(Player p : controller.getGame().getPlayers()){if(p.getNickname().equals(nickname))return controller;}
+        //}
+        /*throw new ClientNotRegisteredException("You are not registered in a current game");*/
+        return null;
     }
-
     /**
      * Return the thread pool executor
      * @return The Executor service related to the server
@@ -124,11 +111,25 @@ public class StartServerImpl {
      * Send a message received from the clients to the controller
      * @param message The message to forward
      */
-    public void receiveMessage(Message message){getController(message.getSender()).onMessageReceived(message);}
+    public void receiveMessage(Message message){
+        if(!message.getType().equals(MessageType.USER_INFO))
+            getController(message.getSender()).onMessageReceived(message);
+        else {
+            addToGame().onMessageReceived(message);
+        }
+    }
 
     /**
      * Send the message from the model to the views in the clients
      * @param message The message for the clients
      */
     public void sendMessage(Message message){serverRMI.sendMessage(message);socketServer.sendMessage(message);}
+
+    /**
+     * Close a game when a player wants to disconnect from the game
+     */
+    public  void disconnect(){
+        serverRMI.disconnect();
+        socketServer.disconnect();
+    }
 }

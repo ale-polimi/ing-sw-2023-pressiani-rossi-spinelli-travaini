@@ -13,5 +13,5 @@ public interface Server {
     void registry(ClientHandler clientHandler) throws RemoteException;
     void receiveMessage(Message message) throws RemoteException;
     void sendMessage(Message message) throws RemoteException;
-    void disconnect(ClientHandler clientHandler);
+    void disconnect();
 }

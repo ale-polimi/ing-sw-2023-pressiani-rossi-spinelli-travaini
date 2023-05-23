@@ -3,8 +3,9 @@ package controller;
 import model.commonobjective.CommonObjective;
 import model.library.PersonalObjective;
 import network.*;
-import network.client.SocketClient;
-import network.client.*
+import network.structure.*;
+
+
 import observer.Observer;
 import observer.ViewObserver;
 import view.View;
@@ -36,15 +37,11 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     public void onUpdateServerInfo(Map<String, String> serverInfo) {
-        try {
-            client = new SocketClient(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
-            client.addObserver(this);
-            client.readMessage(); // Starts an asynchronous reading from the server.
-            client.enablePinger(true);
-            taskQueue.execute(view::askMaxPlayer);
-        } catch (IOException e) {
-            taskQueue.execute(() -> view.showLoginResult(false, false, this.nickname));
-        }
+        client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
+        ((ClientSocket)client).addObserver(this);
+        client.receivedMessage(new UserInfoForLoginMessage(null, this.nickname)); // Starts an asynchronous reading from the server.
+        client.ping();
+        taskQueue.execute(view::askMaxPlayer);
     }
 
     /**
@@ -52,25 +49,25 @@ public class ClientController implements ViewObserver, Observer {
      * @param nickname is the nickname passed by the {@link View}.
      */
     @Override
-    public void onUpdateNickname(String nickname){
+    public void onUpdateNickname(String nickname) throws IOException{
         this.nickname = nickname;
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
     }
 
     @Override
-    public void onMaxPlayers(int maxPlayers){
+    public void onMaxPlayers(int maxPlayers) throws IOException{
         client.sendMessage(new MaxPlayersMessage(this.nickname, maxPlayers));
     }
 
     @Override
-    public void onUdpateBoardMove(ArrayList<Integer> coordinatesToSend) {
+    public void onUdpateBoardMove(ArrayList<Integer> coordinatesToSend) throws IOException{
         inPickup = false;
         inLibrary = true;
         client.sendMessage(new PickObjectMessage(this.nickname, coordinatesToSend));
     }
 
     @Override
-    public void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend) {
+    public void onUdpateLibraryMove(ArrayList<Integer> orderAndColumnToSend) throws IOException {
         inPickup = true;
         inLibrary = false;
         client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
@@ -93,7 +90,7 @@ public class ClientController implements ViewObserver, Observer {
      */
     public static boolean isAddressValid(String ip){
         /* Regex pattern to check if the ip follows the dot-decimal notation standard */
-        /* Sempre sia lodato Stackoverflow */
+        /* Sempre sia eulogized Stackoverflow */
         String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
 
         return ip.matches(PATTERN);
