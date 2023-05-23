@@ -83,7 +83,7 @@ public class ClientRMI extends Observable implements Client{
     public void sendMessage(Message message) throws RemoteException{
 
         server.receiveMessage(message);
-        notifyObserver(new Message("client", message.getType()));
+        //notifyObserver(new Message("client", message.getType()));
 
     }
 
