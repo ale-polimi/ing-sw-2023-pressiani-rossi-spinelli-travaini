@@ -65,7 +65,7 @@ public class Controller implements Observer {
         availableCommonObjectives.put(0, new Diagonal());
         availableCommonObjectives.put(1, new EightEquals());
         availableCommonObjectives.put(2, new FiveX());
-        availableCommonObjectives.put(3, new FourByFour());
+        availableCommonObjectives.put(3, new FourByFourNew());
         availableCommonObjectives.put(4, new FourCorners());
         availableCommonObjectives.put(5, new FourRowsMaxThreeDifferent());
         availableCommonObjectives.put(6, new SixByTwo());
