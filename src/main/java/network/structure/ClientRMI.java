@@ -23,8 +23,8 @@ public class ClientRMI extends Observable implements Client{
     Server server;
 
     //default RMI port
-    private int port;
-    String address;
+    private final int port;
+    private String address;
     boolean getConnected =false;
 
     ClientController clientController;
@@ -49,7 +49,7 @@ public class ClientRMI extends Observable implements Client{
     @Override
     public void connection() throws RemoteException {
         try {
-            Registry registry = LocateRegistry.getRegistry(port);
+            Registry registry = LocateRegistry.getRegistry(address,port);
             server = (ServerRMI) registry.lookup("server");
             initialize(server);
             this.timer = Executors.newSingleThreadScheduledExecutor();
@@ -77,7 +77,6 @@ public class ClientRMI extends Observable implements Client{
     /**
      * Forwards a message
      * @param message is the message to forward
-     * @throws RemoteException when the server is unreachable
      */
     @Override
     public void sendMessage(Message message) {
