@@ -74,6 +74,7 @@ public class Controller implements Observer {
         availableCommonObjectives.put(10, new TotalDifferentRows());
         availableCommonObjectives.put(11, new TwoByFour());
         availableCommonObjectives.put(12, new TwoEqualsInColumn());
+        System.out.println("Controller creato");
     }
 
 
@@ -82,6 +83,7 @@ public class Controller implements Observer {
      * @param receivedMessage is the message received from the "client".
      */
     public void onMessageReceived(Message receivedMessage) {
+        System.out.println("Ricevuto messaggio da: " + receivedMessage.getSender() + " Di tipo: " + receivedMessage.getType().toString());
         switch (receivedMessage.getType()) {
             /* TODO - Controllo se il client che manda (message.getsender) è il giocatore che deve giocare (game.getcurrentplayer) */
             case MAX_PLAYERS_FOR_GAME:
@@ -306,8 +308,8 @@ public class Controller implements Observer {
      * @param game is the game of this controller.
      */
     private void initGame(Game game){
-        game.restoreBoard(game.getBoard());
         game.setFirstPlayer();
+        game.setPlayerInTurn(game.getFirstPlayer());
         setupCommonObjectives();
         /* Subscribe to the players' updates */
         for (Player player:
@@ -316,12 +318,13 @@ public class Controller implements Observer {
         }
         /* Sends the common objectives and the personal objectives to all the connected players. */
         for(Player player: game.getPlayers()){
-            this.update(new ShowCommonObjectiveMessage(player.getNickname(), (CommonObjective) game.getCommonObjectives().keySet().toArray()[0],(CommonObjective) game.getCommonObjectives().keySet().toArray()[0]));
+            this.update(new ShowCommonObjectiveMessage(player.getNickname(), (CommonObjective) game.getCommonObjectives().keySet().toArray()[0], (CommonObjective) game.getCommonObjectives().keySet().toArray()[1]));
             this.update(new ShowPersonalObjectiveMessage(player.getNickname(), player.getPersonalObjective()));
         }
+        System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname());
+        game.restoreBoard(game.getBoard());
 
         game.setGameState(IN_GAME);
-        game.setPlayerInTurn(game.getPlayers().get(0));
     }
 
     /**
@@ -330,12 +333,13 @@ public class Controller implements Observer {
     private void setupCommonObjectives(){
         Random rand1 = new Random();
         Random rand2;
-        do {
+        do{
             rand2 = new Random();
-        } while (rand2 == rand1);
+        } while(rand1 == rand2);
+
         /* First I get the objectives from the hashmap */
         CommonObjective objective1 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
-        CommonObjective objective2 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
+        CommonObjective objective2 = availableCommonObjectives.remove(rand2.nextInt(availableCommonObjectives.size()));
 
         /* Then I set their numeral */
         objective1.setObjectiveNumeral(ObjectiveNumeral.ONE);
@@ -615,16 +619,17 @@ public class Controller implements Observer {
     public void update(Message message){
         switch(message.getType()){
             case ADDED_PLAYER:
-                if(game.getPlayers().size() ==1){networkView.askMaxPlayer();}
-                else {
-                    ArrayList<String> players = new ArrayList<>();
-                    for (Player player :
-                            game.getPlayers()) {
-                        players.add(player.getNickname());
-                    }
-
-                    networkView.showLobby(players);
+                if(game.getPlayers().size() == 1) {
+                    networkView.askMaxPlayer();
                 }
+
+                ArrayList<String> players = new ArrayList<>();
+                for (Player player :
+                        game.getPlayers()) {
+                    players.add(player.getNickname());
+                }
+
+                networkView.showLobby(players);
                 break;
             case NEXT_TURN:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
@@ -641,12 +646,15 @@ public class Controller implements Observer {
             case SHOW_PERSONAL_OBJECTIVE:
                 ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
                 networkView.showPersonalObjective(showPersonalObjectiveMessage.getSender(), showPersonalObjectiveMessage.getPersonalObjective());
+                break;
             case END_GAME:
                 EndGameMessage endGameMessage = (EndGameMessage) message;
                 networkView.showWinner(endGameMessage.getWinner(), endGameMessage.getPlayersPoints());
+                break;
             case GENERIC_ERROR:
                 GenericErrorMessage errorMessage = (GenericErrorMessage) message;
                 networkView.showGenericError(errorMessage.getSender(), errorMessage.getPayload());
+                break;
             default:
                 ;
         }

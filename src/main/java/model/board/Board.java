@@ -3,13 +3,15 @@ package model.board;
 import enumerations.TypeSpace;
 import model.Game;
 import model.objects.ObjectCard;
+import network.GenericModelChangeMessage;
+import observer.Observable;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board implements Serializable {
+public class Board extends Observable implements Serializable{
     private BoardSpace[][] boardSpaces;
     PropertyChangeListener listener;
 
@@ -62,10 +64,8 @@ public class Board implements Serializable {
      * @param objectCard is the object card that will be in the tile.
      */
     public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard) {
-        /* --- LISTENER ---- */
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "BOARD_CHANGED", this.boardSpaces, boardSpaces);
         boardSpace.insertObject(objectCard);
-        this.listener.propertyChange(event);
+        //notifyObserver(new GenericModelChangeMessage());
     }
 
     /**

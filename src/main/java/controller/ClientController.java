@@ -145,18 +145,22 @@ public class ClientController implements ViewObserver, Observer {
                     ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
                     this.commonObjective1 = commonObjectiveMessage.getCommonObjective1();
                     this.commonObjective2 = commonObjectiveMessage.getCommonObjective2();
-                    /*
-                    view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
-                     */
+
+                    // view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
+
+                } else {
+                    System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
                 }
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 if(message.getSender().equals(nickname)) {
                     ShowPersonalObjectiveMessage personalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
                     this.personalObjective = personalObjectiveMessage.getPersonalObjective();
-                    /*
-                    view.showPersonalObjective(personalObjectiveMessage.getSender(), personalObjectiveMessage.getPersonalObjective());
-                     */
+
+                    // view.showPersonalObjective(personalObjectiveMessage.getSender(), personalObjectiveMessage.getPersonalObjective());
+
+                } else {
+                    System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
                 }
                 break;
             case END_GAME:

@@ -273,11 +273,12 @@ public class Cli extends ViewObservable implements View {
     private void showBoard(Board gameBoard){
 
         out.print(printColumnNumbers(9));
+        out.print("\n");
         out.print(Colours.RESET);
         for(int row = 0; row < 9; row++){
             out.print(printRowNumber(row));
             for(int col = 0; col < 9; col++){
-                if(gameBoard.getSpace(row,col).getTypeSpace().equals(TypeSpace.UNUSABLE) || gameBoard.getSpace(row,col).getObject().equals(null)){
+                if(gameBoard.getSpace(row,col).getTypeSpace().equals(TypeSpace.UNUSABLE) || gameBoard.getSpace(row,col).getObject() == null){
                     out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 } else {
                     if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){
@@ -295,6 +296,7 @@ public class Cli extends ViewObservable implements View {
                     }
                 }
             }
+            out.print("\n");
         }
 
         out.println(Colours.RESET);

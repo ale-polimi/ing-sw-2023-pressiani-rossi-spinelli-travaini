@@ -2,7 +2,6 @@ package model.board;
 
 import enumerations.TypeSpace;
 import model.objects.ObjectCard;
-import network.structure.Server;
 
 import java.io.Serializable;
 

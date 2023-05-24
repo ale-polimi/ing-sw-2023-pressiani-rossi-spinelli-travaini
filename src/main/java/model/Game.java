@@ -10,11 +10,9 @@ import model.board.BoardSpace;
 import model.commonobjective.CommonObjective;
 import model.objects.ObjectsDeck;
 import model.player.Player;
-import network.AddedPlayerMessage;
-import network.GenericModelChangeMessage;
-import network.MaxPlayersMessage;
-import network.NextTurnMessage;
+import network.*;
 import observer.Observable;
+import observer.Observer;
 
 
 import java.lang.reflect.Array;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Game extends Observable {
+public class Game extends Observable implements Observer {
     private Board board;
     private GameState gameState;
     private ArrayList<Player> players;
@@ -80,6 +78,7 @@ public class Game extends Observable {
         if ((chosenMaxPlayers > 1 && chosenMaxPlayers <= MAX_PLAYERS)) {
             this.chosenPlayersNumber = chosenMaxPlayers;
             return true;
+            //notifyObserver(new SetPlayersMessage());
         }
         return false;
     }
@@ -97,6 +96,21 @@ public class Game extends Observable {
      */
     public void setFirstPlayer(){
         players.get(0).setAsFirst();
+    }
+
+    /**
+     * This method returns the first player of the game.
+     * @return the first {@link Player player} of the game.
+     */
+    public Player getFirstPlayer() {
+        Player firstPlayer = null;
+        for (Player player: players){
+            if(player.isFirstPlayer()){
+                firstPlayer = player;
+                break;
+            }
+        }
+        return firstPlayer;
     }
 
     /**
@@ -243,6 +257,10 @@ public class Game extends Observable {
         notifyObserver(new GenericModelChangeMessage());
     }
 
+    @Override
+    public void update(Message message) {
+        notifyObserver(message);
+    }
 
     /**
      * Ends the game.
@@ -250,6 +268,5 @@ public class Game extends Observable {
     public void endGame(){
         gameState = GameState.END;
     }
-
 }
 
