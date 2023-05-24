@@ -28,7 +28,7 @@ public class Game extends Observable {
     private ArrayList<Player> players;
     private Player playerInTurn;
     public static int MAX_PLAYERS = 4;
-    private int chosenPlayersNumber = 0;
+    private int chosenPlayersNumber = 1;
     private ObjectsDeck objectsDeck;
     private HashMap<CommonObjective, ArrayList<Integer>> commonObjectivesPoints;
 

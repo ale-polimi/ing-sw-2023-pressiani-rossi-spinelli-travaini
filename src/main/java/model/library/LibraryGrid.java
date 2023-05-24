@@ -8,6 +8,13 @@ import java.io.Serializable;
 public class LibraryGrid implements Serializable {
     protected LibrarySpace[][] libraryGrid = new LibrarySpace[6][5];
 
+    public LibraryGrid(){
+        for(int i =0; i< 6; i++){
+            for(int j = 0; j < 5; j++){
+                libraryGrid[i][j] = new LibrarySpace();
+            }
+        }
+    }
     /**
      * Adds a card in a specified space
      * @param objectCard is the card we want to add to the library

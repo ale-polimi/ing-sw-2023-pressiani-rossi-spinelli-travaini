@@ -13,8 +13,6 @@ public class SocketHandler implements Runnable,ClientHandler {
 
     private final SocketServer socketServer;
     private final Socket socket;
-    private final  Object inputReader;
-    private final Object outputWriter;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
@@ -26,8 +24,6 @@ public class SocketHandler implements Runnable,ClientHandler {
     public SocketHandler(SocketServer socketServer, Socket socket){
         this.socketServer = socketServer;
         this.socket = socket;
-        this.inputReader = new Object();
-        this.outputWriter = new Object();
         try {
             this.oos = new ObjectOutputStream(socket.getOutputStream()) ;
             this.ois = new ObjectInputStream(socket.getInputStream());
@@ -52,10 +48,11 @@ public class SocketHandler implements Runnable,ClientHandler {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 Message message = (Message) ois.readObject();
-                if(message != null) socketServer.receiveMessage(message);
+                System.out.println("Messaggio Ricevuto"+ message.getSender());
+                socketServer.receiveMessage(message);
             }
         } catch (ClassCastException | ClassNotFoundException e) {
-            System.err.println("Client thread malfunction");
+            System.err.println("Client thread malfunction"+ e);
         }
         //socket.close();
     }
@@ -66,11 +63,9 @@ public class SocketHandler implements Runnable,ClientHandler {
     @Override
     public boolean isConnected() {
         try {
-            synchronized (outputWriter) {
                 oos.writeObject(new PingMessage("Server",MessageType.PING));
                 oos.flush();
                 oos.reset();
-            }
         }catch (IOException e) {return false;}
         return true;
     }
@@ -93,11 +88,10 @@ public class SocketHandler implements Runnable,ClientHandler {
     @Override
     public void receivedMessage(Message message) {
         try{
-            synchronized (outputWriter){
                 oos.writeObject(message);
                 oos.flush();
                 oos.reset();
-            }
+                System.out.print("Message sent");
         } catch (IOException e) {throw new RuntimeException("SocketClient unreachable from server",e);}
     }
 }

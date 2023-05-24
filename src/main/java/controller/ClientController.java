@@ -9,7 +9,6 @@ import observer.Observer;
 import observer.ViewObserver;
 import view.View;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -120,18 +119,22 @@ public class ClientController implements ViewObserver, Observer {
             case SHOW_LOBBY:
                 ShowLobbyMessage lobbyMessage = (ShowLobbyMessage) message;
                 view.showLobby(lobbyMessage.getLobbyPlayers());
+                break;
             case SHOW_TURN:
                 if(message.getSender().equals(nickname)) {
                     if (inLibrary == true && inPickup == false) {
+                        assert message instanceof ShowTurnMessage;
                         ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askLibraryMove();
                     } else if (inLibrary == false && inPickup == true) {
+                        assert message instanceof ShowTurnMessage;
                         ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askBoardMove();
                     }
                 } else {
+                    assert message instanceof ShowTurnMessage;
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showNotMyTurn(turnMessage.getGameBoard());
                 }
@@ -160,11 +163,22 @@ public class ClientController implements ViewObserver, Observer {
                 HashMap<String, Integer> sortedLeaderboard = sortLeaderboard(endGameMessage.getPlayersPoints(), false); /* False = ordine decrescente */
                                                                                                                               /* True = ordine crescente */
                 view.showWinner(endGameMessage.getWinner(), sortedLeaderboard);
+                break;
             case GENERIC_ERROR:
                 if(message.getSender().equals(nickname)) {
+                    assert message instanceof GenericErrorMessage;
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
                     view.showGenericError(genericErrorMessage.getSender(), genericErrorMessage.getPayload());
                 }
+                break;
+            case ASK_NICKNAME:
+                view.askNickname();
+                break;
+            case ASK_MAX_PLAYER:
+                view.askMaxPlayer();
+                break;
+            case MAX_PLAYERS_FOR_GAME:
+                client.sendMessage(message);
                 break;
             default:
                 break;

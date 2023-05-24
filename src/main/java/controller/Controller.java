@@ -53,7 +53,6 @@ public class Controller implements Observer {
         this.game = new Game();
         /* Subscribing the Controller to the Model (Game) */
         game.addObserver(this);
-
         networkView = new NetworkView(server);
         game.setGameState(LOGIN);
         byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
@@ -86,43 +85,40 @@ public class Controller implements Observer {
         switch (receivedMessage.getType()) {
             /* TODO - Controllo se il client che manda (message.getsender) è il giocatore che deve giocare (game.getcurrentplayer) */
             case MAX_PLAYERS_FOR_GAME:
-
                 MaxPlayersMessage maxPlayersMessage = (MaxPlayersMessage) receivedMessage;
-
                 if (game.getGameState().equals(LOGIN)) {
-                    if (game.getMaxPlayers() > 0) {
+                    if (game.getMaxPlayers() > 1) {
                         this.update(new GenericErrorMessage(maxPlayersMessage.getSender(),"The players for this game are already set."));
-                    } else if (game.setMaxPlayers(maxPlayersMessage.getPlayers()) == false) {
+                    } else if (!game.setMaxPlayers(maxPlayersMessage.getPlayers())) {
                         this.update(new GenericErrorMessage(maxPlayersMessage.getSender(), "The number is not within the correct bounds. It must be 2 <= players <= " + Game.MAX_PLAYERS));
+                        this.update(new AskMaxPlayerMessage(this.getGame().getPlayers().get(0).getNickname()));
                     }
                 } else {
                     this.update(new GenericErrorMessage(maxPlayersMessage.getSender(), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
-
+                break;
             case USER_INFO:
-
+                assert receivedMessage instanceof UserInfoForLoginMessage;
                 UserInfoForLoginMessage userInfoForLoginMessage = (UserInfoForLoginMessage) receivedMessage;
-
                 if (game.getGameState().equals(LOGIN)) {
-                    if (game.isNicknameTaken(userInfoForLoginMessage.getUsername()) == true) {
+                    if (game.isNicknameTaken(userInfoForLoginMessage.getUsername())) {
                         this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(), "Username is already taken."));
+                        this.update(new AskNicknameMessage("Controller"));
                     } else {
-
                         try {
                             Random rand = new Random();
                             game.addToGame(new Player(userInfoForLoginMessage.getUsername(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
                         } catch (TooManyPlayersException exception) {
                             this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(), exception.getMessage()));
                         }
-
-                        if (game.getPlayers().size() == game.getMaxPlayers()) {
+                        if(game.getPlayers().size() == game.getMaxPlayers()) {
                             initGame(game);
                         }
                     }
                 } else {
                     this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(),"This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
-
+                break;
             case PICK_OBJECT:
 
                 PickObjectMessage pickObjectMessage = (PickObjectMessage) receivedMessage;
@@ -194,7 +190,7 @@ public class Controller implements Observer {
                 } else {
                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
-
+            break;
             case PUT_OBJECT:
 
                 PutObjectInLibraryMessage putObjectInLibraryMessage = (PutObjectInLibraryMessage) receivedMessage;
@@ -296,6 +292,7 @@ public class Controller implements Observer {
                 } else {
                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
+                break;
             default:
                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"Message type: " + receivedMessage.getType().toString() + " is not valid."));
         }
@@ -615,15 +612,16 @@ public class Controller implements Observer {
     public void update(Message message){
         switch(message.getType()){
             case ADDED_PLAYER:
+                if(game.getPlayers().size() ==1){networkView.askMaxPlayer();}
+                else {
+                    ArrayList<String> players = new ArrayList<>();
+                    for (Player player :
+                            game.getPlayers()) {
+                        players.add(player.getNickname());
+                    }
 
-                ArrayList<String> players = new ArrayList<>();
-                for (Player player:
-                     game.getPlayers()) {
-                    players.add(player.getNickname());
+                    networkView.showLobby(players);
                 }
-
-                networkView.showLobby(players);
-
                 break;
             case NEXT_TURN:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());

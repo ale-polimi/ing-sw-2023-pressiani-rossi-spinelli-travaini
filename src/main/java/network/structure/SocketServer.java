@@ -40,7 +40,6 @@ public class SocketServer implements Runnable, Server{
                 SocketHandler clientHandler = new SocketHandler(this, socket);
                 //Thread thread = new Thread(clientHandler, "ss_handler" + socket.getInetAddress());
                 server.getExecutor().submit(clientHandler);
-                //thread.start();
                 registry(clientHandler);
                 System.out.println("Client connected");
             } catch (IOException e) {
@@ -61,7 +60,7 @@ public class SocketServer implements Runnable, Server{
      * @param message the message that has to be forwarded
      */
     @Override
-    public void sendMessage(Message message){server.sendMessage(message);}
+    public void sendMessage(Message message){for(SocketHandler s: clients)s.receivedMessage(message);}
 
     /**
      * Handles the disconnection request from the players

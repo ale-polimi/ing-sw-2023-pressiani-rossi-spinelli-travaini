@@ -10,11 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import java.net.Socket;
-import java.rmi.RemoteException;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 
@@ -28,6 +24,7 @@ public class ClientSocket extends Observable implements Client {
     private ObjectInputStream ois;
     private Socket socket;
     private final int port;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     Server server;
     final String address;
@@ -48,6 +45,7 @@ public class ClientSocket extends Observable implements Client {
         this.port = port;
         try{connection();}
         catch(IOException e){System.err.println("Erron connecting to the socket"); System.exit(1);}
+        receivedMessage();
     }
 
     /**
@@ -76,17 +74,14 @@ public class ClientSocket extends Observable implements Client {
     /**
      * Forwards the message in input
      * @param message is the message to send
-     * @throws IOException if there are communication problems
      */
     @Override
     public void sendMessage(Message message) {
-
         try{
             oos.writeObject(message);
             oos.flush();
             oos.reset();
         }
-
         catch (IOException e){
             try{
                 closeConnection();
@@ -100,21 +95,24 @@ public class ClientSocket extends Observable implements Client {
 
     /**
      * when called, it reads the message
-     * @param message is the message that has to be read
      */
-    public void receivedMessage(Message message) {
-
+    public void receivedMessage() {
+        executor.execute(()->{
+        while(!executor.isShutdown()){
+            Message message;
         try {
             message = (Message) ois.readObject();
             LOGGER.info("Received: "+ message);
+            System.out.println(message.getSender()+" "+ message.getType());
+            notifyObserver(message);
         }
         catch (IOException e) {
             disconnect();
+            executor.shutdownNow();
         }
         catch (ClassNotFoundException e) {
             //it doesn't read the message (?)
-        }
-
+        }}});
     }
 
 
@@ -157,13 +155,16 @@ public class ClientSocket extends Observable implements Client {
 
     }
 
+    @Override
+    public void receivedMessage(Message message) {
+
+    }
+
     /**
      * check the presence of problems in the connection between client and server
      */
     @Override
     public void ping() {
-        timer.scheduleAtFixedRate(() -> {
-            sendMessage(new PingMessage(null, MessageType.PING));
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+        timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(null, MessageType.PING)), 0, 1000, TimeUnit.MILLISECONDS);
     }
 }

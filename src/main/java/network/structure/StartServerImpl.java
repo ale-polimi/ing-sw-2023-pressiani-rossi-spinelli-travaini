@@ -19,7 +19,7 @@ public class StartServerImpl{
     private ServerRMI serverRMI;
     private SocketServer socketServer;
     //private final ArrayList<Tuple> games = new ArrayList<>();
-    private Controller controller;
+    private final Controller controller;
     private static ExecutorService executor;
     public StartServerImpl() throws IOException {
         startRMI();
