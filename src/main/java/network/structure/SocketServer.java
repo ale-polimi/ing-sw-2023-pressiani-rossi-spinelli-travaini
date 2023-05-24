@@ -39,7 +39,8 @@ public class SocketServer implements Runnable, Server{
                 Socket socket = serverSocket.accept();
                 SocketHandler clientHandler = new SocketHandler(this, socket);
                 //Thread thread = new Thread(clientHandler, "ss_handler" + socket.getInetAddress());
-                server.getExecutor().submit(clientHandler);
+                Thread thread = new Thread(clientHandler);
+                thread.start();
                 registry(clientHandler);
                 System.out.println("Client connected");
             } catch (IOException e) {

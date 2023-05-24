@@ -43,11 +43,9 @@ public class Cli extends ViewObservable implements View {
         FutureTask<String> futureTask = new FutureTask<>(new InputReadTask());
         inputThread = new Thread(futureTask);
         inputThread.start();
-
         String input = null;
-
         try {
-            input = futureTask.get();
+          input = futureTask.get();
         } catch (InterruptedException e) {
             futureTask.cancel(true);
             Thread.currentThread().interrupt();
@@ -159,13 +157,15 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askMaxPlayer() {
+        String num;
         int numOfPlayers;
 
         try {
             out.print("How many players are going to play?\n" +
                     "Minimum: 2\n" +
                     "Maximum: 4\n");
-            numOfPlayers = Integer.parseInt(readLine());
+            num = readLine();
+            numOfPlayers = Integer.parseInt(num);
             notifyObserver(viewObserver -> viewObserver.onMaxPlayers(numOfPlayers));
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);

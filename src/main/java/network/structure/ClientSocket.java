@@ -79,6 +79,7 @@ public class ClientSocket extends Observable implements Client {
     public void sendMessage(Message message) {
         try{
             oos.writeObject(message);
+            System.out.println("Numero letto");
             oos.flush();
             oos.reset();
         }

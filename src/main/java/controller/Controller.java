@@ -96,6 +96,9 @@ public class Controller implements Observer {
                 } else {
                     this.update(new GenericErrorMessage(maxPlayersMessage.getSender(), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
+                ArrayList<String> players = new ArrayList<>();
+                for(Player p: game.getPlayers())players.add(p.getNickname());
+                this.update(new ShowLobbyMessage(players));
                 break;
             case USER_INFO:
                 assert receivedMessage instanceof UserInfoForLoginMessage;
@@ -111,7 +114,7 @@ public class Controller implements Observer {
                         } catch (TooManyPlayersException exception) {
                             this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender(), exception.getMessage()));
                         }
-                        if(game.getPlayers().size() == game.getMaxPlayers()) {
+                        if(game.getMaxPlayers()!=1 && game.getPlayers().size() == game.getMaxPlayers()) {
                             initGame(game);
                         }
                     }

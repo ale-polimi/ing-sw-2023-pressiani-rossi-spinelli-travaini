@@ -48,13 +48,13 @@ public class SocketHandler implements Runnable,ClientHandler {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 Message message = (Message) ois.readObject();
-                System.out.println("Messaggio Ricevuto"+ message.getSender());
+                System.out.println("Messaggio Ricevuto "+ message.getSender());
                 socketServer.receiveMessage(message);
             }
         } catch (ClassCastException | ClassNotFoundException e) {
             System.err.println("Client thread malfunction"+ e);
         }
-        //socket.close();
+        socket.close();
     }
     /**
      * Check that a client is still connected

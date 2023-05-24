@@ -51,6 +51,7 @@ public class ClientController implements ViewObserver, Observer {
     public void onUpdateNickname(String nickname) {
         this.nickname = nickname;
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
+        System.out.println("Numero letto");
     }
 
     @Override
