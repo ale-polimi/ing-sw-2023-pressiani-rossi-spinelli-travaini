@@ -342,6 +342,7 @@ public class Cli extends ViewObservable implements View {
 
         out.print(printColumnNumbers(5));
         out.print(Colours.RESET);
+        out.print("\n");
         for(int row = 0; row < 6; row++){
             out.print(printRowNumber(row));
             for(int col = 0; col < 5; col++){
@@ -363,6 +364,7 @@ public class Cli extends ViewObservable implements View {
                     }
                 }
             }
+            out.print("\n");
         }
 
         out.println(Colours.RESET);
@@ -443,6 +445,7 @@ public class Cli extends ViewObservable implements View {
                         out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                     }
                 }
+                out.print("\n");
             }
         }
         out.println(Colours.RESET);

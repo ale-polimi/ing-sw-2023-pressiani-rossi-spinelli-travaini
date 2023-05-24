@@ -24,7 +24,7 @@ public class Player extends Observable {
     private boolean firstPlayer;
     private boolean firstToEnd;
     public static int MAX_OBJECTS_IN_HAND = 3;
-    private ArrayList<ObjectCard> objectsInHand = null;
+    private ArrayList<ObjectCard> objectsInHand= new ArrayList<>();
     private final Library library;
     private final PersonalObjective personalObjective;
     boolean[] completedCommonObjectives = {false, false};
@@ -41,6 +41,7 @@ public class Player extends Observable {
         this.library = new Library();
         this.personalObjective = new PersonalObjective(json);
         this.firstPlayer = false;
+        for(int i =0; i<3;i++)this.objectsInHand.add(new ObjectCard(ObjectColour.EMPTY));
     }
 
     /**
