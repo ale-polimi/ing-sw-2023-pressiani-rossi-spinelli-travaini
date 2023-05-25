@@ -591,7 +591,7 @@ public class Controller implements Observer {
             int firstEmpty = 0;
 
             for (int i = 5; i >= 0; i--) {
-                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)) == null) {
+                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().isEquals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
                     break;
                 }
@@ -622,7 +622,7 @@ public class Controller implements Observer {
             int firstEmpty = 0;
 
             for (int i = 5; i >= 0; i--) {
-                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)) == null) {
+                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().isEquals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
                     break;
                 }
@@ -656,7 +656,7 @@ public class Controller implements Observer {
             int firstEmpty = 0;
 
             for (int i = 5; i >= 0; i--) {
-                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)) == null) {
+                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().isEquals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
                     break;
                 }
