@@ -281,23 +281,23 @@ public class Player extends Observable {
      * @throws TooManyObjectsInHandException if the hand is already full
      */
     public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
+        /* TODO - Debug print */
         System.out.println(this.getClass().toString() + ": INSIDE addToObjectsInHand");
-        System.out.println("ObjectsInHand size is: " + getObjectsInHandSize());
         if(objectsInHand.size() <= MAX_OBJECTS_IN_HAND){
-            System.out.println("Added object of type: " + objectCard.getObjectColour().toString());
             for(int i = 0; i < MAX_OBJECTS_IN_HAND; i++){
                 if(objectsInHand.get(i) == null){
                     objectsInHand.set(i, objectCard);
                     break;
                 }
             }
+            /* TODO - Debug print */
             System.out.print("The current objects in hand are: ");
             String toPrint;
             for(int i = 0; i < MAX_OBJECTS_IN_HAND; i++){
                 if(objectsInHand.get(i) == null){
                     toPrint = "null";
                 } else {
-                    toPrint = objectCard.getObjectColour().toString();
+                    toPrint = objectsInHand.get(i).getObjectColour().toString();
                 }
                 System.out.print(toPrint + ", ");
             }
