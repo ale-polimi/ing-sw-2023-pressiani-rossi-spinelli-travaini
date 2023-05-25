@@ -13,9 +13,7 @@ import model.commonobjective.*;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.*;
-import network.structure.ClientSocket;
 import network.structure.NetworkView;
-import network.structure.Server;
 import network.structure.StartServerImpl;
 import observer.Observer;
 
@@ -23,7 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.logging.Logger;
 
 import static enumerations.GameState.IN_GAME;
 import static enumerations.GameState.LOGIN;
@@ -43,7 +40,7 @@ public class Controller implements Observer {
     private String winner;
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
-    int firstX, firstY, secondX, secondY, thirdX, thirdY = 0;
+    int firstRow, firstCol, secondRow, secondCol, thirdRow, thirdCol = 0;
     private final NetworkView networkView;
 
     /**
@@ -74,7 +71,6 @@ public class Controller implements Observer {
         availableCommonObjectives.put(10, new TotalDifferentRows());
         availableCommonObjectives.put(11, new TwoByFour());
         availableCommonObjectives.put(12, new TwoEqualsInColumn());
-        System.out.println("Controller creato");
     }
 
 
@@ -83,6 +79,7 @@ public class Controller implements Observer {
      * @param receivedMessage is the message received from the "client".
      */
     public void onMessageReceived(Message receivedMessage) {
+        /* TODO - Debug print */
         System.out.println("Ricevuto messaggio da: " + receivedMessage.getSender() + " Di tipo: " + receivedMessage.getType().toString());
         switch (receivedMessage.getType()) {
             /* TODO - Controllo se il client che manda (message.getsender) è il giocatore che deve giocare (game.getcurrentplayer) */
@@ -137,27 +134,29 @@ public class Controller implements Observer {
                     switch (pickObjectMessage.getCoordinates().size()) {
 
                         case 2:
-                            firstX = pickObjectMessage.getCoordinates().get(0);
-                            firstY = pickObjectMessage.getCoordinates().get(1);
+                            firstRow = pickObjectMessage.getCoordinates().get(0);
+                            firstCol = pickObjectMessage.getCoordinates().get(1);
                             try {
-                                pickObjectFromBoard(firstX, firstY);
+                                pickObjectFromBoard(firstRow, firstCol);
+                                this.update(new GenericModelChangeMessage());
                             } catch (IncompatibleStateException e) {
                                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                             }
                             break;
                         case 4:
-                            firstX = pickObjectMessage.getCoordinates().get(0);
-                            firstY = pickObjectMessage.getCoordinates().get(1);
-                            secondX = pickObjectMessage.getCoordinates().get(2);
-                            secondY = pickObjectMessage.getCoordinates().get(3);
+                            firstRow = pickObjectMessage.getCoordinates().get(0);
+                            firstCol = pickObjectMessage.getCoordinates().get(1);
+                            secondRow = pickObjectMessage.getCoordinates().get(2);
+                            secondCol = pickObjectMessage.getCoordinates().get(3);
 
-                            if (secondX != firstX || secondY != firstY) {
+                            if (!(firstRow == secondRow && areAdjacentColumns(firstCol, secondCol))){
                                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"You must pick objects from the same row or column!"));
                             } else {
 
                                 try {
-                                    pickObjectFromBoard(firstX, firstY);
-                                    pickObjectFromBoard(secondX, secondY);
+                                    pickObjectFromBoard(firstRow, firstCol);
+                                    pickObjectFromBoard(secondRow, secondCol);
+                                    this.update(new GenericModelChangeMessage());
                                 } catch (IncompatibleStateException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                                 }
@@ -165,21 +164,21 @@ public class Controller implements Observer {
                             }
                             break;
                         case 6:
-                            firstX = pickObjectMessage.getCoordinates().get(0);
-                            firstY = pickObjectMessage.getCoordinates().get(1);
-                            secondX = pickObjectMessage.getCoordinates().get(2);
-                            secondY = pickObjectMessage.getCoordinates().get(3);
-                            thirdX = pickObjectMessage.getCoordinates().get(4);
-                            thirdY = pickObjectMessage.getCoordinates().get(5);
+                            firstRow = pickObjectMessage.getCoordinates().get(0);
+                            firstCol = pickObjectMessage.getCoordinates().get(1);
+                            secondRow = pickObjectMessage.getCoordinates().get(2);
+                            secondCol = pickObjectMessage.getCoordinates().get(3);
+                            thirdRow = pickObjectMessage.getCoordinates().get(4);
+                            thirdCol = pickObjectMessage.getCoordinates().get(5);
 
 
-                            if (!((firstX == secondX && firstX == thirdX && secondX == thirdX) || (firstY == secondY && firstY == thirdY && secondY == thirdY))) {
+                            if (!((firstRow == secondRow && firstRow == thirdRow && secondRow == thirdRow) || (firstCol == secondCol && firstCol == thirdCol && secondCol == thirdCol))) {
                                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),"You must pick objects from the same row or column!"));
                             } else {
                                 try {
-                                    pickObjectFromBoard(firstX, firstY);
-                                    pickObjectFromBoard(secondX, secondY);
-                                    pickObjectFromBoard(thirdX, thirdY);
+                                    pickObjectFromBoard(firstRow, firstCol);
+                                    pickObjectFromBoard(secondRow, secondCol);
+                                    pickObjectFromBoard(thirdRow, thirdCol);
                                 } catch (IncompatibleStateException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(),e.getMessage()));
                                 }
@@ -321,6 +320,15 @@ public class Controller implements Observer {
             this.update(new ShowCommonObjectiveMessage(player.getNickname(), (CommonObjective) game.getCommonObjectives().keySet().toArray()[0], (CommonObjective) game.getCommonObjectives().keySet().toArray()[1]));
             this.update(new ShowPersonalObjectiveMessage(player.getNickname(), player.getPersonalObjective()));
         }
+
+        for(Player player: game.getPlayers()) {
+            if (player.equals(game.getPlayerInTurn())) {
+                player.setPlayerState(PICKUP);
+            } else {
+                player.setPlayerState(IN_LIBRARY);
+            }
+        }
+        /* TODO - Debug print */
         System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname());
         game.restoreBoard(game.getBoard());
 
@@ -479,12 +487,36 @@ public class Controller implements Observer {
      * Resets the coordinates values for the following turn.
      */
     private void resetCoordinateValues(){
-        firstX = 0;
-        firstY = 0;
-        secondX = 0;
-        secondY = 0;
-        thirdX = 0;
-        thirdY = 0;
+        firstRow = 0;
+        firstCol = 0;
+        secondRow = 0;
+        secondCol = 0;
+        thirdRow = 0;
+        thirdCol = 0;
+    }
+
+    /**
+     * This method checks if two columns are next to each other.
+     * @param firstCol is the first column.
+     * @param secondCol is the second column.
+     * @return {@code true} if the two columns are next to each other, {@code false} otherwise.
+     */
+    private boolean areAdjacentColumns(int firstCol, int secondCol) {
+        if (firstCol < secondCol) {
+            if(secondCol == firstCol + 1){
+                return true;
+            } else {
+                return false;
+            }
+        } else if (firstCol > secondCol) {
+            if(firstCol == secondCol + 1){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
 
@@ -494,25 +526,27 @@ public class Controller implements Observer {
      * @param coordY is the Y coordinate of the card on the board.
      * @throws IncompatibleStateException if the player is not in PICKUP state.
      */
-    public boolean pickObjectFromBoard(int coordX, int coordY) throws IncompatibleStateException{
+    private void pickObjectFromBoard(int coordX, int coordY) throws IncompatibleStateException{
         if(game.getPlayerInTurn().getPlayerState().equals(PICKUP)) {
             /* TODO - CORRECT THIS !!!!! */
-            if (game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().equals(ObjectColour.EMPTY) || game.getBoard().getSpace(coordX, coordY).getTypeSpace().equals(TypeSpace.UNUSABLE)) {
+            System.out.println("Object to pick up from row: " + coordX + ", column: " + coordY + " is of type: " + game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().toString());
+            if (!(game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().equals(ObjectColour.EMPTY)) || !(game.getBoard().getSpace(coordX, coordY).getTypeSpace().equals(TypeSpace.UNUSABLE))) {
                 if(game.getBoard().isSpaceSurrounded(coordX, coordY)){
-                    return false;
+                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "The object you selected is surrounded!"));
                 } else {
 
                     try {
+                        System.out.println("Trying to add object of type: " + game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().toString());
                         game.getPlayerInTurn().addToObjectsInHand(game.getBoard().getSpace(coordX, coordY).getObject());
+                        System.out.println("Added to objects in hand the object of type: " + game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().toString());
                         game.getBoard().getSpace(coordX, coordY).removeObject();
-                        return true;
                     } catch (TooManyObjectsInHandException e) {
-                        return false;
+                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
                     }
 
                 }
             } else {
-                return false;
+                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "You can't pick up objects from there!"));
             }
         } else {
             throw new IncompatibleStateException(PICKUP, game.getPlayerInTurn().getPlayerState());
@@ -637,6 +671,8 @@ public class Controller implements Observer {
                 break;
             case GENERIC_MODEL_CHANGE:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+
+
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case SHOW_COMMON_OBJECTIVE:

@@ -24,7 +24,7 @@ public class Player extends Observable {
     private boolean firstPlayer;
     private boolean firstToEnd;
     public static int MAX_OBJECTS_IN_HAND = 3;
-    private ArrayList<ObjectCard> objectsInHand= new ArrayList<>();
+    private ArrayList<ObjectCard> objectsInHand = new ArrayList<>(Arrays.asList(null, null, null));
     private final Library library;
     private final PersonalObjective personalObjective;
     boolean[] completedCommonObjectives = {false, false};
@@ -41,7 +41,6 @@ public class Player extends Observable {
         this.library = new Library();
         this.personalObjective = new PersonalObjective(json);
         this.firstPlayer = false;
-        for(int i =0; i<3;i++)this.objectsInHand.add(new ObjectCard(ObjectColour.EMPTY));
     }
 
     /**
@@ -250,7 +249,7 @@ public class Player extends Observable {
      * Initialize the player's hand
      */
     public void initObjectsInHand(){
-        this.objectsInHand = new ArrayList<>(Arrays.asList(new ObjectCard(ObjectColour.EMPTY), new ObjectCard(ObjectColour.EMPTY), new ObjectCard(ObjectColour.EMPTY)));
+        this.objectsInHand = new ArrayList<>(Arrays.asList(null, null, null));
         notifyObserver(new GenericModelChangeMessage());
     }
 
@@ -282,9 +281,28 @@ public class Player extends Observable {
      * @throws TooManyObjectsInHandException if the hand is already full
      */
     public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
-        if(objectsInHand.size() < MAX_OBJECTS_IN_HAND){
-            objectsInHand.add(objectCard);
-            notifyObserver(new GenericModelChangeMessage());
+        System.out.println(this.getClass().toString() + ": INSIDE addToObjectsInHand");
+        System.out.println("ObjectsInHand size is: " + getObjectsInHandSize());
+        if(objectsInHand.size() <= MAX_OBJECTS_IN_HAND){
+            System.out.println("Added object of type: " + objectCard.getObjectColour().toString());
+            for(int i = 0; i < MAX_OBJECTS_IN_HAND; i++){
+                if(objectsInHand.get(i) == null){
+                    objectsInHand.set(i, objectCard);
+                    break;
+                }
+            }
+            System.out.print("The current objects in hand are: ");
+            String toPrint;
+            for(int i = 0; i < MAX_OBJECTS_IN_HAND; i++){
+                if(objectsInHand.get(i) == null){
+                    toPrint = "null";
+                } else {
+                    toPrint = objectCard.getObjectColour().toString();
+                }
+                System.out.print(toPrint + ", ");
+            }
+            System.out.print("\n");
+            //notifyObserver(new GenericModelChangeMessage());
         } else {
             throw new TooManyObjectsInHandException(MAX_OBJECTS_IN_HAND);
         }

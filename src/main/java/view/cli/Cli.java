@@ -212,15 +212,15 @@ public class Cli extends ViewObservable implements View {
                 notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
             } else if (orderAndColumn.equals("-showpersonal")){
                 notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
-            }
+            } else {
+                String[] parsedCoordinates = orderAndColumn.split(",");
+                ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
+                for(int i = 0; i < parsedCoordinates.length; i++){
+                    orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                }
 
-            String[] parsedCoordinates = orderAndColumn.split(",");
-            ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
-            for(int i = 0; i < parsedCoordinates.length; i++){
-                orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
             }
-
-            notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -308,11 +308,12 @@ public class Cli extends ViewObservable implements View {
      */
     private void showObjInHand(ArrayList<ObjectCard> rcvObjectsInHand) {
 
-        printColumnNumbers(3);
-        out.println(Colours.RESET);
-        printRowNumber(0);
+        out.print(printColumnNumbers(3));
+        out.print(Colours.RESET);
+        out.print("\n");
+        out.print(printRowNumber(0));
         for(int i = 0; i < 3; i++){
-            if(rcvObjectsInHand.get(i).getObjectColour().equals(ObjectColour.EMPTY)){
+            if((rcvObjectsInHand.get(i) == null) || (rcvObjectsInHand.get(i).getObjectColour().equals(ObjectColour.EMPTY))){
                 out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
             } else {
                 if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.GREEN1)){

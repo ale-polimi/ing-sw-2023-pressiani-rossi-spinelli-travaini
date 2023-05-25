@@ -1,17 +1,20 @@
 package model.board;
 
+import enumerations.ObjectColour;
 import enumerations.TypeSpace;
 import model.Game;
 import model.objects.ObjectCard;
 import network.GenericModelChangeMessage;
+import network.Message;
 import observer.Observable;
+import observer.Observer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board extends Observable implements Serializable{
+public class Board extends Observable implements Serializable, Observer {
     private BoardSpace[][] boardSpaces;
     PropertyChangeListener listener;
 
@@ -31,6 +34,8 @@ public class Board extends Observable implements Serializable{
                 } else {
                     boardSpaces[i][j] = new BoardSpace(TypeSpace.UNUSABLE);
                 }
+                /* Subscribing to the observable boardSpaces */
+                //boardSpaces[i][j].addObserver(this);
             }
         }
     }
@@ -53,8 +58,6 @@ public class Board extends Observable implements Serializable{
     public ObjectCard pickupObjectFrom(BoardSpace boardSpace){
         ObjectCard objectPicked = boardSpace.getObject();
         boardSpace.removeObject();
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "BOARD_CHANGED", this.boardSpaces, boardSpaces);
-        this.listener.propertyChange(event);
         return objectPicked;
     }
 
@@ -75,18 +78,42 @@ public class Board extends Observable implements Serializable{
      * @return {@code true} if the space is surrounded by other objects, {@code false} otherwise.
      */
     public boolean isSpaceSurrounded(int row, int column) {
-        if (row == 0) {
-            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null) || (getSpace(row, column + 1).getObject() != null) || (getSpace(row, column - 1).getObject() != null));
-        } else if (row == 8) {
-            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row - 1, column).getObject() != null || (getSpace(row, column + 1).getObject() != null) || (getSpace(row, column - 1).getObject() != null)));
-        } else if (column == 0) {
-            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null || (getSpace(row, column + 1).getObject() != null) || (getSpace(row - 1, column).getObject() != null)));
-        } else if (column == 8) {
-            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null || (getSpace(row - 1, column).getObject() != null) || (getSpace(row, column - 1).getObject() != null)));
+        if(row == 0){
+            if((getSpace(row + 1, column).getObject() != null) && (getSpace(row, column + 1).getObject() != null) && (getSpace(row, column - 1).getObject() != null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else  if (row == 8){
+            if((getSpace(row - 1, column).getObject() != null) && (getSpace(row, column + 1).getObject() != null) && (getSpace(row, column - 1).getObject() != null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else  if (column == 0){
+            if((getSpace(row - 1, column).getObject() != null) && (getSpace(row + 1, column).getObject() != null) && (getSpace(row, column + 1).getObject() != null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else  if (column == 8){
+            if((getSpace(row - 1, column).getObject() != null) && (getSpace(row + 1, column).getObject() != null) && (getSpace(row, column - 1).getObject() != null)){
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return (!getSpace(row, column).getTypeSpace().equals(TypeSpace.UNUSABLE)&&(getSpace(row + 1, column).getObject() != null || (getSpace(row, column + 1).getObject() != null) || (getSpace(row, column - 1).getObject() != null) || (getSpace(row - 1, column).getObject() != null)));
+            if((getSpace(row - 1, column).getObject() != null) && (getSpace(row + 1, column).getObject() != null) && (getSpace(row, column - 1).getObject() != null) && (getSpace(row, column + 1).getObject() != null)){
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-
+    @Override
+    public void update(Message message) {
+        System.out.println(this.getClass().toString() + ": I have been notified!");
+        notifyObserver(message);
+    }
 }

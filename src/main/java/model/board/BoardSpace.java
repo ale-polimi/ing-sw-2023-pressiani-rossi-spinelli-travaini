@@ -1,11 +1,14 @@
 package model.board;
 
+import enumerations.ObjectColour;
 import enumerations.TypeSpace;
 import model.objects.ObjectCard;
+import network.GenericModelChangeMessage;
+import observer.Observable;
 
 import java.io.Serializable;
 
-public class BoardSpace implements Serializable {
+public class BoardSpace extends Observable implements Serializable {
     private TypeSpace typeSpace;
     private ObjectCard objectContained;
 
@@ -39,6 +42,7 @@ public class BoardSpace implements Serializable {
      */
     public void removeObject(){
         objectContained = null;
+        /* notifyObserver(new GenericModelChangeMessage()); */
     }
 
     /**

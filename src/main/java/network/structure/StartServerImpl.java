@@ -76,7 +76,7 @@ public class StartServerImpl{
         //Start Socket server instance
         socketServer = new SocketServer(this, 12345);
         getExecutor().submit(socketServer);
-        System.out.println("Server socket up, waiting for client");
+        System.out.println("Socket server up, waiting for clients...");
     }
 
     /**

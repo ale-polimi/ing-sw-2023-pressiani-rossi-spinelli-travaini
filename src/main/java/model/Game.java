@@ -36,6 +36,7 @@ public class Game extends Observable implements Observer {
      */
     public Game() {
         this.board = new Board();
+        board.addObserver(this);
         this.players = new ArrayList<>();
         this.objectsDeck = new ObjectsDeck();
         this.commonObjectivesPoints = new HashMap<>(2);
@@ -259,6 +260,7 @@ public class Game extends Observable implements Observer {
 
     @Override
     public void update(Message message) {
+        System.out.println(this.getClass().toString() + ": I have been notified!");
         notifyObserver(message);
     }
 
