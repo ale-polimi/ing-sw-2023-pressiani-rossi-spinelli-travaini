@@ -1,5 +1,6 @@
 package model.library;
 
+import enumerations.ObjectColour;
 import model.objects.ObjectCard;
 
 /**
@@ -13,10 +14,16 @@ public final class PersonalObjective extends LibraryGrid {
      */
     public PersonalObjective(String json){
         this.libraryGrid = new LibrarySpace[6][5];
+        for(int i=0; i< 6;i++){
+            for(int j=0;j<5;j++){
+                libraryGrid[i][j] = new LibrarySpace();
+                libraryGrid[i][j].putObject(new ObjectCard(ObjectColour.EMPTY));
+            }
+        }
         if(json != null){
             String[] tmp = json.split(",");
             for(int i = 0; i < 6; i++){
-                libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])]= new LibrarySpace();
+                //libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])]= new LibrarySpace();
                 libraryGrid[Integer.parseInt(tmp[3*i])][Integer.parseInt(tmp[3*i+1])].putObject(new ObjectCard(tmp[3*i+2]));
             }
         }

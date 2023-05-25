@@ -202,7 +202,9 @@ public class Cli extends ViewObservable implements View {
     public void askLibraryMove() {
         try{
             out.print("In what order do you want to put the cards in? In which column?\n" +
-                      "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n");
+                      "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
+                    "Type -showcommon to show the common objectives\n"+
+                    "Type -showpersonal to show the personal objective\n");
             String orderAndColumn = readLine();
 
             /*
@@ -425,11 +427,12 @@ public class Cli extends ViewObservable implements View {
     private void printPersonalObjective(PersonalObjective personalObjective) {
 
         out.print(printColumnNumbers(5));
+        out.print("\n");
         out.print(Colours.RESET);
         for(int row = 0; row < 6; row++) {
             out.print(printRowNumber(row));
             for (int col = 0; col < 5; col++) {
-                if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().equals(null)) {
+                if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().equals(ObjectColour.EMPTY)) {
                     out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 } else {
                     if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.GREEN1)) {
@@ -446,8 +449,7 @@ public class Cli extends ViewObservable implements View {
                         out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                     }
                 }
-                out.print("\n");
-            }
+            }out.print("\n");
         }
         out.println(Colours.RESET);
 

@@ -126,18 +126,15 @@ public class ClientController implements ViewObserver, Observer {
             case SHOW_TURN:
                 if(message.getSender().equals(nickname)) {
                     if (inLibrary == true && inPickup == false) {
-                        assert message instanceof ShowTurnMessage;
                         ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askLibraryMove();
                     } else if (inLibrary == false && inPickup == true) {
-                        assert message instanceof ShowTurnMessage;
                         ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askBoardMove();
                     }
                 } else {
-                    assert message instanceof ShowTurnMessage;
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showNotMyTurn(turnMessage.getGameBoard());
                 }
@@ -173,7 +170,6 @@ public class ClientController implements ViewObserver, Observer {
                 break;
             case GENERIC_ERROR:
                 if(message.getSender().equals(nickname)) {
-                    assert message instanceof GenericErrorMessage;
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
                     view.showGenericError(genericErrorMessage.getSender(), genericErrorMessage.getPayload());
                 }

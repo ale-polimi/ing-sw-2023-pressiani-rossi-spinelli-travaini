@@ -71,6 +71,7 @@ public class Controller implements Observer {
         availableCommonObjectives.put(10, new TotalDifferentRows());
         availableCommonObjectives.put(11, new TwoByFour());
         availableCommonObjectives.put(12, new TwoEqualsInColumn());
+        System.out.println("Controller creato");
     }
 
 
@@ -100,7 +101,6 @@ public class Controller implements Observer {
                 this.update(new ShowLobbyMessage(players));
                 break;
             case USER_INFO:
-                assert receivedMessage instanceof UserInfoForLoginMessage;
                 UserInfoForLoginMessage userInfoForLoginMessage = (UserInfoForLoginMessage) receivedMessage;
                 if (game.getGameState().equals(LOGIN)) {
                     if (game.isNicknameTaken(userInfoForLoginMessage.getUsername())) {
@@ -563,7 +563,6 @@ public class Controller implements Observer {
 
                     try {
                         game.getPlayerInTurn().addToObjectsInHand(game.getBoard().getSpace(coordX, coordY).getObject());
-                        System.out.println("Added to objects in hand the object of type: " + game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().toString());
                         game.getBoard().getSpace(coordX, coordY).removeObject();
                     } catch (TooManyObjectsInHandException e) {
                         this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
