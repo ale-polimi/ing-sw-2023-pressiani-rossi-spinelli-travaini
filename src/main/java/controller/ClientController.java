@@ -36,22 +36,16 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateServerInfo(Map<String, String> serverInfo) {
-        System.out.println("Entrato");
         client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
-        System.out.println("Socket creato");
         ((ClientSocket)client).addObserver(this);
         //client.receivedMessage(new UserInfoForLoginMessage(null, this.nickname)); // Starts an asynchronous reading from the server.
         //client.ping();
-        //taskQueue.execute(view::askNickname);
-        //taskQueue.execute(view::askMaxPlayer);
-        System.out.println("Fine Server Update");
     }
 
     @Override
     public void onUpdateNickname(String nickname) {
         this.nickname = nickname;
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
-        System.out.println("Numero letto");
     }
 
     @Override
