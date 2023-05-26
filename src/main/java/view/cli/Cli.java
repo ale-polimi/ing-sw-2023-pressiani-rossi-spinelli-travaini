@@ -57,7 +57,7 @@ public class Cli extends ViewObservable implements View {
      * This method will start the CLI.
      */
     public void initCli(){
-        out.println("                                                                                                                        \n" +
+        out.println("" + Colours.BOLD + Colours.GOLD + "                                                                                                                        \n" +
                 "                                                                                                                        \n" +
                 "                                                     ..                                                                 \n" +
                 "                                                  .-:-=-...                                                             \n" +
@@ -75,7 +75,8 @@ public class Cli extends ViewObservable implements View {
                 "          .-----    -----. .-==+==                .-======-   .----  ---=   :-===-  ---   ----  ---.   :-===:           \n" +
                 "                                                                                                                        \n" +
                 "                                                                                                                        \n");
-        out.println("Welcome to My Shelfie board game!");
+        out.print(Colours.RESET);
+        out.println(Colours.BOLD + "                                        Welcome to My Shelfie board game!" + Colours.RESET);
 
         try{
             askServerInfo();
@@ -419,7 +420,8 @@ public class Cli extends ViewObservable implements View {
     public void showGenericError(String player, String errorString){
         clearCli();
 
-        out.println(errorString);
+        out.print("" + Colours.BOLD + Colours.RED + errorString + Colours.RESET);
+        out.print("\n\n");
     }
 
     /**

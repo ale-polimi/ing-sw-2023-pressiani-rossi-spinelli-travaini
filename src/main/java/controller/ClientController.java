@@ -22,6 +22,8 @@ public class ClientController implements ViewObserver, Observer {
     private final View view;
     private Client client;
     private String nickname;
+    private boolean inLobby = false;
+    private ArrayList<String> takenNicknames = new ArrayList<>();
     private CommonObjective commonObjective1;
     private CommonObjective commonObjective2;
     private PersonalObjective personalObjective;
@@ -114,7 +116,9 @@ public class ClientController implements ViewObserver, Observer {
     public void update(Message message) {
         switch (message.getType()){
             case SHOW_LOBBY:
+                inLobby = true;
                 ShowLobbyMessage lobbyMessage = (ShowLobbyMessage) message;
+                this.takenNicknames.add(lobbyMessage.getSender());
                 view.showLobby(lobbyMessage.getLobbyPlayers());
                 break;
             case SHOW_TURN:
@@ -168,19 +172,26 @@ public class ClientController implements ViewObserver, Observer {
                 String sender = parseSender((message.getSender()));
                 if(sender.equals(nickname)) {
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
-                    view.showGenericError(sender, genericErrorMessage.getPayload());
                     switch (type){
                         case "BOARD":
+                            view.showGenericError(sender, genericErrorMessage.getPayload());
                             System.out.println(this.getClass().toString() + " The error is for the board!");
                             inLibrary = false;
                             inPickup = true;
                             view.askBoardMove();
                             break;
                         case "LIBRARY":
+                            view.showGenericError(sender, genericErrorMessage.getPayload());
                             System.out.println(this.getClass().toString() + " The error is for the library!");
                             inLibrary = true;
                             inPickup = false;
                             view.askLibraryMove();
+                            break;
+                        case "NICKNAME":
+                            if(inLobby == false) {
+                                view.showGenericError(sender, genericErrorMessage.getPayload());
+                                view.askNickname();
+                            }
                             break;
                         case "GENERIC":
                             System.out.println(this.getClass().toString() + " The error is generic :(");

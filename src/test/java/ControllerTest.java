@@ -14,6 +14,7 @@ import network.structure.ClientRMI;
 import network.structure.StartServerImpl;
 import org.junit.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,7 +25,7 @@ public class ControllerTest {
     private Client dummyClient;
 
     @Before
-    public void setUp(){
+    public void setUp() throws IOException {
         this.controller = new Controller(new StartServerImpl());
         this.dummyClient = new ClientRMI("localhost", 8080);
     }
@@ -187,5 +188,7 @@ public class ControllerTest {
         assertEquals("Alice", controller.getGame().getPlayerInTurn().getNickname());
         assertEquals("Bob", controller.getGame().getNextPlayer().getNickname());
     }
+
+
 
 }

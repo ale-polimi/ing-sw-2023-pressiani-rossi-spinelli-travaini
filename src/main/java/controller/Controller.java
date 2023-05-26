@@ -72,7 +72,6 @@ public class Controller implements Observer {
         availableCommonObjectives.put(9, new TotalDifferentColumns());
         availableCommonObjectives.put(10, new TotalDifferentRows());
         availableCommonObjectives.put(11, new TwoByFour());
-        availableCommonObjectives.put(12, new TwoEqualsInColumn());
         System.out.println("Controller creato");
     }
 
@@ -106,7 +105,7 @@ public class Controller implements Observer {
                 UserInfoForLoginMessage userInfoForLoginMessage = (UserInfoForLoginMessage) receivedMessage;
                 if (game.getGameState().equals(LOGIN)) {
                     if (game.isNicknameTaken(userInfoForLoginMessage.getUsername())) {
-                        this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender().concat(":GENERIC"), "Username is already taken."));
+                        this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender().concat(":NICKNAME"), "Username is already taken."));
                         this.update(new AskNicknameMessage("Controller"));
                     } else {
                         try {
@@ -355,6 +354,7 @@ public class Controller implements Observer {
      * This method will create the common objectives for the game.
      */
     private void setupCommonObjectives(){
+
         Random rand1 = new Random();
         Random rand2;
         do{
@@ -364,6 +364,10 @@ public class Controller implements Observer {
         /* First I get the objectives from the hashmap */
         CommonObjective objective1 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
         CommonObjective objective2 = availableCommonObjectives.remove(rand2.nextInt(availableCommonObjectives.size()));
+
+        /* TODO - Debug print */
+        System.out.println(objective1.getClass().toString() + " I'm the first objective.");
+        System.out.println(objective2.getClass().toString() + " I'm the second objective.");
 
         /* Then I set their numeral */
         objective1.setObjectiveNumeral(ObjectiveNumeral.ONE);
@@ -580,7 +584,7 @@ public class Controller implements Observer {
             System.out.println("Object to pick up from row: " + coordX + ", column: " + coordY + " is of type: " + debugPrint);
 
 
-            if (!(game.getBoard().getSpace(coordX, coordY).getObject() == null) || !(game.getBoard().getSpace(coordX, coordY).getTypeSpace().equals(TypeSpace.UNUSABLE))) {
+            if (game.getBoard().getSpace(coordX, coordY).getObject() != null && !(game.getBoard().getSpace(coordX, coordY).getTypeSpace().equals(TypeSpace.UNUSABLE))) {
                 if(game.getBoard().isSpaceSurrounded(coordX, coordY)){
                     throw new SpaceSurroundedException();
                 } else {
