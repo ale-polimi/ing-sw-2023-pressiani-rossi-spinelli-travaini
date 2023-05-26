@@ -3,7 +3,7 @@ package network;
 /**
  * Message that contains an error message.
  */
-public class GenericErrorMessage extends Message{
+public class BoardErrorMessage extends Message{
     private final String errorMessage;
 
     /**
@@ -11,8 +11,8 @@ public class GenericErrorMessage extends Message{
      * @param sender is the sender of the message.
      * @param errorMessage is the error message.
      */
-    public GenericErrorMessage(String sender, String errorMessage){
-        super(sender, MessageType.GENERIC_ERROR);
+    public BoardErrorMessage(String sender, String errorMessage){
+        super(sender, MessageType.BOARD_ERROR);
         this.errorMessage = errorMessage;
     }
 

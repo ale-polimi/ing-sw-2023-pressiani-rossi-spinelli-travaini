@@ -55,15 +55,15 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateBoardMove(ArrayList<Integer> coordinatesToSend){
-        inPickup = false;
         inLibrary = true;
+        inPickup = false;
         client.sendMessage(new PickObjectMessage(this.nickname, coordinatesToSend));
     }
 
     @Override
     public void onUpdateLibraryMove(ArrayList<Integer> orderAndColumnToSend){
-        inPickup = true;
         inLibrary = false;
+        inPickup = true;
         client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
     }
 
@@ -163,9 +163,30 @@ public class ClientController implements ViewObserver, Observer {
                 view.showWinner(endGameMessage.getWinner(), sortedLeaderboard);
                 break;
             case GENERIC_ERROR:
-                if(message.getSender().equals(nickname)) {
+                System.out.println(this.getClass().toString() + " I've received an error!");
+                String type = parseType(message.getSender());
+                String sender = parseSender((message.getSender()));
+                if(sender.equals(nickname)) {
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
-                    view.showGenericError(genericErrorMessage.getSender(), genericErrorMessage.getPayload());
+                    view.showGenericError(sender, genericErrorMessage.getPayload());
+                    switch (type){
+                        case "BOARD":
+                            System.out.println(this.getClass().toString() + " The error is for the board!");
+                            inLibrary = false;
+                            inPickup = true;
+                            view.askBoardMove();
+                            break;
+                        case "LIBRARY":
+                            System.out.println(this.getClass().toString() + " The error is for the library!");
+                            inLibrary = true;
+                            inPickup = false;
+                            view.askLibraryMove();
+                            break;
+                        case "GENERIC":
+                            System.out.println(this.getClass().toString() + " The error is generic :(");
+                            default:
+                            ;
+                    }
                 }
                 break;
             case ASK_NICKNAME:
@@ -180,6 +201,24 @@ public class ClientController implements ViewObserver, Observer {
             default:
                 break;
         }
+    }
+
+    /**
+     * This method parses the type of error. Due to limitations of the structure of the game, this is the best way to do it.
+     * @param sender is the sender in format {@code <name_of_the_player>:<error_type>}.
+     * @return the type of error as a {@link String}.
+     */
+    private String parseType(String sender) {
+        return sender.substring(sender.lastIndexOf(':') + 1);
+    }
+
+    /**
+     * This method parses the name in case of error. Due to limitations of the structure of the game, this is the best way to do it.
+     * @param sender is the sender in format {@code <name_of_the_player>:<error_type>}.
+     * @return the name of the player {@link String}.
+     */
+    private String parseSender(String sender) {
+        return sender.substring(0,sender.lastIndexOf(':'));
     }
 
     /**

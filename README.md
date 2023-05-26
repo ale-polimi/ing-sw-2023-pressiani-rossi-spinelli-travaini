@@ -36,3 +36,9 @@ Recreate the board game [MyShelfie](https://craniointernational.com/products/my-
 |Persistence             |     :x:   |
 |Disconnection Resilience|     :x:   |
 |Chat                    |     :x:   |
+
+## System Requirements
+Generally a system that runs Java 19+ applications.
+
+For CLI game:
+ - A terminal that supports [8-bit (256) colours](https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit);

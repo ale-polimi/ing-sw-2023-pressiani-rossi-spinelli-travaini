@@ -283,32 +283,33 @@ public class Cli extends ViewObservable implements View {
      * @param gameBoard is the board passed by the {@link ClientController}.
      */
     private void showBoard(Board gameBoard){
-
-        out.print(printColumnNumbers(9));
-        out.print("\n");
+        int columnsToPrint = 9;
+        out.print(printColumnNumbers(columnsToPrint) + "\n");
+        out.print(printSeparator(columnsToPrint) + "\n");
         out.print(Colours.RESET);
         for(int row = 0; row < 9; row++){
             out.print(printRowNumber(row));
             for(int col = 0; col < 9; col++){
                 if(gameBoard.getSpace(row,col).getTypeSpace().equals(TypeSpace.UNUSABLE) || gameBoard.getSpace(row,col).getObject() == null){
-                    out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print("   |");
                 } else {
                     if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){
-                        out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.GREEN + "■" + Colours.RESET+ " |");
                     } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.WHITE1)){
-                        out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.WHITE + "■" + Colours.RESET + " |");
                     } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)){
-                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + " |");
                     } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.BLUE1)){
-                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + " |");
                     } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){
-                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + " |");
                     } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.PINK1)){
-                        out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.PINK + "■" + Colours.RESET + " |");
                     }
                 }
             }
             out.print(Colours.RESET + "\n");
+            out.print(printSeparator(columnsToPrint) + "\n");
         }
 
         out.println(Colours.RESET);
@@ -319,31 +320,32 @@ public class Cli extends ViewObservable implements View {
      * @param rcvObjectsInHand is the array of objects that a player currently has in hand.
      */
     private void showObjInHand(ArrayList<ObjectCard> rcvObjectsInHand) {
-
-        out.print(printColumnNumbers(3));
+        int columnsToPrint = 3;
+        out.print(printColumnNumbers(columnsToPrint) + "\n");
+        out.print(printSeparator(columnsToPrint) + "\n");
         out.print(Colours.RESET);
-        out.print("\n");
         out.print(printRowNumber(0));
         for(int i = 0; i < 3; i++){
             if((rcvObjectsInHand.get(i) == null) || (rcvObjectsInHand.get(i).getObjectColour().equals(ObjectColour.EMPTY))){
-                out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                out.print("   |");
             } else {
                 if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.GREEN1)){
-                    out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print(" " + Colours.GREEN + "■" + Colours.RESET + " |");
                 } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.WHITE1)){
-                    out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print(" " + Colours.WHITE + "■" + Colours.RESET + " |");
                 } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.YELLOW1)){
-                    out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print(" " + Colours.YELLOW + "■" + Colours.RESET + " |");
                 } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.BLUE1)){
-                    out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print(" " + Colours.BLUE + "■" + Colours.RESET + " |");
                 } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){
-                    out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + " |");
                 } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.PINK1)){
-                    out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print(" " + Colours.PINK + "■" + Colours.RESET + " |");
                 }
             }
         }
         out.print("\n");
+        out.print(printSeparator(columnsToPrint) + "\n");
 
         out.println(Colours.RESET);
     }
@@ -353,32 +355,33 @@ public class Cli extends ViewObservable implements View {
      * @param playerLibrary is the library passed by the {@link ClientController}.
      */
     private void showLibrary(Library playerLibrary){
-
-        out.print(printColumnNumbers(5));
+        int columnsToPrint = 5;
+        out.print(printColumnNumbers(columnsToPrint) + "\n");
+        out.print(printSeparator(columnsToPrint) + "\n");
         out.print(Colours.RESET);
-        out.print("\n");
         for(int row = 0; row < 6; row++){
             out.print(printRowNumber(row));
             for(int col = 0; col < 5; col++){
                 if(playerLibrary.getLibrarySpace(row, col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
-                    out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print("   |");
                 } else {
                     if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){
-                        out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.GREEN + "■" + Colours.RESET + " |");
                     } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.WHITE1)){
-                        out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.WHITE + "■" + Colours.RESET + " |");
                     } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)){
-                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + " |");
                     } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.BLUE1)){
-                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + " |");
                     } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){
-                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + " |");
                     } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.PINK1)){
-                        out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.PINK + "■" + Colours.RESET + " |");
                     }
                 }
             }
-            out.print(Colours.RESET + "\n");
+            out.print("\n");
+            out.print(printSeparator(columnsToPrint) + "\n");
         }
 
         out.println(Colours.RESET);
@@ -438,37 +441,38 @@ public class Cli extends ViewObservable implements View {
      * @param personalObjective is the personal objective of the player.
      */
     private void printPersonalObjective(PersonalObjective personalObjective) {
-
-        out.print(printColumnNumbers(5));
-        out.print("\n");
+        int columnsToPrint = 5;
+        out.print(printColumnNumbers(columnsToPrint) + "\n");
+        out.print(printSeparator(columnsToPrint) + "\n");
         out.print(Colours.RESET);
         for(int row = 0; row < 6; row++) {
             out.print(printRowNumber(row));
             for (int col = 0; col < 5; col++) {
                 if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().equals(ObjectColour.EMPTY)) {
-                    out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                    out.print("   |");
                 } else {
                     if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.GREEN1)) {
-                        out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.GREEN + "■" + Colours.RESET + " |");
                     } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.WHITE1)) {
-                        out.print(" " + Colours.WHITE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.WHITE + "■" + Colours.RESET+ " |");
                     } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)) {
-                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.YELLOW + "■" + Colours.RESET + " |");
                     } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.BLUE1)) {
-                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.BLUE + "■" + Colours.RESET + " |");
                     } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)) {
-                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.LIGHT_BLUE + "■" + Colours.RESET + " |");
                     } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.PINK1)) {
-                        out.print(" " + Colours.PINK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                        out.print(" " + Colours.PINK + "■" + Colours.RESET + " |");
                     }
                 }
             }
             out.print("\n");
+            out.print(printSeparator(columnsToPrint) + "\n");
         }
         out.println(Colours.RESET);
 
-        out.print("  ☑\t" + Colours.UNDERLINED + "1 | 2 | 3 | 4 | 5 | 6 \n" + Colours.RESET +
-                  " Pts.\t" + Colours.UNDERLINED + "1 | 2 | 4 | 6 | 9 | 12\n" + Colours.RESET);
+        out.print(" ✅ " + Colours.UNDERLINED + " 1 | 2 | 3 | 4 | 5 | 6 \n" + Colours.RESET +
+                  " \uD83C\uDFC6 " + Colours.UNDERLINED + " 1 | 2 | 4 | 6 | 9 | 12\n" + Colours.RESET);
     }
 
     /**
@@ -478,9 +482,18 @@ public class Cli extends ViewObservable implements View {
      */
     private String printRowNumber(int row) {
         StringBuilder strRowBld = new StringBuilder(" ");
-        strRowBld.append(row).append(" ").append(Colours.UNDERLINED).append("|");
+        strRowBld.append(row).append(" |");
 
         return strRowBld.toString();
+    }
+
+    private String printSeparator(int maxColumns){
+        StringBuilder strSeparatorBld = new StringBuilder("   +");
+        for(int i = 0; i < maxColumns; i++){
+            strSeparatorBld.append("---+");
+        }
+
+        return strSeparatorBld.toString();
     }
 
     /**
@@ -488,9 +501,9 @@ public class Cli extends ViewObservable implements View {
      * @return the formatted string.
      */
     private String printColumnNumbers(int maxColumns) {
-        StringBuilder strIndexBld = new StringBuilder("   " + Colours.UNDERLINED + " ");
+        StringBuilder strIndexBld = new StringBuilder("   ");
         for (int i = 0; i < maxColumns; i++) {
-            strIndexBld.append(" ").append(i).append(" |");
+            strIndexBld.append("  ").append(i).append(" ");
         }
         return strIndexBld.toString();
     }

@@ -7,6 +7,8 @@ public enum MessageType implements Serializable {
     USER_INFO,
     PICK_OBJECT,
     PUT_OBJECT,
+    BOARD_ERROR,
+    LIBRARY_ERROR,
     GENERIC_ERROR,
     SHOW_TURN,
     SHOW_LIBRARY,
