@@ -1,17 +1,13 @@
 package network.structure;
 
 import controller.Controller;
-import exceptions.player.ClientNotRegisteredException;
 import model.player.Player;
-import network.GameClosedMessage;
 import network.Message;
-import network.MessageType;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -70,7 +66,6 @@ public class StartServerImpl{
 
     /**
      * Start the server socket thread
-     * @throws RemoteException when the server cannot be reached
      */
     private void startSocket(){
         //Start Socket server instance

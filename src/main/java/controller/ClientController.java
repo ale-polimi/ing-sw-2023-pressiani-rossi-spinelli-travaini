@@ -36,22 +36,16 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateServerInfo(Map<String, String> serverInfo) {
-        System.out.println("Entrato");
         client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
-        System.out.println("Socket creato");
         ((ClientSocket)client).addObserver(this);
         //client.receivedMessage(new UserInfoForLoginMessage(null, this.nickname)); // Starts an asynchronous reading from the server.
         //client.ping();
-        //taskQueue.execute(view::askNickname);
-        //taskQueue.execute(view::askMaxPlayer);
-        System.out.println("Fine Server Update");
     }
 
     @Override
     public void onUpdateNickname(String nickname) {
         this.nickname = nickname;
         client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
-        System.out.println("Numero letto");
     }
 
     @Override
@@ -126,18 +120,15 @@ public class ClientController implements ViewObserver, Observer {
             case SHOW_TURN:
                 if(message.getSender().equals(nickname)) {
                     if (inLibrary == true && inPickup == false) {
-                        assert message instanceof ShowTurnMessage;
                         ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askLibraryMove();
                     } else if (inLibrary == false && inPickup == true) {
-                        assert message instanceof ShowTurnMessage;
                         ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                         view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
                         view.askBoardMove();
                     }
                 } else {
-                    assert message instanceof ShowTurnMessage;
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showNotMyTurn(turnMessage.getGameBoard());
                 }
@@ -173,7 +164,6 @@ public class ClientController implements ViewObserver, Observer {
                 break;
             case GENERIC_ERROR:
                 if(message.getSender().equals(nickname)) {
-                    assert message instanceof GenericErrorMessage;
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
                     view.showGenericError(genericErrorMessage.getSender(), genericErrorMessage.getPayload());
                 }
