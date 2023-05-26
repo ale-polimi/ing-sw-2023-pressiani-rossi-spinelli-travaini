@@ -57,15 +57,24 @@ public class Cli extends ViewObservable implements View {
      * This method will start the CLI.
      */
     public void initCli(){
-        out.println(""+
-                "8888ba.88ba              .d88888b  dP                dP .8888b oo         \n" +
-                "88  `8b  `8b             88.    \"' 88                88 88   \"            \n" +
-                "88   88   88 dP    dP    `Y88888b. 88d888b. .d8888b. 88 88aaa  dP .d8888b.\n" +
-                "88   88   88 88    88          `8b 88'  `88 88ooood8 88 88     88 88ooood8\n" +
-                "88   88   88 88.  .88    d8'   .8P 88    88 88.  ... 88 88     88 88.  ...\n" +
-                "dP   dP   dP `8888P88     Y88888P  dP    dP `88888P' dP dP     dP `88888P'\n" +
-                "                  .88                                                     \n" +
-                "              d8888P                                                      ");
+        out.println("                                                                                                                        \n" +
+                "                                                                                                                        \n" +
+                "                                                     ..                                                                 \n" +
+                "                                                  .-:-=-...                                                             \n" +
+                "          :::.-:    :...-=                        =.==:::.-.  ..                    ..:   ..---.                        \n" +
+                "           -..+.     ..:*.                       :-.* ::..+:  .:.=+                 ::* .::*-. ..-                      \n" +
+                "           -..-.    ...-:                        .-.-  .--.    -:+                  ::+ -.* ..:-.+.                     \n" +
+                "           -...-   ..:.-:     ....:.  ::.:-       ::..         -.+                  ::+.=:= .-==+=                      \n" +
+                "           -:-=:- .:==.-:    .-:..+  :-.-+.        .:....      -.=..::.             ::+ =.=     :.                      \n" +
+                "           -:---::::*-.=:       -::.:-.=+            ::....    -.:.::.:-:           -:+ .:-     -:==                    \n" +
+                "           --:=.-::*.-:=:        --::.==               ..:::.  =::+=:.::+  --+=-::. --+.::::--=..--  .-=+-:::.          \n" +
+                "           --:= -:=: =:=:         +::+-          .:::    ::-=  =:+:   -:+ =:-:..:-=.--+ --::=.. -:+: =:=:.:::+          \n" +
+                "           --:+ ==== =:=. :--::: .=:*-          :-::-=:  ::-+: =:+   .==- =:*---==- --+   :-=.  =-+ :==+---==-          \n" +
+                "           --:+     .=:=. +----+---*:           :--===+ :--+#  =-*   :=+. =-+  .---.==+   .-=-  =-* .=--  -::-          \n" +
+                "          :=---:   .=---: :=------*.             -=------=+*. :=-=: .=---  ---:--=*:=-=   --=- .=-+. .--::--=*          \n" +
+                "          .-----    -----. .-==+==                .-======-   .----  ---=   :-===-  ---   ----  ---.   :-===:           \n" +
+                "                                                                                                                        \n" +
+                "                                                                                                                        \n");
         out.println("Welcome to My Shelfie board game!");
 
         try{
@@ -179,8 +188,9 @@ public class Cli extends ViewObservable implements View {
     public void askBoardMove(){
         try{
             out.print("Which cards do you want to pick?\n" +
-                      "You can pick up to 3 cards as: X1,Y1,X2,Y2,X3,Y3\n" +
-                      "(Separate the coordinates with a comma)\n");
+                      "You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n" +
+                      "(Separate the coordinates with a comma)\n"+
+                      "The objects must be in line (same row or column), adjacent and with ad least one side free.\n");
             String coordinates = readLine();
 
             String[] parsedCoordinates = coordinates.split(",");
@@ -201,7 +211,7 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void askLibraryMove() {
         try{
-            out.print("In what order do you want to put the cards in? In which column?\n" +
+            out.print("Please put the order followed by the column in which you wish to add the cards to your library\n" +
                       "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n");
             String orderAndColumn = readLine();
 
@@ -296,7 +306,7 @@ public class Cli extends ViewObservable implements View {
                     }
                 }
             }
-            out.print("\n");
+            out.print(Colours.RESET + "\n");
         }
 
         out.println(Colours.RESET);
@@ -314,7 +324,7 @@ public class Cli extends ViewObservable implements View {
         out.print(printRowNumber(0));
         for(int i = 0; i < 3; i++){
             if((rcvObjectsInHand.get(i) == null) || (rcvObjectsInHand.get(i).getObjectColour().equals(ObjectColour.EMPTY))){
-                out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
+                out.print("   |");
             } else {
                 if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.GREEN1)){
                     out.print(" " + Colours.GREEN + "■" + Colours.RESET + Colours.UNDERLINED + " |");
@@ -331,6 +341,7 @@ public class Cli extends ViewObservable implements View {
                 }
             }
         }
+        out.print("\n");
 
         out.println(Colours.RESET);
     }
@@ -365,7 +376,7 @@ public class Cli extends ViewObservable implements View {
                     }
                 }
             }
-            out.print("\n");
+            out.print(Colours.RESET + "\n");
         }
 
         out.println(Colours.RESET);
@@ -380,7 +391,9 @@ public class Cli extends ViewObservable implements View {
     public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2) {
         out.println("The common objectives are:");
         out.println(commonObjective1.getDescription());
+        out.print("\n");
         out.println(commonObjective2.getDescription());
+        out.print("\n");
     }
 
     /**
@@ -429,7 +442,7 @@ public class Cli extends ViewObservable implements View {
         for(int row = 0; row < 6; row++) {
             out.print(printRowNumber(row));
             for (int col = 0; col < 5; col++) {
-                if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().equals(null)) {
+                if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour() == null) {
                     out.print(" " + Colours.BLACK + "■" + Colours.RESET + Colours.UNDERLINED + " |");
                 } else {
                     if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.GREEN1)) {
@@ -472,7 +485,7 @@ public class Cli extends ViewObservable implements View {
      * @return the formatted string.
      */
     private String printColumnNumbers(int maxColumns) {
-        StringBuilder strIndexBld = new StringBuilder("   " + Colours.UNDERLINED);
+        StringBuilder strIndexBld = new StringBuilder("   " + Colours.UNDERLINED + " ");
         for (int i = 0; i < maxColumns; i++) {
             strIndexBld.append(" ").append(i).append(" |");
         }
