@@ -165,9 +165,7 @@ public class Controller implements Observer {
                                     this.update(new GenericModelChangeMessage());
                                 } catch (IncompatibleStateException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
-                                } catch (SpaceSurroundedException e){
-                                    this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
-                                } catch (EmptySpaceException e){
+                                } catch (SpaceSurroundedException | EmptySpaceException e){
                                     this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
                                 }
 
@@ -183,7 +181,7 @@ public class Controller implements Observer {
 
 
                             if (!(firstRow == secondRow && secondRow == thirdRow && ((areAdjacentColumns(firstCol, secondCol) && areAdjacentColumns(secondCol, thirdCol)) || (areAdjacentColumns(firstCol, secondCol) && areAdjacentColumns(firstCol, thirdCol)) || (areAdjacentColumns(firstCol, thirdCol) && areAdjacentColumns(secondCol, thirdCol)))) && !(firstCol == secondCol && secondCol == thirdCol && ((areAdjacentRows(firstRow, secondRow) && areAdjacentRows(secondRow, thirdRow)) || (areAdjacentRows(firstRow, secondRow) && areAdjacentRows(firstRow, thirdRow)) || (areAdjacentRows(firstRow, thirdRow) && areAdjacentRows(secondRow, thirdRow))))) {
-                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "You must pick objects from the same row or column!"));
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), "You must pick objects from the same row or column!"));
                             } else {
                                 try {
                                     pickObjectFromBoard(firstRow, firstCol);
@@ -192,10 +190,8 @@ public class Controller implements Observer {
                                     game.getPlayerInTurn().setPlayerState(IN_LIBRARY);
                                     this.update(new GenericModelChangeMessage());
                                 } catch (IncompatibleStateException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
-                                } catch (SpaceSurroundedException e){
-                                    this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
-                                } catch (EmptySpaceException e){
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
+                                } catch (SpaceSurroundedException | EmptySpaceException e){
                                     this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
                                 }
                             }
@@ -216,11 +212,11 @@ public class Controller implements Observer {
                     resetCoordinateValues();
 
                     if (putObjectInLibraryMessage.getOrderArray().size() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
-                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "You must put all the objects you have in hand in the library."));
+                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "You must put all the objects you have in hand in the library."));
                         this.update(new AskLibraryMoveMessage("Controller"));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
                         int value = putObjectInLibraryMessage.getOrderArray().size() - 1;
-                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize()));
+                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize()));
                         this.update(new AskLibraryMoveMessage("Controller"));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
                         switch (putObjectInLibraryMessage.getOrderArray().size()) {
@@ -248,9 +244,9 @@ public class Controller implements Observer {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
                                     this.update(new AskLibraryMoveMessage("Controller"));
-                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));}
+                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));}
                             }
                             case 3 -> {
                                 try {
@@ -276,7 +272,7 @@ public class Controller implements Observer {
                                     game.setNextPlayer();
 
                                 }catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
                                     this.update(new AskLibraryMoveMessage("Controller"));
                                 }
                             }
@@ -304,22 +300,22 @@ public class Controller implements Observer {
                                     game.setNextPlayer();
 
                                 } catch (NotEnoughSpaceException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
                                     this.update(new AskLibraryMoveMessage("Controller"));
-                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));}
+                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));}
                             }
                             default ->{
-                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "Invalid number of objects."));
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "Invalid number of objects."));
                                 this.update(new AskLibraryMoveMessage("Controller"));
                             }
                         }
                     }
                 } else {
-                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
+                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
                 break;
             default:
-                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "Message type: " + receivedMessage.getType().toString() + " is not valid."));
+                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "Message type: " + receivedMessage.getType().toString() + " is not valid."));
         }
     }
 
@@ -393,8 +389,8 @@ public class Controller implements Observer {
             /* We apply the common objective only if it still has some points left */
             if(game.getCommonObjectives().get(commonObjective).size() > 0) {
                 /* If the player hasn't already completed the objective, it will get the points */
-                if(game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()] == false) {
-                    if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0) == true) {
+                if(!game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()]) {
+                    if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0)) {
                         int points = game.getCommonObjectives().get(commonObjective).remove(0);
                         game.getPlayerInTurn().addPoints(points);
                         game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective);
@@ -599,7 +595,7 @@ public class Controller implements Observer {
                         game.getPlayerInTurn().addToObjectsInHand(game.getBoard().getSpace(coordX, coordY).getObject());
                         game.getBoard().getSpace(coordX, coordY).removeObject();
                     } catch (TooManyObjectsInHandException e) {
-                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
                         this.update(new AskBoardMoveMessage("Controller"));
                     }
 
