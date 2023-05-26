@@ -268,11 +268,7 @@ public class Player extends Observable {
      * @return true if objectsInHand isn't null, false otherwise
      */
     public boolean hasObjectsInHand(){
-       if(objectsInHand != null){
-           return true;
-       } else {
-           return false;
-       }
+        return objectsInHand != null;
     }
 
     /**
@@ -327,7 +323,11 @@ public class Player extends Observable {
      * @return the number of object cards this player currently has in hand.
      */
     public int getObjectsInHandSize(){
-        return objectsInHand.size();
+       int num=0;
+       for(int i = 0;  i < getObjectsInHand().size();i++){
+           if(getObjectsInHand().get(i)!= null){num++;}
+       }
+       return num;
     }
 
     /**

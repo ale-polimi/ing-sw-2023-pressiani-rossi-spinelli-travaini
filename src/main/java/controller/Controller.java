@@ -143,10 +143,9 @@ public class Controller implements Observer {
                                 this.update(new GenericModelChangeMessage());
                             } catch (IncompatibleStateException e) {
                                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
-                            } catch (SpaceSurroundedException e){
+                            } catch (SpaceSurroundedException | EmptySpaceException e){
                                 this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
-                            } catch (EmptySpaceException e){
-                                this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), e.getMessage()));
+                                this.update(new AskBoardMoveMessage("Controller"));
                             }
                             break;
                         case 4:
@@ -218,9 +217,11 @@ public class Controller implements Observer {
 
                     if (putObjectInLibraryMessage.getOrderArray().size() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
                         this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "You must put all the objects you have in hand in the library."));
+                        this.update(new AskLibraryMoveMessage("Controller"));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 > game.getPlayerInTurn().getObjectsInHandSize()) {
                         int value = putObjectInLibraryMessage.getOrderArray().size() - 1;
                         this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize()));
+                        this.update(new AskLibraryMoveMessage("Controller"));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
                         switch (putObjectInLibraryMessage.getOrderArray().size()) {
                             case 2 -> {
@@ -246,9 +247,10 @@ public class Controller implements Observer {
 
                                     game.setNextPlayer();
 
-                                } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                } catch (NotEnoughSpaceException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
-                                }
+                                    this.update(new AskLibraryMoveMessage("Controller"));
+                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));}
                             }
                             case 3 -> {
                                 try {
@@ -273,8 +275,9 @@ public class Controller implements Observer {
 
                                     game.setNextPlayer();
 
-                                } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                }catch (NotEnoughSpaceException | IncompatibleStateException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                                    this.update(new AskLibraryMoveMessage("Controller"));
                                 }
                             }
                             case 4 -> {
@@ -300,12 +303,15 @@ public class Controller implements Observer {
 
                                     game.setNextPlayer();
 
-                                } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                } catch (NotEnoughSpaceException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
-                                }
+                                    this.update(new AskLibraryMoveMessage("Controller"));
+                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));}
                             }
-                            default ->
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "Invalid number of objects."));
+                            default ->{
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), "Invalid number of objects."));
+                                this.update(new AskLibraryMoveMessage("Controller"));
+                            }
                         }
                     }
                 } else {
@@ -594,6 +600,7 @@ public class Controller implements Observer {
                         game.getBoard().getSpace(coordX, coordY).removeObject();
                     } catch (TooManyObjectsInHandException e) {
                         this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname(), e.getMessage()));
+                        this.update(new AskBoardMoveMessage("Controller"));
                     }
 
                 }
@@ -616,7 +623,7 @@ public class Controller implements Observer {
     private void addObjectToLibrary(int cardID1, int column) throws IncompatibleStateException, NotEnoughSpaceException{
         if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {
             ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);
-            int firstEmpty = 0;
+            int firstEmpty = -1;
 
             for (int i = 5; i >= 0; i--) {
                 if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column))==null) {
@@ -624,7 +631,7 @@ public class Controller implements Observer {
                     break;
                 }
             }
-            if (firstEmpty != 0) {
+            if (firstEmpty >= 0) {
                 game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
             } else {
                 throw new NotEnoughSpaceException(column);
@@ -655,7 +662,7 @@ public class Controller implements Observer {
                     break;
                 }
             }
-            if (!((firstEmpty - 1 < 0) || (firstEmpty - 2 < 0))) {
+            if (!((firstEmpty - 1 < 0)) ) {
                 game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
                 game.getPlayerInTurn().addObjectToLibrary(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));
             } else {
@@ -689,7 +696,7 @@ public class Controller implements Observer {
                     break;
                 }
             }
-            if (!((firstEmpty - 1 < 0) || (firstEmpty - 2 < 0))) {
+            if (!((firstEmpty - 2 < 0))) {
                 game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
                 game.getPlayerInTurn().addObjectToLibrary(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));
                 game.getPlayerInTurn().addObjectToLibrary(objectCard3, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 2, column));
