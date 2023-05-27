@@ -642,7 +642,6 @@ public class Controller implements Observer {
      * The player can select in which order the object cards have to be put in the specified column
      * @param cardID1 is the first card to be put in the specified column.
      * @param column is the player specified column.
-     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
@@ -658,7 +657,6 @@ public class Controller implements Observer {
                     break;
                 }
             }
-
             if (firstEmpty >= 0) {
                 game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
             } else {
@@ -674,7 +672,6 @@ public class Controller implements Observer {
      * @param cardID1 is the first card to be put in the specified column.
      * @param cardID2 is the second card to be put in the specified column.
      * @param column is the player specified column.
-     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
@@ -707,7 +704,6 @@ public class Controller implements Observer {
      * @param cardID2 is the second card to be put in the specified column.
      * @param cardID3 is the third card to be put in the specified column.
      * @param column is the player specified column.
-     * @return true if the cards are correctly put in the library.
      * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
      * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
      */
@@ -736,6 +732,10 @@ public class Controller implements Observer {
         }
     }
 
+    /**
+     * Handles the events notified by the game
+     * @param message is the message used to share information.
+     */
     @Override
     public void update(Message message){
         switch(message.getType()){
