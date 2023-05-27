@@ -176,7 +176,7 @@ public class Game extends Observable implements Observer {
      */
     public void setNextPlayer(){
         this.playerInTurn = getNextPlayer();
-        notifyObserver(new NextTurnMessage());
+        //notifyObserver(new NextTurnMessage());
     }
 
     /**

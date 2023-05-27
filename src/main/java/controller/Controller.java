@@ -227,9 +227,6 @@ public class Controller implements Observer {
                                     /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
                                     game.getPlayerInTurn().initObjectsInHand();
 
-                                    /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
-                                    game.getPlayerInTurn().setPlayerState(PICKUP);
-
                                     /* Check if the player has completed a common objective */
                                     checkCommonObjectives();
 
@@ -241,12 +238,23 @@ public class Controller implements Observer {
                                         endGame(game);
                                     }
 
+                                    //this.update(new GenericModelChangeMessage());
+                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
+                                    resetPlayersState(game);
+                                    for(Player player: game.getPlayers()){
+                                        System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
+                                    }
+
+                                    this.update(new NextTurnMessage());
+                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
 
                                 } catch (NotEnoughSpaceException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
                                     this.update(new AskLibraryMoveMessage("Controller"));
-                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));}
+                                } catch(IncompatibleStateException e) {
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
+                                }
                             }
                             case 3 -> {
                                 try {
@@ -338,13 +346,7 @@ public class Controller implements Observer {
             this.update(new ShowPersonalObjectiveMessage(player.getNickname(), player.getPersonalObjective()));
         }
 
-        for(Player player: game.getPlayers()) {
-            if (player.equals(game.getPlayerInTurn())) {
-                player.setPlayerState(PICKUP);
-            } else {
-                player.setPlayerState(IN_LIBRARY);
-            }
-        }
+        resetPlayersState(game);
         /* TODO - Debug print */
         System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname());
         game.restoreBoard(game.getBoard());
@@ -352,16 +354,28 @@ public class Controller implements Observer {
         game.setGameState(IN_GAME);
     }
 
+    private static void resetPlayersState(Game game) {
+        for(Player player: game.getPlayers()) {
+            if (player.equals(game.getPlayerInTurn())) {
+                player.setPlayerState(PICKUP);
+            } else {
+                player.setPlayerState(IN_LIBRARY);
+            }
+        }
+    }
+
     /**
      * This method will create the common objectives for the game.
      */
     private void setupCommonObjectives(){
-
+        /* TODO - La combinazione rand1 = 7 e rand2 = 3 causa il crash del controller */
         Random rand1 = new Random();
         Random rand2;
         do{
             rand2 = new Random();
         } while(rand1 == rand2);
+        System.out.println("First number: " + rand1.nextInt(availableCommonObjectives.size()));
+        System.out.println("Second number: " + rand2.nextInt(availableCommonObjectives.size()));
 
         /* First I get the objectives from the hashmap */
         CommonObjective objective1 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
@@ -496,7 +510,7 @@ public class Controller implements Observer {
 
         for(int i = 0; i < 6; i++){
             for(int j = 0; j < 5; j++){
-                if(game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, j)) == null){
+                if(game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, j)).getObjectColour().equals(ObjectColour.EMPTY)){
                     freeSpaces++;
                 }
             }
@@ -622,11 +636,13 @@ public class Controller implements Observer {
             int firstEmpty = -1;
 
             for (int i = 5; i >= 0; i--) {
-                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column))==null) {
+                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
+                    System.out.println("First empty row is: " + firstEmpty);
                     break;
                 }
             }
+
             if (firstEmpty >= 0) {
                 game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));
             } else {
@@ -653,7 +669,7 @@ public class Controller implements Observer {
             int firstEmpty = 0;
 
             for (int i = 5; i >= 0; i--) {
-                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column))== null) {
+                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
                     break;
                 }
@@ -687,7 +703,7 @@ public class Controller implements Observer {
             int firstEmpty = 0;
 
             for (int i = 5; i >= 0; i--) {
-                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column))==null) {
+                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
                     break;
                 }

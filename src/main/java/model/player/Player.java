@@ -241,7 +241,7 @@ public class Player extends Observable {
      */
     public void addObjectToLibrary(ObjectCard objectCard, LibrarySpace librarySpace){
         this.library.addObject(objectCard, librarySpace);
-        notifyObserver(new GenericModelChangeMessage());
+        //notifyObserver(new GenericModelChangeMessage());
     }
 
 
@@ -250,7 +250,7 @@ public class Player extends Observable {
      */
     public void initObjectsInHand(){
         this.objectsInHand = new ArrayList<>(Arrays.asList(null, null, null));
-        notifyObserver(new GenericModelChangeMessage());
+        //notifyObserver(new GenericModelChangeMessage());
     }
 
     /**
