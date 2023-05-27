@@ -277,7 +277,15 @@ public class Controller implements Observer {
                                         endGame(game);
                                     }
 
+                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
+                                    resetPlayersState(game);
+                                    for(Player player: game.getPlayers()){
+                                        System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
+                                    }
+
+                                    this.update(new NextTurnMessage());
+                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
 
                                 }catch (NotEnoughSpaceException | IncompatibleStateException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
@@ -305,7 +313,15 @@ public class Controller implements Observer {
                                         endGame(game);
                                     }
 
+                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
+                                    resetPlayersState(game);
+                                    for(Player player: game.getPlayers()){
+                                        System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
+                                    }
+
+                                    this.update(new NextTurnMessage());
+                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
 
                                 } catch (NotEnoughSpaceException e) {
                                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
