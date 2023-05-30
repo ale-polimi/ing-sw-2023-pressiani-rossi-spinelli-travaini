@@ -194,13 +194,20 @@ public class Cli extends ViewObservable implements View {
                       "The objects must be in line (same row or column), adjacent and with ad least one side free.\n");
             String coordinates = readLine();
 
-            String[] parsedCoordinates = coordinates.split(",");
-            ArrayList<Integer> coordinatesToSend = new ArrayList<>();
-            for(int i = 0; i < parsedCoordinates.length; i++){
-                coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
-            }
+            if(coordinates.equals("-showcommon")){
+                notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
+            } else if (coordinates.equals("-showpersonal")){
+                notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+            } else {
 
-            notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
+                String[] parsedCoordinates = coordinates.split(",");
+                ArrayList<Integer> coordinatesToSend = new ArrayList<>();
+                for (int i = 0; i < parsedCoordinates.length; i++) {
+                    coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                }
+
+                notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
+            }
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }

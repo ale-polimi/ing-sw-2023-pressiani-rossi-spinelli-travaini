@@ -72,13 +72,21 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onRequestCommonObjectives() {
         view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2);
-        view.askLibraryMove();
+        if(inLibrary == false && inPickup == true){
+            view.askBoardMove();
+        } else {
+            view.askLibraryMove();
+        }
     }
 
     @Override
     public void onRequestPersonalObjective() {
         view.showPersonalObjective(this.nickname, this.personalObjective);
-        view.askLibraryMove();
+        if(inLibrary == false && inPickup == true){
+            view.askBoardMove();
+        } else {
+            view.askLibraryMove();
+        }
     }
 
     /**

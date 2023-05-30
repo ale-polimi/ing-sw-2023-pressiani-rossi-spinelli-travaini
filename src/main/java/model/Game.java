@@ -255,7 +255,7 @@ public class Game extends Observable implements Observer {
                 }
             }
         }
-        notifyObserver(new GenericModelChangeMessage());
+        //notifyObserver(new GenericModelChangeMessage());
     }
 
     @Override

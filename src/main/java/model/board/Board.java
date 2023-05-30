@@ -111,6 +111,46 @@ public class Board extends Observable implements Serializable, Observer {
         }
     }
 
+    /**
+     * This method is a checker used in the controller to check whether the board needs to be restored.
+     * @param row is the row of the object.
+     * @param column is the column of the object.
+     * @return {@code true} if the space is surrounded only by empty spaces, {@code false} otherwise.
+     */
+    public boolean isSpaceSurroundedByNull(int row, int column) {
+        if(row == 0){
+            if((getSpace(row + 1, column).getObject() == null) && (getSpace(row, column + 1).getObject() == null) && (getSpace(row, column - 1).getObject() == null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else  if (row == 8){
+            if((getSpace(row - 1, column).getObject() == null) && (getSpace(row, column + 1).getObject() == null) && (getSpace(row, column - 1).getObject() == null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else  if (column == 0){
+            if((getSpace(row - 1, column).getObject() == null) && (getSpace(row + 1, column).getObject() == null) && (getSpace(row, column + 1).getObject() == null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else  if (column == 8){
+            if((getSpace(row - 1, column).getObject() == null) && (getSpace(row + 1, column).getObject() == null) && (getSpace(row, column - 1).getObject() == null)){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if((getSpace(row - 1, column).getObject() == null) && (getSpace(row + 1, column).getObject() == null) && (getSpace(row, column - 1).getObject() == null) && (getSpace(row, column + 1).getObject() == null)){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     @Override
     public void update(Message message) {
         System.out.println(this.getClass().toString() + ": I have been notified!");

@@ -116,6 +116,7 @@ public class Controller implements Observer {
                         }
                         if (game.getMaxPlayers() != 1 && game.getPlayers().size() == game.getMaxPlayers()) {
                             initGame(game);
+                            this.update(new GenericModelChangeMessage());
                         }
                     }
                 } else {
@@ -238,6 +239,10 @@ public class Controller implements Observer {
                                         endGame(game);
                                     }
 
+                                    if(boardNeedsRestore()){
+                                        game.restoreBoard(game.getBoard());
+                                    }
+
                                     //this.update(new GenericModelChangeMessage());
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
@@ -277,6 +282,10 @@ public class Controller implements Observer {
                                         endGame(game);
                                     }
 
+                                    if(boardNeedsRestore()){
+                                        game.restoreBoard(game.getBoard());
+                                    }
+
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -313,6 +322,10 @@ public class Controller implements Observer {
                                         endGame(game);
                                     }
 
+                                    if(boardNeedsRestore()){
+                                        game.restoreBoard(game.getBoard());
+                                    }
+
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -344,6 +357,24 @@ public class Controller implements Observer {
     }
 
     /**
+     * This method checks if the board needs to be restored.
+     * @return {@code true} if it needs to be resotred, {@code false} otherwise.
+     */
+    private boolean boardNeedsRestore() {
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(game.getBoard().getSpace(i,j).getObject() != null){
+                    if(game.getBoard().isSpaceSurroundedByNull(i,j) == false){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * This method initializes the game controlled by this controller. It can be called only after all the required players have been added to the game.
      * @param game is the game of this controller.
      */
@@ -370,6 +401,10 @@ public class Controller implements Observer {
         game.setGameState(IN_GAME);
     }
 
+    /**
+     * This method resets the players' state after each turn.
+     * @param game is the controller's game.
+     */
     private static void resetPlayersState(Game game) {
         for(Player player: game.getPlayers()) {
             if (player.equals(game.getPlayerInTurn())) {
