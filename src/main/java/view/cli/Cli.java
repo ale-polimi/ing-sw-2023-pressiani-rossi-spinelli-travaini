@@ -193,7 +193,8 @@ public class Cli extends ViewObservable implements View {
                       "(Separate the coordinates with a comma)\n"+
                       "The objects must be in line (same row or column), adjacent and with ad least one side free.\n"+
                       "Type -showcommon to show the common objectives\n"+
-                      "Type -showpersonal to show your personal objective\n");
+                      "Type -showpersonal to show your personal objective\n"+
+                      "Type -showothers to show the opponents\n");
             String coordinates = readLine();
 
             if(coordinates.equals("-showcommon")){
@@ -226,7 +227,8 @@ public class Cli extends ViewObservable implements View {
             out.print("Please put the order followed by the column in which you wish to add the cards to your library\n" +
                       "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
                       "Type -showcommon to show the common objectives\n"+
-                      "Type -showpersonal to show your personal objective\n");
+                      "Type -showpersonal to show your personal objective\n"+
+                      "Type -showothers to show the opponents\n");
             String orderAndColumn = readLine();
 
             /*
