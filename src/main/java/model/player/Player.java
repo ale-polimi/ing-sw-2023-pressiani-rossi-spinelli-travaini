@@ -170,10 +170,11 @@ public class Player extends Observable {
             if (currentColour != null && currentColour.isEquals(objectColour)) {
                 library.getLibrarySpace(i,j).setVisited(true);
                 group.add(new int[] {i, j});
-                group.addAll(getAdjacentCells(i-1, j, objectColour));
-                group.addAll(getAdjacentCells(i+1, j, objectColour));
-                group.addAll(getAdjacentCells(i, j-1, objectColour));
-                group.addAll(getAdjacentCells(i, j+1, objectColour));
+                if (i!=0) {group.addAll(getAdjacentCells(i - 1, j, objectColour));}
+                if (i!=5) {group.addAll(getAdjacentCells(i + 1, j, objectColour));}
+                if (j!=0){group.addAll(getAdjacentCells(i, j - 1, objectColour));}
+                if (j!=4){group.addAll(getAdjacentCells(i, j + 1, objectColour));}
+
             }
         }
         return group;
