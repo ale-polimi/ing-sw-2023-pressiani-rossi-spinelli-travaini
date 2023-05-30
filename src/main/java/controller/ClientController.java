@@ -1,7 +1,9 @@
 package controller;
 
 import model.commonobjective.CommonObjective;
+import model.library.Library;
 import model.library.PersonalObjective;
+import model.objects.ObjectCard;
 import network.*;
 import network.structure.Client;
 import network.structure.ClientSocket;
@@ -27,6 +29,8 @@ public class ClientController implements ViewObserver, Observer {
     private CommonObjective commonObjective1;
     private CommonObjective commonObjective2;
     private PersonalObjective personalObjective;
+    private Library playerLibrary = new Library();
+    private ArrayList<ObjectCard> objInHand = new ArrayList<>(Arrays.asList(null,null,null));
     private boolean inLibrary = false;
     private boolean inPickup = true;
     private final ExecutorService taskQueue;
@@ -130,19 +134,35 @@ public class ClientController implements ViewObserver, Observer {
                 view.showLobby(lobbyMessage.getLobbyPlayers());
                 break;
             case SHOW_TURN:
-                if(message.getSender().equals(nickname)) {
-                    if (inLibrary == true && inPickup == false) {
-                        ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                        view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
-                        view.askLibraryMove();
-                    } else if (inLibrary == false && inPickup == true) {
-                        ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                        view.showTurn(turnMessage.getSender(), turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
-                        view.askBoardMove();
+                String sender;
+                String type = "TEST";
+                if(message.getSender().contains(":")){
+                    type = parseType(message.getSender());
+                    sender = parseSender((message.getSender()));
+                } else {
+                    sender = message.getSender();
+                }
+
+                if(sender.equals(nickname)) {
+                    ShowTurnMessage turnMessage = (ShowTurnMessage) message;
+                    switch (type){
+                        case "END_TURN":
+                            this.playerLibrary = turnMessage.getPlayerLibrary();
+                            view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand);
+                            break;
+                        default:
+                            if (inLibrary == true && inPickup == false) {
+                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                                view.askLibraryMove();
+                            } else if (inLibrary == false && inPickup == true) {
+                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                                view.askBoardMove();
+                            }
+                            break;
                     }
                 } else {
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                    view.showNotMyTurn(turnMessage.getGameBoard());
+                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand);
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
@@ -176,20 +196,20 @@ public class ClientController implements ViewObserver, Observer {
                 break;
             case GENERIC_ERROR:
                 System.out.println(this.getClass().toString() + " I've received an error!");
-                String type = parseType(message.getSender());
-                String sender = parseSender((message.getSender()));
-                if(sender.equals(nickname)) {
+                String typeErr = parseType(message.getSender());
+                String senderErr = parseSender((message.getSender()));
+                if(senderErr.equals(nickname)) {
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
-                    switch (type){
+                    switch (typeErr){
                         case "BOARD":
-                            view.showGenericError(sender, genericErrorMessage.getPayload());
+                            view.showGenericError(senderErr, genericErrorMessage.getPayload());
                             System.out.println(this.getClass().toString() + " The error is for the board!");
                             inLibrary = false;
                             inPickup = true;
                             view.askBoardMove();
                             break;
                         case "LIBRARY":
-                            view.showGenericError(sender, genericErrorMessage.getPayload());
+                            view.showGenericError(senderErr, genericErrorMessage.getPayload());
                             System.out.println(this.getClass().toString() + " The error is for the library!");
                             inLibrary = true;
                             inPickup = false;
@@ -197,7 +217,7 @@ public class ClientController implements ViewObserver, Observer {
                             break;
                         case "NICKNAME":
                             if(inLobby == false) {
-                                view.showGenericError(sender, genericErrorMessage.getPayload());
+                                view.showGenericError(senderErr, genericErrorMessage.getPayload());
                                 view.askNickname();
                             }
                             break;

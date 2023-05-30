@@ -11,6 +11,7 @@ public enum MessageType implements Serializable {
     LIBRARY_ERROR,
     GENERIC_ERROR,
     SHOW_TURN,
+    END_TURN,
     SHOW_LIBRARY,
     SHOW_BOARD,
     SHOW_PERSONAL_OBJECTIVE,

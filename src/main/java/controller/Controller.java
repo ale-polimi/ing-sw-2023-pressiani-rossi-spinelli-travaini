@@ -243,7 +243,7 @@ public class Controller implements Observer {
                                         game.restoreBoard(game.getBoard());
                                     }
 
-                                    //this.update(new GenericModelChangeMessage());
+                                    this.update(new EndTurnMessage());
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -286,6 +286,7 @@ public class Controller implements Observer {
                                         game.restoreBoard(game.getBoard());
                                     }
 
+                                    this.update(new EndTurnMessage());
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -326,6 +327,7 @@ public class Controller implements Observer {
                                         game.restoreBoard(game.getBoard());
                                     }
 
+                                    this.update(new EndTurnMessage());
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -419,7 +421,7 @@ public class Controller implements Observer {
      * This method will create the common objectives for the game.
      */
     private void setupCommonObjectives(){
-        /* TODO - La combinazione rand1 = 7 e rand2 = 3 causa il crash del controller */
+        /* TODO - La combinazione rand1 = 7/6 e rand2 = 3 ogni tanto causa il crash del controller */
         Random rand1 = new Random();
         Random rand2;
         do{
@@ -796,6 +798,9 @@ public class Controller implements Observer {
 
 
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
+                break;
+            case END_TURN:
+                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;
