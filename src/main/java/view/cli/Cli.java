@@ -200,6 +200,8 @@ public class Cli extends ViewObservable implements View {
                 notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
             } else if (coordinates.equals("-showpersonal")){
                 notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+            } else if (coordinates.equals("-showothers")){
+                notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
             } else {
 
                 String[] parsedCoordinates = coordinates.split(",");
@@ -232,8 +234,10 @@ public class Cli extends ViewObservable implements View {
              */
             if(orderAndColumn.equals("-showcommon")){
                 notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
-            } else if (orderAndColumn.equals("-showpersonal")){
+            } else if (orderAndColumn.equals("-showpersonal")) {
                 notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+            } else if (orderAndColumn.equals("-showothers")){
+                notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
             } else {
                 String[] parsedCoordinates = orderAndColumn.split(",");
                 ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
@@ -420,6 +424,14 @@ public class Cli extends ViewObservable implements View {
     public void showPersonalObjective(String player, PersonalObjective personalObjective) {
         out.println("Your personal objective is:");
         printPersonalObjective(personalObjective);
+    }
+
+    @Override
+    public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
+        for(String username : librariesOfPlayers.keySet()){
+            out.println(Colours.BOLD + username + "'s library:" + Colours.RESET);
+            showLibrary(librariesOfPlayers.get(username));
+        }
     }
 
     /**

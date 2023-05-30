@@ -51,4 +51,10 @@ public interface ViewObserver {
      * This method is particularly useful in the {@link view.cli.Cli CLI}.
      */
     void onRequestPersonalObjective();
+
+    /**
+     * This method will be used by the {@link View} to show the other players' library on screen.
+     * This method is particularly useful in the {@link view.cli.Cli CLI}.
+     */
+    void onRequestOthersLibrary();
 }

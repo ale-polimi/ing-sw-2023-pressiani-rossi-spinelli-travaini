@@ -89,4 +89,11 @@ public interface View {
      * @param gameBoard is the board of the game.
      */
     void showNotMyTurn(Board gameBoard);
+
+    /**
+     * This method will show the other players' library to the player in turn.
+     * @param sender is the sender of the message.
+     * @param librariesOfPlayers is the {@link HashMap} containing the other players' usernames as keys and libraries as values.
+     */
+    void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers);
 }

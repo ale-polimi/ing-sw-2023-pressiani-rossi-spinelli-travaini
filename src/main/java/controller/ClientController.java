@@ -30,6 +30,7 @@ public class ClientController implements ViewObserver, Observer {
     private CommonObjective commonObjective2;
     private PersonalObjective personalObjective;
     private Library playerLibrary = new Library();
+    private HashMap<String, Library> otherPlayersLibrary = new HashMap<>();
     private ArrayList<ObjectCard> objInHand = new ArrayList<>(Arrays.asList(null,null,null));
     private boolean inLibrary = false;
     private boolean inPickup = true;
@@ -86,6 +87,16 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onRequestPersonalObjective() {
         view.showPersonalObjective(this.nickname, this.personalObjective);
+        if(inLibrary == false && inPickup == true){
+            view.askBoardMove();
+        } else {
+            view.askLibraryMove();
+        }
+    }
+
+    @Override
+    public void onRequestOthersLibrary() {
+        view.showOthersLibrary(this.nickname, this.otherPlayersLibrary);
         if(inLibrary == false && inPickup == true){
             view.askBoardMove();
         } else {
@@ -187,6 +198,17 @@ public class ClientController implements ViewObserver, Observer {
                 } else {
                     System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
                 }
+                break;
+            case SHOW_OTHERS_LIBRARY:
+                ShowLibrariesMessage showLibrariesMessage = (ShowLibrariesMessage) message;
+                HashMap<String, Library> notWithMe = new HashMap<>();
+                for(String username : showLibrariesMessage.getLibrariesOfPlayers().keySet()){
+                    if(!username.equals(nickname)){
+                        notWithMe.put(username, showLibrariesMessage.getLibrariesOfPlayers().get(username));
+                    }
+                }
+
+                this.otherPlayersLibrary = notWithMe;
                 break;
             case END_GAME:
                 EndGameMessage endGameMessage = (EndGameMessage) message;

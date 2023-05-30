@@ -12,6 +12,7 @@ import exceptions.game.TooManyPlayersException;
 import exceptions.player.TooManyObjectsInHandException;
 import model.Game;
 import model.commonobjective.*;
+import model.library.Library;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.*;
@@ -42,6 +43,7 @@ public class Controller implements Observer {
     private String winner;
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
+    private HashMap<String, Library> librariesOfPlayers = new HashMap<>();
     int firstRow, firstCol, secondRow, secondCol, thirdRow, thirdCol = 0;
     private final NetworkView networkView;
 
@@ -126,6 +128,7 @@ public class Controller implements Observer {
             case PICK_OBJECT:
 
                 PickObjectMessage pickObjectMessage = (PickObjectMessage) receivedMessage;
+                this.librariesOfPlayers = new HashMap<>();
 
                 if (game.getGameState().equals(IN_GAME)) {
 
@@ -210,6 +213,7 @@ public class Controller implements Observer {
                 PutObjectInLibraryMessage putObjectInLibraryMessage = (PutObjectInLibraryMessage) receivedMessage;
 
                 if (game.getGameState().equals(IN_GAME)) {
+
                     resetCoordinateValues();
 
                     if (putObjectInLibraryMessage.getOrderArray().size() - 1 < game.getPlayerInTurn().getObjectsInHandSize()) {
@@ -244,6 +248,7 @@ public class Controller implements Observer {
                                     }
 
                                     this.update(new EndTurnMessage());
+
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -287,6 +292,7 @@ public class Controller implements Observer {
                                     }
 
                                     this.update(new EndTurnMessage());
+
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -328,6 +334,7 @@ public class Controller implements Observer {
                                     }
 
                                     this.update(new EndTurnMessage());
+
                                     System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
                                     game.setNextPlayer();
                                     resetPlayersState(game);
@@ -394,6 +401,8 @@ public class Controller implements Observer {
             this.update(new ShowCommonObjectiveMessage(player.getNickname(), (CommonObjective) game.getCommonObjectives().keySet().toArray()[0], (CommonObjective) game.getCommonObjectives().keySet().toArray()[1]));
             this.update(new ShowPersonalObjectiveMessage(player.getNickname(), player.getPersonalObjective()));
         }
+
+        sendOtherPlayersLibrary(game);
 
         resetPlayersState(game);
         /* TODO - Debug print */
@@ -585,6 +594,19 @@ public class Controller implements Observer {
     }
 
     /**
+     * This method sends the players' libraries to the current player, so he can check what his opponents are doing.
+     * @param game is the game of this controller.
+     */
+    private void sendOtherPlayersLibrary(Game game) {
+        for (Player player : game.getPlayers()) {
+            librariesOfPlayers.put(player.getNickname(), player.getLibrary());
+        }
+        System.out.println("Object in " + game.getPlayerInTurn().getNickname() + "'s library in position 5,0 is: " + game.getPlayerInTurn().getLibrary().getLibrarySpace(5, 0).getObject().getObjectColour().toString());
+        System.out.println("Object in " + game.getPlayerInTurn().getNickname() + "'s sent library in position 5,0 is: " + librariesOfPlayers.get(game.getNextPlayer().getNickname()).getLibrarySpace(5, 0).getObject().getObjectColour().toString());
+        this.update(new ShowLibrariesMessage(game.getPlayerInTurn().getNickname(), librariesOfPlayers));
+    }
+
+    /**
      * This method checks if two columns are next to each other.
      * @param firstCol is the first column.
      * @param secondCol is the second column.
@@ -690,6 +712,7 @@ public class Controller implements Observer {
             for (int i = 5; i >= 0; i--) {
                 if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {
                     firstEmpty = i;
+                    /* TODO - Debug print */
                     System.out.println("First empty row is: " + firstEmpty);
                     break;
                 }
@@ -791,16 +814,27 @@ public class Controller implements Observer {
                 break;
             case NEXT_TURN:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+
+                sendOtherPlayersLibrary(game);
+
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case GENERIC_MODEL_CHANGE:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
 
+                sendOtherPlayersLibrary(game);
 
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case END_TURN:
                 networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+
+                sendOtherPlayersLibrary(game);
+
+                break;
+            case SHOW_OTHERS_LIBRARY:
+                ShowLibrariesMessage showLibrariesMessage = (ShowLibrariesMessage) message;
+                networkView.showOthersLibrary(showLibrariesMessage.getSender(), showLibrariesMessage.getLibrariesOfPlayers());
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;

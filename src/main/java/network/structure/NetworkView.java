@@ -95,6 +95,11 @@ public class NetworkView implements View {
         server.sendMessage(new GenericErrorMessage(player, payload));
     }
 
+    @Override
+    public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
+        server.sendMessage(new ShowLibrariesMessage(sender, librariesOfPlayers));
+    }
+
     /**
      * Call the disconnection to the game
      */

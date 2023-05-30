@@ -13,6 +13,7 @@ public enum MessageType implements Serializable {
     SHOW_TURN,
     END_TURN,
     SHOW_LIBRARY,
+    SHOW_OTHERS_LIBRARY,
     SHOW_BOARD,
     SHOW_PERSONAL_OBJECTIVE,
     SHOW_COMMON_OBJECTIVE,
