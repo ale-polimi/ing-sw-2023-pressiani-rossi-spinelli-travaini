@@ -11,7 +11,7 @@ public class ThreeColumnsMaxThreeDifferent extends CommonObjective {
             " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     Three columns each formed by 6 tiles\n" +
             " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     of maximum three different types. One\n" +
             " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     column can show the same or a different\n" +
-            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     Three columns each formed by 6 tiles\n" +
+            " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     combination of another column\n" +
             " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
             "  x3\n" +
             "Max 3 =";

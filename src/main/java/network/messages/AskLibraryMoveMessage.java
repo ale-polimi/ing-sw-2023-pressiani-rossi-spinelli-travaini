@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message used to ask the player for a move in the library.

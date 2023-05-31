@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message which contains the maximum number of players for the game.

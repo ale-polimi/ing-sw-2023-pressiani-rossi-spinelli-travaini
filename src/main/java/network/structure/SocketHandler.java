@@ -1,8 +1,8 @@
 package network.structure;
 
-import network.Message;
-import network.MessageType;
-import network.PingMessage;
+import network.messages.Message;
+import network.messages.MessageType;
+import network.messages.PingMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

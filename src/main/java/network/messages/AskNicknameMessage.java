@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message used to ask the player for the username for the game.

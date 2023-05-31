@@ -1,7 +1,10 @@
 package network.structure;
 
 
-import network.*;
+import network.messages.GenericErrorMessage;
+import network.messages.Message;
+import network.messages.MessageType;
+import network.messages.PingMessage;
 import observer.Observable;
 
 

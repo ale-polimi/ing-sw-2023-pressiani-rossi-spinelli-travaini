@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message containing the info for the game closure.

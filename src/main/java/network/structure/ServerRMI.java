@@ -1,8 +1,8 @@
 package network.structure;
 
-import network.GameClosedMessage;
-import network.Message;
-import network.MessageType;
+import network.messages.GameClosedMessage;
+import network.messages.Message;
+import network.messages.MessageType;
 
 
 import java.rmi.RemoteException;

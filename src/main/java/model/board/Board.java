@@ -1,18 +1,13 @@
 package model.board;
 
-import enumerations.ObjectColour;
 import enumerations.TypeSpace;
-import model.Game;
 import model.objects.ObjectCard;
-import network.GenericModelChangeMessage;
-import network.Message;
+import network.messages.Message;
 import observer.Observable;
 import observer.Observer;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Board extends Observable implements Serializable, Observer {
     private BoardSpace[][] boardSpaces;

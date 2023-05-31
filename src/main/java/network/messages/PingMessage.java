@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message used to ping the server and keep the connection alive.

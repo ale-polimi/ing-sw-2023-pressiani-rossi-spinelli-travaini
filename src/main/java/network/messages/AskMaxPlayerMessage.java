@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message used to ask the player for the number of players for the game.

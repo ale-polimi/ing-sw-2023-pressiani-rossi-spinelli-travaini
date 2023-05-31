@@ -1,9 +1,7 @@
 package model.board;
 
-import enumerations.ObjectColour;
 import enumerations.TypeSpace;
 import model.objects.ObjectCard;
-import network.GenericModelChangeMessage;
 import observer.Observable;
 
 import java.io.Serializable;

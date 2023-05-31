@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message that contains the information of the player (username) for the login.

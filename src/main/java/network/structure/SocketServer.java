@@ -1,6 +1,9 @@
 package network.structure;
 
-import network.*;
+import network.messages.AskNicknameMessage;
+import network.messages.GameClosedMessage;
+import network.messages.Message;
+import network.messages.MessageType;
 
 import java.io.IOException;
 import java.net.ServerSocket;

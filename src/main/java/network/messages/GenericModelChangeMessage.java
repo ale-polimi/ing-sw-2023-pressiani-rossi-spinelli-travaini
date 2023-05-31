@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 public class GenericModelChangeMessage extends Message {
     public GenericModelChangeMessage() {

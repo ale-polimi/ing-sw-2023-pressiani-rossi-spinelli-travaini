@@ -1,20 +1,15 @@
 package network.structure;
 
 import model.board.Board;
-import model.board.BoardSpace;
 import model.commonobjective.CommonObjective;
 import model.library.Library;
-import model.library.LibrarySpace;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
-import network.*;
+import network.messages.*;
 import view.View;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This class hides the network to the controller.

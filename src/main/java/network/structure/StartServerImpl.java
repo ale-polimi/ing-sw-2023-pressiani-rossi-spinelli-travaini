@@ -2,7 +2,7 @@ package network.structure;
 
 import controller.Controller;
 import model.player.Player;
-import network.Message;
+import network.messages.Message;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

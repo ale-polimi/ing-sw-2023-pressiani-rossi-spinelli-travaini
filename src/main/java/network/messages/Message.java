@@ -1,6 +1,4 @@
-package network;
-
-import controller.Controller;
+package network.messages;
 
 import java.io.Serializable;
 

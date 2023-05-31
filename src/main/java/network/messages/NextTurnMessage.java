@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message used for an update from the model.

@@ -9,14 +9,11 @@ import model.library.Library;
 import model.library.LibrarySpace;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
-import network.GenericModelChangeMessage;
+import network.messages.GenericModelChangeMessage;
 import observer.Observable;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EmptyStackException;
 import java.util.List;
 
 public class Player extends Observable {

@@ -1,6 +1,6 @@
 package network.structure;
 
-import network.Message;
+import network.messages.Message;
 
 public interface ClientHandler {
     /**

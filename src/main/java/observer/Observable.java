@@ -1,6 +1,6 @@
 package observer;
 
-import network.Message;
+import network.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;

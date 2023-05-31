@@ -4,18 +4,16 @@ import controller.Controller;
 import enumerations.GameState;
 import enumerations.TypeSpace;
 import exceptions.game.TooManyPlayersException;
-import jdk.jshell.spi.ExecutionControl;
 import model.board.Board;
-import model.board.BoardSpace;
 import model.commonobjective.CommonObjective;
 import model.objects.ObjectsDeck;
 import model.player.Player;
-import network.*;
+import network.messages.AddedPlayerMessage;
+import network.messages.Message;
 import observer.Observable;
 import observer.Observer;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

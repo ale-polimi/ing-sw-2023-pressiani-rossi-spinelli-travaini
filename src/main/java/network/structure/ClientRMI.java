@@ -9,9 +9,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import controller.ClientController;
-import network.Message;
-import network.MessageType;
-import network.PingMessage;
+import network.messages.Message;
+import network.messages.MessageType;
+import network.messages.PingMessage;
 import observer.Observable;
 
 /**

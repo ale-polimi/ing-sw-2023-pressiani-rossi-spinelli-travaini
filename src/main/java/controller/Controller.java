@@ -15,7 +15,7 @@ import model.commonobjective.*;
 import model.library.Library;
 import model.objects.ObjectCard;
 import model.player.Player;
-import network.*;
+import network.messages.*;
 import network.structure.NetworkView;
 import network.structure.StartServerImpl;
 import observer.Observer;
@@ -160,6 +160,8 @@ public class Controller implements Observer {
 
                             if (!(firstRow == secondRow && areAdjacentColumns(firstCol, secondCol)) && !(firstCol == secondCol && areAdjacentRows(firstRow, secondRow))) {
                                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "You must pick objects from the same row or column!"));
+                            } else if (game.getBoard().isSpaceSurrounded(firstRow, firstCol) || game.getBoard().isSpaceSurrounded(secondRow, secondCol)){
+                                this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), new SpaceSurroundedException().getMessage()));
                             } else {
 
                                 try {
@@ -186,6 +188,8 @@ public class Controller implements Observer {
 
                             if (!(firstRow == secondRow && secondRow == thirdRow && ((areAdjacentColumns(firstCol, secondCol) && areAdjacentColumns(secondCol, thirdCol)) || (areAdjacentColumns(firstCol, secondCol) && areAdjacentColumns(firstCol, thirdCol)) || (areAdjacentColumns(firstCol, thirdCol) && areAdjacentColumns(secondCol, thirdCol)))) && !(firstCol == secondCol && secondCol == thirdCol && ((areAdjacentRows(firstRow, secondRow) && areAdjacentRows(secondRow, thirdRow)) || (areAdjacentRows(firstRow, secondRow) && areAdjacentRows(firstRow, thirdRow)) || (areAdjacentRows(firstRow, thirdRow) && areAdjacentRows(secondRow, thirdRow))))) {
                                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), "You must pick objects from the same row or column!"));
+                            } else if (game.getBoard().isSpaceSurrounded(firstRow, firstCol) || game.getBoard().isSpaceSurrounded(secondRow, secondCol) || game.getBoard().isSpaceSurrounded(thirdRow, thirdCol)){
+                                this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), new SpaceSurroundedException().getMessage()));
                             } else {
                                 try {
                                     pickObjectFromBoard(firstRow, firstCol);
@@ -224,135 +228,156 @@ public class Controller implements Observer {
                         this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "You do not have " + value + " objects in hand. You have only: " + game.getPlayerInTurn().getObjectsInHandSize()));
                         this.update(new AskLibraryMoveMessage("Controller"));
                     } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {
-                        switch (putObjectInLibraryMessage.getOrderArray().size()) {
-                            case 2 -> {
-                                try {
-                                    addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1));
 
-                                    /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                    game.getPlayerInTurn().initObjectsInHand();
+                        boolean foundNull = false;
+                        for(int i = 0; i < putObjectInLibraryMessage.getOrderArray().size() - 1; i++) {
+                            if (game.getPlayerInTurn().getObjectsInHand().get(putObjectInLibraryMessage.getOrderArray().get(i)) == null) {
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "You do not have an object card in position: " + game.getPlayerInTurn().getObjectsInHand().indexOf(game.getPlayerInTurn().getObjectsInHand().get(putObjectInLibraryMessage.getOrderArray().get(i)))));
+                                foundNull = true;
+                            }
+                        }
 
-                                    /* Check if the player has completed a common objective */
-                                    checkCommonObjectives();
+                        if(!foundNull) {
+                            switch (putObjectInLibraryMessage.getOrderArray().size()) {
+                                case 2 -> {
+                                    try {
+                                        addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1));
 
-                                    if (checkLibrarySpaces() == 0) {
-                                        game.getPlayerInTurn().setFirstToEnd(true);
+                                        /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
+                                        game.getPlayerInTurn().initObjectsInHand();
+
+                                        /* Check if the player has completed a common objective */
+                                        checkCommonObjectives();
+
+                                        if (checkLibrarySpaces() == 0) {
+                                            game.getPlayerInTurn().setFirstToEnd(true);
+                                        }
+
+                                        if (isLastTurn()) {
+                                            endGame(game);
+                                        }
+
+                                        if (boardNeedsRestore()) {
+                                            game.restoreBoard(game.getBoard());
+                                        }
+
+                                        this.update(new EndTurnMessage());
+
+                                        System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
+                                        game.setNextPlayer();
+                                        resetPlayersState(game);
+                                        for (Player player : game.getPlayers()) {
+                                            System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
+                                        }
+
+                                        this.update(new NextTurnMessage());
+                                        System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
+
+                                    } catch (NotEnoughSpaceException e) {
+                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
+                                        this.update(new AskLibraryMoveMessage("Controller"));
+                                    } catch (IncompatibleStateException e) {
+                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
                                     }
-
-                                    if (isLastTurn()) {
-                                        endGame(game);
-                                    }
-
-                                    if(boardNeedsRestore()){
-                                        game.restoreBoard(game.getBoard());
-                                    }
-
-                                    this.update(new EndTurnMessage());
-
-                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-                                    game.setNextPlayer();
-                                    resetPlayersState(game);
-                                    for(Player player: game.getPlayers()){
-                                        System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
-                                    }
-
-                                    this.update(new NextTurnMessage());
-                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-
-                                } catch (NotEnoughSpaceException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
-                                    this.update(new AskLibraryMoveMessage("Controller"));
-                                } catch(IncompatibleStateException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
                                 }
-                            }
-                            case 3 -> {
-                                try {
-                                    addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2));
+                                case 3 -> {
+                                    if (putObjectInLibraryMessage.getOrderArray().get(0) == putObjectInLibraryMessage.getOrderArray().get(1)) {
+                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "You must put all the objects you have in hand in the library."));
+                                    } else {
+                                        try {
+                                            addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2));
 
-                                    /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                    game.getPlayerInTurn().initObjectsInHand();
+                                            /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
+                                            game.getPlayerInTurn().initObjectsInHand();
 
-                                    /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
-                                    game.getPlayerInTurn().setPlayerState(PICKUP);
+                                            /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
+                                            game.getPlayerInTurn().setPlayerState(PICKUP);
 
-                                    /* Check if the player has completed a common objective */
-                                    checkCommonObjectives();
+                                            /* Check if the player has completed a common objective */
+                                            checkCommonObjectives();
 
-                                    if (checkLibrarySpaces() == 0) {
-                                        game.getPlayerInTurn().setFirstToEnd(true);
+                                            if (checkLibrarySpaces() == 0) {
+                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                            }
+
+                                            if (isLastTurn()) {
+                                                endGame(game);
+                                            }
+
+                                            if (boardNeedsRestore()) {
+                                                game.restoreBoard(game.getBoard());
+                                            }
+
+                                            this.update(new EndTurnMessage());
+
+                                            System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
+                                            game.setNextPlayer();
+                                            resetPlayersState(game);
+                                            for (Player player : game.getPlayers()) {
+                                                System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
+                                            }
+
+                                            this.update(new NextTurnMessage());
+                                            System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
+
+                                        } catch (NotEnoughSpaceException | IncompatibleStateException e) {
+                                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
+                                            this.update(new AskLibraryMoveMessage("Controller"));
+                                        }
                                     }
+                                }
+                                case 4 -> {
+                                    if ((putObjectInLibraryMessage.getOrderArray().get(0) == putObjectInLibraryMessage.getOrderArray().get(1)) || (putObjectInLibraryMessage.getOrderArray().get(0) == putObjectInLibraryMessage.getOrderArray().get(2)) || (putObjectInLibraryMessage.getOrderArray().get(1) == putObjectInLibraryMessage.getOrderArray().get(2))) {
+                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "You must put all the objects you have in hand in the library."));
+                                    } else {
+                                        try {
+                                            addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2), putObjectInLibraryMessage.getOrderArray().get(3));
 
-                                    if (isLastTurn()) {
-                                        endGame(game);
+                                            /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
+                                            game.getPlayerInTurn().initObjectsInHand();
+
+                                            /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
+                                            game.getPlayerInTurn().setPlayerState(PICKUP);
+
+                                            /* Check if the player has completed a common objective */
+                                            checkCommonObjectives();
+
+                                            if (checkLibrarySpaces() == 0) {
+                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                            }
+
+                                            if (isLastTurn()) {
+                                                endGame(game);
+                                            }
+
+                                            if (boardNeedsRestore()) {
+                                                game.restoreBoard(game.getBoard());
+                                            }
+
+                                            this.update(new EndTurnMessage());
+
+                                            System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
+                                            game.setNextPlayer();
+                                            resetPlayersState(game);
+                                            for (Player player : game.getPlayers()) {
+                                                System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
+                                            }
+
+                                            this.update(new NextTurnMessage());
+                                            System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
+
+                                        } catch (NotEnoughSpaceException e) {
+                                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
+                                            this.update(new AskLibraryMoveMessage("Controller"));
+                                        } catch (IncompatibleStateException e) {
+                                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));
+                                        }
                                     }
-
-                                    if(boardNeedsRestore()){
-                                        game.restoreBoard(game.getBoard());
-                                    }
-
-                                    this.update(new EndTurnMessage());
-
-                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-                                    game.setNextPlayer();
-                                    resetPlayersState(game);
-                                    for(Player player: game.getPlayers()){
-                                        System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
-                                    }
-
-                                    this.update(new NextTurnMessage());
-                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-
-                                }catch (NotEnoughSpaceException | IncompatibleStateException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
+                                }
+                                default -> {
+                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "Invalid number of objects."));
                                     this.update(new AskLibraryMoveMessage("Controller"));
                                 }
-                            }
-                            case 4 -> {
-                                try {
-                                    addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2), putObjectInLibraryMessage.getOrderArray().get(3));
-
-                                    /* Resetting the player's objects in hand, so they'll start from scratch in the next turn */
-                                    game.getPlayerInTurn().initObjectsInHand();
-
-                                    /* The player must be in PICKUP state for the next turn, else he won't be able to pick any object */
-                                    game.getPlayerInTurn().setPlayerState(PICKUP);
-
-                                    /* Check if the player has completed a common objective */
-                                    checkCommonObjectives();
-
-                                    if (checkLibrarySpaces() == 0) {
-                                        game.getPlayerInTurn().setFirstToEnd(true);
-                                    }
-
-                                    if (isLastTurn()) {
-                                        endGame(game);
-                                    }
-
-                                    if(boardNeedsRestore()){
-                                        game.restoreBoard(game.getBoard());
-                                    }
-
-                                    this.update(new EndTurnMessage());
-
-                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-                                    game.setNextPlayer();
-                                    resetPlayersState(game);
-                                    for(Player player: game.getPlayers()){
-                                        System.out.println("Player in turn is: " + player.getNickname() + " In state: " + player.getPlayerState().toString());
-                                    }
-
-                                    this.update(new NextTurnMessage());
-                                    System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-
-                                } catch (NotEnoughSpaceException e) {
-                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
-                                    this.update(new AskLibraryMoveMessage("Controller"));
-                                }catch( IncompatibleStateException  e){this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), e.getMessage()));}
-                            }
-                            default ->{
-                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), "Invalid number of objects."));
-                                this.update(new AskLibraryMoveMessage("Controller"));
                             }
                         }
                     }
@@ -431,17 +456,17 @@ public class Controller implements Observer {
      */
     private void setupCommonObjectives(){
         /* TODO - La combinazione rand1 = 7/6 e rand2 = 3 ogni tanto causa il crash del controller */
-        Random rand1 = new Random();
-        Random rand2;
+        int rand1 = new Random().nextInt(availableCommonObjectives.size());
+        int rand2;
         do{
-            rand2 = new Random();
+            rand2 = new Random().nextInt(availableCommonObjectives.size());
         } while(rand1 == rand2);
-        System.out.println("First number: " + rand1.nextInt(availableCommonObjectives.size()));
-        System.out.println("Second number: " + rand2.nextInt(availableCommonObjectives.size()));
+        System.out.println("First number: " + rand1);
+        System.out.println("Second number: " + rand2);
 
         /* First I get the objectives from the hashmap */
-        CommonObjective objective1 = availableCommonObjectives.remove(rand1.nextInt(availableCommonObjectives.size()));
-        CommonObjective objective2 = availableCommonObjectives.remove(rand2.nextInt(availableCommonObjectives.size()));
+        CommonObjective objective1 = availableCommonObjectives.remove(rand1);
+        CommonObjective objective2 = availableCommonObjectives.remove(rand2);
 
         /* TODO - Debug print */
         System.out.println(objective1.getClass().toString() + " I'm the first objective.");

@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 public class EndTurnMessage extends Message {
     public EndTurnMessage() {

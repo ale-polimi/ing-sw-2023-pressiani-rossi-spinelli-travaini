@@ -428,6 +428,11 @@ public class Cli extends ViewObservable implements View {
         printPersonalObjective(personalObjective);
     }
 
+    /**
+     * This method shows the other players' library.
+     * @param sender is the sender of the message.
+     * @param librariesOfPlayers is the {@link HashMap} containing the other players' usernames as keys and libraries as values.
+     */
     @Override
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
         for(String username : librariesOfPlayers.keySet()){
@@ -502,7 +507,7 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
-     * This method prints the row numbers for both the board and the library.
+     * This method preapres the row numbers for both the board and the library.
      * @param row is the row to be printed.
      * @return the formatted string.
      */
@@ -513,6 +518,11 @@ public class Cli extends ViewObservable implements View {
         return strRowBld.toString();
     }
 
+    /**
+     * This method prepares the row separator.
+     * @param maxColumns is the number of columns of the object to print.
+     * @return the formatted string.
+     */
     private String printSeparator(int maxColumns){
         StringBuilder strSeparatorBld = new StringBuilder("   +");
         for(int i = 0; i < maxColumns; i++){
@@ -524,6 +534,7 @@ public class Cli extends ViewObservable implements View {
 
     /**
      * This method prints the column numbers for both the board and the library.
+     * @param maxColumns is the number of columns of the object to print.
      * @return the formatted string.
      */
     private String printColumnNumbers(int maxColumns) {

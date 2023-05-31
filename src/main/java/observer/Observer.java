@@ -1,6 +1,6 @@
 package observer;
 
-import network.Message;
+import network.messages.Message;
 
 /**
  * Observer interface used in the entire game.

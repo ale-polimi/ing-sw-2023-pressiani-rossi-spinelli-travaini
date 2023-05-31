@@ -1,17 +1,14 @@
 package view;
 
 import model.board.Board;
-import model.board.BoardSpace;
 import model.commonobjective.CommonObjective;
 import model.library.Library;
-import model.library.LibrarySpace;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
-import network.Message;
+import network.messages.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This interface will be implemented by both the {@link view.cli.Cli CLI} and the {@link GUI}.

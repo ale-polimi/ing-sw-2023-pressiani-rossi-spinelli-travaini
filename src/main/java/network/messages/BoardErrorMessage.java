@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 /**
  * Message that contains an error message.

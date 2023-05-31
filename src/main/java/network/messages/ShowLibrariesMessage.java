@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 import model.library.Library;
 

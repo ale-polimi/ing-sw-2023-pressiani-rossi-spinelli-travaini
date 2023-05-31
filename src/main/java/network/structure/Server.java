@@ -1,6 +1,6 @@
 package network.structure;
 
-import network.Message;
+import network.messages.Message;
 import java.rmi.RemoteException;
 
 public interface Server {

@@ -4,7 +4,7 @@ import model.commonobjective.CommonObjective;
 import model.library.Library;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
-import network.*;
+import network.messages.*;
 import network.structure.Client;
 import network.structure.ClientSocket;
 import observer.Observer;
