@@ -51,17 +51,17 @@
         </Label>
             <ImageView fitHeight="400.0" fitWidth="648.0">
                <image>
-                  <Image url="@../../Downloads/MyShelfie_GraphicalResources/17_MyShelfie_BGA/misc/sfondo%20parquet.jpg" />
+                  <Image url="@../images/sfondo_parquet.jpg" />
                </image>
             </ImageView>
             <ImageView fitHeight="93.0" fitWidth="346.0" layoutX="151.0" layoutY="31.0">
                <image>
-                  <Image url="@../../../../../../Downloads/1684741117422.jpg" />
+                  <Image url="@../images/waiting_for_players_Banner.jpg" />
                </image>
             </ImageView>
             <ImageView fitHeight="93.0" fitWidth="346.0" layoutX="151.0" layoutY="31.0">
                <image>
-                  <Image url="@../../../../../../Downloads/1684741117408.jpg" />
+                  <Image url="@../images/scoreboard_Banner.jpg" />
                </image>
             </ImageView>
             <TextArea layoutX="224.0" layoutY="152.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" />

@@ -34,7 +34,6 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -45,14 +44,9 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="171.0" layoutY="186.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
             <ImageView fitHeight="400.0" fitWidth="640.0">
                <image>
-                  <Image url="@../../Downloads/MyShelfie_GraphicalResources/17_MyShelfie_BGA/misc/sfondo%20parquet.jpg" />
+                  <Image url="@../images/sfondo_parquet.jpg" />
                </image>
             </ImageView>
             <Button layoutX="35.0" layoutY="234.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="245.0" style="-fx-background-color: transparent;">
@@ -65,19 +59,19 @@
                <graphic>
                   <ImageView fitHeight="68.0" fitWidth="210.0">
                      <image>
-                        <Image url="@../../../../../../Downloads/1684843808436.jpg" />
+                        <Image url="@../images/play_Button.jpg" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
             <ImageView fitHeight="117.0" fitWidth="414.0" layoutX="108.0" layoutY="8.0">
                <image>
-                  <Image url="@../../Downloads/MyShelfie_GraphicalResources/17_MyShelfie_BGA/Publisher%20material/banner%201386x400px.png" />
+                  <Image url="@../images/background_Banner.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="130.0" fitWidth="420.0" layoutX="110.0">
                <image>
-                  <Image url="@../../Downloads/MyShelfie_GraphicalResources/17_MyShelfie_BGA/Publisher%20material/Title%202000x618px.png" />
+                  <Image url="@../images/title.png" />
                </image>
             </ImageView>
             <Button layoutX="333.0" layoutY="234.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="214.0" style="-fx-background-color: transparent;">
@@ -90,7 +84,7 @@
                <graphic>
                   <ImageView fitHeight="68.0" fitWidth="210.0">
                      <image>
-                        <Image url="@../../../../../../Downloads/1684843808420.jpg" />
+                        <Image url="@../images/exit_Button.jpg" />
                      </image>
                   </ImageView>
                </graphic>
