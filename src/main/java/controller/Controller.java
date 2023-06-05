@@ -626,8 +626,6 @@ public class Controller implements Observer {
         for (Player player : game.getPlayers()) {
             librariesOfPlayers.put(player.getNickname(), player.getLibrary());
         }
-        System.out.println("Object in " + game.getPlayerInTurn().getNickname() + "'s library in position 5,0 is: " + game.getPlayerInTurn().getLibrary().getLibrarySpace(5, 0).getObject().getObjectColour().toString());
-        System.out.println("Object in " + game.getPlayerInTurn().getNickname() + "'s sent library in position 5,0 is: " + librariesOfPlayers.get(game.getNextPlayer().getNickname()).getLibrarySpace(5, 0).getObject().getObjectColour().toString());
         this.update(new ShowLibrariesMessage(game.getPlayerInTurn().getNickname(), librariesOfPlayers));
     }
 

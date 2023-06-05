@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Command line interface (CLI) for the game.
@@ -187,32 +188,44 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askBoardMove(){
+        boolean validInput;
+
         try{
-            out.print("Which cards do you want to pick?\n" +
-                      "You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n" +
-                      "(Separate the coordinates with a comma)\n"+
-                      "The objects must be in line (same row or column), adjacent and with ad least one side free.\n"+
-                      "Type -showcommon to show the common objectives\n"+
-                      "Type -showpersonal to show your personal objective\n"+
-                      "Type -showothers to show the opponents\n");
-            String coordinates = readLine();
+            do{
+                out.print("Which cards do you want to pick?\n" +
+                        "You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n" +
+                        "(Separate the coordinates with a comma)\n"+
+                        "The objects must be in line (same row or column), adjacent and with ad least one side free.\n"+
+                        "Type -showcommon to show the common objectives\n"+
+                        "Type -showpersonal to show your personal objective\n"+
+                        "Type -showothers to show the opponents' library\n");
+                String coordinates = readLine();
 
-            if(coordinates.equals("-showcommon")){
-                notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
-            } else if (coordinates.equals("-showpersonal")){
-                notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
-            } else if (coordinates.equals("-showothers")){
-                notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
-            } else {
+                if(coordinates.equals("-showcommon")){
+                    notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
+                    validInput = true;
+                } else if (coordinates.equals("-showpersonal")){
+                    notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+                    validInput = true;
+                } else if (coordinates.equals("-showothers")){
+                    notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
+                    validInput = true;
+                } else if(ClientController.isInputValid(coordinates)){
 
-                String[] parsedCoordinates = coordinates.split(",");
-                ArrayList<Integer> coordinatesToSend = new ArrayList<>();
-                for (int i = 0; i < parsedCoordinates.length; i++) {
-                    coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                    String[] parsedCoordinates = coordinates.split(",");
+                    ArrayList<Integer> coordinatesToSend = new ArrayList<>();
+                    for (int i = 0; i < parsedCoordinates.length; i++) {
+                        coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                    }
+
+                    notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
+                    validInput = true;
+                } else {
+                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                    out.print(Colours.RESET);
+                    validInput = false;
                 }
-
-                notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
-            }
+            } while (validInput == false);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -223,32 +236,42 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askLibraryMove() {
+        boolean validInput;
+
         try{
-            out.print("Please put the order followed by the column in which you wish to add the cards to your library\n" +
-                      "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
-                      "Type -showcommon to show the common objectives\n"+
-                      "Type -showpersonal to show your personal objective\n"+
-                      "Type -showothers to show the opponents\n");
-            String orderAndColumn = readLine();
+            do{
+                out.print("Please put the order followed by the column in which you wish to add the cards to your library\n" +
+                        "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
+                        "Type -showcommon to show the common objectives\n"+
+                        "Type -showpersonal to show your personal objective\n"+
+                        "Type -showothers to show the opponents' library\n");
+                String orderAndColumn = readLine();
 
-            /*
-            Only when the player is in the library, he can ask to see its personal objective and the game's common objectives.
-             */
-            if(orderAndColumn.equals("-showcommon")){
-                notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
-            } else if (orderAndColumn.equals("-showpersonal")) {
-                notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
-            } else if (orderAndColumn.equals("-showothers")){
-                notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
-            } else {
-                String[] parsedCoordinates = orderAndColumn.split(",");
-                ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
-                for(int i = 0; i < parsedCoordinates.length; i++){
-                    orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                if(orderAndColumn.equals("-showcommon")){
+                    notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
+                    validInput = true;
+                } else if (orderAndColumn.equals("-showpersonal")){
+                    notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+                    validInput = true;
+                } else if (orderAndColumn.equals("-showothers")){
+                    notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
+                    validInput = true;
+                } else if(ClientController.isInputValid(orderAndColumn)){
+
+                    String[] parsedCoordinates = orderAndColumn.split(",");
+                    ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
+                    for(int i = 0; i < parsedCoordinates.length; i++){
+                        orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                    }
+
+                    notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
+                    validInput = true;
+                } else {
+                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                    out.print(Colours.RESET);
+                    validInput = false;
                 }
-
-                notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
-            }
+            } while (validInput == false);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }

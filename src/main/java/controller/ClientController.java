@@ -135,6 +135,17 @@ public class ClientController implements ViewObserver, Observer {
         }
     }
 
+    /**
+     * This method checks if the input is in the correct format (%d,%d etc.).
+     * @param coordinatesToSend is the string to verify.
+     * @return {@code true} if the string is valid, {@code false} otherwise.
+     */
+    public static boolean isInputValid(String coordinatesToSend) {
+        String PATTERN = "^([0-9](,[0-9])+)$";
+
+        return coordinatesToSend.matches(PATTERN);
+    }
+
     @Override
     public void update(Message message) {
         switch (message.getType()){
