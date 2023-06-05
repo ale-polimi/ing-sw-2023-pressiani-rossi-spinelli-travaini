@@ -141,7 +141,7 @@ public class ClientController implements ViewObserver, Observer {
      * @return {@code true} if the string is valid, {@code false} otherwise.
      */
     public static boolean isInputValid(String coordinatesToSend) {
-        String PATTERN = "^([0-9](,[0-9])+)$";
+        String PATTERN = "^([0-8](,[0-8])+)$";
 
         return coordinatesToSend.matches(PATTERN);
     }

@@ -159,7 +159,7 @@ public class Controller implements Observer {
                             secondCol = pickObjectMessage.getCoordinates().get(3);
 
                             if (!(firstRow == secondRow && areAdjacentColumns(firstCol, secondCol)) && !(firstCol == secondCol && areAdjacentRows(firstRow, secondRow))) {
-                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "You must pick objects from the same row or column!"));
+                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), "You must pick objects from the same row or column!"));
                             } else if (game.getBoard().isSpaceSurrounded(firstRow, firstCol) || game.getBoard().isSpaceSurrounded(secondRow, secondCol)){
                                 this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), new SpaceSurroundedException().getMessage()));
                             } else {
