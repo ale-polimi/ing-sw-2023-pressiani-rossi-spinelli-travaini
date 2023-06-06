@@ -1,9 +1,11 @@
 package network.structure;
 
 import network.messages.Message;
+
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface Server {
+public interface Server extends Remote{
     /**
      * Register a new client that has established a connection to the server
      * @param clientHandler the clientHandler of the client that tries to connect to the server
@@ -27,5 +29,5 @@ public interface Server {
     /**
      * disconnects the client from the server
      */
-    void disconnect();
+    void disconnect()throws RemoteException;
 }

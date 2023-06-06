@@ -6,11 +6,15 @@ import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import network.messages.*;
 import network.structure.Client;
+import network.structure.ClientRMI;
 import network.structure.ClientSocket;
+import observer.Observable;
 import observer.Observer;
 import observer.ViewObserver;
 import view.View;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,7 +24,7 @@ import java.util.stream.Collectors;
  * Controller for the client.
  * It stays client side.
  */
-public class ClientController implements ViewObserver, Observer {
+public class ClientController extends Observable implements ViewObserver, Observer {
     private final View view;
     private Client client;
     private String nickname;
@@ -35,16 +39,33 @@ public class ClientController implements ViewObserver, Observer {
     private boolean inLibrary = false;
     private boolean inPickup = true;
     private final ExecutorService taskQueue;
+    private boolean isSocket;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public ClientController(View view){
+    public ClientController(View view,boolean isSocket){
         this.view = view;
         taskQueue = Executors.newSingleThreadExecutor();
+        this.isSocket=isSocket;
     }
 
     @Override
     public void onUpdateServerInfo(Map<String, String> serverInfo) {
-        client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
-        ((ClientSocket)client).addObserver(this);
+        if(isSocket){
+            client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
+            ((ClientSocket)client).addObserver(this);
+        }
+        else {
+            try {
+                client = new ClientRMI(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")),this);
+                ((ClientRMI) client).addObserver(this);
+                try{client.connection();}
+                catch(IOException e){System.err.println("Cannot connect to the server, closing");}
+                executor.submit((ClientRMI) client);
+            } catch (RemoteException e) {
+                System.err.println("Cannot create the client, exiting");
+                System.exit(1);
+            }
+        }
         //client.receivedMessage(new UserInfoForLoginMessage(null, this.nickname)); // Starts an asynchronous reading from the server.
         //client.ping();
     }
@@ -52,26 +73,43 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onUpdateNickname(String nickname) {
         this.nickname = nickname;
-        client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
+        try {
+            if(isSocket)client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
+            else notifyObserver(new UserInfoForLoginMessage(this.nickname, this.nickname));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onMaxPlayers(int maxPlayers) {
-        client.sendMessage(new MaxPlayersMessage(this.nickname, maxPlayers));
+        try {
+            client.sendMessage(new MaxPlayersMessage(this.nickname, maxPlayers));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onUpdateBoardMove(ArrayList<Integer> coordinatesToSend){
         inLibrary = true;
         inPickup = false;
-        client.sendMessage(new PickObjectMessage(this.nickname, coordinatesToSend));
+        try {
+            client.sendMessage(new PickObjectMessage(this.nickname, coordinatesToSend));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onUpdateLibraryMove(ArrayList<Integer> orderAndColumnToSend){
         inLibrary = false;
         inPickup = true;
-        client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
+        try {
+            client.sendMessage(new PutObjectInLibraryMessage(this.nickname, orderAndColumnToSend));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -268,7 +306,11 @@ public class ClientController implements ViewObserver, Observer {
                 view.askMaxPlayer();
                 break;
             case MAX_PLAYERS_FOR_GAME:
-                client.sendMessage(message);
+                try {
+                    client.sendMessage(message);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             default:
                 break;

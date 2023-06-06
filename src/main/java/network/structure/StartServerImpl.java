@@ -3,15 +3,18 @@ package network.structure;
 import controller.Controller;
 import model.player.Player;
 import network.messages.Message;
+import network.messages.MessageType;
+import observer.Observer;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class StartServerImpl{
+public class StartServerImpl implements Observer {
     private ServerRMI serverRMI;
     private SocketServer socketServer;
     //private final ArrayList<Tuple> games = new ArrayList<>();
@@ -30,7 +33,7 @@ public class StartServerImpl{
     public static void main(String[] args){
         executor = Executors.newCachedThreadPool();
         try {new StartServerImpl();}
-        catch(IOException e){System.err.println("Cannot instantiate the server structure"); System.exit(-1);}
+        catch(IOException e){e.printStackTrace();System.err.println("Cannot instantiate the server structure"); System.exit(-1);}
         while(true) try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -57,10 +60,13 @@ public class StartServerImpl{
     private void startRMI() throws RemoteException {
         //Start RMI server instance
         serverRMI = new ServerRMI(this);
-        LocateRegistry.createRegistry(12000);
-        Registry registry = LocateRegistry.getRegistry(12000);
-        registry.rebind("server", serverRMI);
+        Server stubRMI = (Server) UnicastRemoteObject.exportObject(serverRMI,1099);
+        LocateRegistry.createRegistry(1099);
+        Registry registry = LocateRegistry.getRegistry(1099);
+        registry.rebind("server", stubRMI);
         System.out.println("RMI server started, waiting for clients...");
+        serverRMI.addObserver(this);
+        getExecutor().submit(serverRMI);
     }
 
 
@@ -132,5 +138,19 @@ public class StartServerImpl{
     public  void disconnect(){
         serverRMI.disconnect();
         socketServer.disconnect();
+    }
+
+    @Override
+    public void update(Message message) {
+        if(!message.getType().equals(MessageType.ASK_NICKNAME))
+        receiveMessage(message);
+        else {
+            try {
+                System.out.println("message = " + message);
+                getServerRMI().getClients().get(getServerRMI().getClients().size()-1).receivedMessage(message);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

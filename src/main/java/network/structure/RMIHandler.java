@@ -4,7 +4,9 @@ import network.messages.Message;
 import network.messages.MessageType;
 import network.messages.PingMessage;
 
-public class RMIHandler implements ClientHandler{
+import java.rmi.RemoteException;
+
+public class RMIHandler implements ClientHandler,Runnable{
     private final Client client;
     private final ServerRMI server;
 
@@ -24,7 +26,11 @@ public class RMIHandler implements ClientHandler{
      */
     @Override
     public boolean isConnected() {
-        client.receivedMessage(new PingMessage("Server", MessageType.PING));
+        try {
+            client.receivedMessage(new PingMessage("Server", MessageType.PING));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 
@@ -41,6 +47,21 @@ public class RMIHandler implements ClientHandler{
      */
     @Override
     public void receivedMessage(Message message) {
-        client.receivedMessage(message);
+        try {
+            client.receivedMessage(message);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void run() {
+        while (!Thread.interrupted()){
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

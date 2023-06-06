@@ -25,7 +25,7 @@ public class ClientMain {
 
         if (isCli){
             Cli view = new Cli();
-            ClientController clientController = new ClientController(view);
+            ClientController clientController = new ClientController(view,true);
             view.addObserver(clientController);
             view.initCli();
         }
