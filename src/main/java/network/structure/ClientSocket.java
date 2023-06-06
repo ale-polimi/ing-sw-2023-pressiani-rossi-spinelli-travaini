@@ -107,7 +107,10 @@ public class ClientSocket extends Observable implements Client {
         try {
             message = (Message) ois.readObject();
             LOGGER.info("Received: "+ message);
+
+            /* TODO - Debug print */
             System.out.println(message.getSender()+" "+ message.getType());
+
             notifyObserver(message);
         }
         catch (IOException e) {

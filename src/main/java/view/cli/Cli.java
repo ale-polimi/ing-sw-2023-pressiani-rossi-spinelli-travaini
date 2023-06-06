@@ -187,10 +187,12 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askBoardMove(){
+        out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
         try{
             do{
+                out.println("" + Colours.BOLD + Colours.GREEN + "YOUR TURN!" + Colours.RESET);
                 out.print("Which cards do you want to pick?\n" +
                         "You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n" +
                         "(Separate the coordinates with a comma)\n"+
@@ -235,6 +237,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askLibraryMove() {
+        out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
         try{
@@ -286,6 +289,7 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand){
         clearCli();
+        out.print(Colours.HIDE_CURSOR);
 
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
         showBoard(rcvGameBoard);

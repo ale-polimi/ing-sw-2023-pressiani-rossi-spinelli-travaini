@@ -878,6 +878,7 @@ public class Controller implements Observer {
             case BOARD_ERROR:
                 BoardErrorMessage boardErrorMessage = (BoardErrorMessage) message;
                 networkView.showGenericError(boardErrorMessage.getSender(), boardErrorMessage.getPayload());
+                break;
             default:
                 ;
         }

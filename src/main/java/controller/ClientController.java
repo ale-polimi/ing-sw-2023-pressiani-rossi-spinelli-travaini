@@ -45,7 +45,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     public ClientController(View view,boolean isSocket){
         this.view = view;
         taskQueue = Executors.newSingleThreadExecutor();
-        this.isSocket=isSocket;
+        this.isSocket = isSocket;
     }
 
     @Override
@@ -53,8 +53,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
         if(isSocket){
             client = new ClientSocket(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
             ((ClientSocket)client).addObserver(this);
-        }
-        else {
+        } else {
             try {
                 client = new ClientRMI(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")),this);
                 ((ClientRMI) client).addObserver(this);

@@ -96,6 +96,10 @@ public class ClientRMI extends Observable implements Client,Runnable, Observer {
      * @param message is the sent message
      */
     public void receivedMessage(Message message)throws RemoteException{
+
+        /* TODO - Debug print */
+        System.out.println(message.getSender()+" "+ message.getType());
+
         notifyObserver(message);
     }
 
