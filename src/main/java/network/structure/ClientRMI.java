@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,33 +14,32 @@ import network.messages.Message;
 import network.messages.MessageType;
 import network.messages.PingMessage;
 import observer.Observable;
+import observer.Observer;
 
 /**
  * this class represents an RMI client.
  */
 
-public class ClientRMI extends Observable implements Client{
+public class ClientRMI extends Observable implements Client,Runnable, Observer {
 
-    Server server;
+    private transient Server server;
 
     //default RMI port
     private final int port;
-    private String address;
+    private final String address;
     boolean getConnected =false;
-
-    ClientController clientController;
-
-    ScheduledExecutorService timer;
+    transient ScheduledExecutorService timer;
 
     /**
      * is the constructor with the connection with the server
-     * @param address is the IP client
-     * @param port is the port where the connection is
+     *
+     * @param address         is the IP client
+     * @param port            is the port where the connection is
      */
-    public ClientRMI(String address, int port) {
+    public ClientRMI(String address, int port, ClientController clientController) throws RemoteException {
         this.address=address;
         this.port=port;
-
+        clientController.addObserver(this);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ClientRMI extends Observable implements Client{
     public void connection() throws RemoteException {
         try {
             Registry registry = LocateRegistry.getRegistry(address,port);
-            server = (ServerRMI) registry.lookup("server");
+            server = (Server) registry.lookup("server");
             initialize(server);
             this.timer = Executors.newSingleThreadScheduledExecutor();
             getConnected=true;
@@ -95,8 +95,8 @@ public class ClientRMI extends Observable implements Client{
      * Receive a message
      * @param message is the sent message
      */
-    public void receivedMessage(Message message) {
-        clientController.update(message);
+    public void receivedMessage(Message message)throws RemoteException{
+        notifyObserver(message);
     }
 
     /**
@@ -107,8 +107,9 @@ public class ClientRMI extends Observable implements Client{
 
     private void initialize(Server server) throws RemoteException {
             try {
-                server.registry( this);
+                server.registry( (ClientHandler) UnicastRemoteObject.exportObject(this,0));
             } catch (RemoteException e) {
+                e.printStackTrace();
                 System.err.println("connection unable");
                 getConnected = false;
             }
@@ -139,4 +140,17 @@ public class ClientRMI extends Observable implements Client{
         }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }
+
+    @Override
+    public void run() {while(!Thread.interrupted()) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    }
+
+    @Override
+    public void update(Message message) {sendMessage(message);}
 }

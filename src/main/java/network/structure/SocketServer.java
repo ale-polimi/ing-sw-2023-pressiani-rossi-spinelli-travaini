@@ -72,7 +72,11 @@ public class SocketServer implements Runnable, Server{
     @Override
     public void disconnect() {
         for(ClientHandler c: clients){
-            c.receivedMessage(new GameClosedMessage("Controller", MessageType.GAME_CLOSED));
+            try {
+                c.receivedMessage(new GameClosedMessage("Controller", MessageType.GAME_CLOSED));
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             clients.remove(c);
         }
     }

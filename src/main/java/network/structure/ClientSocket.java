@@ -171,4 +171,5 @@ public class ClientSocket extends Observable implements Client {
     public void ping() {
         timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(null, MessageType.PING)), 0, 1000, TimeUnit.MILLISECONDS);
     }
+
 }

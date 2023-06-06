@@ -3,6 +3,7 @@ package network.structure;
 import network.messages.Message;
 import java.io.IOException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 
 /**
@@ -27,10 +28,12 @@ public interface Client extends Remote, ClientHandler{
      * forwards a message
      * @param message is the sending message
      */
-    void sendMessage(Message message);
+    void sendMessage(Message message)throws RemoteException;
+
+    void receivedMessage(Message message)throws RemoteException;
 
     /**
      * check the presence of problems in the connection between client and server
      */
-    void ping();
+    void ping() throws RemoteException;
 }
