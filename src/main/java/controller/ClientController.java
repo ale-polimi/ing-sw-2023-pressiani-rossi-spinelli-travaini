@@ -256,8 +256,10 @@ public class ClientController implements ViewObserver, Observer {
                             break;
                         case "GENERIC":
                             System.out.println(this.getClass().toString() + " The error is generic :(");
-                            default:
-                            ;
+                            view.showGenericError(senderErr, genericErrorMessage.getPayload());
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
