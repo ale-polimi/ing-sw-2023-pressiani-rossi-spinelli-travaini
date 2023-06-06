@@ -1,17 +1,19 @@
 package network.structure;
 
+import network.messages.AskNicknameMessage;
 import network.messages.GameClosedMessage;
 import network.messages.Message;
 import network.messages.MessageType;
+import observer.Observable;
 
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ServerRMI extends UnicastRemoteObject implements Server{
+public class ServerRMI extends Observable implements Server,Runnable{
 
-    private ArrayList<ClientHandler> clients;
+    private final ArrayList<ClientHandler> clients;
     private final StartServerImpl startServer;
     /**
      * Custom constructor of ServerRMI class
@@ -29,16 +31,22 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
      */
     @Override
     public void registry(ClientHandler clientHandler) throws RemoteException {
-        if(!clients.contains(clientHandler))clients.add(clientHandler);
+        if(!clients.contains(clientHandler)){
+            System.out.println("Received");
+            clients.add(clientHandler);
+            notifyObserver(new  AskNicknameMessage("Controller"));
+        }
     }
 
     /**
      * when called, reads the message
      * @param message is the message that has to be read
-     * @throws RemoteException when the server is unreachable
      */
     @Override
-     public void receiveMessage(Message message){startServer.receiveMessage(message);}
+     public void receiveMessage(Message message){
+        System.out.println("Message Received");
+        notifyObserver(message);
+    }
 
     /**
      * Send a message to the clients
@@ -46,7 +54,14 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
      */
     @Override
     public void sendMessage(Message message){
-        for(ClientHandler c : clients){c.receivedMessage(message);}
+        for(ClientHandler c : clients){
+            try {
+                System.out.println("Message sent");
+                c.receivedMessage(message);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
     /**
      * End a game when a player disconnect from a game
@@ -54,8 +69,25 @@ public class ServerRMI extends UnicastRemoteObject implements Server{
     @Override
     public void disconnect() {
         for(ClientHandler c: clients){
-            c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
+            try {
+                c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             clients.remove(c);
+        }
+    }
+
+    public List<ClientHandler> getClients() {return clients;}
+
+    @Override
+    public void run() {
+        while(!Thread.interrupted()){
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
