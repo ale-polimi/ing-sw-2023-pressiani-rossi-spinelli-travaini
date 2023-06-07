@@ -20,17 +20,18 @@ public class JavaFXGUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-       // Gui view = new Gui();
-        //ClientController clientController = new ClientController(view, true);
-        //view.addObserver(clientController);
+        Gui view = new Gui();
+        ClientController clientController = new ClientController(view, true);
+        view.addObserver(clientController);
 
         FXMLLoader loader = new FXMLLoader();
         FileInputStream fileInputStream = new FileInputStream(new File("src/resources/fxml/Start.fxml"));
-        //loader.setLocation(getClass().getResource("Start.fxml"));
+        //loader.setLocation(getClass().getResource("src/resources/fxml/Start.fxml"));
         Parent root = loader.load(fileInputStream);
 
-       // StartSceneController controller = loader.getController();
-        //controller.addObserver
+
+        StartSceneController controller = loader.getController();
+        controller.addObserver(clientController);
 
         Scene scene = new Scene(root,500,500);
         stage.setScene(scene);

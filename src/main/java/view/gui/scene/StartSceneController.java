@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import observer.ViewObservable;
+import view.gui.SceneController;
 
 public class StartSceneController extends ViewObservable implements GenericSceneController {
 
@@ -27,6 +28,6 @@ public class StartSceneController extends ViewObservable implements GenericScene
 
 
     private void onPlayBtnClick(Event event) {
-        //SceneController.changeRootPane(observers, event, "connect_scene.fxml");
+        SceneController.changeRootPane(observers, event, "connect_scene.fxml");
     }
 }

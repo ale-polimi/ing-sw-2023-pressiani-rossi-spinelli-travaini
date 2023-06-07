@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * Observable class used only for the {@link view.View view}.
  */
 public abstract class ViewObservable {
-    private List<ViewObserver> observers = new ArrayList<>();
+    protected List<ViewObserver> observers = new ArrayList<>();
 
     /**
      * This method will add an observer to the list of view observers.
