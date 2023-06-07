@@ -2,11 +2,13 @@ package view.gui;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import controller.ClientController;
 import view.gui.scene.StartSceneController;
@@ -25,20 +27,30 @@ public class JavaFXGUI extends Application {
         view.addObserver(clientController);
 
         FXMLLoader loader = new FXMLLoader();
-        FileInputStream fileInputStream = new FileInputStream(new File("src/resources/fxml/Start.fxml"));
-        //loader.setLocation(getClass().getResource("src/resources/fxml/Start.fxml"));
-        Parent root = loader.load(fileInputStream);
+        //FileInputStream fileInputStream = new FileInputStream(new File("src/resources/fxml/Start.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/Start.fxml"));
+        Parent root = loader.load();
 
 
         StartSceneController controller = loader.getController();
         controller.addObserver(clientController);
 
-        Scene scene = new Scene(root,500,500);
+        Scene scene = new Scene(root,700,500);
         stage.setScene(scene);
         stage.show();
+
+
+
+
+
+
+
+
+
     }
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }
