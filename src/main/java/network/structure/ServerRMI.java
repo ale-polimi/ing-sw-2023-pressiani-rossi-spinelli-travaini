@@ -14,6 +14,7 @@ import java.util.List;
 public class ServerRMI extends Observable implements Server,Runnable{
 
     private final ArrayList<ClientHandler> clients;
+    private ArrayList<Message> messages = new ArrayList<>();
     private final StartServerImpl startServer;
     /**
      * Custom constructor of ServerRMI class
@@ -34,7 +35,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
         if(!clients.contains(clientHandler)){
             System.out.println("Received");
             clients.add(clientHandler);
-            notifyObserver(new  AskNicknameMessage("Controller"));
+            clientHandler.receivedMessage(new  AskNicknameMessage("Controller"));
         }
     }
 
@@ -45,7 +46,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
      public void receiveMessage(Message message){
         System.out.println("Message Received");
-        notifyObserver(message);
+        messages.add(message);
     }
 
     /**
@@ -83,11 +84,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
     public void run() {
         while(!Thread.interrupted()){
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            if(messages.size()>0)notifyObserver(messages.remove(0));
         }
     }
 }

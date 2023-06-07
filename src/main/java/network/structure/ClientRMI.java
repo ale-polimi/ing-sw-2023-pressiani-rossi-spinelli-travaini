@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +21,7 @@ import observer.Observer;
  * this class represents an RMI client.
  */
 
-public class ClientRMI extends Observable implements Client,Runnable, Observer {
+public class ClientRMI extends Observable implements Client,Runnable {
 
     private transient Server server;
 
@@ -28,6 +29,7 @@ public class ClientRMI extends Observable implements Client,Runnable, Observer {
     private final int port;
     private final String address;
     boolean getConnected =false;
+    private ArrayList<Message> messages =new ArrayList<>();
     transient ScheduledExecutorService timer;
 
     /**
@@ -39,7 +41,7 @@ public class ClientRMI extends Observable implements Client,Runnable, Observer {
     public ClientRMI(String address, int port, ClientController clientController) throws RemoteException {
         this.address=address;
         this.port=port;
-        clientController.addObserver(this);
+        //clientController.addObserver(this);
     }
 
     /**
@@ -95,13 +97,7 @@ public class ClientRMI extends Observable implements Client,Runnable, Observer {
      * Receive a message
      * @param message is the sent message
      */
-    public void receivedMessage(Message message)throws RemoteException{
-
-        /* TODO - Debug print */
-        System.out.println(message.getSender()+" "+ message.getType());
-
-        notifyObserver(message);
-    }
+    public void receivedMessage(Message message)throws RemoteException{messages.add(message);}
 
     /**
      * method for register a client to a game
@@ -146,15 +142,9 @@ public class ClientRMI extends Observable implements Client,Runnable, Observer {
     }
 
     @Override
-    public void run() {while(!Thread.interrupted()) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public void run() {
+        while(!Thread.interrupted()) {
+            if(messages.size()>0) notifyObserver(messages.remove(0));
         }
     }
-    }
-
-    @Override
-    public void update(Message message) {sendMessage(message);}
 }

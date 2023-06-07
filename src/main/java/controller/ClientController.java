@@ -73,8 +73,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     public void onUpdateNickname(String nickname) {
         this.nickname = nickname;
         try {
-            if(isSocket)client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
-            else notifyObserver(new UserInfoForLoginMessage(this.nickname, this.nickname));
+           client.sendMessage(new UserInfoForLoginMessage(this.nickname, this.nickname));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
