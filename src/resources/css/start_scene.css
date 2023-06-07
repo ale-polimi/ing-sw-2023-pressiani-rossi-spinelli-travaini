@@ -1,0 +1,13 @@
+.rootPane {
+
+    -fx-background-image: url("../images/sfondo_parquet.jpg");
+    -fx-background-size: stretch;
+}
+
+.playButton {
+
+    -fx-background-image: url("../images/play_Button.jpg");
+
+
+
+}
