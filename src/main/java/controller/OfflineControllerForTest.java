@@ -36,26 +36,25 @@ import static enumerations.PlayerState.PICKUP;
  * it will finally send a response back to the client with the updated model.
  * This stays server side.
  */
-public class Controller implements Observer {
+public class OfflineControllerForTest implements Observer {
 
     private Game game;
-    private HashMap<String, Integer> playersPoints;
-    private String winner;
+    public HashMap<String, Integer> playersPoints;
+    public String winner;
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
     private HashMap<String, Library> librariesOfPlayers = new HashMap<>();
     int firstRow, firstCol, secondRow, secondCol, thirdRow, thirdCol = 0;
-    private final NetworkView networkView;
     boolean allGood;
+
 
     /**
      * Constructor for the controller.
      */
-    public Controller(StartServerImpl server) throws IOException {
+    public OfflineControllerForTest() throws IOException {
         this.game = new Game();
         /* Subscribing the Controller to the Model (Game) */
         game.addObserver(this);
-        networkView = new NetworkView(server);
         game.setGameState(LOGIN);
         byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
@@ -833,7 +832,7 @@ public class Controller implements Observer {
         switch(message.getType()){
             case ADDED_PLAYER:
                 if(game.getPlayers().size() == 1) {
-                    networkView.askMaxPlayer();
+                    System.out.println("ASK PLAYERS.");
                 }
 
                 ArrayList<String> players = new ArrayList<>();
@@ -842,51 +841,51 @@ public class Controller implements Observer {
                     players.add(player.getNickname());
                 }
 
-                networkView.showLobby(players);
+                System.out.println("SHOW LOBBY.");
                 break;
             case NEXT_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                System.out.println("SHOW TURN.");
 
                 sendOtherPlayersLibrary(game);
 
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case GENERIC_MODEL_CHANGE:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                System.out.println("SHOW TURN.");
 
                 sendOtherPlayersLibrary(game);
 
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case END_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                System.out.println("SHOW END TURN.");
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case SHOW_OTHERS_LIBRARY:
                 ShowLibrariesMessage showLibrariesMessage = (ShowLibrariesMessage) message;
-                networkView.showOthersLibrary(showLibrariesMessage.getSender(), showLibrariesMessage.getLibrariesOfPlayers());
+                System.out.println("SHOW LIBRARIES.");
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;
-                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2());
+                System.out.println("SHOW COMMON OBJECTIVES.");
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
-                networkView.showPersonalObjective(showPersonalObjectiveMessage.getSender(), showPersonalObjectiveMessage.getPersonalObjective());
+                System.out.println("SHOW PERSONAL OBJECTIVES.");
                 break;
             case END_GAME:
                 EndGameMessage endGameMessage = (EndGameMessage) message;
-                networkView.showWinner(endGameMessage.getWinner(), endGameMessage.getPlayersPoints());
+                System.out.println("SHOW COMMON WINNER.");
                 break;
             case GENERIC_ERROR:
                 GenericErrorMessage errorMessage = (GenericErrorMessage) message;
-                networkView.showGenericError(errorMessage.getSender(), errorMessage.getPayload());
+                System.out.println(errorMessage.getPayload());
                 break;
             case BOARD_ERROR:
                 BoardErrorMessage boardErrorMessage = (BoardErrorMessage) message;
-                networkView.showGenericError(boardErrorMessage.getSender(), boardErrorMessage.getPayload());
+                System.out.println(boardErrorMessage.getPayload());
                 break;
             default:
                 ;

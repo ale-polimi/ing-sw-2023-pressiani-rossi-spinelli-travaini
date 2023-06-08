@@ -40,5 +40,4 @@ public class ObjectCard implements Serializable {
         return objectColour;
     }
 
-
 }

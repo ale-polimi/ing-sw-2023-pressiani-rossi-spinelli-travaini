@@ -169,14 +169,29 @@ public class Cli extends ViewObservable implements View {
     public void askMaxPlayer() {
         String num;
         int numOfPlayers;
+        boolean validInput;
 
         try {
-            out.print("How many players are going to play?\n" +
-                    "Minimum: 2\n" +
-                    "Maximum: 4\n");
-            num = readLine();
-            numOfPlayers = Integer.parseInt(num);
-            notifyObserver(viewObserver -> viewObserver.onMaxPlayers(numOfPlayers));
+            do {
+                out.print("How many players are going to play?\n" +
+                        "Minimum: 2\n" +
+                        "Maximum: 4\n");
+                num = readLine();
+                try{
+                    numOfPlayers = Integer.parseInt(num);
+                    if(numOfPlayers >= 2 && numOfPlayers <= 4){
+                        validInput = true;
+                        int finalNumOfPlayers = numOfPlayers;
+                        notifyObserver(viewObserver -> viewObserver.onMaxPlayers(finalNumOfPlayers));
+                    } else {
+                        out.println("" + Colours.RED + Colours.BOLD + "The number is not within the correct bounds. It must be 2 <= players <= 4" + Colours.RESET);
+                        validInput = false;
+                    }
+                } catch (NumberFormatException e){
+                    out.println("" + Colours.RED + Colours.BOLD + e.getMessage() + Colours.RESET);
+                    validInput = false;
+                }
+            } while (validInput == false);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }

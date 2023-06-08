@@ -290,6 +290,10 @@ public class ClientController extends Observable implements ViewObserver, Observ
                                 view.askNickname();
                             }
                             break;
+                        case "OUT_OF_BOUNDS":
+                            view.showGenericError(senderErr, genericErrorMessage.getPayload());
+                            view.askMaxPlayer();
+                            break;
                         case "GENERIC":
                             System.out.println(this.getClass().toString() + " The error is generic :(");
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());

@@ -1,5 +1,7 @@
 package enumerations;
 
+import model.objects.ObjectCard;
+
 public enum ObjectColour {
     /**
      * GREEN1 is Gatti1.1.png
@@ -114,4 +116,4 @@ public enum ObjectColour {
         return false;
     }
 
-    }
+}

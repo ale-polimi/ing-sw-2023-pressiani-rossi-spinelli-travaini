@@ -1,5 +1,6 @@
 package model.library;
 
+import enumerations.ObjectColour;
 import model.objects.ObjectCard;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class LibrarySpaceTest {
   @Test
   public void getObjectNull() {
     LibrarySpace librarySpace = new LibrarySpace();
-    assertNull(librarySpace.getObject());
+    assertEquals(ObjectColour.EMPTY, librarySpace.getObject().getObjectColour());
   }
 
   /**

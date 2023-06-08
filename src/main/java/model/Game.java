@@ -69,17 +69,25 @@ public class Game extends Observable implements Observer {
     }
 
     /**
-     * This method will make it possible to set the maximum number of players in this game.
-     * @param chosenMaxPlayers is the number of players allowed in this game.
-     * @return will show if the method has worked correctly or not.
+     * This method checks if the number of players is within the permitted bounds.
+     * @param chosenMaxPlayers is the number of players chose by the first player.
+     * @return {@code true} if the number is within the bounds, {@code false} otherwise.
      */
-    public boolean setMaxPlayers(int chosenMaxPlayers) {
-        if ((chosenMaxPlayers > 1 && chosenMaxPlayers <= MAX_PLAYERS)) {
-            this.chosenPlayersNumber = chosenMaxPlayers;
+    public boolean isInBounds(int chosenMaxPlayers){
+        if (chosenMaxPlayers >= 2 && chosenMaxPlayers <= 4){
             return true;
-            //notifyObserver(new SetPlayersMessage());
+        } else {
+            return false;
         }
-        return false;
+    }
+
+
+    /**
+     * This method will set the maximum number of players in this game.
+     * @param chosenMaxPlayers is the number of players allowed in this game.
+     */
+    public void setMaxPlayers(int chosenMaxPlayers) {
+        this.chosenPlayersNumber = chosenMaxPlayers;
     }
 
     /**

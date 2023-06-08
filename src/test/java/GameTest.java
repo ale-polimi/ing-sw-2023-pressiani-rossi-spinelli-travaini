@@ -54,7 +54,7 @@ public class GameTest {
      */
     @Test
     public void setMaxPlayers_inRange() {
-        assertTrue(instance.setMaxPlayers(3));
+        assertTrue(instance.isInBounds(3));
         assertEquals(3, instance.numOfPlayers());
     }
 
@@ -63,7 +63,7 @@ public class GameTest {
      */
     @Test
     public void setMaxPlayerLesserBoundOut(){
-        assertFalse(instance.setMaxPlayers(1));
+        assertFalse(instance.isInBounds(1));
     }
 
     /**
@@ -71,7 +71,7 @@ public class GameTest {
      */
     @Test
     public void setMaxPlayersUpperBoundOut() {
-        assertFalse(instance.setMaxPlayers(5));
+        assertFalse(instance.isInBounds(5));
     }
 
     /**
@@ -79,7 +79,8 @@ public class GameTest {
      */
     @Test
     public void setMaxPlayerLesserBoundIn(){
-        assertTrue(instance.setMaxPlayers(2));
+        assertTrue(instance.isInBounds(2));
+        assertEquals(2, instance.numOfPlayers());
     }
 
     /**
@@ -87,7 +88,8 @@ public class GameTest {
      */
     @Test
     public void setMaxPlayerUpperBoundIn(){
-        assertTrue(instance.setMaxPlayers(4));
+        assertTrue(instance.isInBounds(4));
+        assertEquals(4, instance.numOfPlayers());
     }
 
     /**
