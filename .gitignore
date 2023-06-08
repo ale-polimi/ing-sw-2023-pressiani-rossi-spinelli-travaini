@@ -34,6 +34,7 @@ src/main/java/network/client
 src/main/java/network/server
 /src/main/java/network/listeners/
 src/main/java/model/board/BoardView.java
+src/main/java/model/player/PlayerView.java
 
 #Ignored messages
 src/main/java/network/messages/ShowBoardMessage.java

@@ -233,7 +233,7 @@ public class Player extends Observable {
     }
 
     /**
-     * Dummy method to add the object to the library. This method is needed for the {@link PlayerView player listener}.
+     * Dummy method to add the object to the library.
      * @param objectCard is the object that will be added to the library.
      * @param librarySpace is the space the {@code objectCard} will occupy.
      */
