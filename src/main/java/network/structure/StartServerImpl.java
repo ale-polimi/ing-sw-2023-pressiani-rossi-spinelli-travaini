@@ -1,9 +1,7 @@
 package network.structure;
 
 import controller.Controller;
-import model.player.Player;
 import network.messages.Message;
-import network.messages.MessageType;
 import observer.Observer;
 
 import java.io.IOException;
@@ -14,16 +12,17 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class StartServerImpl implements Observer {
+public class StartServerImpl implements Observer, Runnable {
     private ServerRMI serverRMI;
     private SocketServer socketServer;
     //private final ArrayList<Tuple> games = new ArrayList<>();
-    private final Controller controller;
+    private Controller controller;
     private static ExecutorService executor;
     public StartServerImpl() throws IOException {
         startRMI();
         startSocket();
         controller = new Controller(this);
+        executor.submit(this);
     }
 
     /**
@@ -34,11 +33,6 @@ public class StartServerImpl implements Observer {
         executor = Executors.newCachedThreadPool();
         try {new StartServerImpl();}
         catch(IOException e){e.printStackTrace();System.err.println("Cannot instantiate the server structure"); System.exit(-1);}
-        while(true) try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.err.println("Server thread has been interrupted");
-        }
     }
 
     /**
@@ -79,34 +73,6 @@ public class StartServerImpl implements Observer {
         getExecutor().submit(socketServer);
         System.out.println("Socket server up, waiting for clients...");
     }
-
-    /**
-     * Add a player to a game, if there aren't free spaces create a new game
-     * @return The controller of the game where the player will be assigned
-     */
-    private Controller addToGame(){return controller;
-        // Initialise a new game
-            /*try {
-                games.add(new Tuple(new Controller(this),new ArrayList<>()));
-            } catch (IOException e) {
-                System.err.println("ERROR: cannot create a game instance");
-            }
-            getExecutor().submit(games.get(0));
-            return games.get(0).getController();*/
-    }
-
-    /**
-     * Returns the controller related to the current client
-     * @param nickname The nickname related to the client
-     * @return The controller of the game where the player is in
-     */
-    private Controller getController(String nickname){
-        /*for(Tuple t : games){*/
-            for(Player p : controller.getGame().getPlayers()){if(p.getNickname().equals(nickname))return controller;}
-        //}
-        /*throw new ClientNotRegisteredException("You are not registered in a current game");*/
-        return null;
-    }
     /**
      * Return the thread pool executor
      * @return The Executor service related to the server
@@ -117,14 +83,7 @@ public class StartServerImpl implements Observer {
      * Send a message received from the clients to the controller
      * @param message The message to forward
      */
-    public void receiveMessage(Message message){
-        //if(!message.getType().equals(MessageType.USER_INFO))
-            //getController(message.getSender()).onMessageReceived(message);
-          //  controller.onMessageReceived(message);
-        //else {
-         controller.onMessageReceived(message);
-        //}
-    }
+    public void receiveMessage(Message message){controller.onMessageReceived(message);}
 
     /**
      * Send the message from the model to the views in the clients
@@ -135,22 +94,30 @@ public class StartServerImpl implements Observer {
     /**
      * Close a game when a player wants to disconnect from the game
      */
-    public  void disconnect(){
-        serverRMI.disconnect();
-        socketServer.disconnect();
+    public  void disconnect(ClientHandler clientHandler){
+        serverRMI.disconnect(clientHandler);
+        socketServer.disconnect(clientHandler);
+        try {
+            controller = new Controller(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void update(Message message) {
-        if(!message.getType().equals(MessageType.ASK_NICKNAME))
-        receiveMessage(message);
-        else {
-            try {
-                System.out.println("message = " + message);
-                getServerRMI().getClients().get(getServerRMI().getClients().size()-1).receivedMessage(message);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+    public void update(Message message) { receiveMessage(message);}
+
+    @Override
+    public void run() {
+        try {
+            getServerRMI().ping();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            getSocketServer().ping();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }

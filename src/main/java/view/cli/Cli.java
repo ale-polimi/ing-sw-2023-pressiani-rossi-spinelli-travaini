@@ -132,7 +132,6 @@ public class Cli extends ViewObservable implements View {
         } while (validInput == false);
 
         notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
-        out.println("Inviato indirizzo e porte");
     }
 
 

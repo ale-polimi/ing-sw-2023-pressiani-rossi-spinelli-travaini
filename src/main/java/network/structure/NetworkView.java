@@ -94,11 +94,4 @@ public class NetworkView implements View {
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
         server.sendMessage(new ShowLibrariesMessage(sender, librariesOfPlayers));
     }
-
-    /**
-     * Call the disconnection to the game
-     */
-    public void disconnect(){
-        server.disconnect();
-    }
 }

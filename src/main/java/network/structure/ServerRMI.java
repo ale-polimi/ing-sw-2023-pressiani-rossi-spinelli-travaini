@@ -1,9 +1,6 @@
 package network.structure;
 
-import network.messages.AskNicknameMessage;
-import network.messages.GameClosedMessage;
-import network.messages.Message;
-import network.messages.MessageType;
+import network.messages.*;
 import observer.Observable;
 
 
@@ -45,8 +42,11 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
      public void receiveMessage(Message message){
-        System.out.println("Message Received");
-        messages.add(message);
+        if(!message.getType().equals(MessageType.PING))
+        {
+            System.out.println("Message Received");
+            messages.add(message);
+        }
     }
 
     /**
@@ -68,15 +68,22 @@ public class ServerRMI extends Observable implements Server,Runnable{
      * End a game when a player disconnect from a game
      */
     @Override
-    public void disconnect() {
+    public void disconnect(ClientHandler clientHandler) {
+        clients.remove(clientHandler);
         for(ClientHandler c: clients){
-            try {
-                c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+            try {c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
+            } catch (RemoteException e) {}
             clients.remove(c);
         }
+    }
+
+    @Override
+    public void ping() throws RemoteException {
+        for(ClientHandler c : clients){
+            try{c.receivedMessage(new PingMessage(null,MessageType.PING));}
+        catch(RemoteException e){
+                startServer.disconnect(c);
+        }}
     }
 
     public List<ClientHandler> getClients() {return clients;}

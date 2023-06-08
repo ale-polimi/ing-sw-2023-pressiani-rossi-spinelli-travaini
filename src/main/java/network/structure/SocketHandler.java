@@ -48,7 +48,6 @@ public class SocketHandler implements Runnable,ClientHandler {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 Message message = (Message) ois.readObject();
-                System.out.println("Messaggio Ricevuto "+ message.getSender());
                 socketServer.receiveMessage(message);
             }
         } catch (ClassCastException | ClassNotFoundException e) {
@@ -76,7 +75,7 @@ public class SocketHandler implements Runnable,ClientHandler {
      */
     @Override
     public void disconnect() {
-        socketServer.disconnect();
+        socketServer.getServer().disconnect(this);
         try{socket.close();}
         catch(IOException e){System.err.println("Cannot close the socket");}
     }
@@ -92,6 +91,6 @@ public class SocketHandler implements Runnable,ClientHandler {
                 oos.flush();
                 oos.reset();
                 System.out.print("Message sent");
-        } catch (IOException e) {throw new RuntimeException("SocketClient unreachable from server",e);}
+        } catch (IOException e) {disconnect();}
     }
 }

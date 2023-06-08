@@ -39,7 +39,7 @@ public class RMIHandler implements ClientHandler,Runnable{
      * disconnect the server
      */
     @Override
-    public void disconnect() {server.disconnect();}
+    public void disconnect() {server.disconnect(this);}
 
     /**
      * Send the message from the server to the client

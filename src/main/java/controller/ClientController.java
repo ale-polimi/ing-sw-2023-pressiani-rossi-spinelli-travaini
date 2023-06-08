@@ -65,8 +65,11 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 System.exit(1);
             }
         }
-        //client.receivedMessage(new UserInfoForLoginMessage(null, this.nickname)); // Starts an asynchronous reading from the server.
-        //client.ping();
+        try {
+            client.ping();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
