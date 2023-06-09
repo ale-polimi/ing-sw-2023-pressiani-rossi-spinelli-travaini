@@ -24,20 +24,18 @@ public class FiveX extends CommonObjective {
             for ( y = 1; y < 4; y++) {
 
                 ObjectColour colour= library.getLibrarySpace(x,y).getObject().getObjectColour();
-
-                if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().isEquals(colour) &&
-                        library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().isEquals(colour)&&
-                        library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().isEquals(colour)&&
-                        library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().isEquals(colour))
-                    return true;
-
-
+                if(!colour.equals(ObjectColour.EMPTY)){
+                    if (library.getLibrarySpace(x-1,y-1).getObject().getObjectColour().isEquals(colour) &&
+                            library.getLibrarySpace(x-1,y+1).getObject().getObjectColour().isEquals(colour)&&
+                            library.getLibrarySpace(x+1,y-1).getObject().getObjectColour().isEquals(colour)&&
+                            library.getLibrarySpace(x+1,y+1).getObject().getObjectColour().isEquals(colour)) {
+                        return true;
+                    }
+                }
             }
-
         }
 
         return false;
-
     }
 
     public String getDescription() {

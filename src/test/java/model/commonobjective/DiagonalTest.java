@@ -10,89 +10,87 @@ import org.junit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DiagonalTest {
-    private Library instance;
-    private Diagonal diagonal;
+    private Library testLibrary;
+    private CommonObjective diagonal;
+
     @Before
     public void setUp() {
+        testLibrary = new Library();
         diagonal = new Diagonal();
+    }
 
-        instance = new Library();
-
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                instance.getLibraryGrid()[i][j] = new LibrarySpace();
-            }
+    /**
+     * This test checks if the library has a diagonal starting from row = 1 col =0;
+     */
+    @Test
+    public void hasDiagonalFirstTry() {
+        int row = 1;
+        for (int col = 0; col < 5; col++){
+            testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row + col,col));
         }
 
-        //instance initialized with known elements
-
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,3));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(0,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(1,0));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,1));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,2));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,3));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,3));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,4));
-        instance.addObject(new ObjectCard("LIGHT_BLUE1"),instance.getLibrarySpace(3,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,4));
-
+        assertTrue(diagonal.applyObjectiveRules(testLibrary, 0,0));
     }
 
-
-    @After
-    public void tearDown() {
-        diagonal=null;
-    }
-
+    /**
+     * This test checks if the library has a diagonal starting from row = 0 col =0;
+     */
     @Test
-    public void isDiagonal() {
-        int x=0;
-        int y=0;
-        diagonal.applyObjectiveRules(instance, 0, 0);
-        for (int i = 0; i < 4; i++) {
-            if (!instance.getLibrarySpace(x+i,y+i).getObject().getObjectColour().equals(instance.getLibrarySpace(x+i+1,y+i+1).getObject().getObjectColour()))
-                assertFalse(diagonal.applyObjectiveRules(instance, 0, 0));
+    public void hasDiagonalSecondTry(){
+        int row = 1;
+        testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,0));
+        for (int col = 1; col < 5; col++){
+            testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row + col,col));
         }
-    }
 
-    @Test
-    public void isNotDiagonal() {
-        int x=0;
-        int y=0;
-        diagonal.applyObjectiveRules(instance, x, y);
-        for (int i = 0; i < 4; i++) {
-            if (!instance.getLibrarySpace(x+i,y+i).getObject().getObjectColour().equals(instance.getLibrarySpace(x+i+1,y+i+1).getObject().getObjectColour()))
-                assertFalse(diagonal.applyObjectiveRules(instance, 0, 0));
+        row = 0;
+        for (int col = 0; col < 5; col++){
+            testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row + col,col));
         }
+
+        assertTrue(diagonal.applyObjectiveRules(testLibrary, 0,0));
     }
 
+    /**
+     * Test to check if the objective is not applied with an empty library.
+     */
     @Test
-    public void coordinateControl(){
-        int x=0;
-        int y=0;
-        if (x>1 && (y!=0 || y!=4))
-            assertFalse(diagonal.applyObjectiveRules(instance, x, y));
+    public void doesNotHaveDiagonalEmptyLibrary(){
+        assertFalse(diagonal.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if a non-empty library does not meet the objective requirements.
+     */
+    @Test
+    public void doesNotHaveDiagonal(){
+        int row = 1;
+        testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,0));
+        for (int col = 1; col < 5; col++){
+            testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row + col,col));
+        }
+
+        row = 0;
+        testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,0));
+        for (int col = 1; col < 5; col++){
+            testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row + col,col));
+        }
+
+        assertFalse(diagonal.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if a non-empty library does not meet the objective requirements.
+     */
+    @Test
+    public void doesNotHaveDiagonalFirstRowEmpty(){
+        int row = 1;
+        testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,0));
+        for (int col = 1; col < 5; col++){
+            testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row + col,col));
+        }
+
+        assertFalse(diagonal.applyObjectiveRules(testLibrary,0,0));
     }
 
 }

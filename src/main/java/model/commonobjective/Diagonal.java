@@ -20,27 +20,39 @@ public class Diagonal extends CommonObjective {
             "        |" + Colours.UNDERLINED + "■" + Colours.RESET + "|";
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
-        ObjectColour colour = library.getLibrarySpace(x, y).getObject().getObjectColour();
+        boolean returnValue = true;
+        boolean foundDiagonal = true;
 
-        if (y == 0 && x <=1) {
-            int k=0;
-            for (int i = x + 1, j = y + 1; k < 4; k++, j++, i++) {
-                if (!library.getLibrarySpace(i, j).getObject().getObjectColour().isEquals(colour))
-                    break;
-            }
-            if (k==4)
-                return true;
-        }
-        else if (y==4 && x<=1){
-            int k=0;
-                for (int i = x + 1, j = y - 1; k < 4; k++, j--, i++) {
-                    if (!library.getLibrarySpace(i, j).getObject().getObjectColour().isEquals(colour))
-                        break;
+        int rowFirstTry = 1;
+        int rowSecondTry = 0;
+
+        ObjectColour firstTryColour = library.getLibrarySpace(rowFirstTry,0).getObject().getObjectColour();
+        ObjectColour secondTryColour = library.getLibrarySpace(rowSecondTry,0).getObject().getObjectColour();
+
+        if(firstTryColour.equals(ObjectColour.EMPTY)){
+            returnValue = false;
+        } else {
+
+            for(int col = 1; col < 5; col++){
+                if(!library.getLibrarySpace(rowFirstTry + col,col).getObject().getObjectColour().isEquals(firstTryColour)){
+                    foundDiagonal = false;
                 }
-            if (k==4)
-                return true;
             }
-        return false;
+
+            if (foundDiagonal == false) {
+                if (secondTryColour.equals(ObjectColour.EMPTY)) {
+                    returnValue = false;
+                } else {
+                    for (int col = 1; col < 5; col++) {
+                        if (!library.getLibrarySpace(rowSecondTry + col, col).getObject().getObjectColour().isEquals(secondTryColour)) {
+                            returnValue = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return returnValue;
     }
 
     public String getDescription() {

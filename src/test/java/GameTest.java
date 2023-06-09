@@ -3,8 +3,14 @@ import enumerations.TypeSpace;
 import exceptions.game.TooManyPlayersException;
 import model.Game;
 import model.board.Board;
+import model.commonobjective.CommonObjective;
+import model.commonobjective.FourByFourNew;
+import model.commonobjective.FourCorners;
+import model.commonobjective.Stairs;
 import model.player.Player;
 import org.junit.*;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -15,8 +21,8 @@ public class GameTest {
     public void setUp(){
         this.instance = new Game();
         instance.setMaxPlayers(2);
-        Player p1 = new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1");
-        Player p2 = new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1");
+        Player p1 = new Player("Alice","0,0,PINK1,0,2,BLUE1,1,4,GREEN1,2,3,WHITE1,3,1,YELLOW1,5,2,LIGHT_BLUE1");
+        Player p2 = new Player("Bob","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1");
         instance.addToGame(p1);
         instance.addToGame(p2);
     }
@@ -27,7 +33,7 @@ public class GameTest {
     @Test
     public void addToGame_OK(){
         instance.setMaxPlayers(3);
-        instance.addToGame(new Player("Carlo","0,0,PINK1,0,2,BLUE1,1,4,GREEN1,2,3,WHITE1,3,1,YELLOW1,5,2,LIGHT_BLUE1"));
+        instance.addToGame(new Player("Carlo","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
         assertEquals(3, instance.numOfPlayers());
     }
 
@@ -50,15 +56,6 @@ public class GameTest {
     }
 
     /**
-     * Testing that setMaxPlayer set the maximum number of players correspond to the input
-     */
-    @Test
-    public void setMaxPlayers_inRange() {
-        assertTrue(instance.isInBounds(3));
-        assertEquals(3, instance.numOfPlayers());
-    }
-
-    /**
      * Test that setMaxPlayer doesn't accept a number of players lesser than 2
      */
     @Test
@@ -67,7 +64,7 @@ public class GameTest {
     }
 
     /**
-     * Test that setMAxPlayer doesn't accept a number of players greater tha 4
+     * Test that setMAxPlayer doesn't accept a number of players greater than 4
      */
     @Test
     public void setMaxPlayersUpperBoundOut() {
@@ -80,6 +77,7 @@ public class GameTest {
     @Test
     public void setMaxPlayerLesserBoundIn(){
         assertTrue(instance.isInBounds(2));
+        instance.setMaxPlayers(2);
         assertEquals(2, instance.numOfPlayers());
     }
 
@@ -89,6 +87,7 @@ public class GameTest {
     @Test
     public void setMaxPlayerUpperBoundIn(){
         assertTrue(instance.isInBounds(4));
+        instance.setMaxPlayers(4);
         assertEquals(4, instance.numOfPlayers());
     }
 
@@ -115,6 +114,65 @@ public class GameTest {
     public void setFirstPlayer(){
         instance.setFirstPlayer();
         assertTrue(instance.getPlayers().get(0).isFirstPlayer() && !instance.getPlayers().get(1).isFirstPlayer());
+    }
+
+    /**
+     * This test checks if the game correctly creates the points for each common objective.
+     */
+    @Test
+    public void addCommonObjectivesForTwo(){
+        CommonObjective co1 = new Stairs();
+        CommonObjective co2 = new FourCorners();
+        instance.addCommonObjective(co1);
+        instance.addCommonObjective(co2);
+
+        assertTrue(instance.getCommonObjectives().containsKey(co1));
+        assertTrue(instance.getCommonObjectives().containsKey(co2));
+
+        assertEquals(Arrays.asList(8,4), instance.getCommonObjectives().get(co1));
+        assertEquals(Arrays.asList(8,4), instance.getCommonObjectives().get(co2));
+    }
+
+    /**
+     * This test checks if the game correctly creates the points for each common objective.
+     */
+    @Test
+    public void addCommonObjectivesForThree(){
+        instance.setMaxPlayers(3);
+        instance.addToGame(new Player("Carlo","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
+
+        CommonObjective co1 = new Stairs();
+        CommonObjective co2 = new FourCorners();
+        instance.addCommonObjective(co1);
+        instance.addCommonObjective(co2);
+
+        assertTrue(instance.getCommonObjectives().containsKey(co1));
+        assertTrue(instance.getCommonObjectives().containsKey(co2));
+
+        assertEquals(Arrays.asList(8,6,4), instance.getCommonObjectives().get(co1));
+        assertEquals(Arrays.asList(8,6,4), instance.getCommonObjectives().get(co2));
+    }
+
+    /**
+     * This test checks if the game correctly creates the points for each common objective.
+     */
+    @Test
+    public void addCommonObjectivesForFour(){
+        instance.setMaxPlayers(4);
+        instance.addToGame(new Player("Carlo","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
+        instance.addToGame(new Player("Davide","0,4,YELLOW1,2,0,LIGHT_BLUE1,2,2,BLUE1,3,3,PINK1,4,1,WHITE1,4,2,GREEN1"));
+
+
+        CommonObjective co1 = new Stairs();
+        CommonObjective co2 = new FourCorners();
+        instance.addCommonObjective(co1);
+        instance.addCommonObjective(co2);
+
+        assertTrue(instance.getCommonObjectives().containsKey(co1));
+        assertTrue(instance.getCommonObjectives().containsKey(co2));
+
+        assertEquals(Arrays.asList(8,6,4,2), instance.getCommonObjectives().get(co1));
+        assertEquals(Arrays.asList(8,6,4,2), instance.getCommonObjectives().get(co2));
     }
 
     /**
