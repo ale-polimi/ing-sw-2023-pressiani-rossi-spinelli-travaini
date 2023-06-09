@@ -186,7 +186,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     }
 
     @Override
-    public void update(Message message) {
+    public  void update(Message message) {
         switch (message.getType()){
             case SHOW_LOBBY:
                 inLobby = true;
@@ -318,6 +318,10 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
+                break;
+            case GAME_CLOSED:
+                System.out.println("Connection interrupted, terminating application...");
+                System.exit(1);
                 break;
             default:
                 break;
