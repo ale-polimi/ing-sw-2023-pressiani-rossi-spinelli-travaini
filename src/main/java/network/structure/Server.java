@@ -27,7 +27,11 @@ public interface Server extends Remote{
     void sendMessage(Message message) throws RemoteException;
 
     /**
-     * disconnects the client from the server
+     * Disconnect the player from the server
+     * @param clientHandler The clientHandler which is unreachable
+     * @throws RemoteException
      */
-    void disconnect()throws RemoteException;
+    void disconnect(ClientHandler clientHandler)throws RemoteException;
+
+    void ping() throws RemoteException;
 }

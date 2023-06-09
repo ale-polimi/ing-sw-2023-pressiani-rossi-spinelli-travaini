@@ -1,9 +1,6 @@
 package network.structure;
 
-import network.messages.AskNicknameMessage;
-import network.messages.GameClosedMessage;
-import network.messages.Message;
-import network.messages.MessageType;
+import network.messages.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -41,7 +38,6 @@ public class SocketServer implements Runnable, Server{
             try {
                 Socket socket = serverSocket.accept();
                 SocketHandler clientHandler = new SocketHandler(this, socket);
-                //Thread thread = new Thread(clientHandler, "ss_handler" + socket.getInetAddress());
                 Thread thread = new Thread(clientHandler);
                 thread.start();
                 registry(clientHandler);
@@ -57,7 +53,7 @@ public class SocketServer implements Runnable, Server{
      * @param message the message that has to be dispatched
      */
     @Override
-   public void receiveMessage(Message message){server.receiveMessage(message);}
+   public void receiveMessage(Message message){if(!message.getType().equals(MessageType.PING))server.receiveMessage(message);}
 
     /**
      * Send a message to the client
@@ -70,7 +66,8 @@ public class SocketServer implements Runnable, Server{
      * Handles the disconnection request from the players
      */
     @Override
-    public void disconnect() {
+    public void disconnect(ClientHandler clientHandler) {
+        clients.remove(clientHandler);
         for(ClientHandler c: clients){
             try {
                 c.receivedMessage(new GameClosedMessage("Controller", MessageType.GAME_CLOSED));
@@ -81,6 +78,12 @@ public class SocketServer implements Runnable, Server{
         }
     }
 
+    @Override
+    public void ping() throws RemoteException {
+        for (ClientHandler c : clients) {
+            c.receivedMessage(new PingMessage(null, MessageType.PING));
+        }
+    }
     /**
      * Register a new client to the server
      * @param clientHandler the clientHandler of the client that tries to connect to the server
@@ -93,4 +96,6 @@ public class SocketServer implements Runnable, Server{
             clientHandler.receivedMessage(new AskNicknameMessage("Controller"));
         }
     }
+
+    public StartServerImpl getServer() {return server;}
 }

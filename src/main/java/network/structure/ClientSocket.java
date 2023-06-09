@@ -82,7 +82,6 @@ public class ClientSocket extends Observable implements Client {
     public void sendMessage(Message message) {
         try{
             oos.writeObject(message);
-            System.out.println("Numero letto");
             oos.flush();
             oos.reset();
         }
@@ -114,8 +113,9 @@ public class ClientSocket extends Observable implements Client {
             notifyObserver(message);
         }
         catch (IOException e) {
-            disconnect();
             executor.shutdownNow();
+            disconnect();
+
         }
         catch (ClassNotFoundException e) {
             //it doesn't read the message (?)
@@ -134,6 +134,8 @@ public class ClientSocket extends Observable implements Client {
         }
         ois=null;
         oos=null;
+        System.out.println("Connection closed, terminating the application...");
+        System.exit(1);
     }
 
 
@@ -153,8 +155,7 @@ public class ClientSocket extends Observable implements Client {
     @Override
     public void disconnect() {
         try{
-            closeConnection();
-            server.disconnect();
+            closeConnection();;
         }
         catch (IOException e){
             Logger.getLogger("client").severe(e.getMessage());
@@ -164,15 +165,12 @@ public class ClientSocket extends Observable implements Client {
 
     @Override
     public void receivedMessage(Message message) {
-
+        //Voluntarily leaved empty
     }
 
     /**
      * check the presence of problems in the connection between client and server
      */
     @Override
-    public void ping() {
-        timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(null, MessageType.PING)), 0, 1000, TimeUnit.MILLISECONDS);
-    }
-
+    public void ping() {timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(null, MessageType.PING)), 0, 5000, TimeUnit.MILLISECONDS);}
 }

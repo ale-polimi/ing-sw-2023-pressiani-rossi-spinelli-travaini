@@ -72,7 +72,7 @@ public class ClientRMI extends Observable implements Client,Runnable {
      */
     @Override
     public void closeConnection() throws RemoteException {
-        server.disconnect();
+        server.disconnect(this);
         disconnect();
     }
 
@@ -86,7 +86,7 @@ public class ClientRMI extends Observable implements Client,Runnable {
         try{
             server.receiveMessage(message);
         } catch (RemoteException e){
-            System.exit(1);
+           disconnect();
         }
         //notifyObserver(new Message("client", message.getType()));
 
@@ -127,6 +127,8 @@ public class ClientRMI extends Observable implements Client,Runnable {
     @Override
     public void disconnect() {
         server=null;
+        System.out.println("Connection interrupted, terminating application...");
+        System.exit(1);
     }
 
     /**
@@ -134,11 +136,9 @@ public class ClientRMI extends Observable implements Client,Runnable {
      */
     @Override
     public void ping() {
-
         timer.scheduleAtFixedRate(() -> {
             sendMessage(new PingMessage("client", MessageType.PING));
-        }, 0, 1000, TimeUnit.MILLISECONDS);
-
+        }, 0, 5000, TimeUnit.MILLISECONDS);
     }
 
     @Override
