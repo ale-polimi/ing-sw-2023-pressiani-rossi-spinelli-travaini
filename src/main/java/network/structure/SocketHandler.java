@@ -37,7 +37,9 @@ public class SocketHandler implements Runnable,ClientHandler {
     public void run() {
         try{clientCommunication();}
         catch(IOException e){
-            System.err.println("Client "+ socket.getInetAddress()+" is unreachable");}
+            System.err.println("Client "+ socket.getInetAddress()+" is unreachable");
+            disconnect();
+        }
     }
 
     /**
@@ -75,7 +77,7 @@ public class SocketHandler implements Runnable,ClientHandler {
      */
     @Override
     public void disconnect() {
-        socketServer.getServer().disconnect(this);
+        socketServer.disconnect(this);
         try{socket.close();}
         catch(IOException e){System.err.println("Cannot close the socket");}
     }
@@ -90,7 +92,7 @@ public class SocketHandler implements Runnable,ClientHandler {
                 oos.writeObject(message);
                 oos.flush();
                 oos.reset();
-                System.out.print("Message sent");
+                System.out.println("Message sent");
         } catch (IOException e) {disconnect();}
     }
 }

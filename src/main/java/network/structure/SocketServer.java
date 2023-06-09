@@ -12,7 +12,7 @@ public class SocketServer implements Runnable, Server{
     private final StartServerImpl server;
     private final int port;
 
-    private final ArrayList<SocketHandler> clients;
+    private ArrayList<SocketHandler> clients;
     ServerSocket serverSocket;
 
     /**
@@ -67,21 +67,25 @@ public class SocketServer implements Runnable, Server{
      */
     @Override
     public void disconnect(ClientHandler clientHandler) {
-        clients.remove(clientHandler);
+        clients.remove((SocketHandler) clientHandler);
+       server.disconnect();
+    }
+
+    public void disconnect(){
         for(ClientHandler c: clients){
             try {
                 c.receivedMessage(new GameClosedMessage("Controller", MessageType.GAME_CLOSED));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
-            clients.remove(c);
         }
+        clients = new ArrayList<>();
     }
 
     @Override
     public void ping() throws RemoteException {
         for (ClientHandler c : clients) {
-            c.receivedMessage(new PingMessage(null, MessageType.PING));
+            if(!c.isConnected())disconnect(c);
         }
     }
     /**

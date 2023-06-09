@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
  * this interface represents a generic client
  */
 
-public interface Client extends Remote, ClientHandler{
+public interface Client extends Remote{
 
     /**
      * makes the connection between client and server

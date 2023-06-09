@@ -28,7 +28,6 @@ public class ClientSocket extends Observable implements Client {
     private Socket socket;
     private final int port;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
     Server server;
     final String address;
     boolean getConnected =false;
@@ -80,18 +79,17 @@ public class ClientSocket extends Observable implements Client {
      */
     @Override
     public void sendMessage(Message message) {
-        try{
+        try {
             oos.writeObject(message);
             oos.flush();
             oos.reset();
-        }
-        catch (IOException e){
-            try{
+        } catch (IOException e) {
+            try {
                 closeConnection();
-            } catch (IOException exception){
+            } catch (IOException exception) {
                 System.exit(1);
             }
-            getConnected=false;
+            getConnected = false;
             notifyObserver(new GenericErrorMessage("client", "Impossible send message"));
         }
     }
@@ -109,7 +107,6 @@ public class ClientSocket extends Observable implements Client {
 
             /* TODO - Debug print */
             System.out.println(message.getSender()+" "+ message.getType());
-
             notifyObserver(message);
         }
         catch (IOException e) {
@@ -143,7 +140,6 @@ public class ClientSocket extends Observable implements Client {
      * is a boolean method that checks the connection
      * @return the state of the connection
      */
-    @Override
     public boolean isConnected() {
         return getConnected;
     }
@@ -152,7 +148,6 @@ public class ClientSocket extends Observable implements Client {
     /**
      * Disconnect the client
      */
-    @Override
     public void disconnect() {
         try{
             closeConnection();;
