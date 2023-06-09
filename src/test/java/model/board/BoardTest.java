@@ -1,5 +1,6 @@
 package model.board;
 
+import enumerations.ObjectColour;
 import enumerations.TypeSpace;
 import model.Game;
 import model.objects.ObjectCard;
@@ -11,468 +12,281 @@ import static org.junit.Assert.*;
 
 public class BoardTest {
 
-  private Game instance;
+  private Board testBoard;
 
   @Before
-  public void setUp(){
-    instance = new Game();
+  public void setUp() {
+    testBoard = new Board();
   }
 
   /**
-   * Test that getSpace returns a not null BoardSpace
+   * After the creation of the board, if an object is put in a board space, it must be there.
    */
   @Test
-  public void getSpaceNotNull() {
-    instance.setMaxPlayers(2);
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){assertNotNull(instance.getBoard().getSpace(i,j));}
-    }
+  public void putObjectInBoard(){
+    ObjectCard objectCard = new ObjectCard(ObjectColour.PINK1);
+    testBoard.putObjectIn(testBoard.getSpace(4,4), objectCard);
+
+    assertEquals(objectCard.getObjectColour(), testBoard.getSpace(4,4).getObject().getObjectColour());
   }
 
   /**
-   *Test that pickup objectFrom returns null when boarSpace is UNUSABLE
+   * After the creation of the board, all the board spaces must exist.
    */
   @Test
-  public void pickupObjectFromUNUSABLE() {
-    instance.setMaxPlayers(2);
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE)) {
-          assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }
+  public void getSpace() {
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+        assertNotNull(testBoard.getSpace(row, col));
       }
     }
   }
 
   /**
-   *Test that pickup objectFrom returns an object only when the boardSpace is FOR_TWO_PLAYERS
+   * This tests checks if the pickup correctly removes an object from the selected board space.
+   * After the pickup I must have the same object that was in the selected board space.
+   * After the pickup the selected board space must be empty.
    */
   @Test
-  public void pickupObjectFromTwoPlayers() {
-    instance.setMaxPlayers(2);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_TWO_PLAYERS)) {
-          assertNotNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }else{
-          assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }
-      }
-    }
+  public void pickupEmptyTile(){
+    ObjectCard putObject = new ObjectCard(ObjectColour.PINK1);
+    testBoard.putObjectIn(testBoard.getSpace(4,4), putObject);
+    ObjectCard pickedObject = testBoard.pickupObjectFrom(testBoard.getSpace(4,4));
+
+    assertEquals(pickedObject.getObjectColour(), putObject.getObjectColour());
+    assertNull(testBoard.getSpace(4,4).getObject());
   }
 
   /**
-   *Test that pickup objectFrom returns an object only when the boardSpace is FOR_THREE_PLAYERS
+   * Test to check if isSpaceSurrounded works for tiles in row = 0
    */
   @Test
-  public void pickupObjectFromThreePlayers() {
-    instance.setMaxPlayers(3);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.addToGame(new Player("Elisa","1,0,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_TWO_PLAYERS)||
-            instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_THREE_PLAYERS)) {
-          assertNotNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }else{
-          assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }
-      }
-    }
+  public void spaceSurroundedInRow0(){
+    testBoard.putObjectIn(testBoard.getSpace(0,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(0,1), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(0,2), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurrounded(0,1));
   }
 
   /**
-   *Test that pickup objectFrom returns an object only when the boardSpace is FOR_FOUR_PLAYERS
+   * Test to check if isSpaceSurrounded works for tiles in row = 0
    */
   @Test
-  public void pickupObjectFromFourPlayers() {
-    instance.setMaxPlayers(4);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.addToGame(new Player("Elisa","1,0,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame(new Player("Alisa","1,0,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,2,LIGHT_BLUE1,5,2,BLUE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_TWO_PLAYERS)||
-            instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_THREE_PLAYERS)||
-            instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_FOUR_PLAYERS)) {
-          assertNotNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }else{assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));}
-      }
-    }
+  public void spaceNotSurroundedInRow0(){
+    testBoard.putObjectIn(testBoard.getSpace(0,1), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(0,2), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurrounded(0,1));
   }
 
   /**
-   * Test that putObjectIn inserts an object in the corresponding space
+   * Test to check if isSpaceSurrounded works for tiles in col = 0
    */
   @Test
-  public void putObjectInCorrectly() {
-    instance.setMaxPlayers(2);
-    ObjectCard tmp = new ObjectCard();
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(1,3),tmp);
-    assertEquals(tmp.getObjectColour(),instance.getBoard().getSpace(1,3).getObject().getObjectColour());
+  public void spaceSurroundedInCol0(){
+    testBoard.putObjectIn(testBoard.getSpace(0,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(2,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurrounded(1,0));
   }
 
   /**
-   * Test putObjectIn when there are two players
+   * Test to check if isSpaceSurrounded works for tiles in col = 0
    */
   @Test
-  public void putObjectInTwoPlayers(){
-    instance.setMaxPlayers(2);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE)||
-            instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_THREE_PLAYERS)||
-            instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_FOUR_PLAYERS)) {
-          assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }else{assertNotNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));}
-      }
-    }
+  public void spaceNotSurroundedInCol0(){
+    testBoard.putObjectIn(testBoard.getSpace(1,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(2,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurrounded(1,0));
   }
 
   /**
-   * Test putObjectIn when there are three players
+   * Test to check if isSpaceSurrounded works for tiles in row = 8
    */
   @Test
-  public void putObjectInThreePlayers(){
-    instance.setMaxPlayers(3);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.addToGame(new Player("Elisa","1,0,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE)||
-            instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.FOR_FOUR_PLAYERS)) {
-          assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }else{assertNotNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));}
-      }
-    }
+  public void spaceSurroundedInRow8(){
+    testBoard.putObjectIn(testBoard.getSpace(8,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(8,1), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(8,2), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(7,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurrounded(8,1));
   }
 
   /**
-   * Test putObjectIn when there are four players
+   * Test to check if isSpaceSurrounded works for tiles in row = 8
    */
   @Test
-  public void putObjectInFourPlayers(){
-    instance.setMaxPlayers(4);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.addToGame(new Player("Elisa","1,0,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame(new Player("Alisa","1,0,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,2,LIGHT_BLUE1,5,2,BLUE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0; i< 9; i++){
-      for(int j = 0;j < 9;j++){
-        if(instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE)) {
-          assertNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));
-        }else{assertNotNull(instance.getBoard().pickupObjectFrom(instance.getBoard().getSpace(i,j)));}
-      }
-    }
-  }
+  public void spaceNotSurroundedInRow8(){
+    testBoard.putObjectIn(testBoard.getSpace(8,1), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(8,2), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(7,1), new ObjectCard(ObjectColour.PINK1));
 
-
-  /**
-   * Test that isSpaceSurrounded returns true when the board is full
-   */
-  @Test
-  public void isSpaceSurroundedTotalTrue() {
-    instance.setMaxPlayers(2);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i = 0;i < 9;i++){
-      for(int j = 0; j < 9; j++){if(!instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE))
-        assertTrue(instance.getBoard().isSpaceSurrounded(i,j));}
-    }
+    assertFalse(testBoard.isSpaceSurrounded(8,1));
   }
 
   /**
-   * Test that isSpaceSurrounded returns false when the board is empty
+   * Test to check if isSpaceSurrounded works for tiles in col = 8
    */
   @Test
-  public void isSpaceSurroundedTotalFalse(){
-    instance.setMaxPlayers(2);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.restoreBoard(instance.getBoard());
-    for(int i =0;i<9;i++){for(int j=0;j<9;j++){instance.getBoard().getSpace(i,j).removeObject();}}
-    for(int i = 0;i < 9;i++){
-      for(int j = 0; j < 9; j++){if(!instance.getBoard().getSpace(i,j).getTypeSpace().equals(TypeSpace.UNUSABLE))
-        assertFalse(instance.getBoard().isSpaceSurrounded(i,j));}
-    }
+  public void spaceSurroundedInCol8(){
+    testBoard.putObjectIn(testBoard.getSpace(0,8), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,8), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(2,8), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,7), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurrounded(1,8));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on all sides
+   * Test to check if isSpaceSurrounded works for tiles in col = 8
    */
   @Test
-  public void isSpaceSurroundedPlusShaped(){
-    instance.setMaxPlayers(2);
-    instance.addToGame( new Player("Alice","1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1"));
-    instance.addToGame( new Player("Bob","1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1"));
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceNotSurroundedInCol8(){
+    testBoard.putObjectIn(testBoard.getSpace(1,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(2,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(1,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurrounded(1,0));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the left, right and up
+   * Test to check if isSpaceSurrounded works generally
    */
   @Test
-  public void isSpaceSurroundedReverseTShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceSurrounded(){
+    testBoard.putObjectIn(testBoard.getSpace(3,4), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(4,4), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(5,4), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(4,3), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(4,5), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurrounded(4,4));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the left, right and down
+   * Test to check if isSpaceSurrounded works generally
    */
   @Test
-  public void isSpaceSurroundedTShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceNotSurrounded(){
+    testBoard.putObjectIn(testBoard.getSpace(4,4), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(5,4), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(4,3), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(4,5), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurrounded(4,4));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the left, up and down
+   * Test to check if isSpaceSurroundedByNull works for tiles in row = 0
    */
   @Test
-  public void isSpaceSurroundedLTShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
-  }
-  /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the right, up and down
-   */
-  @Test
-  public void isSpaceSurroundedRTShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceSurroundedByNullInRow0(){
+    testBoard.putObjectIn(testBoard.getSpace(0,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurroundedByNull(0,1));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the left and up
+   * Test to check if isSpaceSurroundedByNull works for tiles in row = 0
    */
   @Test
-  public void isSpaceSurroundedLUShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
-  }
-  /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the left and down
-   */
-  @Test
-  public void isSpaceSurroundedLDShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceNotSurroundedByNullInRow0(){
+    testBoard.putObjectIn(testBoard.getSpace(0,1), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(0,2), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurroundedByNull(0,1));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the right and up
+   * Test to check if isSpaceSurroundedByNull works for tiles in col = 0
    */
   @Test
-  public void isSpaceSurroundedRUShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
-  }
-  /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the right and down
-   */
-  @Test
-  public void isSpaceSurroundedRDShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceSurroundedByNullInCol0(){
+    testBoard.putObjectIn(testBoard.getSpace(1,0), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurroundedByNull(1,0));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the right and left
+   * Test to check if isSpaceSurroundedByNull works for tiles in col = 0
    */
   @Test
-  public void isSpaceSurroundedIHShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceNotSurroundedByNullInCol0(){
+    testBoard.putObjectIn(testBoard.getSpace(1,0), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(2,0), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurroundedByNull(1,0));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded up and down
+   * Test to check if isSpaceSurroundedByNull works for tiles in row = 8
    */
   @Test
-  public void isSpaceSurroundedIVShaped(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceSurroundedByNullInRow8(){
+    testBoard.putObjectIn(testBoard.getSpace(8,1), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurroundedByNull(8,1));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the left
+   * Test to check if isSpaceSurroundedByNull works for tiles in row = 8
    */
   @Test
-  public void isSpaceSurroundedLeft(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,3),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceNotSurroundedByNullInRow8(){
+    testBoard.putObjectIn(testBoard.getSpace(8,1), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(8,2), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurroundedByNull(8,1));
   }
 
   /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on up
+   * Test to check if isSpaceSurroundedByNull works for tiles in col = 8
    */
   @Test
-  public void isSpaceSurroundedUp(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
-  }
-  /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on the right
-   */
-  @Test
-  public void isSpaceSurroundedRight(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,5),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
-  }
-  /**
-   * Test that isSpaceSurrounded returns true for an objectCard that is surrounded on down
-   */
-  @Test
-  public void isSpaceSurroundedDown(){
-    instance.setMaxPlayers(2);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,4));
+  public void spaceSurroundedByNullInCol8(){
+    testBoard.putObjectIn(testBoard.getSpace(1,8), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurroundedByNull(1,8));
   }
 
   /**
-   * Test isSpaceSurrounded when row==0 and the space is surrounded
+   * Test to check if isSpaceSurroundedByNull works for tiles in col = 8
    */
   @Test
-  public void isSpaceSurroundedRowZeroTrue(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(0,3),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(1,3),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(0,3));
+  public void spaceNotSurroundedByNullInCol8(){
+    testBoard.putObjectIn(testBoard.getSpace(1,8), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(2,8), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurroundedByNull(1,8));
   }
 
   /**
-   * Test isSpaceSurrounded when row==0 and the space isn't surrounded
+   * Test to check if isSpaceSurroundedByNull works generally
    */
   @Test
-  public void isSpaceSurroundedRowZeroFalse(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(0,3),new ObjectCard());
-    assertFalse(instance.getBoard().isSpaceSurrounded(0,3));
+  public void spaceSurroundedByNull(){
+    testBoard.putObjectIn(testBoard.getSpace(4,4), new ObjectCard(ObjectColour.PINK1));
+
+    assertTrue(testBoard.isSpaceSurroundedByNull(4,4));
   }
 
   /**
-   * Test isSpaceSurrounded when row==8 and the space is surrounded
+   * Test to check if isSpaceSurroundedByNull works generally
    */
   @Test
-  public void isSpaceSurroundedRowEightTrue(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(8,4),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(7,4),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(8,4));
+  public void spaceNotSurroundedByNull(){
+    testBoard.putObjectIn(testBoard.getSpace(3,4), new ObjectCard(ObjectColour.PINK1));
+    testBoard.putObjectIn(testBoard.getSpace(4,4), new ObjectCard(ObjectColour.PINK1));
+
+    assertFalse(testBoard.isSpaceSurroundedByNull(4,4));
   }
 
-  /**
-   * Test isSpaceSurrounded when row==8 and the space isn't surrounded
-   */
-  @Test
-  public void isSpaceSurroundedRowEightFalse(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(8,4),new ObjectCard());
-    assertFalse(instance.getBoard().isSpaceSurrounded(8,4));
-  }
-
-  /**
-   * Test isSpaceSurrounded when column==0 and the space is surrounded
-   */
-  @Test
-  public void isSpaceSurroundedColumnZeroTrue(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,0),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(5,0),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(4,0));
-  }
-
-  /**
-   * Test isSpaceSurrounded when column==0 and the space isn't surrounded
-   */
-  @Test
-  public void isSpaceSurroundedColumnZeroFalse(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,0),new ObjectCard());
-    assertFalse(instance.getBoard().isSpaceSurrounded(4,0));
-  }
-
-  /**
-   * Test isSpaceSurrounded when column==8 and the space is surrounded
-   */
-  @Test
-  public void isSpaceSurroundedColumnEightTrue(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,8),new ObjectCard());
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(4,8),new ObjectCard());
-    assertTrue(instance.getBoard().isSpaceSurrounded(3,8));
-  }
-
-  /**
-   * Test isSpaceSurrounded when column==8 and the space isn't surrounded
-   */
-  @Test
-  public void isSpaceSurroundedColumnEightFalse(){
-    instance.setMaxPlayers(4);
-    instance.getBoard().putObjectIn(instance.getBoard().getSpace(3,8),new ObjectCard());
-    assertFalse(instance.getBoard().isSpaceSurrounded(3,8));
-  }
 }

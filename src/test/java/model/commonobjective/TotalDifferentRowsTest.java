@@ -25,7 +25,7 @@ public class TotalDifferentRowsTest {
             }
         }
 
-        //instance initialized with known elements
+        //testLibrary initialized with known elements
 
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,0));
         instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,1));

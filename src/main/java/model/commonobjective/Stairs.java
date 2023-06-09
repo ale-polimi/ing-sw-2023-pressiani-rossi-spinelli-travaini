@@ -1,5 +1,6 @@
 package model.commonobjective;
 
+import enumerations.ObjectColour;
 import model.library.Library;
 import view.cli.Colours;
 
@@ -17,23 +18,80 @@ public class Stairs extends CommonObjective {
             "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "     the left or on the right, each next column\n" +
             "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "   must be made of exactly one more tile.\n" +
             "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Tiles can be of any type.";
+
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
-        for (int i = x; i < x+5 ; i++) {
-            for (int j = 0; j < i+1; j++) {
-                if (library.getLibrarySpace(i,j).getObject() == null)
-                    return false;
+        boolean returnValue = true;
+        int firstTryRow = 1;
+        int secondTryRow = 0;
+
+        if(!isInDescendingOrder(library, firstTryRow)){
+            if(!isInDescendingOrder(library, secondTryRow)){
+                if(!isInAscendingOrder(library, firstTryRow)){
+                    if(!isInAscendingOrder(library, secondTryRow)){
+                        returnValue = false;
+                    }
+                }
             }
         }
 
-        if ((x==1 && library.getLibrarySpace(0,0).getObject()==null) || x==0 ) {
-            for (int i = x, j = y; i < 4 + x; j++, i++) {
-                if (library.getLibrarySpace(i, j + 1).getObject()!= null)
-                    return false;
+        return returnValue;
+    }
+
+    /**
+     * This method checks if the stairs are present in ascending order.
+     * @param library is the library of the player.
+     * @param startingRow is the starting row (0 or 1).
+     * @return {@code true} if the stairs are in ascending order, {@code false} otherwise.
+     */
+    private boolean isInAscendingOrder(Library library, int startingRow) {
+        boolean retValue = true;
+
+        for(int row = startingRow; row < 5 + startingRow; row++){
+            for(int col = 4; col >= 0; col--){
+                if(4 - col + startingRow <= row){
+                    if(library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
+                        retValue = false;
+                        break;
+                    }
+                } else {
+                    if(!library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
+                        retValue = false;
+                        break;
+                    }
+                }
             }
         }
 
-        return true;
+        return retValue;
+    }
+
+    /**
+     * This method checks if the stairs are present in descending order.
+     * @param library is the library of the player.
+     * @param startingRow is the starting row (0 or 1).
+     * @return {@code true} if the stairs are in descending order, {@code false} otherwise.
+     */
+    private boolean isInDescendingOrder(Library library, int startingRow){
+        boolean retValue = true;
+
+        for(int row = startingRow; row < 5 + startingRow; row++){
+            for(int col = 0; col < 5; col++){
+                if(col + startingRow <= row){
+                    if(library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
+                        retValue = false;
+                        break;
+                    }
+                } else {
+                    if(!library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
+                        retValue = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return retValue;
     }
 
     public String getDescription() {

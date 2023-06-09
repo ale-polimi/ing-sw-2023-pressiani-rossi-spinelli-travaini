@@ -25,8 +25,11 @@ hs_err_pid*
 #IntelliJ IDEA
 .idea/
 *.iml
-#Perr Review Folder
+#Peer Review Folder
 peer_review_players/
+
+# Unused classes
+src/main/java/model/Turn.java
 
 # Experimental network stuff
 src/main/java/view/VirtualView.java

@@ -1,6 +1,7 @@
 package model.commonobjective;
 
 
+import enumerations.ObjectColour;
 import model.library.Library;
 import model.library.LibrarySpace;
 import model.objects.ObjectCard;
@@ -12,73 +13,124 @@ import static org.junit.Assert.*;
 
 
 public class StairsTest {
-    Library instance;
-
+    Library testLibrary;
     Stairs stairs;
 
     @Before
     public void setUp() {
+        testLibrary = new Library();
         stairs = new Stairs();
+    }
 
-        instance = new Library();
-
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                instance.getLibraryGrid()[i][j] = new LibrarySpace();
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void hasStairsDescendingOrderFirstTry(){
+        for(int row = 1; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                if(col + 1 <= row){
+                    testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+                }
             }
         }
-
-        //instance initialized with known elements
-
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,0));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(0,1));
-        instance.addObject(new ObjectCard("PINK1"),instance.getLibrarySpace(0,2));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(0,3));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(0,4));
-        instance.addObject(new ObjectCard("LIGHT_BLUE1"),instance.getLibrarySpace(1,0));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,1));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,2));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,3));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,3));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,4));
-        instance.addObject(new ObjectCard("LIGHT_BLUE1"),instance.getLibrarySpace(3,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,4));
-
+        assertTrue(stairs.applyObjectiveRules(testLibrary,0,0));
     }
 
-    @After
-    public void tearDown() {
-        stairs = null;
-    }
-
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
     @Test
-    public void isNotStair(){
-        stairs.applyObjectiveRules(instance, 0, 0);
-        if (instance.getLibrarySpace(3,4).getObject() != null)
-            assertFalse(stairs.applyObjectiveRules(instance, 0, 0));
-    }
-
-    @Test
-    public void isStair(){
-        if (instance.getLibrarySpace(0,4)== null) {
-           assertTrue(stairs.applyObjectiveRules(instance, 0, 4));
+    public void hasStairsDescendingOrderSecondTry(){
+        for(int row = 0; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                if(col <= row){
+                    testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+                }
+            }
         }
+        assertTrue(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void hasStairsAscendingOrderFirstTry(){
+        for(int row = 1; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                if(4 - col + 1 <= row){
+                    testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+                }
+            }
+        }
+        assertTrue(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void hasStairsAscendingOrderSecondTry(){
+        for(int row = 0; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                if(4 - col <= row){
+                    testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+                }
+            }
+        }
+        assertTrue(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void doesNotHaveStairsDescendingOrderFirstTry(){
+        for(int row = 1; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+            }
+        }
+        assertFalse(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void doesNotHaveStairsDescendingOrderSecondTry(){
+        for(int row = 0; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+            }
+        }
+        assertFalse(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void doesNotHaveStairsAscendingOrderFirstTry(){
+        for(int row = 1; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+            }
+        }
+        assertFalse(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void doesNotHaveStairsAscendingOrderSecondTry(){
+        for(int row = 1; row < 6; row++){
+            for(int col = 0; col < 5; col++){
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+            }
+        }
+        assertFalse(stairs.applyObjectiveRules(testLibrary,0,0));
     }
 }

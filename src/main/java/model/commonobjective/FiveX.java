@@ -4,6 +4,8 @@ import enumerations.ObjectColour;
 import model.library.Library;
 import view.cli.Colours;
 
+import javax.annotation.processing.Generated;
+
 public class FiveX extends CommonObjective {
     /**
      *this method will check the presence of at least five objects of the same colour, that form an x
