@@ -15,23 +15,21 @@ import network.messages.Message;
 import network.messages.MessageType;
 import network.messages.PingMessage;
 import observer.Observable;
-import observer.Observer;
 
 /**
  * this class represents an RMI client.
  */
 
-public class ClientRMI extends Observable implements Client,Runnable {
+public class ClientRMI extends Observable implements Client,Runnable,ClientHandler {
 
     private transient Server server;
-
+    private String nickname;
     //default RMI port
     private final int port;
     private final String address;
     boolean getConnected =false;
-    private ArrayList<Message> messages =new ArrayList<>();
+    private final ArrayList<Message> messages =new ArrayList<>();
     transient ScheduledExecutorService timer;
-
     /**
      * is the constructor with the connection with the server
      *
@@ -82,22 +80,22 @@ public class ClientRMI extends Observable implements Client,Runnable {
      */
     @Override
     public void sendMessage(Message message) {
-
-        try{
-            server.receiveMessage(message);
-        } catch (RemoteException e){
-           disconnect();
+        if(message.getType().equals(MessageType.USER_INFO))nickname = message.getSender();
+        try {server.receiveMessage(message);}
+        catch (RemoteException e) {
+            System.out.println("Server disconnected, terminating application...");
+            System.exit(1);
         }
-        //notifyObserver(new Message("client", message.getType()));
-
     }
 
 
     /**
-     * Receive a message
-     * @param message is the sent message
+     * Handles the reception of a message from the server
+     * @param message is the received message
      */
-    public void receivedMessage(Message message)throws RemoteException{messages.add(message);}
+    public void receivedMessage(Message message)throws RemoteException{
+        if(!message.getType().equals(MessageType.PING)) messages.add(message);
+    }
 
     /**
      * method for register a client to a game
@@ -112,23 +110,25 @@ public class ClientRMI extends Observable implements Client,Runnable {
                 e.printStackTrace();
                 System.err.println("connection unable");
                 getConnected = false;
+                System.exit(1);
             }
         }
 
 
     @Override
-    public boolean isConnected() {
-        return getConnected;
-    }
+    public boolean isConnected() {return getConnected;}
 
     /**
      * Disconnect the RMI client
      */
     @Override
     public void disconnect() {
-        server=null;
-        System.out.println("Connection interrupted, terminating application...");
-        System.exit(1);
+       getConnected = false;
+        try {
+            server.disconnect(this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -137,14 +137,14 @@ public class ClientRMI extends Observable implements Client,Runnable {
     @Override
     public void ping() {
         timer.scheduleAtFixedRate(() -> {
-            sendMessage(new PingMessage("client", MessageType.PING));
+            sendMessage(new PingMessage(nickname, MessageType.PING));
         }, 0, 5000, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void run() {
         while(!Thread.interrupted()) {
-            if(messages.size()>0) notifyObserver(messages.remove(0));
+            if(messages.size()>0) notifyObserver(messages.remove(0));;
         }
     }
 }

@@ -6,13 +6,15 @@ import observer.Observable;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ServerRMI extends Observable implements Server,Runnable{
 
-    private final ArrayList<ClientHandler> clients;
+    private ArrayList<ClientHandler> clients;
     private ArrayList<Message> messages = new ArrayList<>();
     private final StartServerImpl startServer;
+    private HashMap<String, Boolean> pingReceived=new HashMap<>();
     /**
      * Custom constructor of ServerRMI class
      * @throws RemoteException Threw when the server is unreachable
@@ -42,13 +44,9 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
      public void receiveMessage(Message message){
-        if(!message.getType().equals(MessageType.PING))
-        {
-            System.out.println("Message Received");
-            messages.add(message);
-        }
+        if(!message.getType().equals(MessageType.PING))messages.add(message);
+        else pingReceived.replace(message.getSender(), true);
     }
-
     /**
      * Send a message to the clients
      * @param message The message that has to be forwarded
@@ -57,10 +55,10 @@ public class ServerRMI extends Observable implements Server,Runnable{
     public void sendMessage(Message message){
         for(ClientHandler c : clients){
             try {
-                System.out.println("Message sent");
+                System.out.println("Message sent:");
                 c.receivedMessage(message);
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+               disconnect(c);
             }
         }
     }
@@ -70,23 +68,24 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
     public void disconnect(ClientHandler clientHandler) {
         clients.remove(clientHandler);
-        for(ClientHandler c: clients){
-            try {c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
-            } catch (RemoteException e) {}
-            clients.remove(c);
-        }
+       startServer.disconnect();
     }
 
+    public void disconnect(){
+        for(ClientHandler c: clients){
+            try {
+                c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
+            } catch (RemoteException e) {}
+        }
+        clients = new ArrayList<>();
+        pingReceived = new HashMap<>();
+    }
     @Override
     public void ping() throws RemoteException {
-        for(ClientHandler c : clients){
-            try{c.receivedMessage(new PingMessage(null,MessageType.PING));}
-        catch(RemoteException e){
-                startServer.disconnect(c);
-        }}
+        if(pingReceived.containsValue(false))startServer.disconnect();
+        for(String key : pingReceived.keySet()){pingReceived.replace(key,false);}
     }
 
-    public List<ClientHandler> getClients() {return clients;}
 
     @Override
     public void run() {
@@ -94,4 +93,6 @@ public class ServerRMI extends Observable implements Server,Runnable{
             if(messages.size()>0)notifyObserver(messages.remove(0));
         }
     }
+
+    public StartServerImpl getServer() {return startServer; }
 }

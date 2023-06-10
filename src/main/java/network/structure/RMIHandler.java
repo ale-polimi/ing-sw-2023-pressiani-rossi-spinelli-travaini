@@ -50,7 +50,7 @@ public class RMIHandler implements ClientHandler,Runnable{
         try {
             client.receivedMessage(message);
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            server.disconnect(this);
         }
     }
 

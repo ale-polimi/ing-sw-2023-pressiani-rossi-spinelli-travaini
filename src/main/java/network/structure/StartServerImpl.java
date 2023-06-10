@@ -114,18 +114,20 @@ public class StartServerImpl implements Observer, Runnable {
 
     @Override
     public void run() {
-        try {
-            getServerRMI().ping();
-        } catch (RemoteException e) {
-            disconnect();
+        while (!Thread.interrupted()) {
+            try {
+                serverRMI.ping();
+            } catch (RemoteException e) {
+                disconnect();
+            }
+            try {
+                socketServer.ping();
+            } catch (RemoteException e) {
+                disconnect();
+            }
         }
         try {
-            getSocketServer().ping();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            wait(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
