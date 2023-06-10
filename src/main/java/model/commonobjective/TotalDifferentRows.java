@@ -4,12 +4,7 @@ import model.library.Library;
 import view.cli.Colours;
 
 public class TotalDifferentRows extends CommonObjective {
-    /**
-     *this method will check the presence of at least two rows with all different objects
-     * @param library is the personal library of the players
-     * @param x is the row coordinate
-     * @param y is the column coordinate
-     */
+
 
     private final String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Two lines each formed by 5 different\n" +
             "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  types of tiles. One line can show the\n" +
@@ -17,6 +12,12 @@ public class TotalDifferentRows extends CommonObjective {
             "             other line.";
 
    private int count=0;
+    /**
+     *this method will check the presence of at least two rows with all different objects
+     * @param library is the personal library of the players
+     * @param x is the row coordinate
+     * @param y is the column coordinate
+     */
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
         x=0;
@@ -24,11 +25,10 @@ public class TotalDifferentRows extends CommonObjective {
 
         boolean different=true;
 
-        for (int k = 0; k < 5; k++) {
-            different=true;
-            for (int i = 0; i < 5 && different; i++) {
+        for (int k = 0; k < 6; k++) {
+            for (int i = 0; i < 4 && different; i++) {
                 for (int j = i+1; j < 5; j++) {
-                    if (library.getLibrarySpace(k, i).getObject().getObjectColour().isEquals(library.getLibrarySpace(k, i+1).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(k, i).getObject().getObjectColour().isEquals(library.getLibrarySpace(k, j).getObject().getObjectColour())) {
                         different = false;
                         break;
                     }
