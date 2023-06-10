@@ -125,11 +125,11 @@ public class StartServerImpl implements Observer, Runnable {
             } catch (RemoteException e) {
                 disconnect();
             }
-        }
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            try {
+                Thread.sleep(6000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

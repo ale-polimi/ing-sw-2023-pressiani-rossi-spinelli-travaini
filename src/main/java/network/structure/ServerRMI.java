@@ -45,7 +45,8 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
      public void receiveMessage(Message message){
         if(!message.getType().equals(MessageType.PING))messages.add(message);
-        else pingReceived.replace(message.getSender(), true);
+        else {pingReceived.replace(message.getSender(),true);
+            System.out.println("message = " + message);}
     }
     /**
      * Send a message to the clients
@@ -53,6 +54,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
     public void sendMessage(Message message){
+        if(message.getType().equals(MessageType.SHOW_LOBBY)){System.out.println("Clientn to agga");pingReceived.put(message.getSender(), true);}
         for(ClientHandler c : clients){
             try {
                 System.out.println("Message sent:");
@@ -82,8 +84,10 @@ public class ServerRMI extends Observable implements Server,Runnable{
     }
     @Override
     public void ping() throws RemoteException {
+        System.out.println("Alrltr: "+ pingReceived);
         if(pingReceived.containsValue(false))startServer.disconnect();
-        for(String key : pingReceived.keySet()){pingReceived.replace(key,false);}
+       else  for(String key : pingReceived.keySet()){pingReceived.replace(key,true,false);
+            System.out.println(pingReceived);}
     }
 
 

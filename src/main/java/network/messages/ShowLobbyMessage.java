@@ -13,7 +13,7 @@ public class ShowLobbyMessage extends Message {
      * @param players are the players currently connected to the game.
      */
     public ShowLobbyMessage(ArrayList<String> players) {
-        super("Controller", MessageType.SHOW_LOBBY);
+        super(players.get(players.size()-1), MessageType.SHOW_LOBBY);
         this.players = players;
     }
 
