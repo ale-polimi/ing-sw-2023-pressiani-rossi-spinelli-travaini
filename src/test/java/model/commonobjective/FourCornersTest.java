@@ -1,87 +1,53 @@
 package model.commonobjective;
 
 
-import model.library.Library;
-
-import junit.framework.TestCase;
-import model.library.LibrarySpace;
-import model.objects.ObjectCard;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import enumerations.ObjectColour;
 import model.library.Library;
+import model.objects.ObjectCard;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-public class FourCornersTest extends TestCase{
+public class FourCornersTest {
+    Library testLibrary;
     FourCorners  fourCorners;
-    Library instance;
-    @BeforeEach
+
+    @Before
     public void setUp() {
-        instance=new Library();
+        testLibrary =new Library();
         fourCorners= new FourCorners();
-
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                instance.getLibraryGrid()[i][j] = new LibrarySpace();
-            }
-        }
-
-        instance.addObject(new ObjectCard("GREEN2"),instance.getLibrarySpace(0,0));
-        instance.addObject(new ObjectCard("GREEN3"),instance.getLibrarySpace(0,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,3));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(0,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(1,0));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,1));
-        instance.addObject(new ObjectCard("BLUE3"),instance.getLibrarySpace(1,2));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,3));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,0));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,1));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(2,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,3));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,4));
-        instance.addObject(new ObjectCard("LIGHT_BLUE1"),instance.getLibrarySpace(3,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,2));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(3,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,1));
-        instance.addObject(new ObjectCard("GREEN3"),instance.getLibrarySpace(4,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,1));
-        instance.addObject(new ObjectCard("GREEN2"),instance.getLibrarySpace(5,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,4));
     }
 
-    @AfterEach
-    public void tearDown() {
-        fourCorners=null;
-    }
+    /**
+     * Test to check if the objective is not applied when the library is empty.
+     */
     @Test
-    public void isFourCorners(){
-        int x = 0;
-        int y = 0;
-        fourCorners.applyObjectiveRules(instance,x,y);
-        if(instance.getLibrarySpace(x, y).getObject().getObjectColour().equals(instance.getLibrarySpace(x, y + 4).getObject().getObjectColour()) &&
-                instance.getLibrarySpace(x, y).getObject().getObjectColour().equals(instance.getLibrarySpace(x + 5, y).getObject().getObjectColour()) &&
-                instance.getLibrarySpace(x, y).getObject().getObjectColour().equals(instance.getLibrarySpace(x + 5, y + 4).getObject().getObjectColour()))
-            assertTrue(fourCorners.applyObjectiveRules(instance,x,y));
+    public void hasEmptyFourCorners(){
+        assertFalse(fourCorners.applyObjectiveRules(testLibrary,0,0));
     }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
     @Test
-    public void isNotFourCorners(){
-        int x = 0;
-        int y = 0;
-        fourCorners.applyObjectiveRules(instance,x,y);
-        if(!instance.getLibrarySpace(x, y).getObject().getObjectColour().equals(instance.getLibrarySpace(x, y + 4).getObject().getObjectColour()) ||
-                !instance.getLibrarySpace(x, y).getObject().getObjectColour().equals(instance.getLibrarySpace(x + 5, y).getObject().getObjectColour()) ||
-                !instance.getLibrarySpace(x, y).getObject().getObjectColour().equals(instance.getLibrarySpace(x + 5, y + 4).getObject().getObjectColour()))
-            assertFalse(fourCorners.applyObjectiveRules(instance,x,y));
+    public void hasFourCorners(){
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(0,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(0,4));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,4));
+
+        assertTrue(fourCorners.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    /**
+     * Test to check if the objective is not applied when the objects are of different colours.
+     */
+    @Test
+    public void doesNotHaveFourCorners(){
+        testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(0,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(0,4));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,4));
+
+        assertFalse(fourCorners.applyObjectiveRules(testLibrary,0,0));
     }
 }

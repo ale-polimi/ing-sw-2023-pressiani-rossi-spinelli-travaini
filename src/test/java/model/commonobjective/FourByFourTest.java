@@ -3,59 +3,56 @@ package model.commonobjective;
 
 import model.library.Library;
 
-import junit.framework.TestCase;
 import model.library.LibrarySpace;
 import model.objects.ObjectCard;
 import org.junit.*;
 
-import enumerations.ObjectColour;
-import model.library.Library;
-
 import static org.junit.jupiter.api.Assertions.*;
 public class FourByFourTest {
+    Library testLibrary;
     FourByFourNew  fourByFour;
-    Library instance;
+
     @Before
     public void setUp() {
-        instance=new Library();
+        testLibrary =new Library();
         fourByFour= new FourByFourNew();
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                instance.getLibraryGrid()[i][j] = new LibrarySpace();
+                testLibrary.getLibraryGrid()[i][j] = new LibrarySpace();
             }
         }
 
-        instance.addObject(new ObjectCard("GREEN2"),instance.getLibrarySpace(0,0));
-        instance.addObject(new ObjectCard("GREEN3"),instance.getLibrarySpace(0,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,3));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(0,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(1,0));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,1));
-        instance.addObject(new ObjectCard("BLUE3"),instance.getLibrarySpace(1,2));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,3));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,0));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,1));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(2,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,3));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,4));
-        instance.addObject(new ObjectCard("LIGHT_BLUE1"),instance.getLibrarySpace(3,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,2));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(3,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,1));
-        instance.addObject(new ObjectCard("BLUE3"),instance.getLibrarySpace(4,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,4));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(5,0));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(5,1));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(5,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,4));
+        testLibrary.addObject(new ObjectCard("GREEN2"), testLibrary.getLibrarySpace(0,0));
+        testLibrary.addObject(new ObjectCard("GREEN3"), testLibrary.getLibrarySpace(0,1));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(0,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(0,3));
+        testLibrary.addObject(new ObjectCard("WHITE1"), testLibrary.getLibrarySpace(0,4));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(1,0));
+        testLibrary.addObject(new ObjectCard("BLUE1"), testLibrary.getLibrarySpace(1,1));
+        testLibrary.addObject(new ObjectCard("BLUE3"), testLibrary.getLibrarySpace(1,2));
+        testLibrary.addObject(new ObjectCard("BLUE1"), testLibrary.getLibrarySpace(1,3));
+        testLibrary.addObject(new ObjectCard("BLUE1"), testLibrary.getLibrarySpace(1,4));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(2,0));
+        testLibrary.addObject(new ObjectCard("YELLOW1"), testLibrary.getLibrarySpace(2,1));
+        testLibrary.addObject(new ObjectCard("WHITE1"), testLibrary.getLibrarySpace(2,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(2,3));
+        testLibrary.addObject(new ObjectCard("YELLOW1"), testLibrary.getLibrarySpace(2,4));
+        testLibrary.addObject(new ObjectCard("LIGHT_BLUE1"), testLibrary.getLibrarySpace(3,0));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(3,1));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(3,2));
+        testLibrary.addObject(new ObjectCard("WHITE1"), testLibrary.getLibrarySpace(3,3));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(3,4));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(4,0));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(4,1));
+        testLibrary.addObject(new ObjectCard("BLUE3"), testLibrary.getLibrarySpace(4,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(4,3));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(4,4));
+        testLibrary.addObject(new ObjectCard("BLUE1"), testLibrary.getLibrarySpace(5,0));
+        testLibrary.addObject(new ObjectCard("BLUE1"), testLibrary.getLibrarySpace(5,1));
+        testLibrary.addObject(new ObjectCard("BLUE1"), testLibrary.getLibrarySpace(5,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(5,3));
+        testLibrary.addObject(new ObjectCard("GREEN1"), testLibrary.getLibrarySpace(5,4));
 
 
 
@@ -70,22 +67,22 @@ public class FourByFourTest {
     public void isFourByFour(){
         int x = 0;
         int y = 0;
-        fourByFour.applyObjectiveRules(instance,x,y);
+        fourByFour.applyObjectiveRules(testLibrary,x,y);
         System.out.println(fourByFour.groupCount);
         if(fourByFour.groupCount >=5){
             System.out.print("fourbyfour");
-            assertTrue(fourByFour.applyObjectiveRules(instance,x,y));}
+            assertTrue(fourByFour.applyObjectiveRules(testLibrary,x,y));}
     }
 
     @Test
     public void isNotFourByFour(){
         int x = 0;
         int y = 0;
-        fourByFour.applyObjectiveRules(instance,x,y);
+        fourByFour.applyObjectiveRules(testLibrary,x,y);
         System.out.println(fourByFour.groupCount);
         if(fourByFour.groupCount<5){
             System.out.print("notfourbyfour");
-            assertFalse(fourByFour.applyObjectiveRules(instance,x,y));}
+            assertFalse(fourByFour.applyObjectiveRules(testLibrary,x,y));}
     }
 
 }
