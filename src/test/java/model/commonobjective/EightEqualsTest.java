@@ -1,22 +1,27 @@
 package model.commonobjective;
 
-import enumerations.ObjectColour;
-import model.library.*;
-
 import model.library.Library;
 import model.objects.ObjectCard;
 import org.junit.*;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EightEqualsTest {
-    private Library testLibrary;
+
     private EightEquals  eightEquals;
+    private Library testLibrary;
 
     @Before
     public void setUp() {
-        testLibrary = new Library();
         eightEquals = new EightEquals();
+        testLibrary = new Library();
+
+    }
+
+    @After
+    public void tearDown() {
+        eightEquals=null;
     }
 
     @Test
@@ -26,13 +31,16 @@ public class EightEqualsTest {
 
     @Test
     public void hasEightEquals() {
-        for(int row = 0; row < 6; row++){
-            for(int col = 0; col < 2; col++){
-                testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
-            }
-        }
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(1,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(0,0));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(4,3));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(2,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(1,1));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(0,1));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,3));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,2));
 
-        assertTrue(eightEquals.applyObjectiveRules(testLibrary,0,0));
+        assertTrue(eightEquals.applyObjectiveRules(testLibrary, 0, 0 ));
     }
     @Test
     public void notEightEquals() {
