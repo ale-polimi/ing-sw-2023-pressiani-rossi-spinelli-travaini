@@ -47,9 +47,10 @@ public class TotalDifferentColumns extends CommonObjective {
             if(different){
                 count++;
             }
-            if(count == 2){
-                return true;
-            }
+        }
+
+        if(count == 2){
+            return true;
         }
         return false;
     }
