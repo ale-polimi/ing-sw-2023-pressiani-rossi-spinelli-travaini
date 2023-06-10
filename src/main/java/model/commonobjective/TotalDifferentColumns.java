@@ -1,7 +1,10 @@
 package model.commonobjective;
 
+import enumerations.ObjectColour;
 import model.library.Library;
 import view.cli.Colours;
+
+import java.util.HashSet;
 
 public class TotalDifferentColumns extends CommonObjective {
 
@@ -25,29 +28,30 @@ public class TotalDifferentColumns extends CommonObjective {
 
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
-
+        HashSet<ObjectColour> firstSet;
         boolean different=true;
 
-        for (int k = 0; k < 5; k++) {
-            for (int i = 0; i < 4 && different; i++) {
-                for (int j = i+1; j < 5; j++) {
-                    if (library.getLibrarySpace(i, k).getObject().getObjectColour().isEquals(library.getLibrarySpace(j, k).getObject().getObjectColour())) {
+        for (int col = 0; col < 5; col++) {
+            different = true;
+            firstSet = new HashSet<>();
+            for (int row = 0; row < 6 && different; row++) {
+                if(library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
+                    different = false;
+                } else {
+                    if(!firstSet.add(library.getLibrarySpace(row,col).getObject().getObjectColour())){
                         different = false;
-                        break;
                     }
                 }
             }
-            if (different)
-                count++;
-            if (count == 2)
-                return true;
 
+            if(different){
+                count++;
+            }
+            if(count == 2){
+                return true;
+            }
         }
         return false;
-    }
-     /** this method return the result of the count in the method applyObjectiveRules*/
-    public int getCount() {
-        return count;
     }
 
     public String getDescription() {

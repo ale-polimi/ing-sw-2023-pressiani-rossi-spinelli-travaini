@@ -1,7 +1,10 @@
 package model.commonobjective;
 
+import enumerations.ObjectColour;
 import model.library.Library;
 import view.cli.Colours;
+
+import java.util.HashSet;
 
 public class TotalDifferentRows extends CommonObjective {
 
@@ -23,33 +26,33 @@ public class TotalDifferentRows extends CommonObjective {
         x=0;
         y=0;
 
+        HashSet<ObjectColour> firstSet;
         boolean different=true;
 
-        for (int k = 0; k < 6; k++) {
-            for (int i = 0; i < 4 && different; i++) {
-                for (int j = i+1; j < 5; j++) {
-                    if (library.getLibrarySpace(k, i).getObject().getObjectColour().isEquals(library.getLibrarySpace(k, j).getObject().getObjectColour())) {
+        for (int row = 0; row < 6; row++) {
+            different = true;
+            firstSet = new HashSet<>();
+            for (int col = 0; col < 5 && different; col++) {
+                if(library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
+                    different = false;
+                } else {
+                    if(!firstSet.add(library.getLibrarySpace(row,col).getObject().getObjectColour())){
                         different = false;
-                        break;
                     }
                 }
             }
-            if (different)
-                count++;
-            if (count == 2)
-                return true;
 
+            if(different){
+                count++;
+            }
+            if(count == 2){
+                return true;
+            }
         }
         return false;
     }
 
-    public int getCount(){
-        return count;
-    }
     public String getDescription() {
         return description;
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 package model.commonobjective;
 
+import enumerations.ObjectColour;
 import model.library.Library;
 import model.objects.ObjectCard;
 import org.junit.*;

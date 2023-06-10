@@ -37,7 +37,7 @@ public class FourByFourNew extends CommonObjective{
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 5; j++) {
                     ObjectColour colour = library.getLibrarySpace(i,j).getObject().getObjectColour();
-                    if (colour != null) {
+                    if (colour != ObjectColour.EMPTY) {
 
                         List<int[]> group = getAdjacentCells(i, j, colour);
                         if (group.size() >= MIN_GROUP_SIZE) {

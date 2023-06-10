@@ -27,18 +27,19 @@ public class EightEquals extends CommonObjective {
         y=0;
 
         for (ObjectColour o: ObjectColour.values()) {
-            count=0;
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (library.getLibrarySpace(i,j)!= null){
-                        if (library.getLibrarySpace(i,j).getObject().getObjectColour().isEquals(o)){
-                            count++;
+            if(!o.equals(ObjectColour.EMPTY)) {
+                count = 0;
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (library.getLibrarySpace(i, j) != null) {
+                            if (library.getLibrarySpace(i, j).getObject().getObjectColour().isEquals(o)) {
+                                count++;
+                            }
+                            if (count == 8)
+                                return true;
                         }
-                        if (count==8)
-                            return true;
                     }
                 }
-
             }
         }
         return false;
@@ -46,10 +47,6 @@ public class EightEquals extends CommonObjective {
 
     public String getDescription() {
         return description;
-    }
-
-    public int getCount(){
-        return count;
     }
 
 }
