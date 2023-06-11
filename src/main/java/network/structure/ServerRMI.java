@@ -46,8 +46,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
      public void receiveMessage(Message message){
         if(!message.getType().equals(MessageType.PING))messages.add(message);
         else {
-            ShowLobbyMessage lm = (ShowLobbyMessage) message;
-            pingReceived.replace(lm.getLobbyPlayers().get(lm.getNumOfPlayers()),true);
+            pingReceived.replace(message.getSender(), true);
         }
     }
     /**
