@@ -21,6 +21,11 @@ public class StartServerImpl implements Observer, Runnable {
     //private final ArrayList<Tuple> games = new ArrayList<>();
     private Controller controller;
     private static ExecutorService executor;
+
+    /**
+     * Custom constructor for StartServerImpl class
+     * @throws IOException When there is an error during the creation of the RMI or socket connection
+     */
     public StartServerImpl() throws IOException {
         startRMI();
         startSocket();
@@ -109,9 +114,17 @@ public class StartServerImpl implements Observer, Runnable {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Handle the messages coming from RMI
+     * @param message is the message used to share information.
+     */
     @Override
     public void update(Message message) { receiveMessage(message);}
 
+    /**
+     * Run method of the server
+     */
     @Override
     public void run() {
         while (!Thread.interrupted()) {

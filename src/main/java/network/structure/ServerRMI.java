@@ -45,8 +45,10 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
      public void receiveMessage(Message message){
         if(!message.getType().equals(MessageType.PING))messages.add(message);
-        else {pingReceived.replace(message.getSender(),true);
-            System.out.println("message = " + message);}
+        else {
+            ShowLobbyMessage lm = (ShowLobbyMessage) message;
+            pingReceived.replace(lm.getLobbyPlayers().get(lm.getNumOfPlayers()),true);
+        }
     }
     /**
      * Send a message to the clients
@@ -54,7 +56,9 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
     public void sendMessage(Message message){
-        if(message.getType().equals(MessageType.SHOW_LOBBY)){System.out.println("Clientn to agga");pingReceived.put(message.getSender(), true);}
+        if(message.getType().equals(MessageType.SHOW_LOBBY)){
+            ShowLobbyMessage lm = (ShowLobbyMessage) message;
+            pingReceived.put(lm.getLobbyPlayers().get(lm.getNumOfPlayers()), true);}
         for(ClientHandler c : clients){
             try {
                 System.out.println("Message sent:");
@@ -73,6 +77,9 @@ public class ServerRMI extends Observable implements Server,Runnable{
        startServer.disconnect();
     }
 
+    /**
+     * Disconnect all the players from the game
+     */
     public void disconnect(){
         for(ClientHandler c: clients){
             try {
@@ -82,15 +89,20 @@ public class ServerRMI extends Observable implements Server,Runnable{
         clients = new ArrayList<>();
         pingReceived = new HashMap<>();
     }
+
+    /**
+     * Check if a player is not connected anymore
+     * @throws RemoteException
+     */
     @Override
     public void ping() throws RemoteException {
-        System.out.println("Alrltr: "+ pingReceived);
         if(pingReceived.containsValue(false))startServer.disconnect();
-       else  for(String key : pingReceived.keySet()){pingReceived.replace(key,true,false);
-            System.out.println(pingReceived);}
+       else  for(String key : pingReceived.keySet()){pingReceived.replace(key,true,false);}
     }
 
-
+    /**
+     * Run method
+     */
     @Override
     public void run() {
         while(!Thread.interrupted()){
@@ -98,5 +110,9 @@ public class ServerRMI extends Observable implements Server,Runnable{
         }
     }
 
+    /**
+     * Getter method for the startServer parameter
+     * @return the start server instance
+     */
     public StartServerImpl getServer() {return startServer; }
 }

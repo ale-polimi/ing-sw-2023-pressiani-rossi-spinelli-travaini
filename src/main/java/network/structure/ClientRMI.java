@@ -104,17 +104,20 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
      */
 
     private void initialize(Server server) throws RemoteException {
-            try {
-                server.registry( (ClientHandler) UnicastRemoteObject.exportObject(this,0));
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                System.err.println("connection unable");
-                getConnected = false;
-                System.exit(1);
-            }
+        try {
+            server.registry( (ClientHandler) UnicastRemoteObject.exportObject(this,0));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            System.err.println("connection unable");
+            getConnected = false;
+            System.exit(1);
         }
+    }
 
-
+    /**
+     * Getter for isConnected parameter
+     * @return getConnected instance
+     */
     @Override
     public boolean isConnected() {return getConnected;}
 
@@ -141,6 +144,9 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         }, 0, 5000, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Run method
+     */
     @Override
     public void run() {
         while(!Thread.interrupted()) {
