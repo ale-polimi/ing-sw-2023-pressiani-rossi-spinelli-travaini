@@ -11,7 +11,7 @@ public class TwoEqualsInColumn extends CommonObjective {
      * @param y is the column coordinate
      */
     @Override
-    public boolean applyObjectiveRules(Library library,int x, int y) {
+    public  boolean applyObjectiveRules(Library library, int x, int y) {
 
         return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+1, y ).getObject().getObjectColour());
     }

@@ -13,18 +13,24 @@ public class SixByTwo extends TwoEqualsInColumn{
                                        "     from those of another group.";
 
     @Override
-    public boolean applyObjectiveRules(Library library, int x, int y) {
-        return super.applyObjectiveRules(library, x, y);
+    public  boolean applyObjectiveRules(Library library, int x, int y) {
+        if ( rule == true){
+            return  super.applyObjectiveRules(library, x, y);
+        }else {
+            return controlObjective(library);
+        }
     }
 
     private int count = 0;
+    private boolean rule;
 
     /**
      * This method will check the presence of six couples of elements of the same colour(couples can be of different colours from each other)
      * @param library is the personal library of the players
      */
-    public boolean controlObjective(Library library){
+    public  boolean controlObjective(Library library){
         count = 0;
+        rule = true;
 
 
         for (int x = 0; x < 6; x++) {
@@ -33,6 +39,7 @@ public class SixByTwo extends TwoEqualsInColumn{
                     count++;
                     y++;
                     if(count==6){
+                        rule = false;
                         return true;
                     }
                 }
@@ -49,6 +56,7 @@ public class SixByTwo extends TwoEqualsInColumn{
                                 count++;
                                 x++;
                                 if(count == 6){
+                                    rule = false;
                                     return true;
                                 }
                             }
@@ -58,6 +66,7 @@ public class SixByTwo extends TwoEqualsInColumn{
                                 count++;
                                 x++;
                                 if(count == 6){
+                                    rule = false;
                                     return true;
                                 }
                             }
@@ -67,6 +76,7 @@ public class SixByTwo extends TwoEqualsInColumn{
                                 count++;
                                 x++;
                                 if(count == 6){
+                                    rule = false;
                                     return true;
                                 }
                             }
@@ -78,6 +88,7 @@ public class SixByTwo extends TwoEqualsInColumn{
             }
 
         }
+        rule = false;
         return false;
 
     }

@@ -73,10 +73,10 @@ public class FourByFourNew extends CommonObjective{
                 if (currentColour != null && currentColour.isEquals(colour)) {
                     library.getLibrarySpace(i,j).setVisited(true);
                     group.add(new int[] {i, j});
-                    group.addAll(getAdjacentCells(i-1, j, colour));
-                    group.addAll(getAdjacentCells(i+1, j, colour));
-                    group.addAll(getAdjacentCells(i, j-1, colour));
-                    group.addAll(getAdjacentCells(i, j+1, colour));
+                    if(i != 0) group.addAll(getAdjacentCells(i - 1, j, colour));
+                    if(i != 5) group.addAll(getAdjacentCells(i + 1, j, colour));
+                    if(j != 0) group.addAll(getAdjacentCells(i, j - 1, colour));
+                    if(j != 4) group.addAll(getAdjacentCells(i, j + 1, colour));
                 }
             }
             return group;
