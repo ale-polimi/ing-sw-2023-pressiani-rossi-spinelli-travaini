@@ -324,6 +324,10 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 view.showGenericError(nickname, "Another player disconnected, terminating application...");
                 System.exit(1);
                 break;
+            case CHAT:
+                ChatMessage cm = (ChatMessage) message;
+                view.showChat(cm.getSender(),cm.getText());
+                break;
             default:
                 break;
         }

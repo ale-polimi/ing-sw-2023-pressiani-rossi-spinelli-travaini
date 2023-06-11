@@ -7,11 +7,10 @@ import observer.Observable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ServerRMI extends Observable implements Server,Runnable{
 
-    private ArrayList<ClientHandler> clients;
+    private ArrayList<ClientHandler> clientsRMI;
     private ArrayList<Message> messages = new ArrayList<>();
     private final StartServerImpl startServer;
     private HashMap<String, Boolean> pingReceived=new HashMap<>();
@@ -22,7 +21,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
     public ServerRMI(StartServerImpl startServer) throws RemoteException {
         super();
         this.startServer = startServer;
-        this.clients = new ArrayList<>();
+        this.clientsRMI = new ArrayList<>();
     }
 
     /**
@@ -31,9 +30,9 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
     public void registry(ClientHandler clientHandler) throws RemoteException {
-        if(!clients.contains(clientHandler)){
+        if(!clientsRMI.contains(clientHandler)){
             System.out.println("Received");
-            clients.add(clientHandler);
+            clientsRMI.add(clientHandler);
             clientHandler.receivedMessage(new  AskNicknameMessage("Controller"));
         }
     }
@@ -45,9 +44,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
      public void receiveMessage(Message message){
         if(!message.getType().equals(MessageType.PING))messages.add(message);
-        else {
-            pingReceived.replace(message.getSender(), true);
-        }
+        else {pingReceived.replace(message.getSender(), true);}
     }
     /**
      * Send a message to the clients
@@ -58,7 +55,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
         if(message.getType().equals(MessageType.SHOW_LOBBY)){
             ShowLobbyMessage lm = (ShowLobbyMessage) message;
             pingReceived.put(lm.getLobbyPlayers().get(lm.getNumOfPlayers() - 1), true);}
-        for(ClientHandler c : clients){
+        for(ClientHandler c : clientsRMI){
             try {
                 System.out.println("Message sent:");
                 c.receivedMessage(message);
@@ -72,7 +69,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
     public void disconnect(ClientHandler clientHandler) {
-        clients.remove(clientHandler);
+        clientsRMI.remove(clientHandler);
        startServer.disconnect();
     }
 
@@ -80,12 +77,12 @@ public class ServerRMI extends Observable implements Server,Runnable{
      * Disconnect all the players from the game
      */
     public void disconnect(){
-        for(ClientHandler c: clients){
+        for(ClientHandler c: clientsRMI){
             try {
                 c.receivedMessage(new GameClosedMessage("Controller",MessageType.GAME_CLOSED));
             } catch (RemoteException e) {}
         }
-        clients = new ArrayList<>();
+        clientsRMI = new ArrayList<>();
         pingReceived = new HashMap<>();
     }
 
@@ -95,8 +92,12 @@ public class ServerRMI extends Observable implements Server,Runnable{
      */
     @Override
     public void ping() throws RemoteException {
-        if(pingReceived.containsValue(false))startServer.disconnect();
-       else  for(String key : pingReceived.keySet()){pingReceived.replace(key,true,false);}
+        if(pingReceived.isEmpty())return;
+        System.out.println(pingReceived);
+        if(pingReceived.containsValue(false)) startServer.disconnect();
+        for(String key : pingReceived.keySet()){
+            pingReceived.replace(key,true,false);
+        }
     }
 
     /**

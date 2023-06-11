@@ -118,13 +118,13 @@ public class StartServerImpl implements Observer, Runnable {
      * Return the instance of the RMI server
      * @return the serverRMI
      */
-    private ServerRMI getServerRMI() {return serverRMI; }
+    public ServerRMI getServerRMI() {return serverRMI; }
 
     /**
      * Return the instance of the socket server
      * @return The socket server
      */
-    private SocketServer getSocketServer() {return socketServer; }
+    public SocketServer getSocketServer() {return socketServer; }
 
     /**
      * Start the server RMI
@@ -201,7 +201,7 @@ public class StartServerImpl implements Observer, Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            try {
+           try {
                 serverRMI.ping();
             } catch (RemoteException e) {
                 disconnect();

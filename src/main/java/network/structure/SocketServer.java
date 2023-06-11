@@ -53,7 +53,10 @@ public class SocketServer implements Runnable, Server{
      * @param message the message that has to be dispatched
      */
     @Override
-   public void receiveMessage(Message message){if(!message.getType().equals(MessageType.PING))server.receiveMessage(message);}
+   public void receiveMessage(Message message){
+        if(message.getType().equals(MessageType.PING)) server.getServerRMI().receiveMessage(message);
+        else server.receiveMessage(message);
+    }
 
     /**
      * Send a message to the client
@@ -67,6 +70,11 @@ public class SocketServer implements Runnable, Server{
      */
     @Override
     public void disconnect(ClientHandler clientHandler) {
+        try {
+            clientHandler.disconnect();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         clients.remove((SocketHandler) clientHandler);
        server.disconnect();
     }

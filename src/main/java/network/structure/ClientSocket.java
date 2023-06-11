@@ -28,6 +28,7 @@ public class ClientSocket extends Observable implements Client {
     private Socket socket;
     private final int port;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private String nickname;
     Server server;
     final String address;
     boolean getConnected =false;
@@ -80,6 +81,7 @@ public class ClientSocket extends Observable implements Client {
     @Override
     public void sendMessage(Message message) {
         try {
+            if(message.getType().equals(MessageType.USER_INFO))nickname = message.getSender();
             oos.writeObject(message);
             oos.flush();
             oos.reset();
@@ -167,5 +169,5 @@ public class ClientSocket extends Observable implements Client {
      * check the presence of problems in the connection between client and server
      */
     @Override
-    public void ping() {timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(null, MessageType.PING)), 0, 5000, TimeUnit.MILLISECONDS);}
+    public void ping() {timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(nickname, MessageType.PING)), 0, 5000, TimeUnit.MILLISECONDS);}
 }

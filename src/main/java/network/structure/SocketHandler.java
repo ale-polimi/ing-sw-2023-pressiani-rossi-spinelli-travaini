@@ -64,7 +64,7 @@ public class SocketHandler implements Runnable,ClientHandler {
     @Override
     public boolean isConnected() {
         try {
-                oos.writeObject(new PingMessage("Server",MessageType.PING));
+               oos.writeObject(new PingMessage("Server",MessageType.PING));
                 oos.flush();
                 oos.reset();
         }catch (IOException e) {return false;}
@@ -77,7 +77,7 @@ public class SocketHandler implements Runnable,ClientHandler {
      */
     @Override
     public void disconnect() {
-        socketServer.disconnect(this);
+        //socketServer.disconnect(this);
         try{socket.close();}
         catch(IOException e){System.err.println("Cannot close the socket");}
     }
