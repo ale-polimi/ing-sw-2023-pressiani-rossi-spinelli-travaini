@@ -7,14 +7,16 @@ import java.util.ArrayList;
  */
 public class ShowLobbyMessage extends Message {
     ArrayList<String> players;
+    int numOfPlayers;
 
     /**
      * Default constructor.
      * @param players are the players currently connected to the game.
      */
     public ShowLobbyMessage(ArrayList<String> players) {
-        super(players.get(players.size()-1), MessageType.SHOW_LOBBY);
+        super("Controller", MessageType.SHOW_LOBBY);
         this.players = players;
+        this.numOfPlayers = players.size()-1;
     }
 
     /**
@@ -23,5 +25,13 @@ public class ShowLobbyMessage extends Message {
      */
     public ArrayList<String> getLobbyPlayers() {
         return players;
+    }
+
+    /**
+     * Getter method to return the number of currently connected players.
+     * @return the number of players.
+     */
+    public int getNumOfPlayers() {
+        return numOfPlayers;
     }
 }
