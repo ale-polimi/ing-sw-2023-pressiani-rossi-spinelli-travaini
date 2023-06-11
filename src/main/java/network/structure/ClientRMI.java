@@ -11,10 +11,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import controller.ClientController;
-import network.messages.Message;
-import network.messages.MessageType;
-import network.messages.PingMessage;
+import network.messages.*;
 import observer.Observable;
+import view.cli.Colours;
 
 /**
  * this class represents an RMI client.
@@ -83,7 +82,7 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         if(message.getType().equals(MessageType.USER_INFO))nickname = message.getSender();
         try {server.receiveMessage(message);}
         catch (RemoteException e) {
-            System.out.println("Server disconnected, terminating application...");
+            System.out.println("" + Colours.BOLD + Colours.RED + "Server disconnected, terminating application..." + Colours.RESET);
             System.exit(1);
         }
     }

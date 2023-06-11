@@ -45,6 +45,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     public ClientController(View view,boolean isSocket){
         this.view = view;
         taskQueue = Executors.newSingleThreadExecutor();
+
         this.isSocket = isSocket;
     }
 
@@ -150,7 +151,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
      */
     public static boolean isAddressValid(String ip){
         /* Regex pattern to check if the ip follows the dot-decimal notation standard */
-        /* Sempre sia eulogized Stackoverflow */
+        /* Sempre sia lodato Stackoverflow */
         String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
 
         return ip.matches(PATTERN);
@@ -320,7 +321,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 }
                 break;
             case GAME_CLOSED:
-                System.out.println("Connection interrupted, terminating application...");
+                view.showGenericError(nickname, "Another player disconnected, terminating application...");
                 System.exit(1);
                 break;
             default:

@@ -46,7 +46,7 @@ public class ClientSocket extends Observable implements Client {
         this.address=address;
         this.port = port;
         try{connection();}
-        catch(IOException e){System.err.println("Erron connecting to the socket"); System.exit(1);}
+        catch(IOException e){System.err.println("Error connecting to the socket"); System.exit(1);}
         receivedMessage();
     }
 

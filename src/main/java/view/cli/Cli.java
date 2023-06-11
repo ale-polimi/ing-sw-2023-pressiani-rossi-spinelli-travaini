@@ -23,14 +23,16 @@ import java.util.concurrent.FutureTask;
  */
 public class Cli extends ViewObservable implements View {
     private static final String STR_INPUT_CANCELED = "User input canceled.";
+    private final boolean isSocket;
     private final PrintStream out;
     private Thread inputThread;
 
     /**
      * Constructor for the CLI.
      */
-    public Cli() {
+    public Cli(boolean isSocket) {
         out = System.out;
+        this.isSocket = isSocket;
     }
 
     /**
@@ -93,7 +95,8 @@ public class Cli extends ViewObservable implements View {
     private void askServerInfo() throws ExecutionException{
         Map<String, String> serverInfo = new HashMap<>();
         String defaultAddress = "localhost";
-        String defaultPort = "12345";
+        String defaultSocketPort = "12345";
+        String defaultRMIPort = "1099";
         boolean validInput;
 
         out.println("Please enter the connection settings.");
@@ -105,6 +108,7 @@ public class Cli extends ViewObservable implements View {
                 serverInfo.put("address", defaultAddress);
                 validInput = true;
             } else if (ClientController.isAddressValid(address)) {
+
                 serverInfo.put("address", address);
                 validInput = true;
             } else {
@@ -115,11 +119,20 @@ public class Cli extends ViewObservable implements View {
         } while (validInput == false);
 
         do{
-            out.print("Enter the server port (default: " + defaultPort + "):");
+            if(isSocket){
+                out.print("Enter the server port (default: " + defaultSocketPort + "):");
+            } else {
+                out.print("Enter the server port (default: " + defaultRMIPort + "):");
+            }
+
             String port = readLine();
 
             if(port.equals("")){
-                serverInfo.put("port", defaultPort);
+                if(isSocket) {
+                    serverInfo.put("port", defaultSocketPort);
+                } else {
+                    serverInfo.put("port", defaultRMIPort);
+                }
                 validInput = true;
             } else if (ClientController.isPortValid(port)) {
                 serverInfo.put("port", port);

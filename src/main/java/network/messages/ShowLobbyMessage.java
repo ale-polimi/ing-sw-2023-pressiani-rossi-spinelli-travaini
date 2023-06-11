@@ -16,7 +16,7 @@ public class ShowLobbyMessage extends Message {
     public ShowLobbyMessage(ArrayList<String> players) {
         super("Controller", MessageType.SHOW_LOBBY);
         this.players = players;
-        this.numOfPlayers = players.size()-1;
+        this.numOfPlayers = players.size();
     }
 
     /**

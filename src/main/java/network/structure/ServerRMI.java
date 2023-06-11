@@ -57,7 +57,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
     public void sendMessage(Message message){
         if(message.getType().equals(MessageType.SHOW_LOBBY)){
             ShowLobbyMessage lm = (ShowLobbyMessage) message;
-            pingReceived.put(lm.getLobbyPlayers().get(lm.getNumOfPlayers()), true);}
+            pingReceived.put(lm.getLobbyPlayers().get(lm.getNumOfPlayers() - 1), true);}
         for(ClientHandler c : clients){
             try {
                 System.out.println("Message sent:");

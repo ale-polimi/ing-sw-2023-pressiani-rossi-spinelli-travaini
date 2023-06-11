@@ -16,8 +16,8 @@ public class FiveXTest  {
 
     @Before
     public void setUp() {
-        fiveX = new FiveX();
         testLibrary = new Library();
+        fiveX = new FiveX();
     }
 
     /**
