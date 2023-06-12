@@ -39,7 +39,7 @@ import static enumerations.PlayerState.PICKUP;
 public class Controller implements Observer {
 
     private Game game;
-    private HashMap<String, Integer> playersPoints;
+    private HashMap<String, Integer> playersPoints = new HashMap<>();
     private String winner;
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
@@ -259,7 +259,17 @@ public class Controller implements Observer {
                                         checkCommonObjectives();
 
                                         if (checkLibrarySpaces() == 0) {
-                                            game.getPlayerInTurn().setFirstToEnd(true);
+                                            boolean nobodyIsFirst = true;
+                                            for(Player player : game.getPlayers()){
+                                                if (player.isFirstToEnd() == true) {
+                                                    nobodyIsFirst = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if(nobodyIsFirst){
+                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                            }
                                         }
 
                                         if (isLastTurn()) {
@@ -306,7 +316,17 @@ public class Controller implements Observer {
                                             checkCommonObjectives();
 
                                             if (checkLibrarySpaces() == 0) {
-                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                                boolean nobodyIsFirst = true;
+                                                for(Player player : game.getPlayers()){
+                                                    if (player.isFirstToEnd() == true) {
+                                                        nobodyIsFirst = false;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if(nobodyIsFirst){
+                                                    game.getPlayerInTurn().setFirstToEnd(true);
+                                                }
                                             }
 
                                             if (isLastTurn()) {
@@ -352,7 +372,17 @@ public class Controller implements Observer {
                                             checkCommonObjectives();
 
                                             if (checkLibrarySpaces() == 0) {
-                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                                boolean nobodyIsFirst = true;
+                                                for(Player player : game.getPlayers()){
+                                                    if (player.isFirstToEnd() == true) {
+                                                        nobodyIsFirst = false;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if(nobodyIsFirst){
+                                                    game.getPlayerInTurn().setFirstToEnd(true);
+                                                }
                                             }
 
                                             if (isLastTurn()) {
@@ -474,8 +504,9 @@ public class Controller implements Observer {
         System.out.println("Second number: " + rand2);
 
         /* First I get the objectives from the hashmap */
-        CommonObjective objective1 = availableCommonObjectives.remove(rand1);
-        CommonObjective objective2 = availableCommonObjectives.remove(rand2);
+        /* TODO - REMOVE DEBUG VALUES 0 AND 1 */
+        CommonObjective objective1 = availableCommonObjectives.remove(0);
+        CommonObjective objective2 = availableCommonObjectives.remove(1);
 
         /* TODO - Debug print */
         System.out.println(objective1.getClass().toString() + " I'm the first objective.");
@@ -496,12 +527,21 @@ public class Controller implements Observer {
      */
     private void checkCommonObjectives() {
         for (CommonObjective commonObjective : game.getCommonObjectives().keySet()) {
+
+            /* TODO - Debug print */
+            System.out.println("BEFORE applying: Available points for objective " + commonObjective.getClass() + ": " + game.getCommonObjectives().get(commonObjective));
+
             /* We apply the common objective only if it still has some points left */
             if(game.getCommonObjectives().get(commonObjective).size() > 0) {
                 /* If the player hasn't already completed the objective, it will get the points */
                 if(!game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()]) {
                     if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0)) {
                         int points = game.getCommonObjectives().get(commonObjective).remove(0);
+
+                        /* TODO - Debug print */
+                        System.out.println("AFTER applying: available points for objective " + commonObjective.getClass() + ": " + game.getCommonObjectives().get(commonObjective));
+                        System.out.println("Player: " + game.getPlayerInTurn().getNickname() + " has received: " + points + " points from: " + commonObjective.getClass());
+
                         game.getPlayerInTurn().addPoints(points);
                         game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective);
                     }
@@ -515,7 +555,7 @@ public class Controller implements Observer {
      * @param game is the game of this controller.
      */
     private void endGame(Game game){
-        if(game.getNextPlayer().equals(game.getPlayers().get(0))){
+        if(game.getNextPlayer().isFirstPlayer()){
             game.setGameState(GameState.END);
             calcPoints();
             getPointsAndUsernames();
@@ -528,21 +568,32 @@ public class Controller implements Observer {
      * This method will calculate the points each player has made in the game.
      */
     private void calcPoints(){
-        int personalObjectivePoints = 0;
-        int boardPoints = 0;
 
         for (Player player : game.getPlayers()) {
-
+            int personalObjectivePoints = 0;
+            int boardPoints = 0;
             /* Points for the personal objective */
             personalObjectivePoints = player.getPersonalObjective().compareTo(player.getLibrary());
 
+            /* TODO - Debug print */
+            System.out.println("Player: " + player.getNickname() + " has received: " + personalObjectivePoints + " from: " + player.getPersonalObjective());
 
+            /* TODO - FIX BOARD POINTS! */
+            /*
             for(int i = 0; i < ObjectColour.values().length; i += 3){
-                /* Points for the adjacent objects cards */
+                *//* Points for the adjacent objects cards *//*
                 boardPoints += player.getBoardPoints(ObjectColour.values()[i]);
             }
+            */
 
-            player.addPoints(personalObjectivePoints + boardPoints);
+            if(player.isFirstToEnd()){
+                player.addPoints(1);
+
+                /* TODO - Debug print */
+                System.out.println("Player: " + player.getNickname() + " has received 1 point as player.isFirstToEnd() is: " + player.isFirstToEnd());
+            }
+            player.addPoints(personalObjectivePoints);
+            player.addPoints(boardPoints);
         }
     }
 

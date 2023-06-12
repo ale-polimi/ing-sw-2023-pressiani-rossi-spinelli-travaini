@@ -27,6 +27,14 @@ public class PersonalObjectiveTest {
   }
 
   /**
+   * Test to check if the personal objective is not applied to empty cells.
+   */
+  @Test
+  public void compareToEmptyLibrary(){
+    assertEquals(0, pO.compareTo(testLibrary));
+  }
+
+  /**
    * Test the correct execution of the compareTo method when the library has zero matches
    */
   @Test

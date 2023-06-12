@@ -474,15 +474,21 @@ public class ControllerTest {
         }
 
         Library bobLibrary = controller.getGame().getNextPlayer().getLibrary();
-        /* The library of the second player has only one space left */
+        /* The library of the second player has two spaces left */
         for(int col = 0; col < 5; col++){
             for(int row = 5; row >= 0; row--){
                 if(row == 0 && col == 4){
                     break;
                 }
-                aliceLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), aliceLibrary.getLibrarySpace(row, col));
+                bobLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), bobLibrary.getLibrarySpace(row, col));
             }
         }
+
+        /* Setting the board to something known */
+        controller.getGame().getBoard().pickupObjectFrom(controller.getGame().getBoard().getSpace(1,3));
+        controller.getGame().getBoard().pickupObjectFrom(controller.getGame().getBoard().getSpace(1,4));
+        controller.getGame().getBoard().putObjectIn(controller.getGame().getBoard().getSpace(1,3), new ObjectCard(ObjectColour.PINK1));
+        controller.getGame().getBoard().putObjectIn(controller.getGame().getBoard().getSpace(1,4), new ObjectCard(ObjectColour.GREEN1));
 
         controller.onMessageReceived(new PickObjectMessage("Alice", new ArrayList<>(Arrays.asList(1,3))));
         controller.onMessageReceived(new PutObjectInLibraryMessage("Alice", new ArrayList<>(Arrays.asList(0,4))));
@@ -493,5 +499,108 @@ public class ControllerTest {
         controller.onMessageReceived(new PutObjectInLibraryMessage("Bob", new ArrayList<>(Arrays.asList(0,4))));
         assertNotNull(controller.winner);
         assertTrue(controller.playersPoints.containsKey("Alice") && controller.playersPoints.containsKey("Bob"));
+        System.out.println("Winner is: " + controller.winner);
+        controller.playersPoints.forEach((username, points) -> System.out.println(username + " : " + points));
+    }
+
+    /**
+     * Test to check the end of the game conditions.
+     */
+    @Test
+    public void endGameTestFirstPlayerIsFirstToEnd(){
+        controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
+
+        Library aliceLibrary = controller.getGame().getPlayerInTurn().getLibrary();
+        /* The library of the first player has only one space left */
+        for(int col = 0; col < 5; col++){
+            for(int row = 5; row >= 0; row--){
+                if(row == 0 && col == 4){
+                    break;
+                }
+                aliceLibrary.addObject(new ObjectCard(ObjectColour.PINK1), aliceLibrary.getLibrarySpace(row, col));
+            }
+        }
+
+        Library bobLibrary = controller.getGame().getNextPlayer().getLibrary();
+        /* The library of the second player has the last column empty */
+        for(int col = 0; col < 4; col++){
+            for(int row = 5; row >= 0; row--){
+                bobLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), bobLibrary.getLibrarySpace(row, col));
+            }
+        }
+
+        /* Setting the board to something known */
+        controller.getGame().getBoard().pickupObjectFrom(controller.getGame().getBoard().getSpace(1,3));
+        controller.getGame().getBoard().pickupObjectFrom(controller.getGame().getBoard().getSpace(1,4));
+        controller.getGame().getBoard().putObjectIn(controller.getGame().getBoard().getSpace(1,3), new ObjectCard(ObjectColour.PINK1));
+        controller.getGame().getBoard().putObjectIn(controller.getGame().getBoard().getSpace(1,4), new ObjectCard(ObjectColour.GREEN1));
+
+        controller.onMessageReceived(new PickObjectMessage("Alice", new ArrayList<>(Arrays.asList(1,3))));
+        controller.onMessageReceived(new PutObjectInLibraryMessage("Alice", new ArrayList<>(Arrays.asList(0,4))));
+        assertTrue(controller.getGame().getNextPlayer().isFirstToEnd());
+        assertNotEquals(GameState.END, controller.getGame().getGameState());
+
+        controller.onMessageReceived(new PickObjectMessage("Bob", new ArrayList<>(Arrays.asList(1,4))));
+        controller.onMessageReceived(new PutObjectInLibraryMessage("Bob", new ArrayList<>(Arrays.asList(0,4))));
+        assertEquals(GameState.END, controller.getGame().getGameState());
+        assertNotNull(controller.winner);
+        assertTrue(controller.playersPoints.containsKey("Alice") && controller.playersPoints.containsKey("Bob"));
+        System.out.println("Winner is: " + controller.winner);
+        controller.playersPoints.forEach((username, points) -> System.out.println(username + " : " + points));
+    }
+
+    /**
+     * Test to check the end of the game conditions.
+     */
+    @Test
+    public void endGameTestNonFullLibrary(){
+        controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
+        controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
+
+        Library aliceLibrary = controller.getGame().getPlayerInTurn().getLibrary();
+        /* The library of the first player has only one space left */
+        for(int col = 0; col < 5; col++){
+            for(int row = 5; row >= 0; row--){
+                if(row == 0 && col == 4){
+                    break;
+                }
+                aliceLibrary.addObject(new ObjectCard(ObjectColour.PINK1), aliceLibrary.getLibrarySpace(row, col));
+            }
+        }
+
+        Library bobLibrary = controller.getGame().getNextPlayer().getLibrary();
+        /* The library of the second player has two spaces left */
+        for(int col = 0; col < 5; col++){
+            for(int row = 5; row >= 0; row--){
+                if(row == 0 && col == 4){
+                    break;
+                } else if(row == 1 && col == 4){
+                    break;
+                }
+                bobLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), bobLibrary.getLibrarySpace(row, col));
+            }
+        }
+
+        /* Setting the board to something known */
+        controller.getGame().getBoard().pickupObjectFrom(controller.getGame().getBoard().getSpace(1,3));
+        controller.getGame().getBoard().pickupObjectFrom(controller.getGame().getBoard().getSpace(1,4));
+        controller.getGame().getBoard().putObjectIn(controller.getGame().getBoard().getSpace(1,3), new ObjectCard(ObjectColour.PINK1));
+        controller.getGame().getBoard().putObjectIn(controller.getGame().getBoard().getSpace(1,4), new ObjectCard(ObjectColour.GREEN1));
+
+        controller.onMessageReceived(new PickObjectMessage("Alice", new ArrayList<>(Arrays.asList(1,3))));
+        controller.onMessageReceived(new PutObjectInLibraryMessage("Alice", new ArrayList<>(Arrays.asList(0,4))));
+        assertTrue(controller.getGame().getNextPlayer().isFirstToEnd());
+        assertNotEquals(GameState.END, controller.getGame().getGameState());
+
+        controller.onMessageReceived(new PickObjectMessage("Bob", new ArrayList<>(Arrays.asList(1,4))));
+        controller.onMessageReceived(new PutObjectInLibraryMessage("Bob", new ArrayList<>(Arrays.asList(0,4))));
+        assertEquals(GameState.END, controller.getGame().getGameState());
+        assertNotNull(controller.winner);
+        assertTrue(controller.playersPoints.containsKey("Alice") && controller.playersPoints.containsKey("Bob"));
+        System.out.println("Winner is: " + controller.winner);
+        controller.playersPoints.forEach((username, points) -> System.out.println(username + " : " + points));
     }
 }

@@ -90,7 +90,7 @@ public class Player extends Observable {
 
     /**
      * This method will add points to the player.
-     * @param points is calculated by the {@link controller.Controller controller} in the appropriate methods.
+     * @param points are the points to add.
      */
     public void addPoints(int points) {
         this.points += points;

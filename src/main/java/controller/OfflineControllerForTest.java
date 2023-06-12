@@ -19,6 +19,7 @@ import network.messages.*;
 import network.structure.NetworkView;
 import network.structure.StartServerImpl;
 import observer.Observer;
+import view.cli.Cli;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +40,7 @@ import static enumerations.PlayerState.PICKUP;
 public class OfflineControllerForTest implements Observer {
 
     private Game game;
-    public HashMap<String, Integer> playersPoints;
+    public HashMap<String, Integer> playersPoints = new HashMap<>();
     public String winner;
     private HashMap personalObjectives;
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
@@ -258,7 +259,17 @@ public class OfflineControllerForTest implements Observer {
                                         checkCommonObjectives();
 
                                         if (checkLibrarySpaces() == 0) {
-                                            game.getPlayerInTurn().setFirstToEnd(true);
+                                            boolean nobodyIsFirst = true;
+                                            for(Player player : game.getPlayers()){
+                                                if (player.isFirstToEnd() == true) {
+                                                    nobodyIsFirst = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if(nobodyIsFirst){
+                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                            }
                                         }
 
                                         if (isLastTurn()) {
@@ -305,7 +316,17 @@ public class OfflineControllerForTest implements Observer {
                                             checkCommonObjectives();
 
                                             if (checkLibrarySpaces() == 0) {
-                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                                boolean nobodyIsFirst = true;
+                                                for(Player player : game.getPlayers()){
+                                                    if (player.isFirstToEnd() == true) {
+                                                        nobodyIsFirst = false;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if(nobodyIsFirst){
+                                                    game.getPlayerInTurn().setFirstToEnd(true);
+                                                }
                                             }
 
                                             if (isLastTurn()) {
@@ -351,7 +372,17 @@ public class OfflineControllerForTest implements Observer {
                                             checkCommonObjectives();
 
                                             if (checkLibrarySpaces() == 0) {
-                                                game.getPlayerInTurn().setFirstToEnd(true);
+                                                boolean nobodyIsFirst = true;
+                                                for(Player player : game.getPlayers()){
+                                                    if (player.isFirstToEnd() == true) {
+                                                        nobodyIsFirst = false;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if(nobodyIsFirst){
+                                                    game.getPlayerInTurn().setFirstToEnd(true);
+                                                }
                                             }
 
                                             if (isLastTurn()) {
@@ -373,7 +404,6 @@ public class OfflineControllerForTest implements Observer {
 
                                             this.update(new NextTurnMessage());
                                             System.out.println("Player in turn is: " + game.getPlayerInTurn().getNickname() + " In state: " + game.getPlayerInTurn().getPlayerState().toString());
-
                                         } catch (NotEnoughSpaceException e) {
                                             this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":LIBRARY"), e.getMessage()));
                                             this.update(new AskLibraryMoveMessage("Controller"));
@@ -473,8 +503,8 @@ public class OfflineControllerForTest implements Observer {
         System.out.println("Second number: " + rand2);
 
         /* First I get the objectives from the hashmap */
-        CommonObjective objective1 = availableCommonObjectives.remove(rand1);
-        CommonObjective objective2 = availableCommonObjectives.remove(rand2);
+        CommonObjective objective1 = availableCommonObjectives.remove(0);
+        CommonObjective objective2 = availableCommonObjectives.remove(1);
 
         /* TODO - Debug print */
         System.out.println(objective1.getClass().toString() + " I'm the first objective.");
@@ -501,6 +531,7 @@ public class OfflineControllerForTest implements Observer {
                 if(!game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()]) {
                     if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0)) {
                         int points = game.getCommonObjectives().get(commonObjective).remove(0);
+                        System.out.println("Player: " + game.getPlayerInTurn().getNickname() + " has received: " + points + " points from: " + commonObjective.getClass());
                         game.getPlayerInTurn().addPoints(points);
                         game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective);
                     }
@@ -514,7 +545,7 @@ public class OfflineControllerForTest implements Observer {
      * @param game is the game of this controller.
      */
     private void endGame(Game game){
-        if(game.getNextPlayer().equals(game.getPlayers().get(0))){
+        if(game.getNextPlayer().isFirstPlayer()){
             game.setGameState(GameState.END);
             calcPoints();
             getPointsAndUsernames();
@@ -527,21 +558,28 @@ public class OfflineControllerForTest implements Observer {
      * This method will calculate the points each player has made in the game.
      */
     private void calcPoints(){
-        int personalObjectivePoints = 0;
-        int boardPoints = 0;
 
         for (Player player : game.getPlayers()) {
+            int personalObjectivePoints = 0;
+            int boardPoints = 0;
 
             /* Points for the personal objective */
             personalObjectivePoints = player.getPersonalObjective().compareTo(player.getLibrary());
+            System.out.println("Player: " + player.getNickname() + " has received: " + personalObjectivePoints + " from: " + player.getPersonalObjective());
 
-
+            /*
             for(int i = 0; i < ObjectColour.values().length; i += 3){
-                /* Points for the adjacent objects cards */
+                *//* Points for the adjacent objects cards *//*
                 boardPoints += player.getBoardPoints(ObjectColour.values()[i]);
             }
+            */
 
-            player.addPoints(personalObjectivePoints + boardPoints);
+            if(player.isFirstToEnd()){
+                player.addPoints(1);
+                System.out.println("Player: " + player.getNickname() + " has received 1 point as player.isFirstToEnd() is: " + player.isFirstToEnd());
+            }
+            player.addPoints(personalObjectivePoints);
+            player.addPoints(boardPoints);
         }
     }
 
