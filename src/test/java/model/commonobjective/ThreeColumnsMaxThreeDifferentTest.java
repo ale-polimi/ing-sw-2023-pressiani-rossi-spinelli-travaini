@@ -1,6 +1,7 @@
 package model.commonobjective;
 
 
+import enumerations.ObjectColour;
 import model.library.Library;
 
 import junit.framework.TestCase;
@@ -10,54 +11,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import enumerations.ObjectColour;
-import model.library.Library;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
-public class ThreeColumnsMaxThreeDifferentTest extends TestCase{
+public class ThreeColumnsMaxThreeDifferentTest {
     ThreeColumnsMaxThreeDifferent  threeColumnsMaxThreeDifferent;
-    Library instance;
+    Library testLibrary;
     @BeforeEach
     public void setUp() {
-        instance=new Library();
+        testLibrary=new Library();
         threeColumnsMaxThreeDifferent= new ThreeColumnsMaxThreeDifferent();
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                instance.getLibraryGrid()[i][j] = new LibrarySpace();
-            }
-        }
 
-        instance.addObject(new ObjectCard("GREEN2"),instance.getLibrarySpace(0,0));
-        instance.addObject(new ObjectCard("GREEN3"),instance.getLibrarySpace(0,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(0,3));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(0,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(1,0));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,1));
-        instance.addObject(new ObjectCard("BLUE3"),instance.getLibrarySpace(1,2));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,3));
-        instance.addObject(new ObjectCard("BLUE1"),instance.getLibrarySpace(1,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,0));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,1));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(2,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(2,3));
-        instance.addObject(new ObjectCard("YELLOW1"),instance.getLibrarySpace(2,4));
-        instance.addObject(new ObjectCard("LIGHT_BLUE1"),instance.getLibrarySpace(3,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,1));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,2));
-        instance.addObject(new ObjectCard("WHITE1"),instance.getLibrarySpace(3,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(3,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,1));
-        instance.addObject(new ObjectCard("GREEN3"),instance.getLibrarySpace(4,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(4,4));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,0));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,1));
-        instance.addObject(new ObjectCard("GREEN2"),instance.getLibrarySpace(5,2));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,3));
-        instance.addObject(new ObjectCard("GREEN1"),instance.getLibrarySpace(5,4));
     }
 
     @AfterEach
@@ -65,20 +30,98 @@ public class ThreeColumnsMaxThreeDifferentTest extends TestCase{
         threeColumnsMaxThreeDifferent=null;
     }
 
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
     @Test
     public void isThreeColumnsMaxThreeDifferent(){
         int x = 0;
         int y = 0;
-        threeColumnsMaxThreeDifferent.applyObjectiveRules(instance,x,y);
-        if(threeColumnsMaxThreeDifferent.getCountObj()==3)
-            assertTrue(threeColumnsMaxThreeDifferent.applyObjectiveRules(instance,x,y));
+
+
+        for(int col = 0; col < 1; col++){
+            for(int row = 0; row < 6; row++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int col = 1; col < 2; col++){
+            for(int row = 0; row < 4; row++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.GREEN3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), testLibrary.getLibrarySpace(4,1));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,1));
+
+        for(int col = 2; col < 3; col++){
+            for(int row = 0; row < 4; row++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.WHITE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE3), testLibrary.getLibrarySpace(4,2));
+        testLibrary.addObject(new ObjectCard(ObjectColour.GREEN3), testLibrary.getLibrarySpace(5,2));
+
+
+        assertTrue(threeColumnsMaxThreeDifferent.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(threeColumnsMaxThreeDifferent.getCountObj());
+        System.out.println(threeColumnsMaxThreeDifferent.getDescription());
     }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
     @Test
     public void isNotThreeColumnsMaxThreeDifferent(){
         int x = 0;
         int y = 0;
-        threeColumnsMaxThreeDifferent.applyObjectiveRules(instance,x,y);
-        if(threeColumnsMaxThreeDifferent.getCountObj()<3)
-            assertFalse(threeColumnsMaxThreeDifferent.applyObjectiveRules(instance,x,y));
+
+
+        for(int col = 0; col < 1; col++){
+            for(int row = 0; row < 6; row++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int col = 1; col < 2; col++){
+            for(int row = 0; row < 4; row++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.GREEN3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), testLibrary.getLibrarySpace(4,1));
+        testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,1));
+
+        for(int col = 2; col < 3; col++){
+            for(int row = 0; row < 3; row++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.WHITE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), testLibrary.getLibrarySpace(3,2));
+        testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE3), testLibrary.getLibrarySpace(4,2));
+        testLibrary.addObject(new ObjectCard(ObjectColour.GREEN3), testLibrary.getLibrarySpace(5,2));
+
+
+        assertFalse(threeColumnsMaxThreeDifferent.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(threeColumnsMaxThreeDifferent.getCountObj());
+        System.out.println(threeColumnsMaxThreeDifferent.getDescription());
+    }
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isNotThreeColumnsMaxThreeDifferentEmpty(){
+        int x = 0;
+        int y = 0;
+
+        assertFalse(threeColumnsMaxThreeDifferent.applyObjectiveRules(testLibrary,x,y));
     }
 }

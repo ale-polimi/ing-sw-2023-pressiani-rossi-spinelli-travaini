@@ -36,6 +36,7 @@ public class FourCornersTest {
         testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(5,4));
 
         assertTrue(fourCorners.applyObjectiveRules(testLibrary,0,0));
+        System.out.println(fourCorners.getDescription());
     }
 
     /**

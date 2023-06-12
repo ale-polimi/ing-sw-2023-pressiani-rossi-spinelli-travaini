@@ -56,10 +56,13 @@ public class ThreeColumnsMaxThreeDifferent extends CommonObjective {
                     case LIGHT_BLUE1,LIGHT_BLUE2,LIGHT_BLUE3 -> {
                         checkLightBlue = 1;
                     }
+                    case EMPTY -> {
+                        x=6;
+                    }
                 }
                 if(x==5){
                     countColours = checkPink+checkBlue+checkGreen+checkLightBlue+checkWhite+checkYellow;
-                    if(countColours<4){
+                    if(countColours<4 && countColours > 0){
                         countObj++;
                         if(countObj==3){
                             return true;
@@ -68,7 +71,6 @@ public class ThreeColumnsMaxThreeDifferent extends CommonObjective {
 
                 }
             }
-
         }
 
         return false;

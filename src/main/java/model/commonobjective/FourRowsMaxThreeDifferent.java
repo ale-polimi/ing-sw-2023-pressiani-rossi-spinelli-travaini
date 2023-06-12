@@ -51,10 +51,13 @@ public class FourRowsMaxThreeDifferent extends CommonObjective {
                     case LIGHT_BLUE1,LIGHT_BLUE2,LIGHT_BLUE3 -> {
                         checkLightBlue = 1;
                     }
+                    case EMPTY -> {
+                        y = 5;
+                    }
                 }
                 if(y==4){
                     countColours = checkPink+checkBlue+checkGreen+checkLightBlue+checkWhite+checkYellow;
-                    if(countColours<4){
+                    if(countColours > 0 && countColours<4){
                         countObj++;
                         if(countObj==4){
                             return true;
