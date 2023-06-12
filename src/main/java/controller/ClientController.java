@@ -321,7 +321,12 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 }
                 break;
             case GAME_CLOSED:
-                view.showGenericError(nickname, "Another player disconnected, terminating application...");
+                view.showGenericError(nickname, "A player disconnected, terminating application...");
+                System.exit(1);
+                break;
+            case SERVER_DISCONNECT:
+                ServerDisconnectedMessage serverDisconnectedMessage = (ServerDisconnectedMessage) message;
+                view.showGenericError(nickname, serverDisconnectedMessage.getDisconnectionError());
                 System.exit(1);
                 break;
             case CHAT:

@@ -1,10 +1,7 @@
 package network.structure;
 
 
-import network.messages.GenericErrorMessage;
-import network.messages.Message;
-import network.messages.MessageType;
-import network.messages.PingMessage;
+import network.messages.*;
 import observer.Observable;
 
 
@@ -133,8 +130,7 @@ public class ClientSocket extends Observable implements Client {
         }
         ois=null;
         oos=null;
-        System.out.println("Connection closed, terminating the application...");
-        System.exit(1);
+        notifyObserver(new ServerDisconnectedMessage());
     }
 
 

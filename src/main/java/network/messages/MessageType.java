@@ -10,6 +10,8 @@ public enum MessageType implements Serializable {
     BOARD_ERROR,
     LIBRARY_ERROR,
     GENERIC_ERROR,
+    SERVER_DISCONNECT,
+    CLIENT_DISCONNECT,
     SHOW_TURN,
     END_TURN,
     SHOW_LIBRARY,

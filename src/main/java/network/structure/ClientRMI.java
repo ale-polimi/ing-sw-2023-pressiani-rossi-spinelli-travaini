@@ -82,8 +82,7 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         if(message.getType().equals(MessageType.USER_INFO))nickname = message.getSender();
         try {server.receiveMessage(message);}
         catch (RemoteException e) {
-            System.out.println("" + Colours.BOLD + Colours.RED + "Server disconnected, terminating application..." + Colours.RESET);
-            System.exit(1);
+            notifyObserver(new ServerDisconnectedMessage());
         }
     }
 
