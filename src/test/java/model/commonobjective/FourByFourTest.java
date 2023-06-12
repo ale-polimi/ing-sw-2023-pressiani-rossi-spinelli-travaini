@@ -66,6 +66,7 @@ public class FourByFourTest {
 
         assertTrue(fourByFour.applyObjectiveRules(testLibrary,x,y));
         System.out.println(fourByFour.groupCount);
+        System.out.println(fourByFour.getDescription());
     }
 
     /**
@@ -176,6 +177,10 @@ public class FourByFourTest {
         assertFalse(fourByFour.applyObjectiveRules(testLibrary,x,y));
         System.out.println(fourByFour.groupCount);
     }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
     @Test
     public void isNotFourByFour(){
         int x = 0;
