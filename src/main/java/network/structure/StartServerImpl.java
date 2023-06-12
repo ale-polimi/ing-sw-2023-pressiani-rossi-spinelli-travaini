@@ -8,11 +8,15 @@ import observer.Observer;
 import view.cli.Colours;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.net.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,10 +32,67 @@ public class StartServerImpl implements Observer, Runnable {
      * @throws IOException When there is an error during the creation of the RMI or socket connection
      */
     public StartServerImpl(int socketPort, int RMIPort) throws IOException {
+        String[] stringToSplit = getLocalHostLANAddress().toString().split("/");
+        String IPAddress = stringToSplit[1];
+        System.out.println("The LAN IP address for the server is: " + Colours.BOLD + Colours.GREEN + IPAddress + Colours.RESET);
         startRMI(RMIPort);
         startSocket(socketPort);
         controller = new Controller(this);
         executor.submit(this);
+    }
+
+    /**
+     * This method returns the host LAN address. It filters the virtual NICs for VirtualBox users, others may vary.
+     * @return the IPv4 LAN address of the machine.
+     * @throws UnknownHostException if it fails to find a valid IP address.
+     */
+    private static InetAddress getLocalHostLANAddress() throws UnknownHostException {
+        try {
+            InetAddress candidateAddress = null;
+            // Iterate all NICs (network interface cards)...
+            for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
+                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+                //Exclude VirtualBox NICs
+                if(!iface.getDisplayName().contains("Virtual")) {
+                    // Iterate all IP addresses assigned to each card...
+                    for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements(); ) {
+                        InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
+                        if (!inetAddr.isLoopbackAddress()) {
+
+                            if (inetAddr.isSiteLocalAddress()) {
+                                // Found non-loopback site-local address. Return it immediately...
+                                return inetAddr;
+                            } else if (candidateAddress == null) {
+                                // Found non-loopback address, but not necessarily site-local.
+                                // Store it as a candidate to be returned if site-local address is not subsequently found...
+                                candidateAddress = inetAddr;
+                                // Note that we don't repeatedly assign non-loopback non-site-local addresses as candidates,
+                                // only the first. For subsequent iterations, candidate will be non-null.
+                            }
+                        }
+                    }
+                }
+            }
+            if (candidateAddress != null) {
+                // We did not find a site-local address, but we found some other non-loopback address.
+                // Server might have a non-site-local address assigned to its NIC (or it might be running
+                // IPv6 which deprecates the "site-local" concept).
+                // Return this non-loopback candidate address...
+                return candidateAddress;
+            }
+            // At this point, we did not find a non-loopback address.
+            // Fall back to returning whatever InetAddress.getLocalHost() returns...
+            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
+            if (jdkSuppliedAddress == null) {
+                throw new UnknownHostException("The JDK InetAddress.getLocalHost() method unexpectedly returned null.");
+            }
+            return jdkSuppliedAddress;
+        }
+        catch (Exception e) {
+            UnknownHostException unknownHostException = new UnknownHostException("Failed to determine LAN address: " + e);
+            unknownHostException.initCause(e);
+            throw unknownHostException;
+        }
     }
 
     /**
@@ -49,8 +110,6 @@ public class StartServerImpl implements Observer, Runnable {
         int socketPort = 0;
         int RMIPort = 0;
         executor = Executors.newCachedThreadPool();
-
-
 
         if (args.length == 0) {
             socketPort = defaultSocketPort;
@@ -138,7 +197,7 @@ public class StartServerImpl implements Observer, Runnable {
         LocateRegistry.createRegistry(port);
         Registry registry = LocateRegistry.getRegistry(port);
         registry.rebind("server", stubRMI);
-        System.out.println("RMI server started on port: " + port + ", waiting for clients...");
+        System.out.println("RMI server started on port: " + Colours.BOLD + Colours.GREEN + port + Colours.RESET + ", waiting for clients...");
         serverRMI.addObserver(this);
         getExecutor().submit(serverRMI);
     }
@@ -152,7 +211,7 @@ public class StartServerImpl implements Observer, Runnable {
         //Start Socket server instance
         socketServer = new SocketServer(this, port);
         getExecutor().submit(socketServer);
-        System.out.println("Socket server started on port: " + port + ", waiting for clients...");
+        System.out.println("Socket server started on port: " + Colours.BOLD + Colours.GREEN + port + Colours.RESET + ", waiting for clients...");
     }
     /**
      * Return the thread pool executor

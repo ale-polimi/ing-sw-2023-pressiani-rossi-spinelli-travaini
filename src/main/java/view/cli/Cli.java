@@ -160,7 +160,7 @@ public class Cli extends ViewObservable implements View {
                 out.print("Enter your nickname: ");
                 String nickname = readLine();
 
-                if(nickname.equals("Controller") || nickname.equals("Model")){
+                if(nickname.equals("Controller") || nickname.equals("Model") || nickname.equals("Client") || nickname.equals("Server")){
                     out.println("The nickname \"" + nickname + "\" is not permitted.");
                     clearCli();
                     validInput = false;
