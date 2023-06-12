@@ -495,6 +495,17 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
+     * Show the chat message to the player
+     * @param sender is the player who sent the message
+     * @param message the message from the player
+     */
+    @Override
+    public void showChat(String sender, String message) {
+        out.print("" + Colours.BOLD + Colours.GREEN + sender + Colours.RESET+": "+message);
+        out.print("\n");
+    }
+
+    /**
      * This method prints an error.
      * @param errorString is the explanation of the error as shown in most {@link exceptions.MyShelfieRuntimeExceptions runtime exceptions}.
      */

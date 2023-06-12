@@ -94,4 +94,7 @@ public class NetworkView implements View {
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
         server.sendMessage(new ShowLibrariesMessage(sender, librariesOfPlayers));
     }
+
+    @Override
+    public void showChat(String sender, String message) {server.sendMessage(new ChatMessage(sender,message));}
 }

@@ -28,5 +28,6 @@ public enum MessageType implements Serializable {
     ASK_MAX_PLAYER,
     ASK_BOARD_MOVE,
     ASK_LIBRARY_MOVE,
-    ASK_NICKNAME
+    ASK_NICKNAME,
+    CHAT
 }

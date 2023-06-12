@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This interface will be implemented by both the {@link view.cli.Cli CLI} and the {@link GUI}.
+ * This interface will be implemented by both the {@link view.cli.Cli CLI} and the {@link view.gui.Gui GUI}.
  * It's also implemented in the {@link network.structure.NetworkView networkview}.
  */
 public interface View {
@@ -93,4 +93,11 @@ public interface View {
      * @param librariesOfPlayers is the {@link HashMap} containing the other players' usernames as keys and libraries as values.
      */
     void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers);
+
+    /**
+     * This method will show the chat message
+     * @param sender is the player who sent the message
+     * @param message the message from the player
+     */
+    void showChat(String sender, String message);
 }

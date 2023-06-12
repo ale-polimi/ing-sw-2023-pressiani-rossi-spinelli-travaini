@@ -71,4 +71,9 @@ public class Gui extends ViewObservable implements View {
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
 
     }
+
+    @Override
+    public void showChat(String sender, String message) {
+
+    }
 }
