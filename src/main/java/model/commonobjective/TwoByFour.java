@@ -44,13 +44,24 @@ public class TwoByFour extends TwoEqualsInColumn {
         for (int x = 0; x < 5; x = x+2) {
             for (int y = 0; y < 5; y++) {
                 if (applyObjectiveRules(library, x, y)) {
-                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())&&
+                    !library.getLibrarySpace(x,y).isVisited() && !library.getLibrarySpace(x,y+1).isVisited() && !library.getLibrarySpace(x+1,y+1).isVisited() && !library.getLibrarySpace(x+1,y).isVisited()) {
+                        library.getLibrarySpace(x,y).setVisited(true);
+                        library.getLibrarySpace(x,y+1).setVisited(true);
+                        library.getLibrarySpace(x+1,y+1).setVisited(true);
+                        library.getLibrarySpace(x+1,y).setVisited(true);
                         tempCard = library.getLibrarySpace(x, y).getObject();
                         switch (tempCard.getObjectColour()) {
                             case BLUE1, BLUE2, BLUE3 -> {
                                 countBlue++;
                                 if (countBlue == 2) {
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -58,6 +69,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countPink++;
                                 if (countPink == 2) {
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -65,6 +82,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countGreen++;
                                 if (countGreen == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
 
@@ -73,6 +96,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countWhite ++;
                                 if(countWhite == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -80,6 +109,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countYellow ++;
                                 if (countYellow == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -87,6 +122,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countLightBlue ++;
                                 if (countLightBlue == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -102,17 +143,28 @@ public class TwoByFour extends TwoEqualsInColumn {
         for (int x = 1; x <5; x = x+2) {
             for (int y = 0; y < 5; y++) {
                 if (applyObjectiveRules(library, x, y)) {
-                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())) {
+                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())&&
+                            !library.getLibrarySpace(x,y).isVisited() && !library.getLibrarySpace(x,y+1).isVisited() && !library.getLibrarySpace(x+1,y+1).isVisited() && !library.getLibrarySpace(x+1,y).isVisited()) {
                         if((library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x-1, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x -1, y+1).getObject().getObjectColour()))||
                                 (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+2, y).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x +2, y+1).getObject().getObjectColour()))){
 
                         }else {
+                            library.getLibrarySpace(x,y).setVisited(true);
+                            library.getLibrarySpace(x,y+1).setVisited(true);
+                            library.getLibrarySpace(x+1,y+1).setVisited(true);
+                            library.getLibrarySpace(x+1,y).setVisited(true);
                         tempCard = library.getLibrarySpace(x, y).getObject();
                         switch (tempCard.getObjectColour()) {
                             case BLUE1, BLUE2, BLUE3 -> {
                                 countBlue++;
                                 if (countBlue == 2) {
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -120,6 +172,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countPink++;
                                 if (countPink == 2) {
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -127,6 +185,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countGreen++;
                                 if (countGreen == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
 
@@ -135,6 +199,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countWhite ++;
                                 if(countWhite == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -142,6 +212,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countYellow ++;
                                 if (countYellow == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -149,6 +225,12 @@ public class TwoByFour extends TwoEqualsInColumn {
                                 countLightBlue ++;
                                 if (countLightBlue == 2){
                                     rule = false;
+                                    for (int i = 0; i < 6; i++) {
+                                        for (int j = 0; j < 5; j++) {
+                                            library.getLibrarySpace(i,j).setVisited(false);
+                                        }
+
+                                    }
                                     return true;
                                 }
                             }
@@ -162,6 +244,12 @@ public class TwoByFour extends TwoEqualsInColumn {
             }
         }
         rule = false;
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                library.getLibrarySpace(i,j).setVisited(false);
+            }
+
+        }
         return false;
     }
 
