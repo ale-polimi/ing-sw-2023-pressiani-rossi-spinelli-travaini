@@ -308,13 +308,15 @@ public class Cli extends ViewObservable implements View {
 
     /**
      * This method shows the turn to the player.
-     * @param player is the {@link model.player.Player player's nickname}, used in {@link ClientController} to check whether the message is for this user.
-     * @param rcvGameBoard is the {@link Board game board}.
-     * @param rcvPlayerLibrary is the {@link Library player's library}.
-     * @param rcvObjectsInHand is the {@link ArrayList} of objects that a player currently has in hand.
+     *
+     * @param player                    is the {@link model.player.Player player's nickname}, used in {@link ClientController} to check whether the message is for this user.
+     * @param rcvGameBoard              is the {@link Board game board}.
+     * @param rcvPlayerLibrary          is the {@link Library player's library}.
+     * @param rcvObjectsInHand          is the {@link ArrayList} of objects that a player currently has in hand.
+     * @param completedCommonObjectives is the array containing for each common objective if the player has completed it.
      */
     @Override
-    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand){
+    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, boolean[] completedCommonObjectives){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
 
@@ -459,16 +461,31 @@ public class Cli extends ViewObservable implements View {
 
     /**
      * This method prints the current {@link CommonObjective common objectives}.
-     * @param commonObjective1 is the first common objective of the game.
-     * @param commonObjective2 is the second common objective of the game.
+     *
+     * @param commonObjective1          is the first common objective of the game.
+     * @param commonObjective2          is the second common objective of the game.
+     * @param completedCommonObjectives
      */
     @Override
-    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2) {
+    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, boolean[] completedCommonObjectives) {
+
+        out.println("FIRST CO VALUE: " + completedCommonObjectives[0] + " SECOND CO VALUE: " + completedCommonObjectives[1]);
+
         out.println("The common objectives are:");
-        out.println(commonObjective1.getDescription());
+        out.print(commonObjective1.getDescription());
         out.print("\n");
-        out.println(commonObjective2.getDescription());
+        if(completedCommonObjectives[0] == true){
+            out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED!" + Colours.RESET);
+        } else {
+            out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+        }
+        out.print(commonObjective2.getDescription());
         out.print("\n");
+        if(completedCommonObjectives[1] == true){
+            out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED!" + Colours.RESET);
+        } else {
+            out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+        }
     }
 
     /**

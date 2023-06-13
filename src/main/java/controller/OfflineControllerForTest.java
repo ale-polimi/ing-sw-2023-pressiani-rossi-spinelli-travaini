@@ -273,7 +273,10 @@ public class OfflineControllerForTest implements Observer {
                                         }
 
                                         if (isLastTurn()) {
-                                            endGame(game);
+                                            if(endGame(game)){
+                                                this.update(new EndGameMessage(winner, playersPoints));
+                                                break;
+                                            }
                                         }
 
                                         if (boardNeedsRestore()) {
@@ -330,7 +333,10 @@ public class OfflineControllerForTest implements Observer {
                                             }
 
                                             if (isLastTurn()) {
-                                                endGame(game);
+                                                if(endGame(game)){
+                                                    this.update(new EndGameMessage(winner, playersPoints));
+                                                    break;
+                                                }
                                             }
 
                                             if (boardNeedsRestore()) {
@@ -386,7 +392,10 @@ public class OfflineControllerForTest implements Observer {
                                             }
 
                                             if (isLastTurn()) {
-                                                endGame(game);
+                                                if(endGame(game)){
+                                                    this.update(new EndGameMessage(winner, playersPoints));
+                                                    break;
+                                                }
                                             }
 
                                             if (boardNeedsRestore()) {
@@ -544,13 +553,15 @@ public class OfflineControllerForTest implements Observer {
      * This method ends the game and checks the points of the players, declaring the winner.
      * @param game is the game of this controller.
      */
-    private void endGame(Game game){
+    private boolean endGame(Game game){
         if(game.getNextPlayer().isFirstPlayer()){
             game.setGameState(GameState.END);
             calcPoints();
             getPointsAndUsernames();
             this.winner = declareWinner();
-            this.update(new EndGameMessage(winner, playersPoints));
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -915,7 +926,7 @@ public class OfflineControllerForTest implements Observer {
                 break;
             case END_GAME:
                 EndGameMessage endGameMessage = (EndGameMessage) message;
-                System.out.println("SHOW COMMON WINNER.");
+                System.out.println("SHOW WINNER.");
                 break;
             case GENERIC_ERROR:
                 GenericErrorMessage errorMessage = (GenericErrorMessage) message;

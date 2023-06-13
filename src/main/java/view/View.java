@@ -46,20 +46,24 @@ public interface View {
     /**
      * This method will show the current turn of the game, whether it's for the player in turn or not. It will be up to
      * the client to {@link controller.ClientController#update(Message) check if it's for him}.
-     * @param player is the player currently playing.
-     * @param gameBoard is the board of the game.
-     * @param playerLibrary is the player's library.
-     * @param playerObjInHand are the objects the player currently has in hand.
+     *
+     * @param player                    is the player currently playing.
+     * @param gameBoard                 is the board of the game.
+     * @param playerLibrary             is the player's library.
+     * @param playerObjInHand           are the objects the player currently has in hand.
+     * @param completedCommonObjectives is the array containing for each common objective if the player has completed it.
      */
-    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand);
+    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, boolean[] completedCommonObjectives);
 
     /**
      * This method will show the {@link CommonObjective common objectives} to the player.
-     * @param player is the player currently playing.
-     * @param commonObjective1 is the first common objective.
-     * @param commonObjective2 is the second common objective.
+     *
+     * @param player                    is the player currently playing.
+     * @param commonObjective1          is the first common objective.
+     * @param commonObjective2          is the second common objective.
+     * @param completedCommonObjectives
      */
-    void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2);
+    void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, boolean[] completedCommonObjectives);
 
     /**
      * This method will show the {@link PersonalObjective personal objective} to the player.

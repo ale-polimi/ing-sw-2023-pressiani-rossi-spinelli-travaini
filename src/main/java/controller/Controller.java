@@ -273,7 +273,10 @@ public class Controller implements Observer {
                                         }
 
                                         if (isLastTurn()) {
-                                            endGame(game);
+                                            if(endGame(game)){
+                                                this.update(new EndGameMessage(winner, playersPoints));
+                                                break;
+                                            }
                                         }
 
                                         if (boardNeedsRestore()) {
@@ -330,7 +333,10 @@ public class Controller implements Observer {
                                             }
 
                                             if (isLastTurn()) {
-                                                endGame(game);
+                                                if(endGame(game)){
+                                                    this.update(new EndGameMessage(winner, playersPoints));
+                                                    break;
+                                                }
                                             }
 
                                             if (boardNeedsRestore()) {
@@ -386,7 +392,10 @@ public class Controller implements Observer {
                                             }
 
                                             if (isLastTurn()) {
-                                                endGame(game);
+                                                if(endGame(game)){
+                                                    this.update(new EndGameMessage(winner, playersPoints));
+                                                    break;
+                                                }
                                             }
 
                                             if (boardNeedsRestore()) {
@@ -504,7 +513,6 @@ public class Controller implements Observer {
         System.out.println("Second number: " + rand2);
 
         /* First I get the objectives from the hashmap */
-        /* TODO - REMOVE DEBUG VALUES 0 AND 1 */
         CommonObjective objective1 = availableCommonObjectives.remove(0);
         CommonObjective objective2 = availableCommonObjectives.remove(1);
 
@@ -554,13 +562,15 @@ public class Controller implements Observer {
      * This method ends the game and checks the points of the players, declaring the winner.
      * @param game is the game of this controller.
      */
-    private void endGame(Game game){
+    private boolean endGame(Game game){
         if(game.getNextPlayer().isFirstPlayer()){
             game.setGameState(GameState.END);
             calcPoints();
             getPointsAndUsernames();
             this.winner = declareWinner();
-            this.update(new EndGameMessage(winner, playersPoints));
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -896,21 +906,21 @@ public class Controller implements Observer {
                 networkView.showLobby(players);
                 break;
             case NEXT_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
 
                 sendOtherPlayersLibrary(game);
 
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case GENERIC_MODEL_CHANGE:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
 
                 sendOtherPlayersLibrary(game);
 
                 /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case END_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand());
+                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
 
                 sendOtherPlayersLibrary(game);
 
@@ -921,7 +931,7 @@ public class Controller implements Observer {
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;
-                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2());
+                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2(), new boolean[]{false, false});
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;

@@ -32,6 +32,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private ArrayList<String> takenNicknames = new ArrayList<>();
     private CommonObjective commonObjective1;
     private CommonObjective commonObjective2;
+    private boolean[] completedCommonObjectives = new boolean[]{false, false};
     private PersonalObjective personalObjective;
     private Library playerLibrary = new Library();
     private HashMap<String, Library> otherPlayersLibrary = new HashMap<>();
@@ -116,7 +117,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
 
     @Override
     public void onRequestCommonObjectives() {
-        view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2);
+        view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2, this.completedCommonObjectives);
         if(inLibrary == false && inPickup == true){
             view.askBoardMove();
         } else {
@@ -210,21 +211,22 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     switch (type){
                         case "END_TURN":
                             this.playerLibrary = turnMessage.getPlayerLibrary();
-                            view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand);
+                            this.completedCommonObjectives = turnMessage.getCompletedCommonObjectives();
+                            view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives);
                             break;
                         default:
                             if (inLibrary == true && inPickup == false) {
-                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
                                 view.askLibraryMove();
                             } else if (inLibrary == false && inPickup == true) {
-                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand());
+                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
                                 view.askBoardMove();
                             }
                             break;
                     }
                 } else {
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand);
+                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
@@ -322,12 +324,12 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 break;
             case GAME_CLOSED:
                 view.showGenericError(nickname, "A player disconnected, terminating application...");
-                System.exit(1);
+                System.exit(0);
                 break;
             case SERVER_DISCONNECT:
                 ServerDisconnectedMessage serverDisconnectedMessage = (ServerDisconnectedMessage) message;
                 view.showGenericError(nickname, serverDisconnectedMessage.getDisconnectionError());
-                System.exit(1);
+                System.exit(0);
                 break;
             case CHAT:
                 ChatMessage cm = (ChatMessage) message;
