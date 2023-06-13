@@ -79,7 +79,7 @@ UI:
 - ```-cli``` o ```-c``` avvierà il gioco in modalità CLI;
 - ```-gui``` o ```-g``` avvierà il gioco in modalità GUI;
 
-Connection:
+Connessione:
 - ```-socket``` o ```-s``` per utilizzare la connessione socket;
 - ```-rmi``` o ```-r``` per utilizzare la connessione RMI;
 
