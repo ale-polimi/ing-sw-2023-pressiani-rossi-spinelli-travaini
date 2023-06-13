@@ -18,11 +18,8 @@ public class TwoEqualsInColumnTest  {
     Library testLibrary;
     @BeforeEach
     public void setUp() {
-
         testLibrary=new Library();
         twoEqualsInColumn= new TwoEqualsInColumn();
-
-
     }
 
     @AfterEach

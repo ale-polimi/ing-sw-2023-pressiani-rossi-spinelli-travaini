@@ -20,43 +20,7 @@ public class SixByTwoTest  {
     @BeforeEach
     public void setUp() {
         testLibrary=new Library();
-       sixByTwo= new SixByTwoNew();
-
-
-
-        /*
-        testLibrary.addObject(new ObjectCard("GREEN2"),testLibrary.getLibrarySpace(0,0));
-        testLibrary.addObject(new ObjectCard("GREEN3"),testLibrary.getLibrarySpace(0,1));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(0,2));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(0,3));
-        testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(0,4));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(1,0));
-        testLibrary.addObject(new ObjectCard("BLUE1"),testLibrary.getLibrarySpace(1,1));
-        testLibrary.addObject(new ObjectCard("BLUE3"),testLibrary.getLibrarySpace(1,2));
-        testLibrary.addObject(new ObjectCard("BLUE1"),testLibrary.getLibrarySpace(1,3));
-        testLibrary.addObject(new ObjectCard("BLUE1"),testLibrary.getLibrarySpace(1,4));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(2,0));
-        testLibrary.addObject(new ObjectCard("YELLOW1"),testLibrary.getLibrarySpace(2,1));
-        testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(2,2));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(2,3));
-        testLibrary.addObject(new ObjectCard("YELLOW1"),testLibrary.getLibrarySpace(2,4));
-        testLibrary.addObject(new ObjectCard("LIGHT_BLUE1"),testLibrary.getLibrarySpace(3,0));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,1));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,2));
-        testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(3,3));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,4));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(4,0));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(4,1));
-        testLibrary.addObject(new ObjectCard("GREEN3"),testLibrary.getLibrarySpace(4,2));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(4,3));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(4,4));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(5,0));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(5,1));
-        testLibrary.addObject(new ObjectCard("GREEN2"),testLibrary.getLibrarySpace(5,2));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(5,3));
-        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(5,4));
-        */
-
+        sixByTwo= new SixByTwoNew();
     }
 
     @AfterEach
@@ -182,5 +146,33 @@ public class SixByTwoTest  {
         assertFalse(sixByTwo.applyObjectiveRules(testLibrary,x,y));
         System.out.println(sixByTwo.groupCount);
 
+    }
+
+    /**
+     * Test to check if the objective counts an L shape as one group of the same tiles.
+     */
+    @Test
+    public void isNotSixByTwoLShape() {
+        /* L shape in bottom left corner */
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(4,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(5,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(5,1));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(5,2));
+
+        /* Other 4 groups of two tiles in the library */
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(0,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(0,1));
+
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(2,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(2,1));
+
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(4,0));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(4,1));
+
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(4,4));
+        testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), testLibrary.getLibrarySpace(5,4));
+
+        assertFalse(sixByTwo.applyObjectiveRules(testLibrary,0,0));
+        System.out.println(sixByTwo.groupCount);
     }
 }
