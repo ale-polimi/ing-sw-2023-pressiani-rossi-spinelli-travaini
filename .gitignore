@@ -30,6 +30,8 @@ peer_review_players/
 
 # Unused classes
 src/main/java/model/Turn.java
+src/main/java/model/commonobjective/FourByFour.java
+src/main/java/model/commonobjective/SixByTwo.java
 
 # Experimental network stuff
 src/main/java/view/VirtualView.java
