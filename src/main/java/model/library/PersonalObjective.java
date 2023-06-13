@@ -39,7 +39,7 @@ public final class PersonalObjective extends LibraryGrid {
         for(int i = 0; i < 6; i++){
             for(int j =  0; j < 5; j++){
                 if(library.getLibraryGrid()[i][j]!= null && !libraryGrid[i][j].getObject().getObjectColour().equals(ObjectColour.EMPTY)){
-                    if(libraryGrid[i][j].getObject().getObjectColour().equals(library.getLibraryGrid()[i][j].getObject().getObjectColour())){count++;}
+                    if(libraryGrid[i][j].getObject().getObjectColour().isEquals(library.getLibraryGrid()[i][j].getObject().getObjectColour())){count++;}
                 }
             }
         }

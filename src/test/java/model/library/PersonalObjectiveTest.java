@@ -43,9 +43,9 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), this.testLibrary.getLibrarySpace(row, col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
@@ -61,9 +61,9 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), this.testLibrary.getLibrarySpace(row, col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
@@ -79,11 +79,11 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), this.testLibrary.getLibrarySpace(row, col));
         } else if (row == 1 && col == 3){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), this.testLibrary.getLibrarySpace(row,col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
@@ -99,13 +99,13 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), this.testLibrary.getLibrarySpace(row, col));
         } else if (row == 1 && col == 3){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), this.testLibrary.getLibrarySpace(row,col));
         } else if(row == 2 && col == 2){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK2), this.testLibrary.getLibrarySpace(row,col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
@@ -121,15 +121,15 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), this.testLibrary.getLibrarySpace(row, col));
         } else if (row == 1 && col == 3){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 2 && col == 2){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 3 && col == 1) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.GREEN2), this.testLibrary.getLibrarySpace(row,col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
@@ -145,17 +145,17 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), this.testLibrary.getLibrarySpace(row, col));
         } else if (row == 1 && col == 3){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 2 && col == 2){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 3 && col == 1) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.GREEN2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 3 && col == 4) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE2), this.testLibrary.getLibrarySpace(row,col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
@@ -171,19 +171,19 @@ public class PersonalObjectiveTest {
     for(int row = 0; row < 6; row++){
       for(int col = 0; col < 5; col++){
         if(row == 1 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row, col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), this.testLibrary.getLibrarySpace(row, col));
         } else if (row == 1 && col == 3){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 2 && col == 2){
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.PINK2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 3 && col == 1) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.GREEN2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 3 && col == 4) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE2), this.testLibrary.getLibrarySpace(row,col));
         } else if (row == 5 && col == 0) {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.WHITE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.WHITE2), this.testLibrary.getLibrarySpace(row,col));
         } else {
-          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), this.testLibrary.getLibrarySpace(row,col));
+          this.testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), this.testLibrary.getLibrarySpace(row,col));
         }
       }
     }
