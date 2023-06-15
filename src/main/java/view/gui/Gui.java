@@ -38,14 +38,16 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, boolean[] completedCommonObjectives) {
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
 
     }
 
     @Override
-    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, boolean[] completedCommonObjectives) {
+    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
 
     }
+
+
 
 
     @Override

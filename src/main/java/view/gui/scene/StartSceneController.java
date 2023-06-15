@@ -50,7 +50,7 @@ public class StartSceneController extends ViewObservable implements GenericScene
 
 
 
-
+        playButton.addEventHandler(MouseEvent.MOUSE_CLICKED,  this :: onPlayButtonClick);
         exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> System.exit(0));
     }
 
@@ -98,7 +98,7 @@ public class StartSceneController extends ViewObservable implements GenericScene
 
 
 
-    private void onPlayBtnClick(Event event) {
-        SceneController.changeRootPane(observers, event, "connect_scene.fxml");
+    private void onPlayButtonClick(Event event) {
+        SceneController.changeRootPane(observers, event, "ServerInfo.fxml");
     }
 }
