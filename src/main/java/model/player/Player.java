@@ -24,7 +24,7 @@ public class Player extends Observable {
     private ArrayList<ObjectCard> objectsInHand = new ArrayList<>(Arrays.asList(null, null, null));
     private final Library library;
     private final PersonalObjective personalObjective;
-    boolean[] completedCommonObjectives = {false, false};
+    int[] completedCommonObjectives = {0,0};
     private PlayerState playerState;
     private int points;
 
@@ -207,12 +207,17 @@ public class Player extends Observable {
     /**
      * This method will tell which common objectives the player has already done.
      * @param commonObjective is the completed common objective.
+     * @param points are the points gained by the player associated to the common objective.
      */
-    public void setCompletedCommonObjectiveType(CommonObjective commonObjective){
-        completedCommonObjectives[commonObjective.getObjectiveNumeral()] = true;
+    public void setCompletedCommonObjectiveType(CommonObjective commonObjective, int points){
+        completedCommonObjectives[commonObjective.getObjectiveNumeral()] = points;
     }
 
-    public boolean[] getCompletedCommonObjectives() {
+    /**
+     * This method returns the array of completed common objective points of this player.
+     * @return the array of completed common objective points of this player.
+     */
+    public int[] getCompletedCommonObjectives() {
         return completedCommonObjectives;
     }
 

@@ -51,9 +51,9 @@ public interface View {
      * @param gameBoard                 is the board of the game.
      * @param playerLibrary             is the player's library.
      * @param playerObjInHand           are the objects the player currently has in hand.
-     * @param completedCommonObjectives is the array containing for each common objective if the player has completed it.
+     * @param completedCommonObjectives is the array of points for each completed common objective.
      */
-    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, boolean[] completedCommonObjectives);
+    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives);
 
     /**
      * This method will show the {@link CommonObjective common objectives} to the player.
@@ -63,7 +63,7 @@ public interface View {
      * @param commonObjective2          is the second common objective.
      * @param completedCommonObjectives
      */
-    void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, boolean[] completedCommonObjectives);
+    void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives);
 
     /**
      * This method will show the {@link PersonalObjective personal objective} to the player.

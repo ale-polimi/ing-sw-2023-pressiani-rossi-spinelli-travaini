@@ -542,7 +542,7 @@ public class Controller implements Observer {
             /* We apply the common objective only if it still has some points left */
             if(game.getCommonObjectives().get(commonObjective).size() > 0) {
                 /* If the player hasn't already completed the objective, it will get the points */
-                if(!game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()]) {
+                if(game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()] == 0) {
                     if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0)) {
                         int points = game.getCommonObjectives().get(commonObjective).remove(0);
 
@@ -551,7 +551,7 @@ public class Controller implements Observer {
                         System.out.println("Player: " + game.getPlayerInTurn().getNickname() + " has received: " + points + " points from: " + commonObjective.getClass());
 
                         game.getPlayerInTurn().addPoints(points);
-                        game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective);
+                        game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective, points);
                     }
                 }
             }
@@ -931,7 +931,7 @@ public class Controller implements Observer {
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;
-                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2(), new boolean[]{false, false});
+                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2(), new int[]{0,0});
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;

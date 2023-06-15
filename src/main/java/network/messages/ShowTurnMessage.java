@@ -14,7 +14,7 @@ public class ShowTurnMessage extends Message{
     private final Board gameBoard;
     private final Library playerLibrary;
     private final ArrayList<ObjectCard> playerObjInHand;
-    private final boolean[] completedCommonObjectives;
+    private final int[] completedCommonObjectives;
 
     /**
      * Constructor for abstract class Message.
@@ -23,9 +23,9 @@ public class ShowTurnMessage extends Message{
      * @param gameBoard is the {@link Board board} of the game.
      * @param playerLibrary is the {@link Library library} of the player.
      * @param playerObjInHand is the array of ObjectsInHand of the player.
-     * @param completedCommonObjectives is the array containing for each common objective if the player has completed it.
+     * @param completedCommonObjectives is the array of points for each completed common objective.
      */
-    public ShowTurnMessage(String sender, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, boolean[] completedCommonObjectives) {
+    public ShowTurnMessage(String sender, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
         super(sender, MessageType.SHOW_TURN);
         this.gameBoard = gameBoard;
         this.playerLibrary = playerLibrary;
@@ -59,9 +59,9 @@ public class ShowTurnMessage extends Message{
 
     /**
      * Getter method for the player's completed common objectives.
-     * @return a boolean {@link java.lang.reflect.Array array} containing for each {@link model.commonobjective.CommonObjective common objective} if the player has completed it.
+     * @return an int {@link java.lang.reflect.Array array} containing the points for each {@link model.commonobjective.CommonObjective common objective}.
      */
-    public boolean[] getCompletedCommonObjectives() {
+    public int[] getCompletedCommonObjectives() {
         return completedCommonObjectives;
     }
 }

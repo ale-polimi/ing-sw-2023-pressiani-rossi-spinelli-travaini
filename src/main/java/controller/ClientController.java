@@ -32,7 +32,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private ArrayList<String> takenNicknames = new ArrayList<>();
     private CommonObjective commonObjective1;
     private CommonObjective commonObjective2;
-    private boolean[] completedCommonObjectives = new boolean[]{false, false};
+    private int[] completedCommonObjectives = new int[]{0,0};
     private PersonalObjective personalObjective;
     private Library playerLibrary = new Library();
     private HashMap<String, Library> otherPlayersLibrary = new HashMap<>();
