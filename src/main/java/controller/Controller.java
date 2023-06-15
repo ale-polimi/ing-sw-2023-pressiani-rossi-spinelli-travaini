@@ -214,7 +214,7 @@ public class Controller implements Observer {
                             }
                             break;
                         default:
-                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "Coordinates must be in pairs."));
+                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), "Coordinates must be in pairs."));
                     }
 
                 } else {
