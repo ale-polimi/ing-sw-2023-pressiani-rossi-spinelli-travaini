@@ -8,15 +8,18 @@ import model.player.Player;
 import network.messages.ShowLobbyMessage;
 import observer.ViewObservable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WaitingForPlayersSceneController extends ViewObservable implements GenericSceneController {
+    private ArrayList<String> nicknames = new ArrayList<>();
 
 
     @FXML
     private Label playersNicknameLabel;
     @FXML
     private Label playerNumbersLabel;
+    private int maxPlayers;
 
     public void initialize(){
         playersNicknameLabel.setText(String.join(", ", ));
@@ -25,8 +28,8 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
     }
 
 
-    public void setNicknames(List<String> nicknames) {
-        this.nicknames = nicknames;
+    public void setNicknames(ArrayList<String> nicknames) {
+        this.nicknames =  nicknames;
     }
     public void setMaxPlayers(int maxPlayers){
         this.maxPlayers = maxPlayers;

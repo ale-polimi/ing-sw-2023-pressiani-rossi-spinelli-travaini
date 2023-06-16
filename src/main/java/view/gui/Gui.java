@@ -100,7 +100,27 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public void showChat(String sender, String message) {
+    public void showChat(String sender, boolean isPrivate, String message) {
 
+    }
+
+    @Override
+    public boolean getMyTurn() {
+        return false;
+    }
+
+    @Override
+    public void setMyTurn(boolean turn) {
+
+    }
+
+    @Override
+    public void askChat() {
+
+    }
+
+
+    public void showChat(String sender, String receiver,String message) {
+        //Empty because is used in the network view simulation
     }
 }
