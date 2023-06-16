@@ -433,6 +433,11 @@ public class Controller implements Observer {
                     this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
                 break;
+            case CHAT:
+                ChatMessage ncm = (ChatMessage) receivedMessage;
+                //networkView.showChat(ncm.getSender(), ncm.getDest(), ncm.getText());
+                this.update(ncm);
+                break;
             default:
                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "Message type: " + receivedMessage.getType().toString() + " is not valid."));
         }
@@ -948,6 +953,9 @@ public class Controller implements Observer {
             case BOARD_ERROR:
                 BoardErrorMessage boardErrorMessage = (BoardErrorMessage) message;
                 networkView.showGenericError(boardErrorMessage.getSender(), boardErrorMessage.getPayload());
+                break;
+            case CHAT:
+                networkView.showChat((ChatMessage)message);
                 break;
             default:
                 ;

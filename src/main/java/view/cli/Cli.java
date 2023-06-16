@@ -8,6 +8,7 @@ import model.commonobjective.CommonObjective;
 import model.library.Library;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
+import network.messages.ChatMessage;
 import observer.ViewObservable;
 import view.View;
 
@@ -15,7 +16,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -26,6 +30,10 @@ public class Cli extends ViewObservable implements View {
     private final boolean isSocket;
     private final PrintStream out;
     private Thread inputThread;
+    private boolean myTurn = true;
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private boolean chatAbilitator = true;
 
     /**
      * Constructor for the CLI.
@@ -33,6 +41,7 @@ public class Cli extends ViewObservable implements View {
     public Cli(boolean isSocket) {
         out = System.out;
         this.isSocket = isSocket;
+        //getChatOutTurn();
     }
 
     /**
@@ -226,9 +235,11 @@ public class Cli extends ViewObservable implements View {
                         "The objects must be in line (same row or column), adjacent and with ad least one side free.\n"+
                         "Type -showcommon to show the common objectives\n"+
                         "Type -showpersonal to show your personal objective\n"+
-                        "Type -showothers to show the opponents' library\n");
+                        "Type -showothers to show the opponents' library\n"+
+                        "Type -c_message to send a public chat message\n"+
+                        "Type -c_-p_Receiver_message to send a private message\n"
+                );
                 String coordinates = readLine();
-
                 if(coordinates.equals("-showcommon")){
                     notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
                     validInput = true;
@@ -238,6 +249,15 @@ public class Cli extends ViewObservable implements View {
                 } else if (coordinates.equals("-showothers")){
                     notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
                     validInput = true;
+                }else if(coordinates.split("_")[0].equals("-c")){
+                  String[] ncm = coordinates.split("_");
+                  if(ncm[1].equals("-p")){
+                      notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
+                  }
+                  else{
+                      notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
+                  }
+                  validInput = true;;
                 } else if(ClientController.isInputValid(coordinates)){
 
                     String[] parsedCoordinates = coordinates.split(",");
@@ -264,6 +284,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askLibraryMove() {
+        chatAbilitator = true;
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
@@ -273,7 +294,10 @@ public class Cli extends ViewObservable implements View {
                         "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
                         "Type -showcommon to show the common objectives\n"+
                         "Type -showpersonal to show your personal objective\n"+
-                        "Type -showothers to show the opponents' library\n");
+                        "Type -showothers to show the opponents' library\n"+
+                        "Type -c_message to send a public chat message\n"+
+                        "Type -c_-p_Receiver_message to send a private message\n"
+                );
                 String orderAndColumn = readLine();
 
                 if(orderAndColumn.equals("-showcommon")){
@@ -285,6 +309,15 @@ public class Cli extends ViewObservable implements View {
                 } else if (orderAndColumn.equals("-showothers")){
                     notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
                     validInput = true;
+                } else if(orderAndColumn.split("_")[0].equals("-c")){
+                    String[] ncm = orderAndColumn.split("_");
+                    if(ncm[1].equals("-p")){
+                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
+                    }
+                    else {
+                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
+                    }
+                    validInput = true;;
                 } else if(ClientController.isInputValid(orderAndColumn)){
 
                     String[] parsedCoordinates = orderAndColumn.split(",");
@@ -317,6 +350,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
+       chatAbilitator=true;
         clearCli();
         out.print(Colours.HIDE_CURSOR);
 
@@ -342,7 +376,6 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void showLobby(ArrayList<String> players) {
         clearCli();
-
         out.println("Connected players:");
         for (String playerName:
              players) {
@@ -511,15 +544,19 @@ public class Cli extends ViewObservable implements View {
         }
     }
 
-    /**
-     * Show the chat message to the player
-     * @param sender is the player who sent the message
-     * @param message the message from the player
-     */
+
     @Override
-    public void showChat(String sender, String message) {
-        out.print("" + Colours.BOLD + Colours.GREEN + sender + Colours.RESET+": "+message);
-        out.print("\n");
+    public void showChat(String sender,boolean isPrivate, String message) {
+        if(isPrivate){
+            out.println("" + Colours.BOLD + Colours.BLUE + sender + Colours.RESET+": "+message);
+        }
+        else{
+            out.println("" + Colours.BOLD + Colours.GREEN + sender + Colours.RESET+": "+message);
+        }
+    }
+
+    public void showChat(String sender, String receiver,String message) {
+        //Empty because is used in the network view simulation
     }
 
     /**
@@ -633,4 +670,73 @@ public class Cli extends ViewObservable implements View {
         out.println(Colours.CLEAR);
         out.flush();
     }
+
+    /**
+     * Handle the chat function when it isn't the player turn
+     */
+    private void getChatOutTurn(){
+        executor.execute(()->{
+            while (!executor.isShutdown()){
+                if (!myTurn) {
+                    Scanner tmp = new Scanner(System.in);
+                    String[] ncm = tmp.nextLine().split("_");
+                    if(ncm[0].equals("-c")) {
+                        if (ncm[1].equals("-p"))
+                            notifyObserver(viewObserver -> viewObserver.onChatMessage(null, ncm[2], ncm[3]));
+                        else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", ncm[1]));
+                    }else{
+                        out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                        out.print(Colours.RESET);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Getter for myTurn parameter
+     * @return myTurn value
+     */
+    public boolean getMyTurn(){return myTurn;}
+
+    @Override
+    public void setMyTurn(boolean turn) {this.myTurn=turn;}
+
+    public void askChat() {
+        if(!chatAbilitator)return;;
+        boolean validInput;
+        do{
+            System.out.println(
+                 "Chat service out of your turn:\n" +
+                         "Type -c_message to send a public chat message\n" +
+                         "Type -c_-p_Receiver_message to send a private message\n" +
+                         "Type SEE to see if there are incoming messages\n"+
+                         "Type NO CHAT to exit chat");
+            try {
+                String[] text = readLine().split("_");
+                 if (text[0].equals("NO CHAT")) {
+                     out.println("Exiting chat service");
+                     chatAbilitator = false;
+                     return;
+                 }else if (text[0].equals("-c")) {
+                    validInput = true;
+                    if (text[1].equals("-p"))
+                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null, text[2], text[3]));
+                    else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", text[1]));
+                } else if(text[0].equals("SEE")){
+                     validInput = true;
+                    notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "SEE", null));
+                 }
+                else{
+                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                    out.print(Colours.RESET);
+                    validInput = false;
+                }
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }while(!validInput);
+    }
+
+
 }

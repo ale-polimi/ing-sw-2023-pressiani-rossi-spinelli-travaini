@@ -57,4 +57,12 @@ public interface ViewObserver {
      * This method is particularly useful in the {@link view.cli.Cli CLI}.
      */
     void onRequestOthersLibrary();
+
+    /**
+     * This method will be used to send the message in the chat to the other players
+     * @param sender is the player who is sending the message
+     * @param receiver is the player/players who is receiving the message
+     * @param text is the message text
+     */
+    void onChatMessage(String sender, String receiver, String text);
 }

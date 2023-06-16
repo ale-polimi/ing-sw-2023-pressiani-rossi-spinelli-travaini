@@ -100,8 +100,26 @@ public interface View {
 
     /**
      * This method will show the chat message
-     * @param sender is the player who sent the message
-     * @param message the message from the player
+     * @param sender the sender of the message
+     * @param isPrivate indicate if the message is private
+     * @param message is the message text
      */
-    void showChat(String sender, String message);
+    void showChat(String sender,boolean isPrivate,String message);
+
+    /**
+     * Return if the player is the player in turn
+     * @return true if the player is the player in turn
+     */
+    boolean getMyTurn();
+
+    /**
+     * Set the myTurn parameter
+     * @param turn is the new value of the myTurn parameter
+     */
+    void setMyTurn(boolean turn);
+
+    /**
+     * Handle the chat service when the player is not in turn
+     */
+    void askChat();
 }

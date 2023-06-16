@@ -96,5 +96,23 @@ public class NetworkView implements View {
     }
 
     @Override
-    public void showChat(String sender, String message) {server.sendMessage(new ChatMessage(sender,message));}
+    public void showChat(String sender,boolean isPrivate, String message) {}
+
+    @Override
+    public boolean getMyTurn() {
+        return false;
+    }
+
+    @Override
+    public void setMyTurn(boolean turn) {
+
+    }
+
+    @Override
+    public void askChat() {
+
+    }
+
+
+    public void showChat(ChatMessage message) {server.sendMessage(message);}
 }
