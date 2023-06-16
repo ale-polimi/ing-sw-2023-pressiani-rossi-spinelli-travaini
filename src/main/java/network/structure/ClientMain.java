@@ -4,7 +4,10 @@ import controller.ClientController;
 //import javafx.application.Application;
 //import javafx.stage.Stage;
 //import view.Gui;
+import javafx.application.Application;
 import view.cli.*;
+import view.gui.Gui;
+import view.gui.JavaFXGUI;
 
 
 /**
@@ -65,7 +68,7 @@ public class ClientMain {
                 view.initCli();
             } else {
                 *//* TODO - GUI application launch *//*
-                //Application.launch(Gui.class);
+                //Application.launch(JavaFXGUI.class);
             }
         } else {
             System.exit(2);
@@ -83,7 +86,7 @@ public class ClientMain {
             view.initCli();
         } else {
             /* TODO - GUI application launch */
-            //Application.launch(Gui.class);
+            Application.launch(JavaFXGUI.class);
         }
     }
 

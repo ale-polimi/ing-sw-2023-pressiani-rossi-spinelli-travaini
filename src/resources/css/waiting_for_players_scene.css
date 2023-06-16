@@ -1,0 +1,11 @@
+@font-face {
+
+    src: url("fonts/Rancho/Rancho-Regular.ttf");
+}
+
+.label{
+
+
+    -fx-text-fill: black;
+    -fx-font-family: 'Rancho';
+}

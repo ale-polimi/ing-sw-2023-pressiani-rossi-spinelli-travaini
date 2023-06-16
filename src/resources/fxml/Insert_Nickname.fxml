@@ -38,7 +38,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.InsertNicknameSceneController">
 <children>
       <ImageView fitHeight="400.0" fitWidth="648.0">
          <image>
@@ -50,7 +50,7 @@
             <Image url="@../images/insert_nickname_Banner.jpg" />
          </image>
       </ImageView>
-      <Button layoutX="216.0" layoutY="311.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="142.0" style="-fx-background-color: transparent;">
+      <Button fx:id="submitButton" layoutX="216.0" layoutY="311.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="142.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="60.0" fitWidth="200.0">
                <image>
@@ -58,6 +58,6 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <TextField layoutX="200.0" layoutY="236.0" prefHeight="66.0" prefWidth="240.0" />
+      <TextField fx:id="nicknameField" layoutX="200.0" layoutY="236.0" prefHeight="66.0" prefWidth="240.0" />
 </children>
 </AnchorPane>

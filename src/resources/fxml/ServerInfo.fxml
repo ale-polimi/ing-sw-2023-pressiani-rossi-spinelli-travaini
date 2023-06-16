@@ -5,6 +5,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" prefHeight="425.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.ServerInfoSceneController">
    <children>
@@ -13,7 +14,10 @@
             <Image url="@../images/sfondo_parquet.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="serverAddressField" layoutX="111.0" layoutY="190.0" prefHeight="52.0" prefWidth="120.0" />
+      <TextField fx:id="serverAddressField" alignment="CENTER" layoutX="56.0" layoutY="188.0" prefHeight="54.0" prefWidth="229.0" text="127.0.0.1">
+         <font>
+            <Font name="Berlin Sans FB" size="27.0" />
+         </font></TextField>
       <Button fx:id="submitButton" layoutX="363.0" layoutY="299.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="80.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="60.0" fitWidth="200.0">
@@ -23,7 +27,10 @@
             </ImageView>
          </graphic>
       </Button>
-      <TextField fx:id="serverPortField" layoutX="346.0" layoutY="189.0" prefHeight="54.0" prefWidth="229.0" />
+      <TextField fx:id="serverPortField" alignment="CENTER" layoutX="356.0" layoutY="188.0" prefHeight="54.0" prefWidth="229.0" text="12345">
+         <font>
+            <Font name="Berlin Sans FB" size="27.0" />
+         </font></TextField>
       <ImageView fitHeight="70.0" fitWidth="250.0" layoutX="46.0" layoutY="63.0">
          <image>
             <Image url="@../images/server_IP_Banner.jpg" />
