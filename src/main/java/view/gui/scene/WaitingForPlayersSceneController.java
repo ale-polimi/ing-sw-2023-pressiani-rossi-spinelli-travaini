@@ -38,7 +38,7 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
 
     public void updateValues(){
         playersNicknameLabel.setText(String.join(", ", this.nicknames));
-        playerNumbersLabel.setText((this.nicknames.size() + "/" + Game.MAX_PLAYERS));
+        playerNumbersLabel.setText((this.nicknames.size() + "/" + this.maxPlayers));
     }
 }
 
