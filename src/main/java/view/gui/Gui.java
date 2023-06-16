@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Gui extends ViewObservable implements View {
+
+    public int playerNum;
+
+    public static void setPlayerNum(int playerNum){
+        playerNum = playerNum;
+    }
     @Override
     public void askNickname() {
         Platform.runLater(() -> SceneController.changeRootPane(observers, "Insert_Nickname.fxml" ));
@@ -25,7 +31,7 @@ public class Gui extends ViewObservable implements View {
     public void askMaxPlayer() {
         //SelectMaxPlayersSceneController smpsc = new SelectMaxPlayersSceneController();
         //smpsc.addAllObservers(observers);
-        Platform.runLater(() -> SceneController.changeRootPane(observers, "Select_Max_Players.fxml"));
+        Platform.runLater(() -> SceneController.changeRootPane(observers,  "Select_Max_Players.fxml"));
 
     }
 
@@ -69,13 +75,13 @@ public class Gui extends ViewObservable implements View {
         try{
             wfp = (WaitingForPlayersSceneController) SceneController.getActiveController();
             wfp.setNicknames(players);
-            wfp.setMaxPlayers(maxPlayers);
+            wfp.setMaxPlayers(playerNum);
             Platform.runLater(wfp :: updateValues);
         } catch (ClassCastException e) {
             wfp = new WaitingForPlayersSceneController();
             wfp.addAllObservers(observers);
             wfp.setNicknames(players);
-            wfp.setMaxPlayers(maxPlayers);
+            wfp.setMaxPlayers(playerNum);
             WaitingForPlayersSceneController finalWfp = wfp;
             Platform.runLater(() -> SceneController.changeRootPane(finalWfp, "Waiting_For_Players.fxml" ));
 

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import observer.ViewObservable;
+import view.gui.Gui;
 
 public class SelectMaxPlayersSceneController extends ViewObservable implements GenericSceneController {
 
@@ -31,6 +32,7 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
         int players = 2;
+        Gui.setPlayerNum(players);
 
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }
@@ -42,6 +44,8 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
         int players = 3;
+        Gui.setPlayerNum(players);
+
 
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }
@@ -53,6 +57,7 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
         int players = 4;
+        Gui.setPlayerNum(players);
 
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }

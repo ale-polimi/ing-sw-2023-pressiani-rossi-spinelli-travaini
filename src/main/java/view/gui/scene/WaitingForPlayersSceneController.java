@@ -22,7 +22,7 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
     private int maxPlayers;
 
     public void initialize(){
-        playersNicknameLabel.setText(String.join(", ", ));
+        playersNicknameLabel.setText(String.join(", ", nicknames ));
         playerNumbersLabel.setText(nicknames.size()+"/" + maxPlayers );
 
     }
