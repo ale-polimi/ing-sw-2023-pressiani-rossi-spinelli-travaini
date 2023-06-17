@@ -32,14 +32,13 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.SelectMaxPlayersSceneController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
@@ -48,47 +47,12 @@
                   <Image url="@../images/sfondo_parquet.jpg" />
                </image>
             </ImageView>
-            <Button fx:id="fourPlayersButton" layoutX="426.0" layoutY="190.0" mnemonicParsing="false" prefHeight="114.0" prefWidth="120.0" style="-fx-background-color: transparent;">
-               <font>
-                  <Font name="Britannic Bold" size="40.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="120.0" fitWidth="120.0">
-                     <image>
-                        <Image url="@../images/4_Button.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="twoPlayersButton" layoutX="52.0" layoutY="190.0" mnemonicParsing="false" prefHeight="147.0" prefWidth="128.0" style="-fx-background-color: transparent;">
-               <font>
-                  <Font name="Britannic Bold" size="40.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="120.0" fitWidth="120.0">
-                     <image>
-                        <Image url="@../images/2_Button.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="threePlayersButton" layoutX="236.0" layoutY="190.0" mnemonicParsing="false" prefHeight="114.0" prefWidth="120.0" style="-fx-background-color: transparent;">
-               <font>
-                  <Font name="Britannic Bold" size="40.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="120.0" fitWidth="120.0">
-                     <image>
-                        <Image url="@../images/3_Button.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <ImageView fitHeight="113.0" fitWidth="409.0" layoutX="118.0" layoutY="15.0">
+            <ImageView fitHeight="93.0" fitWidth="346.0" layoutX="151.0" layoutY="31.0">
                <image>
-                  <Image url="@../images/number_of_players_Banner.jpg" />
+                  <Image url="@../images/scoreboard_Banner.jpg" />
                </image>
             </ImageView>
+            <TextArea layoutX="224.0" layoutY="152.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" />
       </children>
     </AnchorPane>
   </children>

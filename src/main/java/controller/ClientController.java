@@ -12,6 +12,7 @@ import observer.Observable;
 import observer.Observer;
 import observer.ViewObserver;
 import view.View;
+import view.cli.Cli;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -145,6 +146,24 @@ public class ClientController extends Observable implements ViewObserver, Observ
         }
     }
 
+    @Override
+    public void onChatMessage(String sender, String receiver, String text) {
+        if(receiver.equals("all"))view.showChat(nickname,false,text);
+        else if(!receiver.equals("SEE"))view.showChat(nickname,true,text);
+        try {
+            client.sendMessage(new ChatMessage(nickname,receiver,text));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        if(view.getMyTurn()){
+            if(!inLibrary && inPickup){
+                view.askBoardMove();
+            } else {
+                view.askLibraryMove();
+            }
+        }
+    }
+
     /**
      * This method checks if the ip is valid as in it follows the <a href="https://en.wikipedia.org/wiki/Dot-decimal_notation">dot-decimal notation</a>.
      * @param ip is the ip to verify.
@@ -188,7 +207,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     }
 
     @Override
-    public  void update(Message message) {
+    public void update(Message message) {
         switch (message.getType()){
             case SHOW_LOBBY:
                 inLobby = true;
@@ -207,6 +226,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 }
 
                 if(sender.equals(nickname)) {
+                    view.setMyTurn(true);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     switch (type){
                         case "END_TURN":
@@ -225,8 +245,10 @@ public class ClientController extends Observable implements ViewObserver, Observ
                             break;
                     }
                 } else {
+                    view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
+                    view.askChat();
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
@@ -333,7 +355,11 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 break;
             case CHAT:
                 ChatMessage cm = (ChatMessage) message;
-                view.showChat(cm.getSender(),cm.getText());
+                if (cm.getDest().equals("all") && !cm.getSender().equals(nickname)) {
+                    view.showChat(cm.getSender(), false, cm.getText());
+                } else if (cm.getDest().equals(nickname)) {
+                    view.showChat(cm.getSender(), true, cm.getText());
+                }else if(cm.getSender().equals(nickname)&&cm.getDest().equals("SEE")){view.askChat();}
                 break;
             default:
                 break;

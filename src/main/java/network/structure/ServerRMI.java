@@ -93,7 +93,6 @@ public class ServerRMI extends Observable implements Server,Runnable{
     @Override
     public void ping() throws RemoteException {
         if(pingReceived.isEmpty())return;
-        System.out.println(pingReceived);
         if(pingReceived.containsValue(false)) startServer.disconnect();
         for(String key : pingReceived.keySet()){
             pingReceived.replace(key,true,false);

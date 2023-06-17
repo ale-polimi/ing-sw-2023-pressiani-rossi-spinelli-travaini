@@ -1,5 +1,6 @@
 package view.gui;
 
+import javafx.application.Platform;
 import model.board.Board;
 import model.commonobjective.CommonObjective;
 import model.library.Library;
@@ -7,18 +8,30 @@ import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
 import view.View;
+import view.gui.scene.SelectMaxPlayersSceneController;
+import view.gui.scene.WaitingForPlayersSceneController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Gui extends ViewObservable implements View {
+
+    public int playerNum;
+
+    public static void setPlayerNum(int playerNum){
+        playerNum = playerNum;
+    }
     @Override
     public void askNickname() {
+        Platform.runLater(() -> SceneController.changeRootPane(observers, "Insert_Nickname.fxml" ));
 
     }
 
     @Override
     public void askMaxPlayer() {
+        //SelectMaxPlayersSceneController smpsc = new SelectMaxPlayersSceneController();
+        //smpsc.addAllObservers(observers);
+        Platform.runLater(() -> SceneController.changeRootPane(observers,  "Select_Max_Players.fxml"));
 
     }
 
@@ -48,6 +61,8 @@ public class Gui extends ViewObservable implements View {
     }
 
 
+
+
     @Override
     public void showPersonalObjective(String player, PersonalObjective personalObjective) {
 
@@ -55,8 +70,25 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showLobby(ArrayList<String> players) {
+        WaitingForPlayersSceneController wfp;
 
+        try{
+            wfp = (WaitingForPlayersSceneController) SceneController.getActiveController();
+            wfp.setNicknames(players);
+            wfp.setMaxPlayers(playerNum);
+            Platform.runLater(wfp :: updateValues);
+        } catch (ClassCastException e) {
+            wfp = new WaitingForPlayersSceneController();
+            wfp.addAllObservers(observers);
+            wfp.setNicknames(players);
+            wfp.setMaxPlayers(playerNum);
+            WaitingForPlayersSceneController finalWfp = wfp;
+            Platform.runLater(() -> SceneController.changeRootPane(finalWfp, "Waiting_For_Players.fxml" ));
+
+        }
     }
+
+
 
     @Override
     public void showWinner(String winner, HashMap<String, Integer> leaderboard) {
@@ -74,7 +106,27 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public void showChat(String sender, String message) {
+    public void showChat(String sender, boolean isPrivate, String message) {
 
+    }
+
+    @Override
+    public boolean getMyTurn() {
+        return false;
+    }
+
+    @Override
+    public void setMyTurn(boolean turn) {
+
+    }
+
+    @Override
+    public void askChat() {
+
+    }
+
+
+    public void showChat(String sender, String receiver,String message) {
+        //Empty because is used in the network view simulation
     }
 }

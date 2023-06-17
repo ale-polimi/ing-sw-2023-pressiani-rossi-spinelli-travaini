@@ -33,22 +33,17 @@
 -->
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.WaitingForPlayersSceneController">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" stylesheets="@../css/waiting_for_players_scene.css" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
             <ImageView fitHeight="400.0" fitWidth="648.0">
                <image>
                   <Image url="@../images/sfondo_parquet.jpg" />
@@ -59,12 +54,26 @@
                   <Image url="@../images/waiting_for_players_Banner.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="93.0" fitWidth="346.0" layoutX="151.0" layoutY="31.0">
-               <image>
-                  <Image url="@../images/scoreboard_Banner.jpg" />
-               </image>
-            </ImageView>
-            <TextArea layoutX="224.0" layoutY="152.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" />
+            <Text layoutX="46.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Players connected:" wrappingWidth="210.9366455078125">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Text>
+            <Label fx:id="playersNicknameLabel" layoutX="257.0" layoutY="168.0" prefHeight="35.0" prefWidth="385.0" text="Player 1, Player 2, Player 3, Player 4" textFill="#000000e8">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Text layoutX="104.0" layoutY="291.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Remaining Players">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Text>
+            <Label fx:id="playerNumbersLabel" layoutX="363.0" layoutY="255.0" prefHeight="51.0" prefWidth="86.0" text="0 / 0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
       </children>
     </AnchorPane>
   </children>
