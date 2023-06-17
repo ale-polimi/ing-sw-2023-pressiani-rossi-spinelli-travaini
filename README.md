@@ -16,7 +16,7 @@ Scaglione Cugola, gruppo GC-019.
 Ricreare il gioco da tavolo [MyShelfie](https://craniointernational.com/products/my-shelfie/)<sup>(<i>apre sito esterno</i>)</sup> pubblicato da Cranio Creations, seguendo i principi di buona ingegneria del software.<br>
 Il progetta punta a creare una copia virtuale del gioco come un'applicazione Java distribuita e in rete. Come viene insegnato nei corsi d'ingegneria del software, un programma così complesso deve seguire delle regole in modo tale da essere <b>mantenibile</b>, <b>riutilizzabile</b> e <b>aggiornabile</b> da altri sviluppatori.<br>
 Per seguire tali linee guida, nella realizzazione del progetto si sono utilizzati diversi <i>[design pattern](https://it.wikipedia.org/wiki/Design_pattern)</i><sup>(<i>apre sito esterno</i>)</sup>, come il pattern <i>Model-View-Controller</i> per una corretta divisione degli strati dell'applicazione.<br>
-I requisiti del progetto sono disponibili qui: [requisiti](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/src/resources/requirements.pdf).
+I requisiti del progetto sono disponibili qui: [requisiti](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/requirements.pdf).
 
 ## Documentazione
 ### UML
@@ -41,7 +41,7 @@ I componenti del gioco sono stati testati singolarmente con JUnit e la copertura
 
 ## Funzionalità implementate
 ### Core
-- Regole complete disponibili qui: [Regole MyShelfie](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/src/resources/MyShelfie_Rulebook_ITA.pdf);
+- Regole complete disponibili qui: [Regole MyShelfie](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/MyShelfie_Rulebook_ITA.pdf);
 - Connessione socket;
 - Connessione RMI;
 - Interfaccia da Linea di Comando (CLI);
@@ -121,7 +121,7 @@ Software Engineering project for the 2022-2023 academic year.
 Recreate the board game [MyShelfie](https://craniointernational.com/products/my-shelfie/)<sup>(<i>opens external site</i>)</sup> published by Cranio Creations following the software engineering principles.<br>
 The project aims to create a virtual copy of the game as a distributed, online Java application. As taught in Software Engineering courses, a complex software such as this has to follow some rules in order to be <b>maintainable</b>, <b>reusable</b> and <b>updatable</b> by other developers.<br>
 In order to accomplish this, the project uses many [design patterns](https://en.wikipedia.org/wiki/Software_design_pattern)<sup>(<i>opens external site</i>)</sup> such as the <i>Model-View-Controller</i> pattern for the core division of information layers in the application.<br> 
-The project's requirements are available here: [requirements](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/src/resources/requirements.pdf) (available only in Italian).
+The project's requirements are available here: [requirements](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/requirements.pdf) (available only in Italian).
 
 ## Documentation
 ### UML
@@ -148,7 +148,7 @@ The components of the game have been individually tested with Junit and the code
 ## Implemented Functions
 ### Core
 
-- Complete rule-set available here: [MyShelfie rules](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/src/resources/MyShelfie_Rulebook_ENG.pdf);
+- Complete rule-set available here: [MyShelfie rules](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/MyShelfie_Rulebook_ENG.pdf);
 - Socket connection;
 - RMI connection;
 - Command Line Interface (CLI);
