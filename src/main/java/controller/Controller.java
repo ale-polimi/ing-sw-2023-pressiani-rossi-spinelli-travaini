@@ -1,6 +1,8 @@
 package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import enumerations.GameState;
 import enumerations.ObjectColour;
 import enumerations.TypeSpace;
@@ -21,6 +23,8 @@ import network.structure.StartServerImpl;
 import observer.Observer;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -57,7 +61,9 @@ public class Controller implements Observer {
         game.addObserver(this);
         networkView = new NetworkView(server);
         game.setGameState(LOGIN);
-        byte[] jsonData = Files.readAllBytes(Paths.get("src/resources/json/personalObjectives.json"));
+
+        /* TODO - Packaged app can't read this! */
+        byte[] jsonData = Files.readAllBytes(Paths.get("src/main/resources/json/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
         personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
 
