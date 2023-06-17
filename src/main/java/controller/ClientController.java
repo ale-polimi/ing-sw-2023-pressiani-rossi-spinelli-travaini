@@ -226,7 +226,6 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 }
 
                 if(sender.equals(nickname)) {
-                    view.setMyTurn(true);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     switch (type){
                         case "END_TURN":
@@ -245,10 +244,8 @@ public class ClientController extends Observable implements ViewObserver, Observ
                             break;
                     }
                 } else {
-                    view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
-                    view.askChat();
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
@@ -372,7 +369,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
      * @return the type of error as a {@link String}.
      */
     private String parseType(String sender) {
-        return sender.substring(sender.lastIndexOf(':') + 1);
+        return sender.substring(sender.lastIndexOf(':') +    1);
     }
 
     /**

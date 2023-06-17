@@ -36,4 +36,15 @@ public interface Client extends Remote{
      * check the presence of problems in the connection between client and server
      */
     void ping() throws RemoteException;
+    /**
+     * is a boolean method that checks the connection
+     * @return the state of the connection
+     */
+    boolean isConnected()throws RemoteException;
+    /**
+     * Disconnect the client
+     */
+    void disconnect() throws RemoteException;
+
+
 }

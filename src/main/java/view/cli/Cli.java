@@ -350,7 +350,6 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
-       chatAbilitator=true;
         clearCli();
         out.print(Colours.HIDE_CURSOR);
 

@@ -15,6 +15,7 @@ import exceptions.player.TooManyObjectsInHandException;
 import model.Game;
 import model.commonobjective.*;
 import model.library.Library;
+import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.messages.*;
@@ -63,9 +64,14 @@ public class Controller implements Observer {
         game.setGameState(LOGIN);
 
         /* TODO - Packaged app can't read this! */
-        byte[] jsonData = Files.readAllBytes(Paths.get("src/main/resources/json/personalObjectives.json"));
+        //byte[] jsonData = Files.readAllBytes(Paths.get("src/main/resources/json/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
-        personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
+        //personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
+
+        Reader reader;
+        reader = new InputStreamReader(Objects.requireNonNull(StartServerImpl.class.getResourceAsStream("/json/personalObjectives.json")));
+        personalObjectives = objectMapper.readValue(reader,HashMap.class);
+
 
         /* Creating all the common objectives; when the game starts we will randomly select only two */
         availableCommonObjectives = new HashMap<>();

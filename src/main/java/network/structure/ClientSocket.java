@@ -134,18 +134,13 @@ public class ClientSocket extends Observable implements Client {
     }
 
 
-    /**
-     * is a boolean method that checks the connection
-     * @return the state of the connection
-     */
+    @Override
     public boolean isConnected() {
         return getConnected;
     }
 
 
-    /**
-     * Disconnect the client
-     */
+    @Override
     public void disconnect() {
         try{
             closeConnection();;
