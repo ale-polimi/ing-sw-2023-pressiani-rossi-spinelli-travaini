@@ -12,7 +12,6 @@ import observer.Observable;
 import observer.Observer;
 import observer.ViewObserver;
 import view.View;
-import view.cli.Cli;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -30,7 +29,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private Client client;
     private String nickname;
     private boolean inLobby = false;
-    private ArrayList<String> takenNicknames = new ArrayList<>();
+    private final ArrayList<String> takenNicknames = new ArrayList<>();
     private CommonObjective commonObjective1;
     private CommonObjective commonObjective2;
     private int[] completedCommonObjectives = new int[]{0,0};
@@ -41,7 +40,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private boolean inLibrary = false;
     private boolean inPickup = true;
     private final ExecutorService taskQueue;
-    private boolean isSocket;
+    private final boolean isSocket;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public ClientController(View view,boolean isSocket){
@@ -119,7 +118,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     @Override
     public void onRequestCommonObjectives() {
         view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2, this.completedCommonObjectives);
-        if(inLibrary == false && inPickup == true){
+        if(!inLibrary && inPickup){
             view.askBoardMove();
         } else {
             view.askLibraryMove();
@@ -129,7 +128,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     @Override
     public void onRequestPersonalObjective() {
         view.showPersonalObjective(this.nickname, this.personalObjective);
-        if(inLibrary == false && inPickup == true){
+        if(!inLibrary && inPickup){
             view.askBoardMove();
         } else {
             view.askLibraryMove();
@@ -139,7 +138,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     @Override
     public void onRequestOthersLibrary() {
         view.showOthersLibrary(this.nickname, this.otherPlayersLibrary);
-        if(inLibrary == false && inPickup == true){
+        if(!inLibrary && inPickup){
             view.askBoardMove();
         } else {
             view.askLibraryMove();
@@ -149,7 +148,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     @Override
     public void onChatMessage(String sender, String receiver, String text) {
         if(receiver.equals("all"))view.showChat(nickname,false,text);
-        else if(!receiver.equals("SEE"))view.showChat(nickname,true,text);
+        else if(!receiver.equals("SEE"))view.showChat(nickname+" to "+receiver,true,text);
         try {
             client.sendMessage(new ChatMessage(nickname,receiver,text));
         } catch (RemoteException e) {
@@ -226,6 +225,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 }
 
                 if(sender.equals(nickname)) {
+                    view.setMyTurn(true);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     switch (type){
                         case "END_TURN":
@@ -234,16 +234,17 @@ public class ClientController extends Observable implements ViewObserver, Observ
                             view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives);
                             break;
                         default:
-                            if (inLibrary == true && inPickup == false) {
+                            if (inLibrary && !inPickup) {
                                 view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
                                 view.askLibraryMove();
-                            } else if (inLibrary == false && inPickup == true) {
+                            } else if (!inLibrary && inPickup) {
                                 view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
                                 view.askBoardMove();
                             }
                             break;
                     }
                 } else {
+                    view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
                 }
@@ -310,7 +311,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                             view.askLibraryMove();
                             break;
                         case "NICKNAME":
-                            if(inLobby == false) {
+                            if(!inLobby) {
                                 view.showGenericError(senderErr, genericErrorMessage.getPayload());
                                 view.askNickname();
                             }
@@ -355,8 +356,9 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 if (cm.getDest().equals("all") && !cm.getSender().equals(nickname)) {
                     view.showChat(cm.getSender(), false, cm.getText());
                 } else if (cm.getDest().equals(nickname)) {
-                    view.showChat(cm.getSender(), true, cm.getText());
-                }else if(cm.getSender().equals(nickname)&&cm.getDest().equals("SEE")){view.askChat();}
+                    view.showChat(cm.getSender()+" to "+ cm.getDest(), true, cm.getText());
+                }else if((cm.getSender().equals(nickname)&&cm.getDest().equals("SEE"))){view.askChat();}
+                else if(!view.getMyTurn()){view.askChat();}
                 break;
             default:
                 break;
