@@ -8,7 +8,6 @@ import model.commonobjective.CommonObjective;
 import model.library.Library;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
-import network.messages.ChatMessage;
 import observer.ViewObservable;
 import view.View;
 
@@ -16,7 +15,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,7 +30,6 @@ public class Cli extends ViewObservable implements View {
     private Thread inputThread;
     private boolean myTurn = true;
 
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private boolean chatAbilitator = true;
 
     /**
@@ -151,7 +148,7 @@ public class Cli extends ViewObservable implements View {
                 clearCli();
                 validInput = false;
             }
-        } while (validInput == false);
+        } while (!validInput);
 
         notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
     }
@@ -177,7 +174,7 @@ public class Cli extends ViewObservable implements View {
                     validInput = true;
                     notifyObserver(viewObserver -> viewObserver.onUpdateNickname(nickname));
                 }
-            } while (validInput == false);
+            } while (!validInput);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -212,7 +209,7 @@ public class Cli extends ViewObservable implements View {
                     out.println("" + Colours.RED + Colours.BOLD + e.getMessage() + Colours.RESET);
                     validInput = false;
                 }
-            } while (validInput == false);
+            } while (!validInput);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -273,7 +270,7 @@ public class Cli extends ViewObservable implements View {
                     out.print(Colours.RESET);
                     validInput = false;
                 }
-            } while (validInput == false);
+            } while (!validInput);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -285,6 +282,7 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void askLibraryMove() {
         chatAbilitator = true;
+        myTurn = true;
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
@@ -333,7 +331,7 @@ public class Cli extends ViewObservable implements View {
                     out.print(Colours.RESET);
                     validInput = false;
                 }
-            } while (validInput == false);
+            } while (!validInput);
         } catch (ExecutionException e){
             out.println(STR_INPUT_CANCELED);
         }
@@ -352,11 +350,14 @@ public class Cli extends ViewObservable implements View {
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
+        chatAbilitator = true;
 
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
         showBoard(rcvGameBoard);
         showObjInHand(rcvObjectsInHand);
         showLibrary(rcvPlayerLibrary);
+
+        if(!myTurn){askChat();}
     }
 
     /**
@@ -546,16 +547,10 @@ public class Cli extends ViewObservable implements View {
 
     @Override
     public void showChat(String sender,boolean isPrivate, String message) {
-        if(isPrivate){
-            out.println("" + Colours.BOLD + Colours.BLUE + sender + Colours.RESET+": "+message);
-        }
-        else{
-            out.println("" + Colours.BOLD + Colours.GREEN + sender + Colours.RESET+": "+message);
-        }
-    }
-
-    public void showChat(String sender, String receiver,String message) {
-        //Empty because is used in the network view simulation
+        String senderOut;
+        if(isPrivate){senderOut = "PRIVATE|"+ sender;}
+        else{senderOut = sender;}
+        out.println("" + Colours.BOLD + Colours.GREEN + senderOut + Colours.RESET+": "+message);
     }
 
     /**
@@ -671,28 +666,6 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
-     * Handle the chat function when it isn't the player turn
-     */
-    private void getChatOutTurn(){
-        executor.execute(()->{
-            while (!executor.isShutdown()){
-                if (!myTurn) {
-                    Scanner tmp = new Scanner(System.in);
-                    String[] ncm = tmp.nextLine().split("_");
-                    if(ncm[0].equals("-c")) {
-                        if (ncm[1].equals("-p"))
-                            notifyObserver(viewObserver -> viewObserver.onChatMessage(null, ncm[2], ncm[3]));
-                        else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", ncm[1]));
-                    }else{
-                        out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
-                        out.print(Colours.RESET);
-                    }
-                }
-            }
-        });
-    }
-
-    /**
      * Getter for myTurn parameter
      * @return myTurn value
      */
@@ -710,10 +683,10 @@ public class Cli extends ViewObservable implements View {
                          "Type -c_message to send a public chat message\n" +
                          "Type -c_-p_Receiver_message to send a private message\n" +
                          "Type SEE to see if there are incoming messages\n"+
-                         "Type NO CHAT to exit chat");
+                         "Type EXIT to exit chat");
             try {
                 String[] text = readLine().split("_");
-                 if (text[0].equals("NO CHAT")) {
+                 if (text[0].equals("EXIT")) {
                      out.println("Exiting chat service");
                      chatAbilitator = false;
                      return;
