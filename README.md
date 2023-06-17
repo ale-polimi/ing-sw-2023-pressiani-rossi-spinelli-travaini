@@ -91,7 +91,7 @@ Questo programma richiede una versione Java 19 o superiore per eseguire corretta
 
 Per l'interfaccia CLI:
 - Un terminale che supporti [256 colori (8-bit)](https://it.wikipedia.org/wiki/Codici_di_escape_ANSI)<sup>(<i>apre sito esterno</i>)</sup>;
-- :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat, altrimenti non si vedono i colori nella CLI;
+- :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), altrimenti non si vedono i colori nella CLI;
 - :warning: Per mantenere la formattazione degli elementi di gioco, si consiglia di utilizzare un tipo di carattere monospazio come Courier New (Windows), Monospace (Linux) o Liberation Mono (Linux).
 
 ### Compatibilità dell'applicazione
