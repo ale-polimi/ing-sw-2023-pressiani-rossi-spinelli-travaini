@@ -57,7 +57,7 @@ public class Controller implements Observer {
         game.addObserver(this);
         networkView = new NetworkView(server);
         game.setGameState(LOGIN);
-        byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
+        byte[] jsonData = Files.readAllBytes(Paths.get("src/resources/json/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
         personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
 
