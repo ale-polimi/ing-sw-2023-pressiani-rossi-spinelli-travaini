@@ -112,17 +112,15 @@ public class Controller implements Observer {
                     } else {
                         game.setMaxPlayers(maxPlayersMessage.getPlayers());
                         allGood = true;
+                        ArrayList<String> players = new ArrayList<>();
+                        for (Player p : game.getPlayers()) players.add(p.getNickname());
+                        this.update(new ShowLobbyMessage(players));
                     }
                 } else {
                     this.update(new GenericErrorMessage(maxPlayersMessage.getSender().concat(":GENERIC"), "This message type: " + receivedMessage.getType().toString() + " is not available for this game state: " + game.getGameState().toString()));
                 }
 
                 System.out.println("allGood is: " + allGood);
-                if(allGood == true){
-                    ArrayList<String> players = new ArrayList<>();
-                    for (Player p : game.getPlayers()) players.add(p.getNickname());
-                    this.update(new ShowLobbyMessage(players));
-                }
                 break;
             case USER_INFO:
                 UserInfoForLoginMessage userInfoForLoginMessage = (UserInfoForLoginMessage) receivedMessage;
@@ -912,15 +910,19 @@ public class Controller implements Observer {
             case ADDED_PLAYER:
                 if(game.getPlayers().size() == 1) {
                     networkView.askMaxPlayer();
+                }else {
+                    ArrayList<String> players = new ArrayList<>();
+                    for (Player player :
+                            game.getPlayers()) {
+                        players.add(player.getNickname());
+                    }
+                    networkView.showLobby(players);
                 }
 
-                ArrayList<String> players = new ArrayList<>();
-                for (Player player :
-                        game.getPlayers()) {
-                    players.add(player.getNickname());
-                }
-
-                networkView.showLobby(players);
+                break;
+            case SHOW_LOBBY:
+                ShowLobbyMessage lobbyMessage = (ShowLobbyMessage) message;
+                networkView.showLobby(lobbyMessage.getLobbyPlayers());
                 break;
             case NEXT_TURN:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
