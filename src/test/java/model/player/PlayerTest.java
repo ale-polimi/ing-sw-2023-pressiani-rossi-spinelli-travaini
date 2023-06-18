@@ -91,43 +91,43 @@ public class PlayerTest {
   }
 
   /**
-   * Test the correct returning of the player's points when they are 0
+   * Test the correct returning of the player's personal objective points from when they are 0
    */
   @Test
-  public void getPointsDefault() {
+  public void getPointsPersonalObjectiveDefault() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
-    assertEquals(0,player.getPoints());
+    assertEquals(0,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
-   * Test the correct returning of the player's points when they are 1
+   * Test the correct returning of the player's personal objective points when they are 1
    */
   @Test
-  public void getPointsOne() {
+  public void getPointsPersonalObjectiveOne() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
     player.getLibrary().getLibraryGrid()[5][4] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("PINK1"),player.getLibrary().getLibraryGrid()[5][4]);
-    assertEquals(1,player.getPoints());
+    assertEquals(1,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
-   * Test the correct returning of the player's points when they are 2
+   * Test the correct returning of the player's personal objective points when they are 2
    */
   @Test
-  public void getPointsTwo() {
+  public void getPointsPersonalObjectiveTwo() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
     player.getLibrary().getLibraryGrid()[5][4] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("PINK1"),player.getLibrary().getLibraryGrid()[5][4]);
     player.getLibrary().getLibraryGrid()[5][3] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("BLUE1"),player.getLibrary().getLibraryGrid()[5][3]);
-    assertEquals(2,player.getPoints());
+    assertEquals(2,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
-   * Test the correct returning of the player's points when they are 4
+   * Test the correct returning of the player's personal objective points when they are 4
    */
   @Test
-  public void getPointsFour() {
+  public void getPointsPersonalObjectiveFour() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
     player.getLibrary().getLibraryGrid()[5][4] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("PINK1"),player.getLibrary().getLibraryGrid()[5][4]);
@@ -135,14 +135,14 @@ public class PlayerTest {
     player.getLibrary().addObject(new ObjectCard("BLUE1"),player.getLibrary().getLibraryGrid()[5][3]);
     player.getLibrary().getLibraryGrid()[5][2] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("GREEN1"),player.getLibrary().getLibraryGrid()[5][2]);
-    assertEquals(4,player.getPoints());
+    assertEquals(4,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
-   * Test the correct returning of the player's points when they are 6
+   * Test the correct returning of the player's personal objective points when they are 6
    */
   @Test
-  public void getPointsSix() {
+  public void getPointsPersonalObjectiveSix() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
     player.getLibrary().getLibraryGrid()[5][4] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("PINK1"),player.getLibrary().getLibraryGrid()[5][4]);
@@ -152,14 +152,14 @@ public class PlayerTest {
     player.getLibrary().addObject(new ObjectCard("GREEN1"),player.getLibrary().getLibraryGrid()[5][2]);
     player.getLibrary().getLibraryGrid()[5][1] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("WHITE1"),player.getLibrary().getLibraryGrid()[5][1]);
-    assertEquals(6,player.getPoints());
+    assertEquals(6,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
-   * Test the correct returning of the player's points when they are 9
+   * Test the correct returning of the player's personal objective points when they are 9
    */
   @Test
-  public void getPointsNine() {
+  public void getPointsPersonalObjectiveNine() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
     player.getLibrary().getLibraryGrid()[5][4] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("PINK1"),player.getLibrary().getLibraryGrid()[5][4]);
@@ -171,14 +171,14 @@ public class PlayerTest {
     player.getLibrary().addObject(new ObjectCard("WHITE1"),player.getLibrary().getLibraryGrid()[5][1]);
     player.getLibrary().getLibraryGrid()[5][0] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("YELLOW1"),player.getLibrary().getLibraryGrid()[5][0]);
-    assertEquals(9,player.getPoints());
+    assertEquals(9,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
-   * Test the correct returning of the player's points when they are 12
+   * Test the correct returning of the player's personal objective points when they are 12
    */
   @Test
-  public void getPointsTwelve() {
+  public void getPointsPersonalObjectiveTwelve() {
     Player player = new Player("Gino", "5,4,PINK1,5,3,BLUE1,5,2,GREEN1,5,1,WHITE1,5,0,YELLOW1,4,0,LIGHT_BLUE1");
     player.getLibrary().getLibraryGrid()[5][4] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("PINK1"),player.getLibrary().getLibraryGrid()[5][4]);
@@ -192,7 +192,7 @@ public class PlayerTest {
     player.getLibrary().addObject(new ObjectCard("YELLOW1"),player.getLibrary().getLibraryGrid()[5][0]);
     player.getLibrary().getLibraryGrid()[4][0] = new LibrarySpace();
     player.getLibrary().addObject(new ObjectCard("LIGHT_BLUE1"),player.getLibrary().getLibraryGrid()[4][0]);
-    assertEquals(12,player.getPoints());
+    assertEquals(12,player.getPersonalObjective().compareTo(player.getLibrary()));
   }
 
   /**
