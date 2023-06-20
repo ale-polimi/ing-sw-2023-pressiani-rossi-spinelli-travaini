@@ -54,7 +54,7 @@ public class Gui extends ViewObservable implements View {
     @Override
     public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
 
-        BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary);
+        BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
        // bsc.setBoardGrid(gameBoard);
         //bsc.setLibraryGrid(playerLibrary);
     }
@@ -134,17 +134,19 @@ public class Gui extends ViewObservable implements View {
         //Empty because is used in the network view simulation
     }
 
-    private BoardSceneController getBoardSceneController(Board gameBoard, Library playerLibrary) {
+    private BoardSceneController getBoardSceneController(Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand) {
         BoardSceneController bsc;
         try {
             bsc = (BoardSceneController) SceneController.getActiveController();
             bsc.setBoardGrid(gameBoard);
             bsc.setLibraryGrid(playerLibrary);
+            bsc.setPlayerObjInHand(playerObjInHand);
         } catch (ClassCastException e) {
             bsc = new BoardSceneController();
             bsc.addAllObservers(observers);
             bsc.setBoardGrid(gameBoard);
             bsc.setLibraryGrid(playerLibrary);
+            bsc.setPlayerObjInHand(playerObjInHand);
             BoardSceneController finalBsc = bsc;
             Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
         }
