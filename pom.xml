@@ -71,22 +71,6 @@
   </dependencies>
 
   <build>
-    <resources>
-      <resource>
-        <directory>src/main/java</directory>
-        <excludes>
-          <exclude>controller.OfflineControllerForTest</exclude>
-          <exclude>model.Turn</exclude>
-          <exclude>model.commonobjective.SixByTwo</exclude>
-          <exclude>model.commonobjective.FourByFour</exclude>
-          <exclude>network.listeners</exclude>
-          <exclude>network.client</exclude>
-          <exclude>network.server</exclude>
-          <exclude>model.player.PlayerView</exclude>
-          <exclude>view.VirtualView</exclude>
-        </excludes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -105,21 +89,9 @@
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>src.main.java.network.structure.StartServerImpl</mainClass>
+                  <mainClass>network.structure.StartServerImpl</mainClass>
                 </transformer>
               </transformers>
-              <artifactSet>
-                <excludes>
-                  <exclude>src.main.java.controller.OfflineControllerForTest</exclude>
-                  <exclude>src.main.java.controller.ClientController</exclude>
-                  <exclude>src.main.java.model.commonobjective.FourByFour</exclude>
-                  <exclude>src.main.java.model.commonobjective.SixByTwo</exclude>
-                  <exclude>src.main.java.model.player.PlayerView</exclude>
-                  <exclude>src.main.java.model.Turn</exclude>
-                  <exclude>src.main.</exclude>
-                  <exclude>src.main.java.view.VirtualView</exclude>
-                </excludes>
-              </artifactSet>
               <filters>
                 <filter>
                   <artifact>*:*</artifact>
@@ -141,7 +113,7 @@
               <finalName>${project.description}-client</finalName>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>src.main.java.network.structure.ClientMain</mainClass>
+                  <mainClass>network.structure.ClientMain</mainClass>
                 </transformer>
               </transformers>
               <filters>

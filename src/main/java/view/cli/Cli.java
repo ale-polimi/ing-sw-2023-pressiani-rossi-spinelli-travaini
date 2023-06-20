@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -108,7 +109,9 @@ public class Cli extends ViewObservable implements View {
         out.println("Please enter the connection settings.");
         do{
             out.print("Enter the server address (default: " + defaultAddress + "):");
-            String address = readLine();
+            Scanner addrScanner = new Scanner(System.in);  // Create a Scanner object
+            String address = addrScanner.nextLine();
+            //String address = readLine();
 
             if(address.equals("")){
                 serverInfo.put("address", defaultAddress);
@@ -131,7 +134,8 @@ public class Cli extends ViewObservable implements View {
                 out.print("Enter the server port (default: " + defaultRMIPort + "):");
             }
 
-            String port = readLine();
+            Scanner portScanner = new Scanner(System.in);  // Create a Scanner object
+            String port = portScanner.nextLine();
 
             if(port.equals("")){
                 if(isSocket) {
@@ -161,23 +165,20 @@ public class Cli extends ViewObservable implements View {
     public void askNickname() {
         boolean validInput;
 
-        try{
-            do {
-                out.print("Enter your nickname: ");
-                String nickname = readLine();
+        do {
+            out.print("Enter your nickname: ");
+            Scanner nameScanner = new Scanner(System.in);  // Create a Scanner object
+            String nickname = nameScanner.nextLine();
 
-                if(nickname.equals("Controller") || nickname.equals("Model") || nickname.equals("Client") || nickname.equals("Server")){
-                    out.println("The nickname \"" + nickname + "\" is not permitted.");
-                    clearCli();
-                    validInput = false;
-                }  else {
-                    validInput = true;
-                    notifyObserver(viewObserver -> viewObserver.onUpdateNickname(nickname));
-                }
-            } while (!validInput);
-        } catch (ExecutionException e){
-            out.println(STR_INPUT_CANCELED);
-        }
+            if(nickname.equals("Controller") || nickname.equals("Model") || nickname.equals("Client") || nickname.equals("Server")){
+                out.println("The nickname \"" + nickname + "\" is not permitted.");
+                clearCli();
+                validInput = false;
+            }  else {
+                validInput = true;
+                notifyObserver(viewObserver -> viewObserver.onUpdateNickname(nickname));
+            }
+        } while (!validInput);
     }
 
     /**
@@ -189,30 +190,29 @@ public class Cli extends ViewObservable implements View {
         int numOfPlayers;
         boolean validInput;
 
-        try {
-            do {
-                out.print("How many players are going to play?\n" +
-                        "Minimum: 2\n" +
-                        "Maximum: 4\n");
-                num = readLine();
-                try{
-                    numOfPlayers = Integer.parseInt(num);
-                    if(numOfPlayers >= 2 && numOfPlayers <= 4){
-                        validInput = true;
-                        int finalNumOfPlayers = numOfPlayers;
-                        notifyObserver(viewObserver -> viewObserver.onMaxPlayers(finalNumOfPlayers));
-                    } else {
-                        out.println("" + Colours.RED + Colours.BOLD + "The number is not within the correct bounds. It must be 2 <= players <= 4" + Colours.RESET);
-                        validInput = false;
-                    }
-                } catch (NumberFormatException e){
-                    out.println("" + Colours.RED + Colours.BOLD + e.getMessage() + Colours.RESET);
+        do {
+            out.print("How many players are going to play?\n" +
+                    "Minimum: 2\n" +
+                    "Maximum: 4\n");
+
+            Scanner numScanner = new Scanner(System.in);  // Create a Scanner object
+            num = numScanner.nextLine();
+
+            try{
+                numOfPlayers = Integer.parseInt(num);
+                if(numOfPlayers >= 2 && numOfPlayers <= 4){
+                    validInput = true;
+                    int finalNumOfPlayers = numOfPlayers;
+                    notifyObserver(viewObserver -> viewObserver.onMaxPlayers(finalNumOfPlayers));
+                } else {
+                    out.println("" + Colours.RED + Colours.BOLD + "The number is not within the correct bounds. It must be 2 <= players <= 4" + Colours.RESET);
                     validInput = false;
                 }
-            } while (!validInput);
-        } catch (ExecutionException e){
-            out.println(STR_INPUT_CANCELED);
-        }
+            } catch (NumberFormatException e){
+                out.println("" + Colours.RED + Colours.BOLD + e.getMessage() + Colours.RESET);
+                validInput = false;
+            }
+        } while (!validInput);
     }
 
     /**
@@ -223,57 +223,56 @@ public class Cli extends ViewObservable implements View {
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
-        try{
-            do{
-                out.println("" + Colours.BOLD + Colours.GREEN + "YOUR TURN!" + Colours.RESET);
-                out.print("Which cards do you want to pick?\n" +
-                        "You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n" +
-                        "(Separate the coordinates with a comma)\n"+
-                        "The objects must be in line (same row or column), adjacent and with ad least one side free.\n"+
-                        "Type -showcommon to show the common objectives\n"+
-                        "Type -showpersonal to show your personal objective\n"+
-                        "Type -showothers to show the opponents' library\n"+
-                        "Type -c_message to send a public chat message\n"+
-                        "Type -c_-p_Receiver_message to send a private message\n"
-                );
-                String coordinates = readLine();
-                if(coordinates.equals("-showcommon")){
-                    notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
-                    validInput = true;
-                } else if (coordinates.equals("-showpersonal")){
-                    notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
-                    validInput = true;
-                } else if (coordinates.equals("-showothers")){
-                    notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
-                    validInput = true;
-                }else if(coordinates.split("_")[0].equals("-c")){
-                  String[] ncm = coordinates.split("_");
-                  if(ncm[1].equals("-p")){
-                      notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
-                  }
-                  else{
-                      notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
-                  }
-                  validInput = true;;
-                } else if(ClientController.isInputValid(coordinates)){
+        do{
+            out.println("" + Colours.BOLD + Colours.GREEN + "YOUR TURN!" + Colours.RESET);
+            out.print("Which cards do you want to pick?\n" +
+                    "You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n" +
+                    "(Separate the coordinates with a comma)\n"+
+                    "The objects must be in line (same row or column), adjacent and with ad least one side free.\n"+
+                    "Type -showcommon to show the common objectives\n"+
+                    "Type -showpersonal to show your personal objective\n"+
+                    "Type -showothers to show the opponents' library\n"+
+                    "Type -c_message to send a public chat message\n"+
+                    "Type -c_-p_Receiver_message to send a private message\n"
+            );
 
-                    String[] parsedCoordinates = coordinates.split(",");
-                    ArrayList<Integer> coordinatesToSend = new ArrayList<>();
-                    for (int i = 0; i < parsedCoordinates.length; i++) {
-                        coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
-                    }
+            Scanner coordScanner = new Scanner(System.in);  // Create a Scanner object
+            String coordinates = coordScanner.nextLine();
 
-                    notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
-                    validInput = true;
-                } else {
-                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
-                    out.print(Colours.RESET);
-                    validInput = false;
+            if(coordinates.equals("-showcommon")){
+                notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
+                validInput = true;
+            } else if (coordinates.equals("-showpersonal")){
+                notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+                validInput = true;
+            } else if (coordinates.equals("-showothers")){
+                notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
+                validInput = true;
+            }else if(coordinates.split("_")[0].equals("-c")){
+              String[] ncm = coordinates.split("_");
+              if(ncm[1].equals("-p")){
+                  notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
+              }
+              else{
+                  notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
+              }
+              validInput = true;;
+            } else if(ClientController.isInputValid(coordinates)){
+
+                String[] parsedCoordinates = coordinates.split(",");
+                ArrayList<Integer> coordinatesToSend = new ArrayList<>();
+                for (int i = 0; i < parsedCoordinates.length; i++) {
+                    coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));
                 }
-            } while (!validInput);
-        } catch (ExecutionException e){
-            out.println(STR_INPUT_CANCELED);
-        }
+
+                notifyObserver(viewObserver -> viewObserver.onUpdateBoardMove(coordinatesToSend));
+                validInput = true;
+            } else {
+                out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                out.print(Colours.RESET);
+                validInput = false;
+            }
+        } while (!validInput);
     }
 
     /**
@@ -286,55 +285,53 @@ public class Cli extends ViewObservable implements View {
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
-        try{
-            do{
-                out.print("Please put the order followed by the column in which you wish to add the cards to your library\n" +
-                        "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
-                        "Type -showcommon to show the common objectives\n"+
-                        "Type -showpersonal to show your personal objective\n"+
-                        "Type -showothers to show the opponents' library\n"+
-                        "Type -c_message to send a public chat message\n"+
-                        "Type -c_-p_Receiver_message to send a private message\n"
-                );
-                String orderAndColumn = readLine();
+        do{
+            out.print("Please put the order followed by the column in which you wish to add the cards to your library\n" +
+                    "You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n"+
+                    "Type -showcommon to show the common objectives\n"+
+                    "Type -showpersonal to show your personal objective\n"+
+                    "Type -showothers to show the opponents' library\n"+
+                    "Type -c_message to send a public chat message\n"+
+                    "Type -c_-p_Receiver_message to send a private message\n"
+            );
 
-                if(orderAndColumn.equals("-showcommon")){
-                    notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
-                    validInput = true;
-                } else if (orderAndColumn.equals("-showpersonal")){
-                    notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
-                    validInput = true;
-                } else if (orderAndColumn.equals("-showothers")){
-                    notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
-                    validInput = true;
-                } else if(orderAndColumn.split("_")[0].equals("-c")){
-                    String[] ncm = orderAndColumn.split("_");
-                    if(ncm[1].equals("-p")){
-                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
-                    }
-                    else {
-                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
-                    }
-                    validInput = true;;
-                } else if(ClientController.isInputValid(orderAndColumn)){
+            Scanner orderAndColumnScanner = new Scanner(System.in);  // Create a Scanner object
+            String orderAndColumn = orderAndColumnScanner.nextLine();
 
-                    String[] parsedCoordinates = orderAndColumn.split(",");
-                    ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
-                    for(int i = 0; i < parsedCoordinates.length; i++){
-                        orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
-                    }
-
-                    notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
-                    validInput = true;
-                } else {
-                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
-                    out.print(Colours.RESET);
-                    validInput = false;
+            if(orderAndColumn.equals("-showcommon")){
+                notifyObserver(viewObserver -> viewObserver.onRequestCommonObjectives());
+                validInput = true;
+            } else if (orderAndColumn.equals("-showpersonal")){
+                notifyObserver(viewObserver -> viewObserver.onRequestPersonalObjective());
+                validInput = true;
+            } else if (orderAndColumn.equals("-showothers")){
+                notifyObserver(viewObserver -> viewObserver.onRequestOthersLibrary());
+                validInput = true;
+            } else if(orderAndColumn.split("_")[0].equals("-c")){
+                String[] ncm = orderAndColumn.split("_");
+                if(ncm[1].equals("-p")){
+                    notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
                 }
-            } while (!validInput);
-        } catch (ExecutionException e){
-            out.println(STR_INPUT_CANCELED);
-        }
+                else {
+                    notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
+                }
+                validInput = true;;
+            } else if(ClientController.isInputValid(orderAndColumn)){
+
+                String[] parsedCoordinates = orderAndColumn.split(",");
+                ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
+                for(int i = 0; i < parsedCoordinates.length; i++){
+                    orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));
+                }
+
+                notifyObserver(viewObserver -> viewObserver.onUpdateLibraryMove(orderAndColumnToSend));
+                validInput = true;
+            } else {
+                out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                out.print(Colours.RESET);
+                validInput = false;
+            }
+        } while (!validInput);
     }
 
     /**
