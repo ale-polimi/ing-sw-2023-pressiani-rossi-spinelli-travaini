@@ -15,7 +15,7 @@ public enum Colours {
     BLACK("\033[38;5;0m"),
     GREEN("\033[38;5;10m"),
     WHITE("\033[38;5;15m"),
-    YELLOW("\033[38;5;11m"),
+    YELLOW("\033[38;5;220m"),
     BLUE("\033[38;5;21m"),
     LIGHT_BLUE("\033[38;5;14m"),
     PINK("\033[38;5;13m"),
