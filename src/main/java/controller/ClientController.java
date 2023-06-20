@@ -295,37 +295,37 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 String senderErr = parseSender((message.getSender()));
                 if(senderErr.equals(nickname)) {
                     GenericErrorMessage genericErrorMessage = (GenericErrorMessage) message;
-                    switch (typeErr){
-                        case "BOARD":
+                    switch (typeErr) {
+                        case "BOARD" -> {
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
                             System.out.println(this.getClass().toString() + " The error is for the board!");
                             inLibrary = false;
                             inPickup = true;
                             view.askBoardMove();
-                            break;
-                        case "LIBRARY":
+                        }
+                        case "LIBRARY" -> {
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
                             System.out.println(this.getClass().toString() + " The error is for the library!");
                             inLibrary = true;
                             inPickup = false;
                             view.askLibraryMove();
-                            break;
-                        case "NICKNAME":
-                            if(!inLobby) {
+                        }
+                        case "NICKNAME" -> {
+                            if (!inLobby) {
                                 view.showGenericError(senderErr, genericErrorMessage.getPayload());
                                 view.askNickname();
                             }
-                            break;
-                        case "OUT_OF_BOUNDS":
+                        }
+                        case "OUT_OF_BOUNDS" -> {
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
                             view.askMaxPlayer();
-                            break;
-                        case "GENERIC":
+                        }
+                        case "GENERIC" -> {
                             System.out.println(this.getClass().toString() + " The error is generic :(");
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
-                            break;
-                        default:
-                            break;
+                        }
+                        default -> {
+                        }
                     }
                 }
                 break;
@@ -357,7 +357,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     view.showChat(cm.getSender(), false, cm.getText());
                 } else if (cm.getDest().equals(nickname)) {
                     view.showChat(cm.getSender()+" to "+ cm.getDest(), true, cm.getText());
-                }else if((cm.getSender().equals(nickname)&&cm.getDest().equals("SEE"))){view.askChat();}
+                }else if((cm.getSender().equals(nickname)&&cm.getDest().equals("SEE")&&!view.getMyTurn())){view.askChat();}
                 else if(!view.getMyTurn()){view.askChat();}
                 break;
             default:
