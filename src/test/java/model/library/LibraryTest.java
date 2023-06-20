@@ -66,4 +66,76 @@ public class LibraryTest {
     library.getLibraryGrid()[0][0] = tmp;
     assertEquals(library.getLibraryGrid()[0][0],library.getLibrarySpace(0,0));
   }
+
+  /**
+   * Test that the library points are assigned correctly when there are 0 cards with the same colour
+   */
+  @Test
+  public void getPointsCorrectly0(){
+    Library library = new Library();
+    library.getLibrarySpace(5,0).putObject(new ObjectCard("PINK2"));
+    library.getLibrarySpace(5,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,1).putObject(new ObjectCard("BLUE1"));
+    library.getLibrarySpace(4,2).putObject(new ObjectCard("BLUE1"));
+    assertEquals(0,library.getLibraryPoints());
+  }
+  /**
+   * Test that the library points are assigned correctly when there are 3 cards with the same colour
+   */
+  @Test
+  public void getPointsCorrectly2(){
+    Library library = new Library();
+    library.getLibrarySpace(5,0).putObject(new ObjectCard("PINK2"));
+    library.getLibrarySpace(5,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(5,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,1).putObject(new ObjectCard("BLUE1"));
+    library.getLibrarySpace(4,2).putObject(new ObjectCard("BLUE1"));
+    assertEquals(2,library.getLibraryPoints());
+  }
+
+  /**
+   * Test that the library points are assigned correctly when there are 4 cards with the same colour
+   */
+  @Test
+  public void getPointsCorrectly3(){
+    Library library = new Library();
+    library.getLibrarySpace(5,0).putObject(new ObjectCard("PINK2"));
+    library.getLibrarySpace(5,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(5,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,0).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,1).putObject(new ObjectCard("BLUE1"));
+    library.getLibrarySpace(4,2).putObject(new ObjectCard("BLUE1"));
+    assertEquals(3,library.getLibraryPoints());
+  }
+
+  /**
+   * Test that the library points are assigned correctly when there are 5 cards with the same colour
+   */
+  @Test
+  public void getPointsCorrectly5(){
+    Library library = new Library();
+    library.getLibrarySpace(5,0).putObject(new ObjectCard("PINK2"));
+    library.getLibrarySpace(5,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(5,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,0).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,1).putObject(new ObjectCard("BLUE1"));
+    assertEquals(5,library.getLibraryPoints());
+  }
+
+  /**
+   * Test that the library points are assigned correctly when there are 6 or more cards with the same colour
+   */
+  @Test
+  public void getPointsCorrectly8(){
+    Library library = new Library();
+    library.getLibrarySpace(5,0).putObject(new ObjectCard("PINK2"));
+    library.getLibrarySpace(5,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(5,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,2).putObject(new ObjectCard("PINK3"));
+    library.getLibrarySpace(3,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(2,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(2,1).putObject(new ObjectCard("PINK1"));
+    assertEquals(8,library.getLibraryPoints());
+  }
 }

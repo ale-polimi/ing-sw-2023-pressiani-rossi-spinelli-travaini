@@ -8,6 +8,7 @@ import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
 import view.View;
+import view.gui.scene.BoardSceneController;
 import view.gui.scene.SelectMaxPlayersSceneController;
 import view.gui.scene.WaitingForPlayersSceneController;
 
@@ -29,9 +30,9 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void askMaxPlayer() {
-        //SelectMaxPlayersSceneController smpsc = new SelectMaxPlayersSceneController();
-        //smpsc.addAllObservers(observers);
-        Platform.runLater(() -> SceneController.changeRootPane(observers,  "Select_Max_Players.fxml"));
+        SelectMaxPlayersSceneController smpsc = new SelectMaxPlayersSceneController();
+        smpsc.addAllObservers(observers);
+        Platform.runLater(() -> SceneController.changeRootPane(smpsc,  "Select_Max_Players.fxml"));
 
     }
 
@@ -53,6 +54,9 @@ public class Gui extends ViewObservable implements View {
     @Override
     public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
 
+        BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary);
+       // bsc.setBoardGrid(gameBoard);
+        //bsc.setLibraryGrid(playerLibrary);
     }
 
     @Override
@@ -128,5 +132,22 @@ public class Gui extends ViewObservable implements View {
 
     public void showChat(String sender, String receiver,String message) {
         //Empty because is used in the network view simulation
+    }
+
+    private BoardSceneController getBoardSceneController(Board gameBoard, Library playerLibrary) {
+        BoardSceneController bsc;
+        try {
+            bsc = (BoardSceneController) SceneController.getActiveController();
+            bsc.setBoardGrid(gameBoard);
+            bsc.setLibraryGrid(playerLibrary);
+        } catch (ClassCastException e) {
+            bsc = new BoardSceneController();
+            bsc.addAllObservers(observers);
+            bsc.setBoardGrid(gameBoard);
+            bsc.setLibraryGrid(playerLibrary);
+            BoardSceneController finalBsc = bsc;
+            Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
+        }
+        return bsc;
     }
 }
