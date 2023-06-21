@@ -282,7 +282,7 @@ public class Player extends Observable {
     public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
         /* TODO - Debug print */
         System.out.println(this.getClass().toString() + ": INSIDE addToObjectsInHand");
-        if(objectsInHand.size() <= MAX_OBJECTS_IN_HAND){
+        if(objectsInHand.get(2) == null){
             for(int i = 0; i < MAX_OBJECTS_IN_HAND; i++){
                 if(objectsInHand.get(i) == null){
                     objectsInHand.set(i, objectCard);
@@ -314,7 +314,7 @@ public class Player extends Observable {
      * @throws EmptyDeckException if the hand deck does not contain any card.
      */
     public ObjectCard getObjectInHand(int positionInDeck) throws EmptyDeckException {
-        if(!objectsInHand.isEmpty()){
+        if(!objectsInHand.stream().allMatch(x -> x == null)){
             return objectsInHand.get(positionInDeck);
         } else {
             throw new EmptyDeckException();

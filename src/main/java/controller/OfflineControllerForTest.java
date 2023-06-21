@@ -16,9 +16,12 @@ import model.library.Library;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.messages.*;
+import network.structure.StartServerImpl;
 import observer.Observer;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -54,9 +57,13 @@ public class OfflineControllerForTest implements Observer {
         /* Subscribing the Controller to the Model (Game) */
         game.addObserver(this);
         game.setGameState(LOGIN);
-        byte[] jsonData = Files.readAllBytes(Paths.get("src/main/java/personalObjectives.json"));
+        //byte[] jsonData = Files.readAllBytes(Paths.get("src/main/resources/json/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
-        personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
+        //personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
+
+        Reader reader;
+        reader = new InputStreamReader(Objects.requireNonNull(StartServerImpl.class.getResourceAsStream("/json/personalObjectives.json")));
+        personalObjectives = objectMapper.readValue(reader,HashMap.class);
 
         /* Creating all the common objectives; when the game starts we will randomly select only two */
         availableCommonObjectives = new HashMap<>();

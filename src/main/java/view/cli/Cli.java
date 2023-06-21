@@ -116,12 +116,10 @@ public class Cli extends ViewObservable implements View {
                 serverInfo.put("address", defaultAddress);
                 validInput = true;
             } else if (ClientController.isAddressValid(address)) {
-
                 serverInfo.put("address", address);
                 validInput = true;
             } else {
-                out.println("Invalid input!");
-                clearCli();
+                out.println("" + Colours.BOLD + Colours.RED + "Invalid input!" + Colours.RESET);
                 validInput = false;
             }
         } while (validInput == false);
@@ -147,8 +145,7 @@ public class Cli extends ViewObservable implements View {
                 serverInfo.put("port", port);
                 validInput = true;
             } else {
-                out.println("Invalid input!");
-                clearCli();
+                out.println("" + Colours.BOLD + Colours.RED + "Invalid input!" + Colours.RESET);
                 validInput = false;
             }
         } while (!validInput);
@@ -171,7 +168,6 @@ public class Cli extends ViewObservable implements View {
 
             if(nickname.equals("Controller") || nickname.equals("Model") || nickname.equals("Client") || nickname.equals("Server")){
                 out.println("The nickname \"" + nickname + "\" is not permitted.");
-                clearCli();
                 validInput = false;
             }  else {
                 validInput = true;

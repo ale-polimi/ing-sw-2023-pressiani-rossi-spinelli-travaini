@@ -3,6 +3,7 @@ import controller.OfflineControllerForTest;
 import enumerations.GameState;
 import enumerations.ObjectColour;
 import enumerations.PlayerState;
+import exceptions.player.EmptyDeckException;
 import model.library.Library;
 import model.objects.ObjectCard;
 import network.messages.MaxPlayersMessage;
@@ -110,10 +111,8 @@ public class ControllerTest {
         controller.onMessageReceived(new MaxPlayersMessage("Client1", 2));
         controller.onMessageReceived(new UserInfoForLoginMessage("Client1", "Alice"));
         controller.onMessageReceived(new UserInfoForLoginMessage("Client2", "Bob"));
-        ArrayList<ObjectCard> oldObjectsInHand = controller.getGame().getPlayerInTurn().getObjectsInHand();
         controller.onMessageReceived(new PickObjectMessage("Alice", new ArrayList<>(Arrays.asList(0,0))));
-        assertNull(controller.getGame().getPlayerInTurn().getObjectInHand(0));
-        assertEquals(oldObjectsInHand, controller.getGame().getPlayerInTurn().getObjectsInHand());
+        assertThrows(EmptyDeckException.class, ()->controller.getGame().getPlayerInTurn().getObjectInHand(0));
     }
 
     /**

@@ -98,9 +98,9 @@ Per l'interfaccia CLI:
 
 Il client e il server sono stati provati su macchine con i seguenti sistemi operativi:
 - Windows 10 1909;
-- Windows 10;
+- Windows 10 22H2;
 - Fedora Linux 38;
-- Windows 11;
+- Windows 11 22H2;
 
 La compatibilità con altri sistemi operativi non è stata collaudata, la vostra esperienza potrebbe variare.
 
@@ -208,8 +208,8 @@ For CLI game:
 
 The client and server have been tested working on the following operating systems:
 - Windows 10 1909;
-- Windows 10;
+- Windows 10 22H2;
 - Fedora Linux 38;
-- Windows 11;
+- Windows 11 22H2;
 
 Compatibility with other OSes has not been tested, your experience may vary.
