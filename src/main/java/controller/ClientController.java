@@ -255,7 +255,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     this.commonObjective1 = commonObjectiveMessage.getCommonObjective1();
                     this.commonObjective2 = commonObjectiveMessage.getCommonObjective2();
 
-                    // view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2());
+                     view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2(), completedCommonObjectives);
 
                 } else {
                     System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());

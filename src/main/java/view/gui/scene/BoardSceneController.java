@@ -182,159 +182,164 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     public void setPlayerObjInHand(ArrayList<ObjectCard> playerObjInHand){
 
-        if(objInHandGrid != null){
+        if(objInHandGrid != null && playerObjInHand != null) {
             int x = 0;
-            for (int y = 0; y < playerObjInHand.size(); y++) {
-                for(Node node : objInHandGrid.getChildren()){
-                    if ((GridPane.getRowIndex(node)== null  && GridPane.getColumnIndex(node) == null && y== 0) ||
-                            (GridPane.getRowIndex(node)== null && GridPane.getColumnIndex(node) != null  && GridPane.getColumnIndex(node) == y)){
-                        Button b = (Button) node;
-                        if(playerObjInHand.get(y) != null){
-                            b.setStyle(null);
-                            switch (playerObjInHand.get(y).getObjectColour()) {
-                                case GREEN1 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
+
+                for (int y = 0; y < playerObjInHand.size(); y++) {
+                    for (Node node : objInHandGrid.getChildren()) {
+                        if ((GridPane.getRowIndex(node) == null && GridPane.getColumnIndex(node) == null && y == 0) ||
+                                (GridPane.getRowIndex(node) == null && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == y)) {
+                            Button b = (Button) node;
+                            if (playerObjInHand.get(y) != null) {
+                                b.setStyle(null);
+                                switch (playerObjInHand.get(y).getObjectColour()) {
+                                    case GREEN1 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
 
 
+                                    }
+                                    case GREEN2 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case GREEN3 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case BLUE1 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/BLUE1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case BLUE2 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/BLUE2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case BLUE3 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/BLUE3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case WHITE1 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/WHITE1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case WHITE2 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/WHITE2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case WHITE3 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/WHITE3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case LIGHT_BLUE1 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/LIGHTBLUE1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case LIGHT_BLUE2 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/LIGHTBLUE2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case LIGHT_BLUE3 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/LIGHTBLUE3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case PINK1 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/PINK1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case PINK2 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/PINK2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case PINK3 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/PINK3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case YELLOW1 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/YELLOW1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case YELLOW2 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/YELLOW2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
+                                    case YELLOW3 -> {
+                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/YELLOW3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                                        Background background = new Background(backgroundImage);
+                                        b.setBackground(background);
+
+
+                                    }
                                 }
-                                case GREEN2 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
 
-
-                                }
-                                case GREEN3 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case BLUE1 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/BLUE1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case BLUE2 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/BLUE2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case BLUE3 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/BLUE3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case WHITE1 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/WHITE1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case WHITE2 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/WHITE2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case WHITE3 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/WHITE3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case LIGHT_BLUE1 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/LIGHTBLUE1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case LIGHT_BLUE2 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/LIGHTBLUE2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case LIGHT_BLUE3 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/LIGHTBLUE3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case PINK1 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/PINK1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case PINK2 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/PINK2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case PINK3 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/PINK3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case YELLOW1 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/YELLOW1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case YELLOW2 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/YELLOW2XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
-                                case YELLOW3 -> {
-                                    BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/YELLOW3XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                                    Background background = new Background(backgroundImage);
-                                    b.setBackground(background);
-
-
-                                }
+                            } else {
+                                b.setStyle("-fx-background-color: transparent");
+                                //playerObjInHand.remove(y);
                             }
-
-                        }else{
-                            b.setStyle("-fx-background-color: transparent");
-                            //playerObjInHand.remove(y);
                         }
+
                     }
-
-                }
-            }
-
-            for (int i = 0; i < playerObjInHand.size(); i++) {
-                if(playerObjInHand.get(i) == null){
-                    playerObjInHand.remove(i);
                 }
 
-            }
+                if(playerObjInHand != null) {
+                    for (int i = 0; i < playerObjInHand.size(); i++) {
+                        if (playerObjInHand.get(i) == null) {
+                            playerObjInHand.remove(i);
+                        }
+
+                    }
+                }
+
+
         }
         playerObjInHand1 = playerObjInHand;
     }
@@ -353,7 +358,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                           ||  (GridPane.getRowIndex(node)== null && GridPane.getColumnIndex(node) != null && x==0 && GridPane.getColumnIndex(node) == y)||
                             (GridPane.getRowIndex(node)!= null && GridPane.getColumnIndex(node) != null &&(GridPane.getRowIndex(node) == x && GridPane.getColumnIndex(node) == y))) {
                         Button b = (Button) node;
-                        if(gameBoard.getSpace(x, y).getObject() != null) {
+                        if(gameBoard!= null && gameBoard.getSpace(x, y).getObject() != null) {
                             b.setStyle(null);
                             switch (gameBoard.getSpace(x, y).getObject().getObjectColour()) {
                                 case GREEN1 -> {
@@ -508,7 +513,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                                 ||  (GridPane.getRowIndex(node)== null && GridPane.getColumnIndex(node) != null && x==0 && GridPane.getColumnIndex(node) == y)||
                                 (GridPane.getRowIndex(node)!= null && GridPane.getColumnIndex(node) != null &&(GridPane.getRowIndex(node) == x && GridPane.getColumnIndex(node) == y)))  {
                             Button b = (Button) node;
-                            if(playerLibrary.getLibrarySpace(x,y) != null) {
+                            if(playerLibrary!= null && playerLibrary.getLibrarySpace(x,y) != null) {
                                 switch (playerLibrary.getLibrarySpace(x, y).getObject().getObjectColour()) {
                                     case GREEN1 -> {
                                         b.setStyle(null);
@@ -703,8 +708,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     private void onCommonObjClick(MouseEvent event){
         new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives()));
-        //setCommonObj1Button(commonObjective11);
-        //setCommonObj2Button(commonObjective21);
+        setCommonObj1Button(commonObjective11);
+        setCommonObj2Button(commonObjective21);
     }
 
     private void onConfirmButtonClick(MouseEvent event){
