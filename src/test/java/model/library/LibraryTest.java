@@ -138,4 +138,19 @@ public class LibraryTest {
     library.getLibrarySpace(2,1).putObject(new ObjectCard("PINK1"));
     assertEquals(8,library.getLibraryPoints());
   }
+
+  @Test
+  public void strangeFormPoints(){
+    Library library = new Library();
+    library.getLibrarySpace(5,0).putObject(new ObjectCard("PINK2"));
+    library.getLibrarySpace(5,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(5,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(4,1).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(0,4).putObject(new ObjectCard("PINK3"));
+    library.getLibrarySpace(0,3).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(0,2).putObject(new ObjectCard("PINK1"));
+    library.getLibrarySpace(2,1).putObject(new ObjectCard("YELLOW1"));
+    library.getLibrarySpace(1,4).putObject(new ObjectCard("PINK1"));
+    assertEquals(6,library.getLibraryPoints());
+  }
 }
