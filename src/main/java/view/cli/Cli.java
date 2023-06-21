@@ -39,7 +39,6 @@ public class Cli extends ViewObservable implements View {
     public Cli(boolean isSocket) {
         out = System.out;
         this.isSocket = isSocket;
-        //getChatOutTurn();
     }
 
     /**
@@ -347,7 +346,7 @@ public class Cli extends ViewObservable implements View {
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
-        chatAbilitator = true;
+        if(myTurn)chatAbilitator = true;
 
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
         showBoard(rcvGameBoard);
@@ -548,6 +547,12 @@ public class Cli extends ViewObservable implements View {
         if(isPrivate){senderOut = "PRIVATE|"+ sender;}
         else{senderOut = sender;}
         out.println("" + Colours.BOLD + Colours.GREEN + senderOut + Colours.RESET+": "+message);
+        if(!chatAbilitator){
+            System.out.println(""+Colours.BOLD + Colours.YELLOW +"Abilitating the chat service only for a message as you closed the service\n"+Colours.RESET);
+            chatAbilitator = true;
+            askChat();
+            chatAbilitator = false;
+        }
     }
 
     /**
@@ -672,7 +677,7 @@ public class Cli extends ViewObservable implements View {
     public void setMyTurn(boolean turn) {this.myTurn=turn;}
 
     public void askChat() {
-        if(!chatAbilitator)return;;
+        if(!chatAbilitator || myTurn)return;
         boolean validInput;
         do{
             System.out.println(
@@ -683,23 +688,27 @@ public class Cli extends ViewObservable implements View {
                          "Type EXIT to exit chat");
             try {
                 String[] text = readLine().split("_");
-                 if (text[0].equals("EXIT")) {
-                     out.println("Exiting chat service");
-                     chatAbilitator = false;
-                     return;
-                 }else if (text[0].equals("-c")) {
-                    validInput = true;
-                    if (text[1].equals("-p"))
-                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null, text[2], text[3]));
-                    else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", text[1]));
-                } else if(text[0].equals("SEE")){
-                     validInput = true;
-                    notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "SEE", null));
-                 }
-                else{
-                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
-                    out.print(Colours.RESET);
-                    validInput = false;
+                switch (text[0]) {
+                    case "EXIT" -> {
+                        out.println("Exiting chat service");
+                        chatAbilitator = false;
+                        return;
+                    }
+                    case "-c" -> {
+                        validInput = true;
+                        if (text[1].equals("-p"))
+                            notifyObserver(viewObserver -> viewObserver.onChatMessage(null, text[2], text[3]));
+                        else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", text[1]));
+                    }
+                    case "SEE" -> {
+                        validInput = true;
+                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "SEE", null));
+                    }
+                    default -> {
+                        out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                        out.print(Colours.RESET);
+                        validInput = false;
+                    }
                 }
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);

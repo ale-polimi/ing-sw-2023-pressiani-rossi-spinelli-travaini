@@ -58,7 +58,7 @@ public class ClientSocket extends Observable implements Client {
        try {
            socket= new Socket(address, port);
            this.oos = new ObjectOutputStream(socket.getOutputStream());
-           System.out.println(socket.getInputStream());
+           //System.out.println(socket.getInputStream());
            this.ois= new ObjectInputStream(socket.getInputStream());
            this.timer = Executors.newSingleThreadScheduledExecutor();
            getConnected=true;
@@ -102,10 +102,10 @@ public class ClientSocket extends Observable implements Client {
             Message message;
         try {
             message = (Message) ois.readObject();
-            LOGGER.info("Received: "+ message);
+            //LOGGER.info("Received: "+ message);
 
             /* TODO - Debug print */
-            System.out.println(message.getSender()+" "+ message.getType());
+            //System.out.println(message.getSender()+" "+ message.getType());
             notifyObserver(message);
         }
         catch (IOException e) {
