@@ -603,13 +603,7 @@ public class Controller implements Observer {
             /* TODO - Debug print */
             System.out.println("Player: " + player.getNickname() + " has received: " + personalObjectivePoints + " from: " + player.getPersonalObjective());
 
-            /* TODO - FIX BOARD POINTS! */
-            /*
-            for(int i = 0; i < ObjectColour.values().length; i += 3){
-                *//* Points for the adjacent objects cards *//*
-                boardPoints += player.getBoardPoints(ObjectColour.values()[i]);
-            }
-            */
+           boardPoints += player.getLibrary().getLibraryPoints();
 
             if(player.isFirstToEnd()){
                 player.addPoints(1);
