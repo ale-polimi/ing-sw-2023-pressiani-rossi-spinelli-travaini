@@ -7,12 +7,14 @@ import model.objects.ObjectCard;
  * This class represents the personal objective given to a player.
  */
 public final class PersonalObjective extends LibraryGrid {
+    private final String personalOBJ;
 
     /**
      * Constructor of the PersonalObjective class
      * @param json is the string containing the parameters of the personal objective
      */
     public PersonalObjective(String json){
+        this.personalOBJ=json;
         this.libraryGrid = new LibrarySpace[6][5];
         for(int i=0; i< 6;i++){
             for(int j=0;j<5;j++){
@@ -52,5 +54,13 @@ public final class PersonalObjective extends LibraryGrid {
             case 6 -> 12;
             default -> 0;
         };
+    }
+
+    /**
+     * Getter for personalObj parameter
+     * @return A String representing the personal objective
+     */
+    public String getPersonalOBJ() {
+        return personalOBJ;
     }
 }

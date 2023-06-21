@@ -73,6 +73,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
 
 
+
     }
 
     public void setCommonObj1Button(CommonObjective commonObjective1){
@@ -707,9 +708,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     private void onCommonObjClick(MouseEvent event){
-        new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives()));
-        setCommonObj1Button(commonObjective11);
-        setCommonObj2Button(commonObjective21);
+        new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives())).start();
+        //setCommonObj1Button(commonObjective11);
+        //setCommonObj2Button(commonObjective21);
     }
 
     private void onConfirmButtonClick(MouseEvent event){
@@ -734,6 +735,21 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
         }
 
+    }
+
+    public void resetErrorValues(){
+        if(coordinatesToSend.size()>0){
+            coordinatesToSend = new ArrayList<>();
+            for(Node node : objInHandGrid.getChildren()){
+                Button b = (Button) node;
+                b.setStyle("-fx-background-color: transparent");
+            }
+        }else{
+            objInHand = 0;
+            libColumn = 0;
+            orderObjects = new ArrayList<>();
+            setPlayerObjInHand(playerObjInHand1);
+        }
     }
 
 }

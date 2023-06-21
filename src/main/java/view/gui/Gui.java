@@ -48,7 +48,8 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showGenericError(String player, String payload) {
-
+        BoardSceneController bsc = getBoardSceneController();
+        bsc.resetErrorValues();
     }
 
     @Override
@@ -166,6 +167,23 @@ public class Gui extends ViewObservable implements View {
             bsc.addAllObservers(observers);
             bsc.setCommonObj1Button(commonObjective1);
             bsc.setCommonObj2Button(commonObjective2);
+            BoardSceneController finalBsc = bsc;
+            Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
+        }
+        return bsc;
+    }
+
+    private BoardSceneController getBoardSceneController() {
+        BoardSceneController bsc;
+        try {
+            bsc = (BoardSceneController) SceneController.getActiveController();
+
+
+        } catch (ClassCastException e) {
+            bsc = new BoardSceneController();
+            bsc.addAllObservers(observers);
+
+
             BoardSceneController finalBsc = bsc;
             Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
         }
