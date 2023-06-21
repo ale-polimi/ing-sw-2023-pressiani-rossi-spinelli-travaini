@@ -61,6 +61,9 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+        System.out.println(commonObjective1);
+        System.out.println(commonObjective2);
+        BoardSceneController bsc = getBoardSceneController(commonObjective1, commonObjective2);
 
     }
 
@@ -147,6 +150,22 @@ public class Gui extends ViewObservable implements View {
             bsc.setBoardGrid(gameBoard);
             bsc.setLibraryGrid(playerLibrary);
             bsc.setPlayerObjInHand(playerObjInHand);
+            BoardSceneController finalBsc = bsc;
+            Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
+        }
+        return bsc;
+    }
+    private BoardSceneController getBoardSceneController(CommonObjective commonObjective1, CommonObjective commonObjective2) {
+        BoardSceneController bsc;
+        try {
+            bsc = (BoardSceneController) SceneController.getActiveController();
+            bsc.setCommonObj1Button(commonObjective1);
+            bsc.setCommonObj2Button(commonObjective2);
+        } catch (ClassCastException e) {
+            bsc = new BoardSceneController();
+            bsc.addAllObservers(observers);
+            bsc.setCommonObj1Button(commonObjective1);
+            bsc.setCommonObj2Button(commonObjective2);
             BoardSceneController finalBsc = bsc;
             Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
         }

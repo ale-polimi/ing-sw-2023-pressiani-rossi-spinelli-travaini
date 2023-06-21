@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import model.board.Board;
+import model.commonobjective.*;
 import model.library.Library;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
@@ -27,12 +28,18 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private GridPane libraryGrid;
     @FXML
     private Button confirmButton;
+    @FXML
+    private Button commonObj1Button;
+    @FXML
+    private Button commonObj2Button;
     private Board gameBoard1;
     private Library playerLibrary1;
     private ArrayList<ObjectCard>playerObjInHand1;
     private ArrayList<Integer> coordinatesToSend = new ArrayList<>();
     private ArrayList<Integer>orderObjects = new ArrayList<>();
     private int libColumn;
+    private CommonObjective commonObjective11;
+    private CommonObjective commonObjective21;
 
     private int objInHand = 0;
 
@@ -53,9 +60,13 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             b.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onObjInHandClick);
         }
         confirmButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConfirmButtonClick);
+        commonObj1Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
+        commonObj2Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
         setBoardGrid(gameBoard1);
         setLibraryGrid(playerLibrary1);
         setPlayerObjInHand(playerObjInHand1);
+        setCommonObj1Button(commonObjective11);
+        setCommonObj2Button(commonObjective21);
 
 
 
@@ -63,6 +74,111 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
 
     }
+
+    public void setCommonObj1Button(CommonObjective commonObjective1){
+       if( commonObjective1 != null){
+        commonObjective11 = commonObjective1;
+       }
+        if(commonObj1Button != null && commonObjective1 != null){
+            if (commonObjective1.getClass().equals(FiveX.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/fiveX.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(FourByFourNew.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/four_by_four.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(FourCorners.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/four_corners.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(Diagonal.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/diagonal.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(EightEquals.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/eight_equals.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(FourRowsMaxThreeDifferent.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/four_rows_max_three_different.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(SixByTwoNew.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/six_by_two.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(ThreeColumnsMaxThreeDifferent.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/three_columns_max_three_different.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(TotalDifferentColumns.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/total_different_columns.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(TotalDifferentRows.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/total_different_rows.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(TwoByFour.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/two_by_four.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
+            }
+        }
+    }
+    public void setCommonObj2Button(CommonObjective commonObjective2){
+        commonObjective21 = commonObjective2;
+        if(commonObj2Button != null && commonObjective2 != null){
+            if (commonObjective2.getClass().equals(FiveX.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/fiveX.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(FourByFourNew.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/four_by_four.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(FourCorners.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/four_corners.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(Diagonal.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/diagonal.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(EightEquals.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/eight_equals.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(FourRowsMaxThreeDifferent.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/four_rows_max_three_different.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(SixByTwoNew.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/six_by_two.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(ThreeColumnsMaxThreeDifferent.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/three_columns_max_three_different.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(TotalDifferentColumns.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/total_different_columns.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(TotalDifferentRows.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/total_different_rows.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(TwoByFour.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/two_by_four.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            }
+        }
+    }
+
+
 
     public void setPlayerObjInHand(ArrayList<ObjectCard> playerObjInHand){
 
@@ -206,11 +322,18 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
                         }else{
                             b.setStyle("-fx-background-color: transparent");
-                            playerObjInHand.remove(y);
+                            //playerObjInHand.remove(y);
                         }
                     }
 
                 }
+            }
+
+            for (int i = 0; i < playerObjInHand.size(); i++) {
+                if(playerObjInHand.get(i) == null){
+                    playerObjInHand.remove(i);
+                }
+
             }
         }
         playerObjInHand1 = playerObjInHand;
@@ -578,6 +701,12 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     }
 
+    private void onCommonObjClick(MouseEvent event){
+        new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives()));
+        //setCommonObj1Button(commonObjective11);
+        //setCommonObj2Button(commonObjective21);
+    }
+
     private void onConfirmButtonClick(MouseEvent event){
         if(playerObjInHand1.size() > 0 && objInHand > 0 ){
             objInHand = 0;
@@ -588,8 +717,15 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             coordinatesToSend = new ArrayList<>();
             orderObjects.add(libColumn);
             System.out.println(orderObjects);
+            for(Node node : objInHandGrid.getChildren()){
+                Button b = (Button) node;
+                b.setStyle("-fx-background-color: transparent");
+            }
+
+
 
             new Thread(() -> notifyObserver(obs -> obs.onUpdateLibraryMove(orderObjects))).start();
+
 
         }
 
