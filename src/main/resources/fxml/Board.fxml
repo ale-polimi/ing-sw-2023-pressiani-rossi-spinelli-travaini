@@ -245,8 +245,8 @@
                   <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" />
                </children>
             </GridPane>
-            <Button fx:id="commonObj1Button" layoutX="125.0" layoutY="516.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" />
-            <Button fx:id="commonObj2Button" layoutX="603.0" layoutY="516.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" />
+            <Button id="commonObj1Button" fx:id="commonObj1Button" layoutX="125.0" layoutY="516.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" stylesheets="@../css/board_scene.css" />
+            <Button fx:id="commonObj2Button" layoutX="603.0" layoutY="516.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" stylesheets="@../css/board_scene.css" />
       </children>
     </AnchorPane>
   </children>

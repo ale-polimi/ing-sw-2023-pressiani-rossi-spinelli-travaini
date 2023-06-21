@@ -67,6 +67,13 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         setPlayerObjInHand(playerObjInHand1);
         setCommonObj1Button(commonObjective11);
         setCommonObj2Button(commonObjective21);
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/common_Obj1_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        commonObj1Button.setBackground(background);
+        BackgroundImage backgroundImage2 = new BackgroundImage(new Image(getClass().getResource("/images/common_Obj2_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background2 = new Background(backgroundImage2);
+        commonObj2Button.setBackground(background2);
+
 
 
 
@@ -708,6 +715,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     private void onCommonObjClick(MouseEvent event){
+
         new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives())).start();
         //setCommonObj1Button(commonObjective11);
         //setCommonObj2Button(commonObjective21);
