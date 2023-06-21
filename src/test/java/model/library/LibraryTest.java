@@ -68,6 +68,15 @@ public class LibraryTest {
   }
 
   /**
+   * Test that an empty library return 0 points
+   */
+  @Test
+  public void getPointsEmptyLibrary(){
+    Library library = new Library();
+    assertEquals(0,library.getLibraryPoints());
+  }
+
+  /**
    * Test that the library points are assigned correctly when there are 0 cards with the same colour
    */
   @Test
@@ -139,6 +148,9 @@ public class LibraryTest {
     assertEquals(8,library.getLibraryPoints());
   }
 
+  /**
+   * Test the points calculation for a custom formation for the tiles in the library
+   */
   @Test
   public void strangeFormPoints(){
     Library library = new Library();
