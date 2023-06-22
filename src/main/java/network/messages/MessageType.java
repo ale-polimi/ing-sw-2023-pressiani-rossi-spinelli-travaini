@@ -31,5 +31,5 @@ public enum MessageType implements Serializable {
     ASK_BOARD_MOVE,
     ASK_LIBRARY_MOVE,
     ASK_NICKNAME,
-    CHAT
+    CHATLOG, CHAT
 }

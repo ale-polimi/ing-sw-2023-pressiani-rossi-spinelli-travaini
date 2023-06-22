@@ -228,7 +228,8 @@ public class Cli extends ViewObservable implements View {
                     "Type -showpersonal to show your personal objective\n"+
                     "Type -showothers to show the opponents' library\n"+
                     "Type -c_message to send a public chat message\n"+
-                    "Type -c_-p_Receiver_message to send a private message\n"
+                    "Type -c_-p_Receiver_message to send a private message\n"+
+                    "Type SEE to se all chat messages received\n"
             );
 
             Scanner coordScanner = new Scanner(System.in);  // Create a Scanner object
@@ -252,7 +253,11 @@ public class Cli extends ViewObservable implements View {
                   notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
               }
               validInput = true;;
-            } else if(ClientController.isInputValid(coordinates)){
+            } else if (coordinates.equals("SEE")) {
+                notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"SEE",null));
+                validInput = true;
+            }
+            else if(ClientController.isInputValid(coordinates)){
 
                 String[] parsedCoordinates = coordinates.split(",");
                 ArrayList<Integer> coordinatesToSend = new ArrayList<>();
@@ -287,7 +292,8 @@ public class Cli extends ViewObservable implements View {
                     "Type -showpersonal to show your personal objective\n"+
                     "Type -showothers to show the opponents' library\n"+
                     "Type -c_message to send a public chat message\n"+
-                    "Type -c_-p_Receiver_message to send a private message\n"
+                    "Type -c_-p_Receiver_message to send a private message\n"+
+                    "Type SEE to se all chat messages received\n"
             );
 
             Scanner orderAndColumnScanner = new Scanner(System.in);  // Create a Scanner object
@@ -311,6 +317,9 @@ public class Cli extends ViewObservable implements View {
                     notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
                 }
                 validInput = true;;
+            } else if (orderAndColumn.equals("SEE")) {
+                notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"SEE",null));
+                validInput = true;
             } else if(ClientController.isInputValid(orderAndColumn)){
 
                 String[] parsedCoordinates = orderAndColumn.split(",");
@@ -680,7 +689,7 @@ public class Cli extends ViewObservable implements View {
                  "Chat service out of your turn:\n" +
                          "Type -c_message to send a public chat message\n" +
                          "Type -c_-p_Receiver_message to send a private message\n" +
-                         "Type SEE to see if there are incoming messages\n"+
+                         "Type SEE to see the chat log\n"+
                          "Type EXIT to exit chat");
             try {
                 String[] text = readLine().split("_");

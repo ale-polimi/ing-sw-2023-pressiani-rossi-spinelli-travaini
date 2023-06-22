@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class Gui extends ViewObservable implements View {
 
-
+    private  boolean myTurn= true;
 
     public static void setPlayerNum(int playerNum){
         playerNum = playerNum;
@@ -119,14 +119,10 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public boolean getMyTurn() {
-        return false;
-    }
+    public boolean getMyTurn() {return myTurn;}
 
     @Override
-    public void setMyTurn(boolean turn) {
-
-    }
+    public void setMyTurn(boolean turn) {myTurn = turn;}
 
     @Override
     public void askChat() {

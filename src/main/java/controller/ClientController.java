@@ -118,21 +118,25 @@ public class ClientController extends Observable implements ViewObserver, Observ
     @Override
     public void onRequestCommonObjectives() {
         view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2, this.completedCommonObjectives);
-        if(!inLibrary && inPickup){
-            view.askBoardMove();
-        } else {
-            view.askLibraryMove();
+        if(view.getMyTurn()){
+            if(!inLibrary && inPickup){
+                view.askBoardMove();
+            } else {
+                view.askLibraryMove();
+            }
         }
     }
 
     @Override
     public void onRequestPersonalObjective() {
         view.showPersonalObjective(this.nickname, this.personalObjective);
-        if(!inLibrary && inPickup){
-            view.askBoardMove();
-        } else {
-            view.askLibraryMove();
-        }
+       if(view.getMyTurn()){
+           if(!inLibrary && inPickup){
+               view.askBoardMove();
+           } else {
+               view.askLibraryMove();
+           }
+       }
     }
 
     @Override
@@ -147,18 +151,20 @@ public class ClientController extends Observable implements ViewObserver, Observ
 
     @Override
     public void onChatMessage(String sender, String receiver, String text) {
-        if(receiver.equals("all"))view.showChat(nickname,false,text);
-        else if(!receiver.equals("SEE"))view.showChat(nickname+" to "+receiver,true,text);
         try {
             client.sendMessage(new ChatMessage(nickname,receiver,text));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        if(view.getMyTurn()){
-            if(!inLibrary && inPickup){
-                view.askBoardMove();
-            } else {
-                view.askLibraryMove();
+        if(!receiver.equals("SEE")){
+            if(view.getMyTurn()){
+                if(!inLibrary && inPickup){
+                    view.askBoardMove();
+                } else {
+                    view.askLibraryMove();
+                }
+            }else{
+                view.askChat();
             }
         }
     }
@@ -351,14 +357,26 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 view.showGenericError(nickname, serverDisconnectedMessage.getDisconnectionError());
                 System.exit(0);
                 break;
-            case CHAT:
-                ChatMessage cm = (ChatMessage) message;
-                if (cm.getDest().equals("all") && !cm.getSender().equals(nickname)) {
-                    view.showChat(cm.getSender(), false, cm.getText());
-                } else if (cm.getDest().equals(nickname)) {
-                    view.showChat(cm.getSender()+" to "+ cm.getDest(), true, cm.getText());
-                }else if((cm.getSender().equals(nickname)&&cm.getDest().equals("SEE")&&!view.getMyTurn())){view.askChat();}
-                else if(!view.getMyTurn()){view.askChat();}
+            case CHATLOG:
+                ChatLogMessage cm = (ChatLogMessage) message;
+               for(ChatMessage c: cm.getChatlog()){
+                   if (c.getDest().equals("all")) {
+                       view.showChat(cm.getSender(), false, c.getText());
+                   } else if (c.getDest().equals(nickname)) {
+                       view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
+                   }else if(c.getSender().equals(nickname)){
+                       view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
+                   }
+               }
+                if(view.getMyTurn()){
+                    if(!inLibrary && inPickup){
+                        view.askBoardMove();
+                    } else {
+                        view.askLibraryMove();
+                    }
+                }else{
+                    view.askChat();
+                }
                 break;
             default:
                 break;

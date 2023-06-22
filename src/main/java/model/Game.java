@@ -9,7 +9,10 @@ import model.commonobjective.CommonObjective;
 import model.objects.ObjectsDeck;
 import model.player.Player;
 import network.messages.AddedPlayerMessage;
+import network.messages.ChatLogMessage;
+import network.messages.ChatMessage;
 import network.messages.Message;
+import network.structure.NetworkView;
 import observer.Observable;
 import observer.Observer;
 
@@ -27,6 +30,7 @@ public class Game extends Observable implements Observer {
     private int chosenPlayersNumber = 1;
     private ObjectsDeck objectsDeck;
     private HashMap<CommonObjective, ArrayList<Integer>> commonObjectivesPoints;
+    private final ArrayList<ChatMessage> chatLog = new ArrayList<>();
 
 
     /**
@@ -276,5 +280,17 @@ public class Game extends Observable implements Observer {
     public void endGame(){
         gameState = GameState.END;
     }
+
+    /**
+     * Add a received chat message to the chat messages list
+     * @param chatMessage the ChatMessage to add
+     */
+    public void addChatMessage(ChatMessage chatMessage){this.chatLog.add(chatMessage);}
+
+    /**
+     * Getter method for chat log parameter
+     * @return the chat log parameter
+     */
+    public ArrayList<ChatMessage> getChatLog(){return chatLog;}
 }
 
