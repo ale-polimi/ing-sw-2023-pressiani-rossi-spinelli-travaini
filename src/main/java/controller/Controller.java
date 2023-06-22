@@ -530,8 +530,8 @@ public class Controller implements Observer {
         System.out.println("Second number: " + rand2);
 
         /* First I get the objectives from the hashmap */
-        CommonObjective objective1 = availableCommonObjectives.remove(0);
-        CommonObjective objective2 = availableCommonObjectives.remove(1);
+        CommonObjective objective1 = availableCommonObjectives.remove(rand1);
+        CommonObjective objective2 = availableCommonObjectives.remove(rand2);
 
         /* TODO - Debug print */
         System.out.println(objective1.getClass().toString() + " I'm the first objective.");

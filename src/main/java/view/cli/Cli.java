@@ -506,20 +506,41 @@ public class Cli extends ViewObservable implements View {
         out.println("FIRST CO VALUE: " + completedCommonObjectives[0] + " SECOND CO VALUE: " + completedCommonObjectives[1]);
 
         out.println("The common objectives are:");
-        out.print(commonObjective1.getDescription());
-        out.print("\n");
-        if(completedCommonObjectives[0] > 0){
-            out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[0] + " POINTS!" + Colours.RESET);
-        } else {
-            out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+        switch(commonObjective1.getObjectiveNumeral()){
+            case 0:
+                out.print(commonObjective1.getDescription());
+                out.print("\n");
+                if(completedCommonObjectives[0] > 0){
+                    out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[0] + " POINTS!" + Colours.RESET);
+                } else {
+                    out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                }
+                out.print(commonObjective2.getDescription());
+                out.print("\n");
+                if(completedCommonObjectives[1] > 0){
+                    out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[1] + " POINTS!" + Colours.RESET);
+                } else {
+                    out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                }
+                break;
+            case 1:
+                out.print(commonObjective2.getDescription());
+                out.print("\n");
+                if(completedCommonObjectives[0] > 0){
+                    out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[0] + " POINTS!" + Colours.RESET);
+                } else {
+                    out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                }
+                out.print(commonObjective1.getDescription());
+                out.print("\n");
+                if(completedCommonObjectives[1] > 0){
+                    out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[1] + " POINTS!" + Colours.RESET);
+                } else {
+                    out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                }
+                break;
         }
-        out.print(commonObjective2.getDescription());
-        out.print("\n");
-        if(completedCommonObjectives[1] > 0){
-            out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[1] + " POINTS!" + Colours.RESET);
-        } else {
-            out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
-        }
+
     }
 
     /**
@@ -621,8 +642,8 @@ public class Cli extends ViewObservable implements View {
         }
         out.println(Colours.RESET);
 
-        out.print(" ✅ " + Colours.UNDERLINED + " 1 | 2 | 3 | 4 | 5 | 6 \n" + Colours.RESET +
-                  " \uD83C\uDFC6 " + Colours.UNDERLINED + " 1 | 2 | 4 | 6 | 9 | 12\n" + Colours.RESET);
+        out.print(" Done " + Colours.UNDERLINED + " 1 | 2 | 3 | 4 | 5 | 6 " + Colours.RESET + "\n" +
+                  " Pts. " + Colours.UNDERLINED + " 1 | 2 | 4 | 6 | 9 | 12" + Colours.RESET + "\n");
     }
 
     /**
