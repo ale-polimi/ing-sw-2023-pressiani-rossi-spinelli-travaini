@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class Gui extends ViewObservable implements View {
 
-    public int playerNum;
+
 
     public static void setPlayerNum(int playerNum){
         playerNum = playerNum;
@@ -73,7 +73,9 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showPersonalObjective(String player, PersonalObjective personalObjective) {
-
+        System.out.println(personalObjective);
+        System.out.println(personalObjective.getPersonalOBJ());
+        BoardSceneController bsc = getBoardSceneController(personalObjective);
     }
 
     @Override
@@ -83,13 +85,11 @@ public class Gui extends ViewObservable implements View {
         try{
             wfp = (WaitingForPlayersSceneController) SceneController.getActiveController();
             wfp.setNicknames(players);
-            wfp.setMaxPlayers(playerNum);
             Platform.runLater(wfp :: updateValues);
         } catch (ClassCastException e) {
             wfp = new WaitingForPlayersSceneController();
             wfp.addAllObservers(observers);
             wfp.setNicknames(players);
-            wfp.setMaxPlayers(playerNum);
             WaitingForPlayersSceneController finalWfp = wfp;
             Platform.runLater(() -> SceneController.changeRootPane(finalWfp, "Waiting_For_Players.fxml" ));
 
@@ -167,6 +167,22 @@ public class Gui extends ViewObservable implements View {
             bsc.addAllObservers(observers);
             bsc.setCommonObj1Button(commonObjective1);
             bsc.setCommonObj2Button(commonObjective2);
+            BoardSceneController finalBsc = bsc;
+            Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
+        }
+        return bsc;
+    }
+
+    private BoardSceneController getBoardSceneController(PersonalObjective personalObjective) {
+        BoardSceneController bsc;
+        try {
+            bsc = (BoardSceneController) SceneController.getActiveController();
+            bsc.setPersonalObjButton(personalObjective);
+
+        } catch (ClassCastException e) {
+            bsc = new BoardSceneController();
+            bsc.addAllObservers(observers);
+            bsc.setPersonalObjButton(personalObjective);
             BoardSceneController finalBsc = bsc;
             Platform.runLater(() -> SceneController.changeRootPane(finalBsc, "Board.fxml"));
         }

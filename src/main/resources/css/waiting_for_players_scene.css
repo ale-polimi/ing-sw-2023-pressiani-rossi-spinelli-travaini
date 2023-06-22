@@ -2,6 +2,11 @@
 
     src: url("fonts/Rancho/Rancho-Regular.ttf");
 }
+.rootPane {
+
+    -fx-background-image: url("../images/sfondo_parquet.jpg");
+    -fx-background-size: stretch;
+}
 
 .label{
 

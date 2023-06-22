@@ -4,17 +4,10 @@
     -fx-background-size: stretch;
 }
 
-.playButton {
+.Button {
     -fx-background-color: transparent;
 }
-.exitButton {
-    -fx-background-color: transparent;
 
-}
-.playButton:hover{
-
-    -fx-background-color: rgba(255, 235, 162, 0.9);
-}
-.exitButton:hover{
+.Button:hover{
     -fx-background-color: rgba(255, 235, 162, 0.9);
 }

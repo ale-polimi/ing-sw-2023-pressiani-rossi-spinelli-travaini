@@ -37,27 +37,26 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.InsertNicknameSceneController">
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/serverInfo_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.InsertNicknameSceneController">
 <children>
-      <ImageView fitHeight="400.0" fitWidth="648.0">
-         <image>
-            <Image url="@../images/sfondo_parquet.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="121.0" fitWidth="429.0" layoutX="107.0" layoutY="26.0">
+      <ImageView fitHeight="141.0" fitWidth="500.0" layoutX="482.0" layoutY="45.0">
          <image>
             <Image url="@../images/insert_nickname_Banner.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="submitButton" layoutX="216.0" layoutY="311.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="142.0" style="-fx-background-color: transparent;">
+      <Button fx:id="submitButton" layoutX="574.0" layoutY="507.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="300.0" styleClass="Button">
          <graphic>
-            <ImageView fitHeight="60.0" fitWidth="200.0">
+            <ImageView fitHeight="90.0" fitWidth="300.0">
                <image>
                   <Image url="@../images/submit_Button.jpg" />
                </image>
             </ImageView>
          </graphic></Button>
-      <TextField fx:id="nicknameField" layoutX="200.0" layoutY="236.0" prefHeight="66.0" prefWidth="240.0" />
+      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="532.0" layoutY="304.0" prefHeight="111.0" prefWidth="400.0" promptText="Nickname" styleClass="nickname">
+         <font>
+            <Font size="36.0" />
+         </font></TextField>
 </children>
 </AnchorPane>

@@ -11,6 +11,7 @@ import javafx.scene.layout.*;
 import model.board.Board;
 import model.commonobjective.*;
 import model.library.Library;
+import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
 
@@ -32,6 +33,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private Button commonObj1Button;
     @FXML
     private Button commonObj2Button;
+    @FXML
+    private Button personalObjButton;
     private Board gameBoard1;
     private Library playerLibrary1;
     private ArrayList<ObjectCard>playerObjInHand1;
@@ -40,6 +43,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private int libColumn;
     private CommonObjective commonObjective11;
     private CommonObjective commonObjective21;
+    private PersonalObjective personalObjective1;
 
     private int objInHand = 0;
 
@@ -62,17 +66,22 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         confirmButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConfirmButtonClick);
         commonObj1Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
         commonObj2Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
+        personalObjButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onPersonalObjClick);
         setBoardGrid(gameBoard1);
         setLibraryGrid(playerLibrary1);
         setPlayerObjInHand(playerObjInHand1);
         setCommonObj1Button(commonObjective11);
         setCommonObj2Button(commonObjective21);
+        setPersonalObjButton(personalObjective1);
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/common_Obj1_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
         commonObj1Button.setBackground(background);
         BackgroundImage backgroundImage2 = new BackgroundImage(new Image(getClass().getResource("/images/common_Obj2_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background2 = new Background(backgroundImage2);
         commonObj2Button.setBackground(background2);
+        BackgroundImage backgroundImageP = new BackgroundImage(new Image(getClass().getResource("/images/personal_Obj_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background backgroundP = new Background(backgroundImageP);
+        personalObjButton.setBackground(backgroundP);
 
 
 
@@ -81,6 +90,65 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
 
 
+    }
+
+    public void setPersonalObjButton(PersonalObjective personalObjective){
+        if(personalObjective != null){
+            personalObjective1 = personalObjective;
+        }
+
+        if(personalObjButton != null && personalObjective != null){
+            if (("0,0,PINK1,0,2,BLUE1,1,4,GREEN1,2,3,WHITE1,3,1,YELLOW1,5,2,LIGHT_BLUE1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("1,1,PINK1,2,0,GREEN1,2,2,YELLOW1,3,4,WHITE1,4,3,LIGHT_BLUE1,5,4,BLUE1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals2.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("1,0,BLUE1,1,3,YELLOW1,2,2,PINK1,3,1,GREEN1,3,4,LIGHT_BLUE1,5,0,WHITE1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals3.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,4,YELLOW1,2,0,LIGHT_BLUE1,2,2,BLUE1,3,3,PINK1,4,1,WHITE1,4,2,GREEN1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals4.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("1,1,LIGHT_BLUE1,3,1,BLUE1,3,2,WHITE1,4,4,PINK1,5,0,YELLOW1,5,3,GREEN1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals5.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,2,LIGHT_BLUE1,0,4,GREEN1,2,3,WHITE1,4,1,YELLOW1,4,3,BLUE1,5,0,PINK1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals6.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,0,GREEN1,1,3,BLUE1,2,1,PINK1,3,0,LIGHT_BLUE1,4,4,YELLOW1,5,2,WHITE1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals7.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,4,BLUE1,1,1,GREEN1,2,2,LIGHT_BLUE1,3,0,PINK1,4,3,WHITE1,5,3,YELLOW1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals8.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,2,YELLOW1,2,2,GREEN1,3,4,WHITE1,4,1,LIGHT_BLUE1,4,4,PINK1,5,0,BLUE1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals9.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,4,LIGHT_BLUE1,1,1,YELLOW1,2,0,WHITE1,3,3,GREEN1,4,1,BLUE1,5,3,PINK1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals10.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,2,PINK1,1,1,WHITE1,2,0,YELLOW1,3,2,BLUE1,4,4,GREEN1,5,3,LIGHT_BLUE1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals11.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }else if (("0,2,WHITE1,1,1,PINK1,2,2,BLUE1,3,3,LIGHT_BLUE1,4,4,YELLOW1,5,0,GREEN1").compareTo(personalObjective.getPersonalOBJ()) == 0){
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/Personal_Goals12.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                personalObjButton.setBackground(background);
+            }
+
+        }
     }
 
     public void setCommonObj1Button(CommonObjective commonObjective1){
@@ -717,8 +785,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private void onCommonObjClick(MouseEvent event){
 
         new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives())).start();
-        //setCommonObj1Button(commonObjective11);
-        //setCommonObj2Button(commonObjective21);
+    }
+    private void onPersonalObjClick(MouseEvent event){
+
+        new Thread(() -> notifyObserver(obs -> obs.onRequestPersonalObjective())).start();
+
     }
 
     private void onConfirmButtonClick(MouseEvent event){

@@ -1,10 +1,33 @@
-.commonObj1Button{
+.rootPane {
 
+    -fx-background-image: url("../images/sfondo_parquet.jpg");
     -fx-background-size: stretch;
+}
+
+.Button {
+    -fx-border-color: transparent;
+    -fx-border-width: 4px;
 
 }
-.commonObj2Button{
+.Button:hover{
 
-    -fx-background-size: stretch;
+    -fx-border-color: rgb(139, 0, 157);
+}
+.confButton {
+    -fx-background-color: transparent;
 
+
+}
+.confButton:hover{
+
+    -fx-background-color: rgba(255, 235, 162, 0.9);
+}
+.objButton {
+    -fx-border-color: transparent;
+    -fx-border-width: 7px;
+
+}
+.objButton:hover{
+
+    -fx-border-color: rgba(255, 235, 162, 0.9);
 }

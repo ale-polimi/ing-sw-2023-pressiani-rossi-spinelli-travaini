@@ -54,7 +54,7 @@
                   <Image url="@../images/title.png" />
                </image>
             </ImageView>
-            <Button fx:id="exitButton" layoutX="774.0" layoutY="452.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="350.0" style="-fx-background-color: transparent;">
+            <Button fx:id="exitButton" layoutX="774.0" layoutY="452.0" mnemonicParsing="false" prefHeight="120.0" prefWidth="490.0" styleClass="exitButton">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="46.0" />
                </font>
@@ -69,7 +69,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="playButton" layoutX="269.0" layoutY="452.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="350.0" style="-fx-background-color: transparent;">
+            <Button fx:id="playButton" layoutX="174.0" layoutY="452.0" mnemonicParsing="false" prefHeight="120.0" prefWidth="490.0" styleClass="playButton">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="46.0" />
                </font>
@@ -77,7 +77,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                <graphic>
-                  <ImageView fx:id="playImg" fitHeight="120.0" fitWidth="490.0" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="490.0">
                      <image>
                         <Image url="@../images/play_Button.jpg" />
                      </image>

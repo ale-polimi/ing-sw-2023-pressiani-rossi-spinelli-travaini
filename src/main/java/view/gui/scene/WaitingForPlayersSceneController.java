@@ -19,11 +19,11 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
     private Label playersNicknameLabel;
     @FXML
     private Label playerNumbersLabel;
-    private int maxPlayers;
+
 
     public void initialize(){
         playersNicknameLabel.setText(String.join(", ", nicknames ));
-        playerNumbersLabel.setText(nicknames.size()+"/" + maxPlayers );
+        playerNumbersLabel.setText(String.valueOf(nicknames.size()));
 
     }
 
@@ -31,14 +31,12 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
     public void setNicknames(ArrayList<String> nicknames) {
         this.nicknames =  nicknames;
     }
-    public void setMaxPlayers(int maxPlayers){
-        this.maxPlayers = maxPlayers;
-    }
+
 
 
     public void updateValues(){
         playersNicknameLabel.setText(String.join(", ", this.nicknames));
-        playerNumbersLabel.setText((this.nicknames.size() + "/" + this.maxPlayers));
+        playerNumbersLabel.setText(String.valueOf((this.nicknames.size() )));
     }
 }
 

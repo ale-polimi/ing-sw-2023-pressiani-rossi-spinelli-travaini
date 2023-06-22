@@ -7,43 +7,38 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="425.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.ServerInfoSceneController">
+<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/serverInfo_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.ServerInfoSceneController">
    <children>
-      <ImageView fitHeight="431.0" fitWidth="639.0">
-         <image>
-            <Image url="@../images/sfondo_parquet.jpg" />
-         </image>
-      </ImageView>
-      <TextField fx:id="serverAddressField" alignment="CENTER" layoutX="56.0" layoutY="188.0" prefHeight="54.0" prefWidth="229.0" text="127.0.0.1">
+      <TextField fx:id="serverAddressField" alignment="CENTER" layoutX="226.0" layoutY="269.0" prefHeight="90.0" prefWidth="380.0" styleClass="label" text="127.0.0.1">
          <font>
-            <Font name="Berlin Sans FB" size="27.0" />
+            <Font name="Berlin Sans FB" size="36.0" />
          </font></TextField>
-      <Button fx:id="submitButton" layoutX="363.0" layoutY="299.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="80.0" style="-fx-background-color: transparent;">
+      <Button fx:id="submitButton" layoutX="873.0" layoutY="454.0" mnemonicParsing="false" prefHeight="94.0" prefWidth="300.0" styleClass="Button">
          <graphic>
-            <ImageView fitHeight="60.0" fitWidth="200.0">
+            <ImageView fitHeight="94.0" fitWidth="300.0">
                <image>
                   <Image url="@../images/submit_Button.jpg" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <TextField fx:id="serverPortField" alignment="CENTER" layoutX="356.0" layoutY="188.0" prefHeight="54.0" prefWidth="229.0" text="12345">
+      <TextField fx:id="serverPortField" alignment="CENTER" layoutX="841.0" layoutY="269.0" prefHeight="90.0" prefWidth="380.0" styleClass="label" text="12345">
          <font>
-            <Font name="Berlin Sans FB" size="27.0" />
+            <Font name="Berlin Sans FB" size="36.0" />
          </font></TextField>
-      <ImageView fitHeight="70.0" fitWidth="250.0" layoutX="46.0" layoutY="63.0">
+      <ImageView fitHeight="112.0" fitWidth="400.0" layoutX="216.0" layoutY="63.0">
          <image>
             <Image url="@../images/server_IP_Banner.jpg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="70.0" fitWidth="250.0" layoutX="346.0" layoutY="63.0">
+      <ImageView fitHeight="112.0" fitWidth="400.0" layoutX="831.0" layoutY="63.0">
          <image>
             <Image url="@../images/server_port_Banner.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="returnButton" layoutX="63.0" layoutY="299.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="80.0" style="-fx-background-color: transparent;">
+      <Button fx:id="returnButton" layoutX="258.0" layoutY="454.0" mnemonicParsing="false" prefHeight="94.0" prefWidth="300.0" styleClass="Button">
          <graphic>
-            <ImageView fitHeight="60.0" fitWidth="200.0">
+            <ImageView fitHeight="94.0" fitWidth="300.0">
                <image>
                   <Image url="@../images/return_Button.jpg" />
                </image>

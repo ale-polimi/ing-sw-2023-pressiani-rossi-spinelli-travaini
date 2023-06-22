@@ -37,7 +37,7 @@ public class JavaFXGUI extends Application {
 
         Scene scene = new Scene(root,700,500);
         stage.setScene(scene);
-       // stage.setFullScreen(true);
+        stage.setFullScreen(true);
         //stage.setFullScreenExitHint("");
         //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.show();
