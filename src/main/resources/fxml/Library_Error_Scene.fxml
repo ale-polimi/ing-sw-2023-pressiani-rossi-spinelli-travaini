@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="450.0" styleClass="rootPane" stylesheets="@../css/PopUp_Scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.PopUpSceneController">
+   <children>
+      <Button fx:id="confirmButton" layoutY="300.0" maxWidth="450.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="450.0" styleClass="confirmButton">
+         <graphic>
+            <ImageView fitHeight="150.0" fitWidth="434.0">
+               <image>
+                  <Image url="@../images/confirm_Button.jpg" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <ImageView fitHeight="300.0" fitWidth="451.0">
+         <image>
+            <Image url="@../images/library_Error_Background.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

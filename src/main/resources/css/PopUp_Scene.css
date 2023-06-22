@@ -1,0 +1,13 @@
+.rootPane {
+    -fx-background-image: url("../images/sfondo_parquet.jpg");
+    -fx-background-size: stretch;
+}
+
+.confirmButton {
+    -fx-background-color: transparent;
+}
+
+.confirmButton:hover{
+
+    -fx-background-color: rgba(255, 235, 162, 0.9);
+}

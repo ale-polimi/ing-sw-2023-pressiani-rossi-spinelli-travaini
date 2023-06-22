@@ -586,9 +586,18 @@
                      </cursor></Button>
                </children>
             </GridPane>
-            <Button id="commonObj1Button" fx:id="commonObj1Button" layoutX="122.0" layoutY="667.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css" />
-            <Button fx:id="commonObj2Button" layoutX="634.0" layoutY="667.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css" />
-            <Button fx:id="personalObjButton" layoutX="681.0" layoutY="207.0" mnemonicParsing="false" prefHeight="307.0" prefWidth="202.0" styleClass="objButton" />
+            <Button id="commonObj1Button" fx:id="commonObj1Button" layoutX="122.0" layoutY="667.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="commonObj2Button" layoutX="634.0" layoutY="667.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="personalObjButton" layoutX="681.0" layoutY="207.0" mnemonicParsing="false" prefHeight="307.0" prefWidth="202.0" styleClass="objButton">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
       </children>
          <cursor>
             <Cursor fx:constant="DEFAULT" />

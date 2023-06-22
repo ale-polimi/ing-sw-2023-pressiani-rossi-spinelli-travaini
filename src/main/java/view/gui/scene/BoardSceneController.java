@@ -1,6 +1,7 @@
 package view.gui.scene;
 
 import enumerations.ObjectColour;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
 import view.gui.Gui;
+import view.gui.SceneController;
 
 import java.util.ArrayList;
 
@@ -832,11 +834,15 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                 Button b = (Button) node;
                 b.setStyle("-fx-background-color: transparent");
             }
+            String scene ="/fxml/Board_Error_Scene.fxml";
+            Platform.runLater(() -> SceneController.showPopUP(scene));
         }else{
             objInHand = 0;
             libColumn = 0;
             orderObjects = new ArrayList<>();
             setPlayerObjInHand(playerObjInHand1);
+            String scene ="/fxml/Library_Error_Scene.fxml";
+            Platform.runLater(() -> SceneController.showPopUP(scene));
         }
     }
 

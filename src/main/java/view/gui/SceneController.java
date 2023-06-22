@@ -5,9 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import network.structure.ClientSocket;
 import observer.ViewObservable;
 import observer.ViewObserver;
 import view.gui.scene.GenericSceneController;
+import view.gui.scene.PopUpSceneController;
 
 import java.io.IOException;
 import java.util.List;
@@ -80,6 +82,25 @@ public class SceneController extends ViewObservable {
 
     public static void changeRootPane(GenericSceneController controller, String fxml){
         changeRootPane(controller, activeScene,fxml);
+    }
+
+    public static void showPopUP(String scene) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(SceneController.class.getResource(scene));
+
+        Parent root;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.out.println("exception");
+            throw new RuntimeException(e);
+
+        }
+
+        PopUpSceneController popUpSceneController = loader.getController();
+        Scene PopUpScene = new Scene(root);
+        popUpSceneController.setScene(PopUpScene);
+        popUpSceneController.displayPopUp();
     }
 
 }
