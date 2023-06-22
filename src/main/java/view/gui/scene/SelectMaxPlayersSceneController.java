@@ -32,7 +32,7 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
         int players = 2;
-        Gui.setPlayerNum(players);
+
 
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }
@@ -44,7 +44,7 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
         int players = 3;
-        Gui.setPlayerNum(players);
+
 
 
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
@@ -57,7 +57,7 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
         int players = 4;
-        Gui.setPlayerNum(players);
+
 
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }
