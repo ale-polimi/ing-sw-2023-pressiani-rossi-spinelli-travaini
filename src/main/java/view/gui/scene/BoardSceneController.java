@@ -14,6 +14,7 @@ import model.library.Library;
 import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import observer.ViewObservable;
+import view.gui.Gui;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private PersonalObjective personalObjective1;
 
     private int objInHand = 0;
+    private boolean boardFirstTurn = false;
 
     public void initialize(){
 
@@ -82,14 +84,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         BackgroundImage backgroundImageP = new BackgroundImage(new Image(getClass().getResource("/images/personal_Obj_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background backgroundP = new Background(backgroundImageP);
         personalObjButton.setBackground(backgroundP);
-
-
-
-
-
-
-
-
+        blockBoardTiles();
+        if(boardFirstTurn){
+            resetBoardTiles();
+        }
     }
 
     public void setPersonalObjButton(PersonalObjective personalObjective){
@@ -737,14 +735,22 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }else {
              col = GridPane.getColumnIndex(clickedButton);
         }
-        if(gameBoard1.getSpace(row,col).getObject() != null && gameBoard1.getSpace(row,col).getObject().getObjectColour() != ObjectColour.EMPTY) {
+        if(gameBoard1!= null && gameBoard1.getSpace(row,col).getObject() != null && gameBoard1.getSpace(row,col).getObject().getObjectColour() != ObjectColour.EMPTY) {
             objInHand ++;
             if (objInHand <= 3) {
                 playerObjInHand1.add(gameBoard1.getSpace(row, col).getObject());
+                clickedButton.setDisable(true);
                 coordinatesToSend.add(row);
                 coordinatesToSend.add(col);
             }
+
+            if(objInHand == 3){
+                blockBoardTiles();
+            }
         }
+
+
+
 
         System.out.println(playerObjInHand1);
         System.out.println(coordinatesToSend);
@@ -777,17 +783,16 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
         if(playerObjInHand1.get(col) != null && playerObjInHand1.get(col).getObjectColour() != ObjectColour.EMPTY){
             orderObjects.add(col);
+            clickedButton.setDisable(true);
         }
         System.out.println(orderObjects);
 
     }
 
     private void onCommonObjClick(MouseEvent event){
-
         new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives())).start();
     }
     private void onPersonalObjClick(MouseEvent event){
-
         new Thread(() -> notifyObserver(obs -> obs.onRequestPersonalObjective())).start();
 
     }
@@ -797,11 +802,15 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             objInHand = 0;
             libColumn = 0;
             orderObjects = new ArrayList<>();
+            resetLibraryTiles();
+            resetObjInHandTiles();
+            blockBoardTiles();
           new Thread(() ->  notifyObserver(obs -> obs.onUpdateBoardMove(coordinatesToSend))).start();
         }else{
             coordinatesToSend = new ArrayList<>();
             orderObjects.add(libColumn);
             System.out.println(orderObjects);
+            blockLibraryTiles();
             for(Node node : objInHandGrid.getChildren()){
                 Button b = (Button) node;
                 b.setStyle("-fx-background-color: transparent");
@@ -828,6 +837,55 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             libColumn = 0;
             orderObjects = new ArrayList<>();
             setPlayerObjInHand(playerObjInHand1);
+        }
+    }
+
+    public void resetBoardTiles(){
+        boardFirstTurn = true;
+        if(boardGrid != null) {
+            for (Node node : boardGrid.getChildren()) {
+                Button b = (Button) node;
+                b.setDisable(false);
+
+            }
+        }
+    }
+    public void resetLibraryTiles(){
+        if(libraryGrid != null) {
+            for (Node node : libraryGrid.getChildren()) {
+                Button b = (Button) node;
+                b.setDisable(false);
+
+            }
+        }
+    }
+
+    public void resetObjInHandTiles(){
+
+            for (Node node : objInHandGrid.getChildren()) {
+                Button b = (Button) node;
+                b.setDisable(false);
+
+            }
+
+    }
+
+    public void blockBoardTiles(){
+        if(boardGrid != null) {
+            for (Node node : boardGrid.getChildren()) {
+                Button b = (Button) node;
+                b.setDisable(true);
+
+            }
+        }
+    }
+    public void blockLibraryTiles(){
+        if(libraryGrid != null) {
+            for (Node node : libraryGrid.getChildren()) {
+                Button b = (Button) node;
+                b.setDisable(true);
+
+            }
         }
     }
 

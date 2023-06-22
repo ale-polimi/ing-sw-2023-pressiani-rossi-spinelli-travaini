@@ -14,14 +14,17 @@ import view.gui.scene.WaitingForPlayersSceneController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Gui extends ViewObservable implements View {
 
     private  boolean myTurn= true;
 
-    public static void setPlayerNum(int playerNum){
-        playerNum = playerNum;
-    }
+   private boolean boardUsed;
+
+
+
+
     @Override
     public void askNickname() {
         Platform.runLater(() -> SceneController.changeRootPane(observers, "Insert_Nickname.fxml" ));
@@ -38,25 +41,59 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void askBoardMove() {
+        System.out.println("BOARDMOVE");
+        setBoardUsed(false);
+
+       // setMyTurn(true);
+        BoardSceneController bsc = null;
+        try {
+            bsc = getBoardSceneController();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        bsc.resetBoardTiles();
+
 
     }
 
     @Override
     public void askLibraryMove() {
+        System.out.println("LIBRARYMOVE");
+        setBoardUsed(true);
+        BoardSceneController bsc = null;
+        try {
+            bsc = getBoardSceneController();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        bsc.resetObjInHandTiles();
+        bsc.resetLibraryTiles();
+
 
     }
 
     @Override
     public void showGenericError(String player, String payload) {
-        BoardSceneController bsc = getBoardSceneController();
+        BoardSceneController bsc = null;
+        try {
+            bsc = getBoardSceneController();
+        } catch (InterruptedException e) {
+           System.exit(0);
+
+        }
         bsc.resetErrorValues();
     }
 
     @Override
     public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
-
+        System.out.println("TURNCALL");
         BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
-       // bsc.setBoardGrid(gameBoard);
+        bsc.blockBoardTiles();
+
+
+
+
+        // bsc.setBoardGrid(gameBoard);
         //bsc.setLibraryGrid(playerLibrary);
     }
 
@@ -65,6 +102,9 @@ public class Gui extends ViewObservable implements View {
         System.out.println(commonObjective1);
         System.out.println(commonObjective2);
         BoardSceneController bsc = getBoardSceneController(commonObjective1, commonObjective2);
+        if(getBoardUsed()){
+            bsc.blockBoardTiles();
+        }
 
     }
 
@@ -105,7 +145,8 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showNotMyTurn(Board gameBoard) {
-
+        setMyTurn(false);
+        System.out.println("notmyturn");
     }
 
     @Override
@@ -119,10 +160,22 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public boolean getMyTurn() {return myTurn;}
+    public boolean getMyTurn() {
+        return myTurn;
+    }
 
     @Override
-    public void setMyTurn(boolean turn) {myTurn = turn;}
+    public void setMyTurn(boolean turn) {
+        myTurn = turn;
+
+    }
+
+    public void setBoardUsed(boolean boardUsed) {
+        this.boardUsed = boardUsed;
+    }
+    public boolean getBoardUsed(){
+        return boardUsed;
+    }
 
     @Override
     public void askChat() {
@@ -185,8 +238,11 @@ public class Gui extends ViewObservable implements View {
         return bsc;
     }
 
-    private BoardSceneController getBoardSceneController() {
+    private BoardSceneController getBoardSceneController() throws InterruptedException {
         BoardSceneController bsc;
+
+        TimeUnit.MILLISECONDS.sleep(10);
+
         try {
             bsc = (BoardSceneController) SceneController.getActiveController();
 
