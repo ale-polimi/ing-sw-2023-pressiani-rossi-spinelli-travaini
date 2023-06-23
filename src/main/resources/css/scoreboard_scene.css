@@ -1,0 +1,24 @@
+@font-face {
+
+    src: url("fonts/Rancho/Rancho-Regular.ttf");
+}
+.rootPane {
+
+    -fx-background-image: url("../images/sfondo_parquet.jpg");
+    -fx-background-size: stretch;
+}
+
+.label{
+
+
+    -fx-text-fill: black;
+    -fx-font-family: 'Rancho';
+}
+
+.closeButton {
+    -fx-background-color: transparent;
+
+}
+.closeButton:hover{
+    -fx-background-color: rgba(255, 235, 162, 0.9);
+}

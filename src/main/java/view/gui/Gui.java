@@ -9,6 +9,7 @@ import model.objects.ObjectCard;
 import observer.ViewObservable;
 import view.View;
 import view.gui.scene.BoardSceneController;
+import view.gui.scene.ScoreboardSceneController;
 import view.gui.scene.SelectMaxPlayersSceneController;
 import view.gui.scene.WaitingForPlayersSceneController;
 
@@ -141,7 +142,58 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showWinner(String winner, HashMap<String, Integer> leaderboard) {
+        int count = 0;
+        ScoreboardSceneController sbsc = new ScoreboardSceneController();
+        sbsc.addAllObservers(observers);
+        switch (leaderboard.size()){
+            case 2 ->{
+                for(Map.Entry<String,Integer> entry : leaderboard.entrySet()) {
+                    count++;
+                    String string = entry.getKey();
+                    int points = entry.getValue();
+                    String score = string + points;
+                    if(count == 1){
+                        sbsc.setWinner(score);
+                    } else if (count==2) {
+                        sbsc.setSecond(score);
+                    }
+                }
+            }
+            case 3 -> {
+                for(Map.Entry<String,Integer> entry : leaderboard.entrySet()) {
+                    count++;
+                    String string = entry.getKey();
+                    int points = entry.getValue();
+                    String score = string + points;
+                    if(count == 1){
+                        sbsc.setWinner(score);
+                    } else if (count==2) {
+                        sbsc.setSecond(score);
+                    } else if (count == 3) {
+                        sbsc.setThird(score);
+                    }
+                }
+            }
+            case 4 -> {
+                for(Map.Entry<String,Integer> entry : leaderboard.entrySet()) {
+                    count++;
+                    String string = entry.getKey();
+                    int points = entry.getValue();
+                    String score = string + points;
+                    if(count == 1){
+                        sbsc.setWinner(score);
+                    } else if (count==2) {
+                        sbsc.setSecond(score);
+                    } else if (count == 3) {
+                        sbsc.setThird(score);
+                    } else if (count == 4) {
+                        sbsc.setFourth(score);
+                    }
+                }
+            }
+        }
 
+        Platform.runLater(() -> SceneController.changeRootPane(sbsc,  "ScoreBoard.fxml"));
     }
 
     @Override
@@ -152,11 +204,6 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
-        System.out.println(librariesOfPlayers.size());
-        for(Map.Entry<String,Library> entry : librariesOfPlayers.entrySet()) {
-            String string = entry.getKey();
-            System.out.println(string);
-        }
         BoardSceneController bsc = null;
         try {
             bsc = getBoardSceneController();
