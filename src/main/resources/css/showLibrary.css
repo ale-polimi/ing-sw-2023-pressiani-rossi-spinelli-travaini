@@ -1,0 +1,19 @@
+@font-face {
+
+    src: url("fonts/Rancho/Rancho-Regular.ttf");
+}
+
+
+.label{
+
+
+    -fx-text-fill: black;
+    -fx-font-family: 'Rancho';
+}
+.closeButton {
+    -fx-background-color: transparent;
+
+}
+.closeButton:hover{
+    -fx-background-color: rgba(255, 235, 162, 0.9);
+}

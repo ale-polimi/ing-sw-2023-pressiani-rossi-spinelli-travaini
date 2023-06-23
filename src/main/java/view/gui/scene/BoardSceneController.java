@@ -19,6 +19,7 @@ import view.gui.Gui;
 import view.gui.SceneController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BoardSceneController extends ViewObservable implements GenericSceneController {
 
@@ -32,6 +33,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private GridPane libraryGrid;
     @FXML
     private Button confirmButton;
+    @FXML
+    private Button librariesButton;
     @FXML
     private Button commonObj1Button;
     @FXML
@@ -68,6 +71,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             b.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onObjInHandClick);
         }
         confirmButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConfirmButtonClick);
+        librariesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onShowLibrariesClick);
         commonObj1Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
         commonObj2Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
         personalObjButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onPersonalObjClick);
@@ -155,7 +159,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
        if( commonObjective1 != null){
         commonObjective11 = commonObjective1;
        }
-        if(commonObj1Button != null && commonObjective1 != null){
+        if(commonObj1Button != null && commonObjective1 != null) {
             if (commonObjective1.getClass().equals(FiveX.class)) {
                 BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/fiveX.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
                 Background background = new Background(backgroundImage);
@@ -200,8 +204,13 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                 BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/two_by_four.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
                 Background background = new Background(backgroundImage);
                 commonObj1Button.setBackground(background);
+            } else if (commonObjective1.getClass().equals(Stairs.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/stairs.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj1Button.setBackground(background);
             }
         }
+
     }
     public void setCommonObj2Button(CommonObjective commonObjective2){
         commonObjective21 = commonObjective2;
@@ -248,6 +257,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                 commonObj2Button.setBackground(background);
             } else if (commonObjective2.getClass().equals(TwoByFour.class)) {
                 BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/two_by_four.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                commonObj2Button.setBackground(background);
+            } else if (commonObjective2.getClass().equals(Stairs.class)) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/stairs.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
                 Background background = new Background(backgroundImage);
                 commonObj2Button.setBackground(background);
             }
@@ -798,6 +811,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         new Thread(() -> notifyObserver(obs -> obs.onRequestPersonalObjective())).start();
 
     }
+    private void onShowLibrariesClick(MouseEvent event){
+        new Thread(() -> notifyObserver(obs -> obs.onRequestOthersLibrary())).start();
+    }
 
     private void onConfirmButtonClick(MouseEvent event){
         if(playerObjInHand1.size() > 0 && objInHand > 0 ){
@@ -893,6 +909,20 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
             }
         }
+    }
+
+    public void showLibraries(HashMap<String, Library> librariesOfPlayers){
+        if(librariesOfPlayers.size() == 1){
+            String scene ="/fxml/libraries_Two_Players_Scene.fxml";
+            Platform.runLater(() -> SceneController.showTwoLibraries(scene,librariesOfPlayers));
+        } else if (librariesOfPlayers.size()==2) {
+            String scene ="/fxml/libraries_Three_Players_Scene.fxml";
+            Platform.runLater(() -> SceneController.showThreeLibraries(scene,librariesOfPlayers));
+        } else if (librariesOfPlayers.size() == 3) {
+            String scene ="/fxml/libraries_Four_Players_Scene.fxml";
+            Platform.runLater(() -> SceneController.showFourLibraries(scene,librariesOfPlayers));
+        }
+
     }
 
 }

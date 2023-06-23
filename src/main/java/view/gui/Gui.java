@@ -14,6 +14,7 @@ import view.gui.scene.WaitingForPlayersSceneController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Gui extends ViewObservable implements View {
@@ -151,7 +152,18 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
-
+        System.out.println(librariesOfPlayers.size());
+        for(Map.Entry<String,Library> entry : librariesOfPlayers.entrySet()) {
+            String string = entry.getKey();
+            System.out.println(string);
+        }
+        BoardSceneController bsc = null;
+        try {
+            bsc = getBoardSceneController();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        bsc.showLibraries(librariesOfPlayers);
     }
 
     @Override

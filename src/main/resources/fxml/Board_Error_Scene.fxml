@@ -6,7 +6,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="450.0" styleClass="rootPane" stylesheets="@../css/PopUp_Scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.scene.PopUpSceneController">
    <children>
       <ImageView fitHeight="300.0" fitWidth="451.0">

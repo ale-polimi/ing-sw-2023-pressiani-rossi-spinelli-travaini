@@ -598,6 +598,18 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
+            <Button fx:id="librariesButton" layoutX="1100.0" layoutY="405.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" styleClass="confButton">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <graphic>
+                  <ImageView fitHeight="75.0" fitWidth="234.0">
+                     <image>
+                        <Image url="@../images/show_Libraries_Button.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
       </children>
          <cursor>
             <Cursor fx:constant="DEFAULT" />
