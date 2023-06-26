@@ -161,6 +161,16 @@ public class ClientController extends Observable implements ViewObserver, Observ
         }
     }
 
+    @Override
+    public void onChatLogMessage() {
+        try {
+            client.sendMessage(new ChatLogMessage(nickname,null));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     /**
      * This method checks if the ip is valid as in it follows the <a href="https://en.wikipedia.org/wiki/Dot-decimal_notation">dot-decimal notation</a>.
      * @param ip is the ip to verify.
@@ -245,6 +255,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
+                    view.askChat();
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
@@ -355,12 +366,28 @@ public class ClientController extends Observable implements ViewObserver, Observ
                for(ChatMessage c: cm.getChatlog()){
                    chatHandling(c);
                }
-                checkTurn();
+                if(view.getMyTurn()) {
+                    if (inLibrary && !inPickup) {
+                        view.askLibraryMove();
+                    } else if (!inLibrary && inPickup) {
+                        view.askBoardMove();
+                    }
+                }else{
+                    view.askChat();
+                }
                 break;
             case CHAT:
                 ChatMessage c = (ChatMessage) message;
                 chatHandling(c);
-                checkTurn();
+                if(view.getMyTurn()&&c.getSender().equals(nickname)) {
+                    if (inLibrary && !inPickup) {
+                        view.askLibraryMove();
+                    } else if (!inLibrary && inPickup) {
+                        view.askBoardMove();
+                    }
+                }else if(c.getSender().equals(nickname)){
+                    view.askChat();
+                }
                 break;
             default:
                 break;
@@ -375,21 +402,9 @@ public class ClientController extends Observable implements ViewObserver, Observ
         if (c.getDest().equals("all")) {
             view.showChat(c.getSender(), false, c.getText());
         } else if (c.getDest().equals(nickname)) {
-            view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
-        }else if(c.getSender().equals(nickname)){
             view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
-        }
-    }
-
-    private void checkTurn(){
-        if(view.getMyTurn()){
-            if(!inLibrary && inPickup){
-                view.askBoardMove();
-            } else {
-                view.askLibraryMove();
-            }
-        }else{
-            view.askChat();
+        }else if(c.getSender().equals(nickname)){
+            view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
         }
     }
 

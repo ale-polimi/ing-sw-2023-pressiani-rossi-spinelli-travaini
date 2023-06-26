@@ -445,12 +445,12 @@ public class Controller implements Observer {
                 break;
             case CHAT:
                 ChatMessage ncm = (ChatMessage) receivedMessage;
-                if(!ncm.getDest().equals("SEE")) {
                     game.addChatMessage(ncm);
-                    this.update(new ChatMessage(ncm.getSender() , ncm.getDest(), ncm.getText()));
-                }
-                else this.update(new ChatLogMessage(ncm.getSender(),game.getChatLog()));
-                this.update(ncm);
+                    this.update(ncm);
+                break;
+            case CHATLOG:
+                ChatLogMessage clm = (ChatLogMessage)receivedMessage;
+                this.update(new ChatLogMessage(clm.getSender(),game.getChatLog()));
                 break;
             default:
                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "Message type: " + receivedMessage.getType().toString() + " is not valid."));
@@ -459,7 +459,7 @@ public class Controller implements Observer {
 
     /**
      * This method checks if the board needs to be restored.
-     * @return {@code true} if it needs to be resotred, {@code false} otherwise.
+     * @return {@code true} if it needs to be restored, {@code false} otherwise.
      */
     private boolean boardNeedsRestore() {
         for(int i = 0; i < 9; i++){
@@ -967,7 +967,7 @@ public class Controller implements Observer {
                 networkView.showGenericError(boardErrorMessage.getSender(), boardErrorMessage.getPayload());
                 break;
             case CHAT:
-                networkView.showChat((ChatMessage)message);
+                networkView.showChat((ChatMessage) message);
                 break;
             case CHATLOG:
                 networkView.sendMessageTo(message);

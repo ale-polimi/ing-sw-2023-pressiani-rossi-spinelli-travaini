@@ -65,4 +65,9 @@ public interface ViewObserver {
      * @param text is the message text
      */
     void onChatMessage(String sender, String receiver, String text);
+
+    /**
+     * Method used to show the chat log
+     */
+    void onChatLogMessage();
 }
