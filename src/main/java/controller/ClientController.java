@@ -12,6 +12,7 @@ import observer.Observable;
 import observer.Observer;
 import observer.ViewObserver;
 import view.View;
+import view.cli.Colours;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -142,11 +143,13 @@ public class ClientController extends Observable implements ViewObserver, Observ
     @Override
     public void onRequestOthersLibrary() {
         view.showOthersLibrary(this.nickname, this.otherPlayersLibrary);
-        if(!inLibrary && inPickup){
-            view.askBoardMove();
-        } else {
-            view.askLibraryMove();
-        }
+       if(view.getMyTurn()) {
+           if (!inLibrary && inPickup) {
+               view.askBoardMove();
+           } else {
+               view.askLibraryMove();
+           }
+       }
     }
 
     @Override
@@ -155,17 +158,6 @@ public class ClientController extends Observable implements ViewObserver, Observ
             client.sendMessage(new ChatMessage(nickname,receiver,text));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
-        }
-        if(!receiver.equals("SEE")){
-            if(view.getMyTurn()){
-                if(!inLibrary && inPickup){
-                    view.askBoardMove();
-                } else {
-                    view.askLibraryMove();
-                }
-            }else{
-                view.askChat();
-            }
         }
     }
 
@@ -359,27 +351,45 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 break;
             case CHATLOG:
                 ChatLogMessage cm = (ChatLogMessage) message;
+                if(!cm.getSender().equals(nickname))return;
                for(ChatMessage c: cm.getChatlog()){
-                   if (c.getDest().equals("all")) {
-                       view.showChat(cm.getSender(), false, c.getText());
-                   } else if (c.getDest().equals(nickname)) {
-                       view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
-                   }else if(c.getSender().equals(nickname)){
-                       view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
-                   }
+                   chatHandling(c);
                }
-                if(view.getMyTurn()){
-                    if(!inLibrary && inPickup){
-                        view.askBoardMove();
-                    } else {
-                        view.askLibraryMove();
-                    }
-                }else{
-                    view.askChat();
-                }
+                checkTurn();
+                break;
+            case CHAT:
+                ChatMessage c = (ChatMessage) message;
+                chatHandling(c);
+                checkTurn();
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Show the chat message content to the player
+     * @param c is the chat message to handle
+     */
+    private void chatHandling(ChatMessage c) {
+        if (c.getDest().equals("all")) {
+            view.showChat(c.getSender(), false, c.getText());
+        } else if (c.getDest().equals(nickname)) {
+            view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
+        }else if(c.getSender().equals(nickname)){
+            view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
+        }
+    }
+
+    private void checkTurn(){
+        if(view.getMyTurn()){
+            if(!inLibrary && inPickup){
+                view.askBoardMove();
+            } else {
+                view.askLibraryMove();
+            }
+        }else{
+            view.askChat();
         }
     }
 
