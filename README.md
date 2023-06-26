@@ -56,6 +56,7 @@ I componenti del gioco sono stati testati singolarmente con JUnit e la copertura
 | Partite multiple               | :x:                |
 | Persistenza                    | :x:                |
 | Resilienza alle disconnessioni | :x:                |
+
 Legenda:
 - :white_check_mark: : implementata;
 - :yellow_circle: : in sviluppo;
@@ -189,6 +190,7 @@ The components of the game have been individually tested with Junit and the code
 | Multiple games           | :x:                |
 | Persistence              | :x:                |
 | Disconnection resilience | :x:                |
+
 Legend:
 - :white_check_mark: : implemented;
 - :yellow_circle: : work in progress;
