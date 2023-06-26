@@ -43,6 +43,9 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     private Label nickname3Label;
 
 
+    /**
+     *
+     */
     public ShowLibraryFourPSceneController(){
         stage = new Stage();
         stage.initOwner(SceneController.getActiveScene().getWindow());
@@ -52,6 +55,9 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
         yOffset = 0;
     }
 
+    /**
+     * initialises the scene
+     */
     @FXML
     public void initialize(){
         rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onRootPaneMousePressed);
@@ -62,43 +68,83 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
         System.out.println("init");
     }
 
+    /**
+     * sets the coordinates and allows to move the window on the screen
+     * @param event is the click of the user
+     */
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
     }
 
+    /**
+     * moves the window on the screen
+     * @param event is the click of the user
+     */
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
         stage.setY(event.getScreenY() + yOffset);
     }
 
+    /**
+     * closes the stage
+     * @param event is the click of the user
+     */
+
     private void onCloseButtonClick(MouseEvent event){
         stage.close();
     }
+
+    /**
+     * displays the popup window
+     */
 
     public void displayPopUp(){
         stage.showAndWait();
     }
 
+    /**
+     * sets the scene
+     * @param scene
+     */
     public void setScene(Scene scene){
         stage.setScene(scene);
     }
+
+    /**
+     * set the first other player nickname
+     * @param nicknames is the nickname player
+     */
     public void setNickname1(String nicknames){
         nickname1 = nicknames;
         System.out.println("setter");
         nickname1Label.setText(nickname1);
     }
+
+    /**
+     * set the second other player nickname
+     * @param nicknames is the nickname player
+     */
     public void setNickname2(String nicknames){
         nickname2 = nicknames;
         System.out.println("setter");
         nickname2Label.setText(nickname2);
     }
+
+    /**
+     * set the third other player nickname
+     * @param nicknames is the nickname
+     */
     public void setNickname3(String nicknames){
         nickname3 = nicknames;
         System.out.println("setter");
         nickname3Label.setText(nickname3);
     }
 
+    /**
+     * sets the other first player library
+     * @param playerLibrary is the library
+     */
     public void SetLibraryGrid1(Library playerLibrary){
         playerLibrary1 = playerLibrary;
         for (int x = 0; x < 6; x++) {
@@ -238,7 +284,10 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
 
     }
 
-
+    /**
+     * sets the other second player library
+     * @param playerLibrary is the library
+     */
     public void SetLibraryGrid2(Library playerLibrary){
         playerLibrary2 = playerLibrary;
         for (int x = 0; x < 6; x++) {
@@ -377,6 +426,11 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
         }
 
     }
+
+    /**
+     * sets the other third player library
+     * @param playerLibrary is the library
+     */
 
     public void SetLibraryGrid3(Library playerLibrary){
         playerLibrary3 = playerLibrary;

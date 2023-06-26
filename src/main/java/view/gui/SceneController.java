@@ -22,15 +22,29 @@ public class SceneController extends ViewObservable {
     private static GenericSceneController activeController;
 
 
+    /**
+     * @return the current scene
+     */
     public static Scene getActiveScene(){
         return activeScene;
     }
 
+    /**
+     * @return the current generic scene controller
+     */
     public static GenericSceneController getActiveController(){
         return activeController;
     }
 
 
+    /**
+     * when called change the scene
+     * @param observerList is the list of the observers
+     * @param scene is the scene that replace the current scene
+     * @param fxml
+     * @return the controller
+     * @param <P>
+     */
     public static <P> P changeRootPane(List<ViewObserver> observerList, Scene scene, String fxml){
       P controller = null;
 
@@ -49,16 +63,36 @@ public class SceneController extends ViewObservable {
       return controller;
     }
 
-
+    /**
+     * when called change the scene
+     * @param observerList is the list of the observers
+     * @param event is the event that caused the scene change
+     * @param fxml
+     * @return
+     * @param <P>
+     */
     public static <P> P changeRootPane(List<ViewObserver> observerList, Event event, String fxml){
         Scene scene = ((Node) event.getSource()).getScene();
         return changeRootPane(observerList,scene,fxml);
     }
 
+    /**
+     * when called change the scene
+     * @param observerList is the list of the observers
+     * @param
+     * @return
+     * @param <P>
+     */
     public static <P> P changeRootPane(List<ViewObserver> observerList, String fxml){
         return changeRootPane(observerList,activeScene,fxml);
     }
 
+    /**
+     * when called change the scene
+     * @param controller is the gui controller
+     * @param scene is the scene that replace the current scene
+     * @param fxml
+     */
 
     public static void changeRootPane(GenericSceneController controller, Scene scene, String fxml){
         try{
@@ -82,9 +116,21 @@ public class SceneController extends ViewObservable {
     }
 
 
+
+    /**
+     * when called change the scene
+     * @param controller is the gui controller
+     * @param fxml
+     */
+
     public static void changeRootPane(GenericSceneController controller, String fxml){
         changeRootPane(controller, activeScene,fxml);
     }
+
+    /**
+     * when called gives out a popup window
+     * @param scene is the scene that is showed by the popup window
+     */
 
     public static void showPopUP(String scene) {
         FXMLLoader loader = new FXMLLoader();
@@ -105,6 +151,11 @@ public class SceneController extends ViewObservable {
         popUpSceneController.displayPopUp();
     }
 
+    /**
+     * when there are 2 players, this shows the others players library
+     * @param scene is the scene that has to be displayed
+     * @param librariesOfPlayers are the libraries of the other players
+     */
     public static void showTwoLibraries(String scene, HashMap<String, Library> librariesOfPlayers) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(SceneController.class.getResource(scene));
@@ -132,6 +183,11 @@ public class SceneController extends ViewObservable {
         showLibraryTwoPSceneController.displayPopUp();
     }
 
+    /**
+     * when there are 3 players, this shows the others players library
+     * @param scene is the scene that has to be displayed
+     * @param librariesOfPlayers are the libraries of the other players
+     */
     public static void showThreeLibraries(String scene, HashMap<String, Library> librariesOfPlayers) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(SceneController.class.getResource(scene));
@@ -168,6 +224,11 @@ public class SceneController extends ViewObservable {
         showLibraryThreePSceneController.displayPopUp();
     }
 
+    /**
+     * when there are 4 players, this shows the others players library
+     * @param scene is the scene that has to be displayed
+     * @param librariesOfPlayers are the libraries of the other players
+     */
 
     public static void showFourLibraries(String scene, HashMap<String, Library> librariesOfPlayers) {
         FXMLLoader loader = new FXMLLoader();

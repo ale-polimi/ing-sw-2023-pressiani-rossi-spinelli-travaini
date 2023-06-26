@@ -21,6 +21,9 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
     private Label playerNumbersLabel;
 
 
+    /**
+     * initialises the scene
+     */
     public void initialize(){
         playersNicknameLabel.setText(String.join(", ", nicknames ));
         playerNumbersLabel.setText(String.valueOf(nicknames.size()));
@@ -28,12 +31,18 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
     }
 
 
+    /**
+     * sets the nicknames of the players
+     * @param nicknames is the list of the players' nickname
+     */
     public void setNicknames(ArrayList<String> nicknames) {
         this.nicknames =  nicknames;
     }
 
 
-
+    /**
+     * replace the number and the name
+     */
     public void updateValues(){
         playersNicknameLabel.setText(String.join(", ", this.nicknames));
         playerNumbersLabel.setText(String.valueOf((this.nicknames.size() )));
