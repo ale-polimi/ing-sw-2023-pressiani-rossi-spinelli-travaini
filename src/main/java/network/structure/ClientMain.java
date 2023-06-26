@@ -38,7 +38,7 @@ public class ClientMain {
             failedArgs = true;
         } else {
 
-            *//* Check for the first argument *//*
+            /* Check for the first argument */
             if (args[0].equals("-cli") || args[0].equals("-c")) {
                 isCli = true;
             } else if (args[0].equals("-gui") || args[0].equals("-g")) {
@@ -48,7 +48,7 @@ public class ClientMain {
                 failedArgs = true;
             }
 
-            *//* Check for the second argument *//*
+            /* Check for the second argument */
             if (args[1].equals("-socket") || args[1].equals("-s")) {
                 isSocket = true;
             } else if (args[1].equals("-rmi") || args[1].equals("-r")) {
@@ -61,7 +61,7 @@ public class ClientMain {
 
         if (!failedArgs) {
             if (isCli) {
-                Cli view = new Cli();
+                Cli view = new Cli(isSocket);
                 ClientController clientController = new ClientController(view, isSocket);
                 view.addObserver(clientController);
                 view.initCli();
