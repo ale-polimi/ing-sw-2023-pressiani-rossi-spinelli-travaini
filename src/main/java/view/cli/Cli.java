@@ -690,18 +690,9 @@ public class Cli extends ViewObservable implements View {
 
     @Override
     public void setMyTurn(boolean turn) {this.myTurn=turn;}
-    /*TODO Resolve the chat after exiting turn but arrive a new chat message*/
-    public void checkChat(boolean showTurn){
-        if(showTurn){askChat();}
-        else if (!chatAbilitator) {
-            System.out.println("" + Colours.BOLD + Colours.YELLOW + "Abilitating the chat service only for a message as you closed the service\n" + Colours.RESET);
-            chatAbilitator = true;
-            askChat();
-            chatAbilitator = false;
-        }
-    }
+    @Override
     public void askChat() {
-        if(myTurn||!chatAbilitator)return;
+        if(myTurn)return;
         boolean validInput;
         do{
             System.out.println(
@@ -726,7 +717,7 @@ public class Cli extends ViewObservable implements View {
                     }
                     case "SEE" -> {
                         validInput = true;
-                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "SEE", null));
+                        notifyObserver(viewObserver -> viewObserver.onChatLogMessage());
                     }
                     default -> {
                         out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
@@ -739,6 +730,12 @@ public class Cli extends ViewObservable implements View {
             }
         }while(!validInput);
     }
+
+    @Override
+    public boolean getChatAbilitator() {return chatAbilitator;}
+
+    @Override
+    public void setChatAbilitator(boolean value) {this.chatAbilitator = value;}
 
 
 }

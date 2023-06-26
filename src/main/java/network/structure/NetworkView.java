@@ -113,6 +113,16 @@ public class NetworkView implements View {
 
     }
 
+    @Override
+    public boolean getChatAbilitator() {
+       return false;
+    }
+
+    @Override
+    public void setChatAbilitator(boolean value) {
+
+    }
+
 
     public void showChat(ChatMessage message) {server.sendMessage(message);}
 }

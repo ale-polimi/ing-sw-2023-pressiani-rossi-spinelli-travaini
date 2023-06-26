@@ -255,7 +255,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
-                    view.askChat();
+                    if(view.getChatAbilitator())view.askChat();
                 }
                 break;
             case SHOW_COMMON_OBJECTIVE:
@@ -385,8 +385,14 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     } else if (!inLibrary && inPickup) {
                         view.askBoardMove();
                     }
-                }else if(c.getSender().equals(nickname)){
+                }else if(!view.getMyTurn() && c.getSender().equals(nickname)){
                     view.askChat();
+                }else if(!view.getMyTurn() && !c.getSender().equals(nickname)){
+                    if(!view.getChatAbilitator()){
+                            System.out.println("" + Colours.BOLD + Colours.YELLOW + "Abilitating the chat service only for a message as you closed the service\n" + Colours.RESET);
+                             view.askChat();
+                    }
+
                 }
                 break;
             default:

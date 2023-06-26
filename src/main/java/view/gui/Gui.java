@@ -241,6 +241,16 @@ public class Gui extends ViewObservable implements View {
 
     }
 
+    @Override
+    public boolean getChatAbilitator() {
+        return false;
+    }
+
+    @Override
+    public void setChatAbilitator(boolean value) {
+
+    }
+
 
     public void showChat(String sender, String receiver,String message) {
         //Empty because is used in the network view simulation
