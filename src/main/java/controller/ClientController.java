@@ -394,6 +394,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
      * Show the chat message content to the player
      * @param c is the chat message to handle
      */
+
     private void chatHandling(ChatMessage c) {
         if (c.getDest().equals("all")) {
             view.showChat(c.getSender(), false, c.getText());

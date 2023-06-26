@@ -896,6 +896,7 @@ public class Controller implements Observer {
      * Handles the events notified by the game
      * @param message is the message used to share information.
      */
+
     @Override
     public synchronized void update(Message message){
         switch(message.getType()){
