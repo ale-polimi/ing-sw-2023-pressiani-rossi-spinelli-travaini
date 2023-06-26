@@ -77,7 +77,8 @@ public class ClientMain {
 
         /* TODO - REMOVE THIS! ONLY FOR DEBUG */
         boolean isCli = true;
-        boolean isSocket = true;
+        boolean isSocket = false
+                ;
 
         if (isCli) {
             Cli view = new Cli(isSocket);
