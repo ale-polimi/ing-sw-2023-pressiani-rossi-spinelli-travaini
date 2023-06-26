@@ -6,6 +6,7 @@ import model.library.Library;
 import model.library.LibrarySpace;
 import model.objects.ObjectCard;
 import org.junit.*;
+import view.cli.Colours;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,6 +92,18 @@ public class DiagonalTest {
         }
 
         assertFalse(diagonal.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+                "  |" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+                "    |" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "     Five tiles of the same type forming a diagonal.\n" +
+                "      |" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+                "        |" + Colours.UNDERLINED + "■" + Colours.RESET + "|";
+
+        assertEquals(description, diagonal.getDescription());
     }
 
 }

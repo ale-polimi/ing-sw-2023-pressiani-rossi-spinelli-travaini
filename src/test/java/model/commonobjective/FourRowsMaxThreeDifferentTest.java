@@ -7,6 +7,7 @@ import model.objects.ObjectCard;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import view.cli.Colours;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class FourRowsMaxThreeDifferentTest{
@@ -132,5 +133,15 @@ public class FourRowsMaxThreeDifferentTest{
 
         assertFalse(fourRowsMaxThreeDifferent.applyObjectiveRules(testLibrary,x,y));
         System.out.println(fourRowsMaxThreeDifferent.getCountObj());
+    }
+
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Four lines each formed by 5 tiles of\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  maximum three different types. One\n" +
+                "    x4     line can show the same or a different\n" +
+                " Max 3 =   combination of another line.";
+
+        assertEquals(description, fourRowsMaxThreeDifferent.getDescription());
     }
 }

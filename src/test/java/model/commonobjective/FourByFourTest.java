@@ -7,6 +7,7 @@ import model.library.Library;
 import model.library.LibrarySpace;
 import model.objects.ObjectCard;
 import org.junit.*;
+import view.cli.Colours;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class FourByFourTest {
@@ -227,6 +228,15 @@ public class FourByFourTest {
         System.out.println(fourByFour.groupCount);
     }
 
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Four groups each containing at least\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  4 tiles of the same type (not necessarily\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  in the depicted shape).\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  The tiles of one group can be different\n" +
+                " x4  from those of another group.";
 
-
+        assertEquals(description, fourByFour.getDescription());
+    }
 }

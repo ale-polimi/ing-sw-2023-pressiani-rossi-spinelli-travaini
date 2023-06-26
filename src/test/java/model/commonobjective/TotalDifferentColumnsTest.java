@@ -3,6 +3,7 @@ package model.commonobjective;
 import model.library.*;
 import model.objects.ObjectCard;
 import org.junit.*;
+import view.cli.Colours;
 
 import static org.junit.Assert.*;
 
@@ -96,6 +97,20 @@ public class TotalDifferentColumnsTest  {
         testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(5,3));
 
         assertFalse(totalDifferentColumns.applyObjectiveRules(testLibrary, 0, 0));
+    }
+
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Two columns each formed by 6\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  different types of tiles.\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+                " x2";
+
+        assertEquals(description, totalDifferentColumns.getDescription());
     }
 
 }

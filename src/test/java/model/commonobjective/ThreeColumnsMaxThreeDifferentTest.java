@@ -10,9 +10,9 @@ import model.objects.ObjectCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import view.cli.Colours;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ThreeColumnsMaxThreeDifferentTest {
     ThreeColumnsMaxThreeDifferent  threeColumnsMaxThreeDifferent;
@@ -123,5 +123,20 @@ public class ThreeColumnsMaxThreeDifferentTest {
         int y = 0;
 
         assertFalse(threeColumnsMaxThreeDifferent.applyObjectiveRules(testLibrary,x,y));
+    }
+
+    @Test
+    public void getDescription(){
+        String description = "  " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+                " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+                " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     Three columns each formed by 6 tiles\n" +
+                " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     of maximum three different types. One\n" +
+                " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     column can show the same or a different\n" +
+                " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|     combination of another column\n" +
+                " |" + Colours.UNDERLINED + "■" + Colours.RESET + "|\n" +
+                "  x3\n" +
+                "Max 3 =";
+
+        assertEquals(description, threeColumnsMaxThreeDifferent.getDescription());
     }
 }

@@ -8,7 +8,9 @@ import model.objects.ObjectCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import view.cli.Colours;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -558,5 +560,15 @@ public class TwoByFourTest {
         int y = 0;
 
         assertFalse(twoByFour.applyObjectiveRules(testLibrary, x, y));
+    }
+
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Two groups each containing 4 tiles of\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  the same type in a 2x2 square. The tiles\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  of one square must be the same of\n" +
+                "  x2   those of the other square.";
+
+        assertEquals(description, twoByFour.getDescription());
     }
 }

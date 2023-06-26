@@ -7,6 +7,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import model.library.Library;
+import view.cli.Colours;
 
 public class TotalDifferentRowsTest {
     private TotalDifferentRows totalDifferentRows;
@@ -84,5 +85,15 @@ public class TotalDifferentRowsTest {
         testTotDiffRows.addObject(new ObjectCard("WHITE1"),testTotDiffRows.getLibrarySpace(2,4));
 
         assertFalse(totalDifferentRows.applyObjectiveRules(testTotDiffRows, 0, 0));
+    }
+
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + " " + Colours.UNDERLINED + " " + Colours.RESET + "   Two lines each formed by 5 different\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  types of tiles. One line can show the\n" +
+                "     x2      same or a different combination of the\n" +
+                "             other line.";
+
+        assertEquals(description, totalDifferentRows.getDescription());
     }
 }

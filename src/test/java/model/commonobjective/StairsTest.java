@@ -8,8 +8,10 @@ import model.objects.ObjectCard;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import view.cli.Colours;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class StairsTest {
@@ -132,5 +134,17 @@ public class StairsTest {
             }
         }
         assertFalse(stairs.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    @Test
+    public void getDescription(){
+        String description =" " + Colours.UNDERLINED + " " + Colours.RESET + "\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "         Five columns of increasing or decreasing\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "       height. Starting from the first column on\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "     the left or on the right, each next column\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "   must be made of exactly one more tile.\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET  + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  Tiles can be of any type.";
+
+        assertEquals(description, stairs.getDescription());
     }
 }

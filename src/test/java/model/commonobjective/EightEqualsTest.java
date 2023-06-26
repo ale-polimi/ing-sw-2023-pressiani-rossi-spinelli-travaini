@@ -4,6 +4,7 @@ import enumerations.ObjectColour;
 import model.library.Library;
 import model.objects.ObjectCard;
 import org.junit.*;
+import view.cli.Colours;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,6 +53,16 @@ public class EightEqualsTest {
         testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(1,1));
 
         assertFalse(eightEquals.applyObjectiveRules(testLibrary,0,0));
+    }
+
+    @Test
+    public void getDescription(){
+        String description = "   " + Colours.UNDERLINED + " " + Colours.RESET + "   "  + Colours.UNDERLINED + " " + Colours.RESET + " \n" +
+                " " + Colours.UNDERLINED + " " + Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " "+ Colours.RESET + "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|" + Colours.UNDERLINED + " " + Colours.RESET + "   Eight tiles of the same type. There’s no\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "| |" + Colours.UNDERLINED + "■" + Colours.RESET + "| |" + Colours.UNDERLINED + "■" + Colours.RESET + "|  restriction about the position of these\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "| |" + Colours.UNDERLINED + "■" + Colours.RESET + "| |" + Colours.UNDERLINED + "■" + Colours.RESET + "|  tiles.";
+
+        assertEquals(description, eightEquals.getDescription());
     }
 }
 

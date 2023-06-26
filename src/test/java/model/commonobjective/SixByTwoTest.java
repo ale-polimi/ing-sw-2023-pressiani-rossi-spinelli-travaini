@@ -9,9 +9,9 @@ import model.objects.ObjectCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import view.cli.Colours;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SixByTwoTest  {
 
@@ -174,5 +174,16 @@ public class SixByTwoTest  {
 
         assertFalse(sixByTwo.applyObjectiveRules(testLibrary,0,0));
         System.out.println(sixByTwo.groupCount);
+    }
+
+    @Test
+    public void getDescription(){
+        String description = " " + Colours.UNDERLINED + " " + Colours.RESET + "   Six groups each containing at least\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  2 tiles of the same type (not necessarily\n" +
+                "|" + Colours.UNDERLINED + "■" + Colours.RESET + "|  in the depicted shape).\n" +
+                " x6  The tiles of one group can be different\n" +
+                "     from those of another group.";
+
+        assertEquals(description, sixByTwo.getDescription());
     }
 }
