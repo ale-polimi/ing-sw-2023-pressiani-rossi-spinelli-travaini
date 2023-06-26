@@ -74,7 +74,7 @@ I jar compilati saranno disponibili nella cartella ```target/``` con i seguenti 
 
 Per avviare il server bisogna digitare in un terminale:
 ```
-java -jar myshelfie-server.jar [socket port](Opzionale) [RMI port](Opzionale)
+java -jar MyShelfie-server.jar [socket port](Opzionale) [RMI port](Opzionale)
 ```
 Se <b>entrambi</b> i valori non sono impostati, il server partirà con i valori di default:
 - 12345 per socket;
@@ -86,7 +86,7 @@ Si consiglia di non utilizzare porte già usate da altre applicazioni e di conse
 
 Per avviare il client bisogna digitare in un terminale:
 ```
-java -jar myshelfie-client.jar <UI> <Connessione>
+java -jar MyShelfie-client.jar <UI> <Connessione>
 ```
 Dove UI e Connessione sono parametri obbligatori.
 UI:
@@ -201,7 +201,7 @@ The packaged jars will be in the ```target/``` folder and are called ```MyShelfi
 
 To start a server run the following command in a terminal:
 ```
-java -jar myshelfie-server.jar [socket port](Optional) [RMI port](Optional)
+java -jar MyShelfie-server.jar [socket port](Optional) [RMI port](Optional)
 ```
 If <b>both</b> are not set the server will start using the default ports:
 - 12345 for socket;
@@ -213,7 +213,7 @@ Please be sure that the ports are not used by another application and are allowe
 
 To start a client run the following command in a terminal:
 ```
-java -jar myshelfie-client.jar <UI> <Connection>
+java -jar MyShelfie-client.jar <UI> <Connection>
 ```
 Where UI and Connection are both mandatory.
 UI:

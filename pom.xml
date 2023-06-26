@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
+  <groupId>it.polimi.ingsw</groupId>
   <artifactId>softeng-gc19</artifactId>
   <description>MyShelfie</description>
   <version>1.0-SNAPSHOT</version>
@@ -72,6 +72,7 @@
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -94,8 +95,8 @@
               </transformers>
               <filters>
                 <filter>
-                  <artifact>*:*</artifact>
                   <excludes>
+                  <artifact>*:*</artifact>
                     <exclude>module-info.class</exclude>
                   </excludes>
                 </filter>
