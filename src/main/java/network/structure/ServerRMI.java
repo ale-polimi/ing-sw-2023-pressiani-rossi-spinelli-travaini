@@ -8,15 +8,20 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class represents an instance for the RMI server.
+ */
 public class ServerRMI extends Observable implements Server,Runnable{
 
     private ArrayList<ClientHandler> clientsRMI;
     private ArrayList<Message> messages = new ArrayList<>();
     private final StartServerImpl startServer;
     private HashMap<String, Boolean> pingReceived=new HashMap<>();
+
     /**
-     * Custom constructor of ServerRMI class
-     * @throws RemoteException Threw when the server is unreachable
+     * Custom constructor for the RMI server.
+     * @param startServer is the server's main that starts this instance.
+     * @throws RemoteException is thrown when the server is not reachable.
      */
     public ServerRMI(StartServerImpl startServer) throws RemoteException {
         super();
@@ -24,10 +29,6 @@ public class ServerRMI extends Observable implements Server,Runnable{
         this.clientsRMI = new ArrayList<>();
     }
 
-    /**
-     * Add the client to the list of known clients
-     * @param clientHandler  the client handler that tries to connect to the server
-     */
     @Override
     public void registry(ClientHandler clientHandler) throws RemoteException {
         if(!clientsRMI.contains(clientHandler)){
@@ -37,19 +38,13 @@ public class ServerRMI extends Observable implements Server,Runnable{
         }
     }
 
-    /**
-     * when called, reads the message
-     * @param message is the message that has to be read
-     */
     @Override
      public void receiveMessage(Message message){
         if(!message.getType().equals(MessageType.PING))messages.add(message);
         else {pingReceived.replace(message.getSender(), true);}
     }
-    /**
-     * Send a message to the clients
-     * @param message The message that has to be forwarded
-     */
+
+
     @Override
     public void sendMessage(Message message){
         if(message.getType().equals(MessageType.SHOW_LOBBY)){
@@ -64,9 +59,8 @@ public class ServerRMI extends Observable implements Server,Runnable{
             }
         }
     }
-    /**
-     * End a game when a player disconnect from a game
-     */
+
+
     @Override
     public void disconnect(ClientHandler clientHandler) {
         clientsRMI.remove(clientHandler);
@@ -74,7 +68,7 @@ public class ServerRMI extends Observable implements Server,Runnable{
     }
 
     /**
-     * Disconnect all the players from the game
+     * This method disconnects all clients from this server.
      */
     public void disconnect(){
         for(ClientHandler c: clientsRMI){
@@ -86,10 +80,6 @@ public class ServerRMI extends Observable implements Server,Runnable{
         pingReceived = new HashMap<>();
     }
 
-    /**
-     * Check if a player is not connected anymore
-     * @throws RemoteException
-     */
     @Override
     public void ping() throws RemoteException {
         if(pingReceived.isEmpty())return;
@@ -99,9 +89,6 @@ public class ServerRMI extends Observable implements Server,Runnable{
         }
     }
 
-    /**
-     * Run method
-     */
     @Override
     public void run() {
         while(!Thread.interrupted()){
@@ -110,8 +97,8 @@ public class ServerRMI extends Observable implements Server,Runnable{
     }
 
     /**
-     * Getter method for the startServer parameter
-     * @return the start server instance
+     * Getter method for the startServer parameter.
+     * @return the start server instance.
      */
     public StartServerImpl getServer() {return startServer; }
 }

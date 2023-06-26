@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * This class represents an instance for the socket server.
+ */
 public class SocketServer implements Runnable, Server{
     private final StartServerImpl server;
     private final int port;
@@ -16,9 +19,9 @@ public class SocketServer implements Runnable, Server{
     ServerSocket serverSocket;
 
     /**
-     * Custom constructor of class SocketServer
-     * @param server The main server
-     * @param port The port where the message will be sent
+     * Custom constructor for the socket server.
+     * @param server is the main of the server.
+     * @param port is the port of the server.
      */
     public SocketServer(StartServerImpl server, int port){
         this.server = server;
@@ -28,10 +31,6 @@ public class SocketServer implements Runnable, Server{
         catch ( IOException e) {System.err.println("Server could not start!");}
     }
 
-
-    /**
-     * The run method that the server thread execute
-     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -48,26 +47,15 @@ public class SocketServer implements Runnable, Server{
         }
     }
 
-    /**
-     * Receive a message from the client and send it to the RMI server
-     * @param message the message that has to be dispatched
-     */
     @Override
    public void receiveMessage(Message message){
         if(message.getType().equals(MessageType.PING)) server.getServerRMI().receiveMessage(message);
         else server.receiveMessage(message);
     }
 
-    /**
-     * Send a message to the client
-     * @param message the message that has to be forwarded
-     */
     @Override
     public void sendMessage(Message message){for(SocketHandler s: clients)s.receivedMessage(message);}
 
-    /**
-     * Handles the disconnection request from the players
-     */
     @Override
     public void disconnect(ClientHandler clientHandler) {
         try {
@@ -79,6 +67,9 @@ public class SocketServer implements Runnable, Server{
        server.disconnect();
     }
 
+    /**
+     * This method disconnects all clients from this server.
+     */
     public void disconnect(){
         for(ClientHandler c: clients){
             try {
@@ -96,11 +87,7 @@ public class SocketServer implements Runnable, Server{
             if(!c.isConnected())disconnect(c);
         }
     }
-    /**
-     * Register a new client to the server
-     * @param clientHandler the clientHandler of the client that tries to connect to the server
-     * @throws RemoteException Threw when the server is unreachable
-     */
+
     @Override
     public void registry(ClientHandler clientHandler) throws RemoteException {
         if(!clients.contains((SocketHandler) clientHandler)){
@@ -109,5 +96,9 @@ public class SocketServer implements Runnable, Server{
         }
     }
 
+    /**
+     * Getter method for the startServer parameter.
+     * @return the start server instance.
+     */
     public StartServerImpl getServer() {return server;}
 }

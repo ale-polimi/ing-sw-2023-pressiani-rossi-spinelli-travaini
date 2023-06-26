@@ -9,6 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * This class represents a handler for the socket connection.
+ */
 public class SocketHandler implements Runnable,ClientHandler {
 
     private final SocketServer socketServer;
@@ -30,9 +33,6 @@ public class SocketHandler implements Runnable,ClientHandler {
         }catch(IOException e){System.err.println("Cannot connect to the socket streams");}
     }
 
-    /**
-     * Run method of the SocketHandler class
-     */
     @Override
     public void run() {
         try{clientCommunication();}
@@ -43,7 +43,7 @@ public class SocketHandler implements Runnable,ClientHandler {
     }
 
     /**
-     * Handle the communication with the server
+     * This method handles the communication with the server.
      * @throws IOException when there is a malfunction with the socket
      */
     private void clientCommunication() throws IOException {
@@ -57,10 +57,7 @@ public class SocketHandler implements Runnable,ClientHandler {
         }
         socket.close();
     }
-    /**
-     * Check that a client is still connected
-     * @return true if the client is reachable, false otherwise
-     */
+
     @Override
     public boolean isConnected() {
         try {
@@ -71,10 +68,6 @@ public class SocketHandler implements Runnable,ClientHandler {
         return true;
     }
 
-
-    /**
-     * close the connection
-     */
     @Override
     public void disconnect() {
         //socketServer.disconnect(this);
@@ -82,10 +75,6 @@ public class SocketHandler implements Runnable,ClientHandler {
         catch(IOException e){System.err.println("Cannot close the socket");}
     }
 
-    /**
-     * Forward a message to the client
-     * @param message The message that has to be forwarded
-     */
     @Override
     public void receivedMessage(Message message) {
         try{

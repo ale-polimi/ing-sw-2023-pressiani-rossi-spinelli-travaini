@@ -6,22 +6,26 @@ import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Interface used for the server to represent a client.
+ */
 public interface ClientHandler extends Remote,Serializable{
+
     /**
-     * check the connection between client and server
-     * @return true if the connection is up
+     * This method checks the connection between the client and the server.
+     * @return {@code true} if the connection is alive, {@code false} otherwise.
      */
     boolean isConnected()throws RemoteException;
 
     /**
-     * disconnect the client from a server
+     * This method disconnects the client.
      */
     void disconnect()throws RemoteException;
 
     /**
-     * when called, it reads the message in input
-     * @param message is the message that has to be read
-     * @throws RemoteException if it is not possible to communicate with the client
+     * This method receives a message from the network.
+     * @param message is the received message.
+     * @throws RemoteException if the server is not reachable.
      */
     void receivedMessage(Message message)throws RemoteException;
 }

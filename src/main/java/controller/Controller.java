@@ -63,11 +63,7 @@ public class Controller implements Observer {
         networkView = new NetworkView(server);
         game.setGameState(LOGIN);
 
-        /* TODO - Packaged app can't read this! */
-        //byte[] jsonData = Files.readAllBytes(Paths.get("src/main/resources/json/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
-        //personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
-
         Reader reader;
         reader = new InputStreamReader(Objects.requireNonNull(StartServerImpl.class.getResourceAsStream("/json/personalObjectives.json")));
         personalObjectives = objectMapper.readValue(reader,HashMap.class);
@@ -99,7 +95,6 @@ public class Controller implements Observer {
         /* TODO - Debug print */
         System.out.println("Ricevuto messaggio da: " + receivedMessage.getSender() + " Di tipo: " + receivedMessage.getType().toString());
         switch (receivedMessage.getType()) {
-            /* TODO - Controllo se il client che manda (message.getsender) è il giocatore che deve giocare (game.getcurrentplayer) */
             case MAX_PLAYERS_FOR_GAME:
                 MaxPlayersMessage maxPlayersMessage = (MaxPlayersMessage) receivedMessage;
                 if (game.getGameState().equals(LOGIN)) {
@@ -769,7 +764,6 @@ public class Controller implements Observer {
      */
     private void pickObjectFromBoard(int coordX, int coordY) throws SpaceSurroundedException, EmptySpaceException, IncompatibleStateException{
         if(game.getPlayerInTurn().getPlayerState().equals(PICKUP)) {
-            /* TODO - CORRECT THIS !!!!! */
 
             /* TODO - Debug print */
             String debugPrint;
@@ -927,14 +921,12 @@ public class Controller implements Observer {
 
                 sendOtherPlayersLibrary(game);
 
-                /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case GENERIC_MODEL_CHANGE:
                 networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
 
                 sendOtherPlayersLibrary(game);
 
-                /* TODO - Send the view update to the game.getPlayerInTurn() user */
                 break;
             case END_TURN:
                 networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());

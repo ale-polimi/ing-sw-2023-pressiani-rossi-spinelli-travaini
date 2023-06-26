@@ -42,7 +42,7 @@ public class StartServerImpl implements Observer, Runnable {
     }
 
     /**
-     * This method returns the host LAN address. It filters the virtual NICs for VirtualBox users, others may vary.
+     * This method returns the host LAN address. It filters out the virtual NICs for VirtualBox users, others may vary.
      * @return the IPv4 LAN address of the machine.
      * @throws UnknownHostException if it fails to find a valid IP address.
      */

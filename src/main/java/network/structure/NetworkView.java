@@ -113,6 +113,5 @@ public class NetworkView implements View {
 
     }
 
-
     public void showChat(ChatMessage message) {server.sendMessage(message);}
 }

@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
 
@@ -35,9 +36,9 @@ public class ClientSocket extends Observable implements Client {
 
 
     /**
-     * constructor for a socket client
-     * @param address is the address of the client
-     * @param port is he connection port
+     * Default constructor for the socket client with the connection to the server.
+     * @param address is the IP of the server.
+     * @param port is the port for the connection.
      */
     public ClientSocket(String address, int port){
         System.out.println("Entrato in client");
@@ -48,11 +49,7 @@ public class ClientSocket extends Observable implements Client {
         receivedMessage();
     }
 
-    /**
-     * method for the connection socket with the server
-     * @throws IOException when the server is unreachable
-     */
-
+    @Override
     public void connection() throws IOException {
 
        try {
@@ -71,10 +68,6 @@ public class ClientSocket extends Observable implements Client {
 
     }
 
-    /**
-     * Forwards the message in input
-     * @param message is the message to send
-     */
     @Override
     public void sendMessage(Message message) {
         try {
@@ -94,7 +87,7 @@ public class ClientSocket extends Observable implements Client {
     }
 
     /**
-     * when called, it reads the message
+     * This method receives a message from the network.
      */
     public void receivedMessage() {
         executor.execute(()->{
@@ -119,10 +112,7 @@ public class ClientSocket extends Observable implements Client {
     }
 
 
-    /**
-     * close the connection between the client and the server
-     * @throws IOException if the connection is already close
-     */
+    @Override
     public void closeConnection() throws IOException {
         if (!socket.isClosed()){
             socket.close();
@@ -133,12 +123,10 @@ public class ClientSocket extends Observable implements Client {
         notifyObserver(new ServerDisconnectedMessage());
     }
 
-
     @Override
     public boolean isConnected() {
         return getConnected;
     }
-
 
     @Override
     public void disconnect() {
@@ -155,10 +143,7 @@ public class ClientSocket extends Observable implements Client {
     public void receivedMessage(Message message) {
         //Voluntarily leaved empty
     }
-
-    /**
-     * check the presence of problems in the connection between client and server
-     */
+    
     @Override
     public void ping() {timer.scheduleAtFixedRate(() -> sendMessage(new PingMessage(nickname, MessageType.PING)), 0, 5000, TimeUnit.MILLISECONDS);}
 }

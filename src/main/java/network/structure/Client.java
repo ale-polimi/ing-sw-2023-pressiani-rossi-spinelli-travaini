@@ -7,42 +7,52 @@ import java.rmi.RemoteException;
 
 
 /**
- * this interface represents a generic client
+ * This interface represents a generic client.
  */
 
 public interface Client extends Remote{
 
     /**
-     * makes the connection between client and server
-     * @throws IOException when the server is unreachable
+     * This method makes the connection between client and server.
+     * @throws IOException when the server is unreachable.
      */
     void connection() throws IOException;
 
     /**
-     * closes the connection between client and server
-     * @throws IOException when the connection is already closed
+     * This method closes the connection between a client and a server.
+     * @throws IOException when the connection is already closed.
      */
     void closeConnection() throws IOException;
 
     /**
-     * forwards a message
-     * @param message is the sending message
+     * This method sends a {@link Message message} on the network.
+     * @param message is the message to send.
+     * @throws RemoteException when the server is not reachable.
      */
     void sendMessage(Message message)throws RemoteException;
 
+    /**
+     * This method receives a message from the network.
+     * @param message is the received message.
+     * @throws RemoteException if the server is not reachable.
+     */
     void receivedMessage(Message message)throws RemoteException;
 
     /**
-     * check the presence of problems in the connection between client and server
+     * This method pings the server. It's used to constantly check the status of the connection.
+     * @throws RemoteException if the server is not reachable.
      */
     void ping() throws RemoteException;
+
     /**
-     * is a boolean method that checks the connection
-     * @return the state of the connection
+     * This method shows if the connection is still alive.
+     * @return {@code true} if the connection is alive, {@code false} otherwise.
+     * @throws RemoteException if the server is not reachable.
      */
-    boolean isConnected()throws RemoteException;
+    boolean isConnected() throws RemoteException;
+
     /**
-     * Disconnect the client
+     * This method disconnects the client.
      */
     void disconnect() throws RemoteException;
 

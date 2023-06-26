@@ -60,7 +60,7 @@ public class Game extends Observable implements Observer {
                 commonObjectivesPoints.put(commonObjective, new ArrayList<>(Arrays.asList(8,6,4,2)));
                 break;
             default:
-                /* TODO - ECCEZIONE */
+                ;
         }
     }
 

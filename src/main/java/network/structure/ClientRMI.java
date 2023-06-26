@@ -32,10 +32,11 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
     private final ArrayList<Message> messages =new ArrayList<>();
     transient ScheduledExecutorService timer;
     /**
-     * is the constructor with the connection with the server
-     *
-     * @param address         is the IP client
-     * @param port            is the port where the connection is
+     * Default constructor for the RMI client with the connection to the server.
+     * @param address is the IP of the server.
+     * @param port is the port for the connection.
+     * @param clientController is the controller for the client.
+     * @throws RemoteException when the server is not reachable.
      */
     public ClientRMI(String address, int port, ClientController clientController) throws RemoteException {
         try {
@@ -48,10 +49,6 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         //clientController.addObserver(this);
     }
 
-    /**
-     *  Connection with the server
-     *  @throws RemoteException when the registry is not found
-     */
     @Override
     public void connection() throws RemoteException {
         try {
@@ -69,21 +66,12 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         }
     }
 
-
-    /**
-     * Close connection with the server
-     * @throws RemoteException when the client is already disconnected
-     */
     @Override
     public void closeConnection() throws RemoteException {
         server.disconnect(this);
         disconnect();
     }
 
-    /**
-     * Forwards a message
-     * @param message is the message to forward
-     */
     @Override
     public void sendMessage(Message message) {
         if(message.getType().equals(MessageType.USER_INFO))nickname = message.getSender();
@@ -93,42 +81,30 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         }
     }
 
-
-    /**
-     * Handles the reception of a message from the server
-     * @param message is the received message
-     */
+    @Override
     public void receivedMessage(Message message)throws RemoteException{
         if(!message.getType().equals(MessageType.PING)) messages.add(message);
     }
 
     /**
-     * method for register a client to a game
-     * @param server is the server which the client connects to for starting the game
-     * @throws RemoteException if the connection is not possible
+     * This method registers an RMI client to a server.
+     * @param server is the server that this client is connected to.
+     * @throws RemoteException if the server is not reachable.
      */
-
     private void initialize(Server server) throws RemoteException {
         try {
             server.registry( (ClientHandler) UnicastRemoteObject.exportObject(this,0));
         } catch (RemoteException e) {
             e.printStackTrace();
-            System.err.println("connection unable");
+            System.err.println("Unable to connect!");
             getConnected = false;
             System.exit(1);
         }
     }
 
-    /**
-     * Getter for isConnected parameter
-     * @return getConnected instance
-     */
     @Override
     public boolean isConnected() {return getConnected;}
 
-    /**
-     * Disconnect the RMI client
-     */
     @Override
     public void disconnect() {
        getConnected = false;
@@ -139,9 +115,6 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         }
     }
 
-    /**
-     * check the presence of problems in the connection between client and server
-     */
     @Override
     public void ping() {
         timer.scheduleAtFixedRate(() -> {
@@ -149,9 +122,6 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
         }, 0, 5000, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * Run method
-     */
     @Override
     public void run() {
         while(!Thread.interrupted()) {
