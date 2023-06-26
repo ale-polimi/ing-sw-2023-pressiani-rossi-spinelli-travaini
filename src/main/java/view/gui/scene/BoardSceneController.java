@@ -449,11 +449,13 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                         Button b = (Button) node;
                         if(gameBoard!= null && gameBoard.getSpace(x, y).getObject() != null) {
                             b.setStyle(null);
+                            b.setVisible(true);
                             switch (gameBoard.getSpace(x, y).getObject().getObjectColour()) {
                                 case GREEN1 -> {
                                     BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/GREEN1XS.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
                                     Background background = new Background(backgroundImage);
                                     b.setBackground(background);
+
 
 
                                 }
@@ -579,6 +581,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                             }
                         }else{
                             b.setStyle("-fx-background-color: transparent");
+                            b.setVisible(false);
                         }
 
                     }
@@ -714,10 +717,12 @@ public class BoardSceneController extends ViewObservable implements GenericScene
                                     }
                                     case EMPTY -> {
                                         b.setStyle("-fx-background-color: transparent");
+
                                     }
                                 }
                             }else{
                                 b.setStyle("-fx-background-color: transparent");
+
                             }
 
                         }
@@ -867,7 +872,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         if(boardGrid != null) {
             for (Node node : boardGrid.getChildren()) {
                 Button b = (Button) node;
-                b.setDisable(false);
+                if(b.isVisible()) {
+                    b.setDisable(false);
+                }
 
             }
         }
@@ -876,7 +883,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         if(libraryGrid != null) {
             for (Node node : libraryGrid.getChildren()) {
                 Button b = (Button) node;
-                b.setDisable(false);
+                    b.setDisable(false);
 
             }
         }
