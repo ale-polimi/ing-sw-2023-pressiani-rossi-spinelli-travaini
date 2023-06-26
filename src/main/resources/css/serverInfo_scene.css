@@ -25,9 +25,11 @@
 
     -fx-text-fill: black;
     -fx-font-family: 'Rancho';
+    -fx-font-size: 36px;
 }
 .nickname{
     -fx-text-fill: black;
     -fx-font-family: 'Rancho';
     -fx-font-size: 36px;
+
 }
