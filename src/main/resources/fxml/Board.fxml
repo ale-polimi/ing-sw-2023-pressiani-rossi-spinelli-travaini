@@ -34,6 +34,9 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -46,7 +49,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="977.0" prefWidth="1519.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="confirmButton" layoutX="1043.0" layoutY="507.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="200.0" styleClass="confButton">
+            <Button fx:id="confirmButton" layoutX="1043.0" layoutY="391.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="200.0" styleClass="confButton">
                <graphic>
                   <ImageView fitHeight="75.0" fitWidth="234.0">
                      <image>
@@ -594,11 +597,11 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="personalObjButton" layoutX="681.0" layoutY="207.0" mnemonicParsing="false" prefHeight="307.0" prefWidth="202.0" styleClass="objButton">
+            <Button fx:id="personalObjButton" layoutX="681.0" layoutY="153.0" mnemonicParsing="false" prefHeight="307.0" prefWidth="202.0" styleClass="objButton">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="librariesButton" layoutX="1043.0" layoutY="405.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" styleClass="confButton">
+            <Button fx:id="librariesButton" layoutX="647.0" layoutY="475.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" styleClass="confButton">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -610,6 +613,25 @@
                   </ImageView>
                </graphic>
             </Button>
+            <TextField fx:id="chatMsg" layoutX="1021.0" layoutY="636.0" prefHeight="50.0" prefWidth="311.0" styleClass="label" />
+            <Button fx:id="sendButton" layoutX="1091.0" layoutY="695.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="156.0" styleClass="confButton">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="156.0">
+                     <image>
+                        <Image url="@../images/send_Button.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ScrollPane layoutX="1021.0" layoutY="487.0" prefHeight="142.0" prefWidth="311.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="142.0" prefWidth="311.0">
+                     <children>
+                        <TextArea fx:id="chatBox" prefHeight="142.0" prefWidth="311.0" styleClass="label" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
       </children>
          <cursor>
             <Cursor fx:constant="DEFAULT" />

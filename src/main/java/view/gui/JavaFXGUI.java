@@ -1,29 +1,24 @@
 package view.gui;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import controller.ClientController;
 import view.gui.scene.StartSceneController;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class JavaFXGUI extends Application {
+
+    public static boolean isSocket;
     @Override
     public void start(Stage stage) throws IOException {
 
+
         Gui view = new Gui();
-        ClientController clientController = new ClientController(view, true);
+        System.out.println(isSocket);
+        ClientController clientController = new ClientController(view, isSocket);
         view.addObserver(clientController);
 
         FXMLLoader loader = new FXMLLoader();
@@ -53,7 +48,15 @@ public class JavaFXGUI extends Application {
     }
 
     public static void main(String[] args) {
+        System.out.println(args[1]);
         launch(args);
 
+
+
+
+    }
+
+    public static void setIsSocket(boolean isSocketcontroller){
+        isSocket = isSocketcontroller;
     }
 }

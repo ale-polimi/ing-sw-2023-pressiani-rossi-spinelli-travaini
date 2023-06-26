@@ -6,6 +6,8 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -19,6 +21,7 @@ import view.gui.Gui;
 import view.gui.SceneController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class BoardSceneController extends ViewObservable implements GenericSceneController {
@@ -28,7 +31,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     @FXML
     private GridPane objInHandGrid;
     @FXML
-    private Button boardButton00;
+    private Button sendButton;
     @FXML
     private GridPane libraryGrid;
     @FXML
@@ -41,6 +44,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private Button commonObj2Button;
     @FXML
     private Button personalObjButton;
+    @FXML
+    private TextField chatMsg;
+    @FXML
+    private TextArea chatBox;
     private Board gameBoard1;
     private Library playerLibrary1;
     private ArrayList<ObjectCard>playerObjInHand1;
@@ -50,6 +57,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private CommonObjective commonObjective11;
     private CommonObjective commonObjective21;
     private PersonalObjective personalObjective1;
+    private String myPlayer;
+    private String chatLog ;
 
     private int objInHand = 0;
     private boolean boardFirstTurn = false;
@@ -71,6 +80,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             b.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onObjInHandClick);
         }
         confirmButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConfirmButtonClick);
+        sendButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onSendButtonClick);
         librariesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onShowLibrariesClick);
         commonObj1Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
         commonObj2Button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCommonObjClick);
@@ -846,6 +856,46 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
         }
 
+    }
+
+
+    private void onSendButtonClick(MouseEvent event){
+        String message = chatMsg.getText();
+        String messageToSend = null;
+        System.out.println(message.split("_").length);
+        if( message.split("_").length > 1) {
+            messageToSend = message.split("_")[1];
+
+        }
+        String messageToSend1 = messageToSend;
+        if(message.split("_")[0].equals("all")|| message.split("_").length ==1){
+            if( message.split("_").length == 1){
+               String messageToSend2 = message.split("_")[0];
+                new Thread(() -> notifyObserver(obs -> obs.onChatMessage(myPlayer, "all", messageToSend2))).start();
+            }else {
+                new Thread(() -> notifyObserver(obs -> obs.onChatMessage(myPlayer, "all", messageToSend1))).start();
+            }
+        }else {
+            String receiver = message.split("_")[0];
+            System.out.println(receiver);
+            new Thread(() -> notifyObserver(obs -> obs.onChatMessage(myPlayer,receiver,messageToSend1))).start();
+        }
+    }
+
+   public void updateChat(String sender, String message){
+        if(sender==myPlayer){
+          String  temp = chatLog +"\n"+ "        "+message;
+          chatLog = temp;
+        }else{
+            String temp = chatLog +"\n"+sender+":  "+message;
+            chatLog = temp;
+        }
+
+        chatBox.setText(chatLog);
+    }
+
+    public void savePlayer(String player){
+        myPlayer = player;
     }
 
     public void resetErrorValues(){
