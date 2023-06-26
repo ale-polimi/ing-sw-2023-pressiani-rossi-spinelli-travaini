@@ -59,12 +59,12 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Text layoutX="559.0" layoutY="544.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Number of Players">
+            <Text layoutX="421.0" layoutY="544.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Number of Players">
                <font>
                   <Font size="48.0" />
                </font>
             </Text>
-            <Label fx:id="playerNumbersLabel" layoutX="907.0" layoutY="493.0" prefHeight="51.0" prefWidth="86.0" text="0" textAlignment="CENTER">
+            <Label fx:id="playerNumbersLabel" layoutX="921.0" layoutY="493.0" prefHeight="51.0" prefWidth="86.0" text="0" textAlignment="CENTER">
                <font>
                   <Font size="48.0" />
                </font>
