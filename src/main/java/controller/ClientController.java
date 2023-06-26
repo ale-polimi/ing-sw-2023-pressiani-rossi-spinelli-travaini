@@ -192,11 +192,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     public static boolean isPortValid(String portString){
         try{
             int port = Integer.parseInt(portString);
-            if(port >= 1 && port <= 65535) {
-                return true;
-            } else {
-                return false;
-            }
+            return port >= 1 && port <= 65535;
         } catch (NumberFormatException e){
             return false;
         }
@@ -214,7 +210,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     }
 
     @Override
-    public void update(Message message) {
+    public synchronized void update(Message message) {
         switch (message.getType()){
             case SHOW_LOBBY:
                 inLobby = true;
@@ -235,21 +231,18 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 if(sender.equals(nickname)) {
                     view.setMyTurn(true);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                    switch (type){
-                        case "END_TURN":
-                            this.playerLibrary = turnMessage.getPlayerLibrary();
-                            this.completedCommonObjectives = turnMessage.getCompletedCommonObjectives();
-                            view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives);
-                            break;
-                        default:
-                            if (inLibrary && !inPickup) {
-                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
-                                view.askLibraryMove();
-                            } else if (!inLibrary && inPickup) {
-                                view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
-                                view.askBoardMove();
-                            }
-                            break;
+                    if (type.equals("END_TURN")) {
+                        this.playerLibrary = turnMessage.getPlayerLibrary();
+                        this.completedCommonObjectives = turnMessage.getCompletedCommonObjectives();
+                        view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives);
+                    } else {
+                        if (inLibrary && !inPickup) {
+                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
+                            view.askLibraryMove();
+                        } else if (!inLibrary && inPickup) {
+                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
+                            view.askBoardMove();
+                        }
                     }
                 } else {
                     view.setMyTurn(false);
@@ -263,8 +256,6 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     ShowCommonObjectiveMessage commonObjectiveMessage = (ShowCommonObjectiveMessage) message;
                     this.commonObjective1 = commonObjectiveMessage.getCommonObjective1();
                     this.commonObjective2 = commonObjectiveMessage.getCommonObjective2();
-
-                     //view.showCommonObjectives(commonObjectiveMessage.getSender(), commonObjectiveMessage.getCommonObjective1(), commonObjectiveMessage.getCommonObjective2(), completedCommonObjectives);
 
                 } else {
                     System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
@@ -392,7 +383,6 @@ public class ClientController extends Observable implements ViewObserver, Observ
                             System.out.println("" + Colours.BOLD + Colours.YELLOW + "Abilitating the chat service only for a message as you closed the service\n" + Colours.RESET);
                              view.askChat();
                     }
-
                 }
                 break;
             default:
@@ -408,9 +398,9 @@ public class ClientController extends Observable implements ViewObserver, Observ
         if (c.getDest().equals("all")) {
             view.showChat(c.getSender(), false, c.getText());
         } else if (c.getDest().equals(nickname)) {
-            view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
-        }else if(c.getSender().equals(nickname)){
             view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
+        }else if(c.getSender().equals(nickname)){
+            view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
         }
     }
 

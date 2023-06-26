@@ -91,7 +91,7 @@ public class Controller implements Observer {
      * Main method for the controller that will manage the course of the game.
      * @param receivedMessage is the message received from the "client".
      */
-    public void onMessageReceived(Message receivedMessage) {
+    public synchronized void onMessageReceived(Message receivedMessage) {
         /* TODO - Debug print */
         System.out.println("Ricevuto messaggio da: " + receivedMessage.getSender() + " Di tipo: " + receivedMessage.getType().toString());
         switch (receivedMessage.getType()) {
@@ -897,7 +897,7 @@ public class Controller implements Observer {
      * @param message is the message used to share information.
      */
     @Override
-    public void update(Message message){
+    public synchronized void update(Message message){
         switch(message.getType()){
             case ADDED_PLAYER:
                 if(game.getPlayers().size() == 1) {
