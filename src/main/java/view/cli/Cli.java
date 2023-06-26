@@ -254,7 +254,7 @@ public class Cli extends ViewObservable implements View {
               }
               validInput = true;;
             } else if (coordinates.equals("SEE")) {
-                notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"SEE",null));
+                notifyObserver(viewObserver -> viewObserver.onChatLogMessage());
                 validInput = true;
             }
             else if(ClientController.isInputValid(coordinates)){
@@ -281,7 +281,6 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void askLibraryMove() {
         chatAbilitator = true;
-        myTurn = true;
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
@@ -318,7 +317,7 @@ public class Cli extends ViewObservable implements View {
                 }
                 validInput = true;;
             } else if (orderAndColumn.equals("SEE")) {
-                notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"SEE",null));
+                notifyObserver(viewObserver -> viewObserver.onChatLogMessage());
                 validInput = true;
             } else if(ClientController.isInputValid(orderAndColumn)){
 
@@ -351,14 +350,10 @@ public class Cli extends ViewObservable implements View {
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
-       // if(myTurn)chatAbilitator = true;
-
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
         showBoard(rcvGameBoard);
         showObjInHand(rcvObjectsInHand);
         showLibrary(rcvPlayerLibrary);
-
-        if(!myTurn){askChat();}
     }
 
     /**
