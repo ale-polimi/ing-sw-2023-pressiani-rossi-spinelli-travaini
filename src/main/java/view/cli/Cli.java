@@ -351,7 +351,7 @@ public class Cli extends ViewObservable implements View {
     public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
-        if(myTurn)chatAbilitator = true;
+       // if(myTurn)chatAbilitator = true;
 
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
         showBoard(rcvGameBoard);
@@ -573,12 +573,6 @@ public class Cli extends ViewObservable implements View {
         if(isPrivate){senderOut = "PRIVATE|"+ sender;}
         else{senderOut = sender;}
         out.println("" + Colours.BOLD + Colours.GREEN + senderOut + Colours.RESET+": "+message);
-        if(!chatAbilitator){
-            System.out.println(""+Colours.BOLD + Colours.YELLOW +"Abilitating the chat service only for a message as you closed the service\n"+Colours.RESET);
-            chatAbilitator = true;
-            askChat();
-            chatAbilitator = false;
-        }
     }
 
     /**
@@ -701,9 +695,18 @@ public class Cli extends ViewObservable implements View {
 
     @Override
     public void setMyTurn(boolean turn) {this.myTurn=turn;}
-
+    /*TODO Resolve the chat after exiting turn but arrive a new chat message*/
+    public void checkChat(boolean showTurn){
+        if(showTurn){askChat();}
+        else if (!chatAbilitator) {
+            System.out.println("" + Colours.BOLD + Colours.YELLOW + "Abilitating the chat service only for a message as you closed the service\n" + Colours.RESET);
+            chatAbilitator = true;
+            askChat();
+            chatAbilitator = false;
+        }
+    }
     public void askChat() {
-        if(!chatAbilitator || myTurn)return;
+        if(myTurn||!chatAbilitator)return;
         boolean validInput;
         do{
             System.out.println(

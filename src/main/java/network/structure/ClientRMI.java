@@ -1,5 +1,7 @@
 package network.structure;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -36,6 +38,11 @@ public class ClientRMI extends Observable implements Client,Runnable,ClientHandl
      * @param port            is the port where the connection is
      */
     public ClientRMI(String address, int port, ClientController clientController) throws RemoteException {
+        try {
+            System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
         this.address=address;
         this.port=port;
         //clientController.addObserver(this);

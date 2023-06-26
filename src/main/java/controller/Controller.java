@@ -445,9 +445,11 @@ public class Controller implements Observer {
                 break;
             case CHAT:
                 ChatMessage ncm = (ChatMessage) receivedMessage;
-                if(!ncm.getDest().equals("SEE"))game.addChatMessage(ncm);
+                if(!ncm.getDest().equals("SEE")) {
+                    game.addChatMessage(ncm);
+                    this.update(new ChatMessage(ncm.getSender() , ncm.getDest(), ncm.getText()));
+                }
                 else this.update(new ChatLogMessage(ncm.getSender(),game.getChatLog()));
-                //networkView.showChat(ncm.getSender(), ncm.getDest(), ncm.getText());
                 this.update(ncm);
                 break;
             default:
