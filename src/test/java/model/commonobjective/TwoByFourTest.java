@@ -30,7 +30,7 @@ public class TwoByFourTest {
      * Test to check if the objective correctly applies its rules.
      */
     @Test
-    public void isTwoByFour(){
+    public void isTwoByFourLB(){
         int x = 0;
         int y = 0;
 
@@ -61,11 +61,367 @@ public class TwoByFourTest {
 
 
     }
+
     /**
      * Test to check if the objective correctly applies its rules.
      */
     @Test
-    public void isTwoByFourOdd(){
+    public void isTwoByFourB(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 4; row < 6; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 4; row < 6; row++){
+            for(int col = 0; col < 2; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.BLUE3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountBlue());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+        System.out.println(twoByFour.getDescription());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourP(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 4; row < 6; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 4; row < 6; row++){
+            for(int col = 0; col < 2; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountBlue());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+        System.out.println(twoByFour.getDescription());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourG(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 4; row < 6; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.GREEN2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 4; row < 6; row++){
+            for(int col = 0; col < 2; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.GREEN3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountBlue());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+        System.out.println(twoByFour.getDescription());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourW(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 4; row < 6; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.WHITE2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 4; row < 6; row++){
+            for(int col = 0; col < 2; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.WHITE3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountBlue());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+        System.out.println(twoByFour.getDescription());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourY(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 4; row < 6; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 4; row < 6; row++){
+            for(int col = 0; col < 2; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.YELLOW3), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountBlue());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+        System.out.println(twoByFour.getDescription());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourOddB(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 3; row < 5; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.BLUE2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 1; row < 3; row++){
+            for(int col = 0; col < 2; col++){
+
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.BLUE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourOddP(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 3; row < 5; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 1; row < 3; row++){
+            for(int col = 0; col < 2; col++){
+
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.PINK1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourOddG(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 3; row < 5; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.GREEN2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 1; row < 3; row++){
+            for(int col = 0; col < 2; col++){
+
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.GREEN1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourOddW(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 3; row < 5; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.WHITE2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 1; row < 3; row++){
+            for(int col = 0; col < 2; col++){
+
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.WHITE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourOddLB(){
+        int x = 0;
+        int y = 0;
+
+        for(int row = 3; row < 5; row++){
+            for(int col = 3; col < 5; col++){
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE2), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+        for(int row = 1; row < 3; row++){
+            for(int col = 0; col < 2; col++){
+
+
+                testLibrary.addObject(new ObjectCard(ObjectColour.LIGHT_BLUE1), testLibrary.getLibrarySpace(row,col));
+
+            }
+        }
+
+
+        assertTrue(twoByFour.applyObjectiveRules(testLibrary,x,y));
+        System.out.println(twoByFour.getCountGreen());
+        System.out.println(twoByFour.getCountYellow());
+        System.out.println(twoByFour.getCountPink());
+        System.out.println(twoByFour.getCountLightBlue());
+        System.out.println(twoByFour.getCountWhite());
+
+
+    }
+
+    /**
+     * Test to check if the objective correctly applies its rules.
+     */
+    @Test
+    public void isTwoByFourOddY(){
         int x = 0;
         int y = 0;
 
@@ -95,6 +451,8 @@ public class TwoByFourTest {
 
 
     }
+
+
 
     /**
      * Test to check if the objective correctly applies its rules.
