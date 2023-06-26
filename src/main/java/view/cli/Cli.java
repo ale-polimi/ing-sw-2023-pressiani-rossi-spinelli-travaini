@@ -565,9 +565,9 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void showChat(String sender,boolean isPrivate, String message) {
         String senderOut;
-        if(isPrivate){senderOut = "PRIVATE|"+ sender;}
+        if(isPrivate){senderOut = "PRIVATE | " + sender;}
         else{senderOut = sender;}
-        out.println("" + Colours.BOLD + Colours.GREEN + senderOut + Colours.RESET+": "+message);
+        out.println("" + Colours.BOLD + Colours.GREEN + senderOut + Colours.RESET + ": " + message);
     }
 
     /**

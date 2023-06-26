@@ -105,7 +105,7 @@ Questo programma richiede una versione Java 19 o superiore per eseguire corretta
 
 Per l'interfaccia CLI:
 - Un terminale che supporti [256 colori (8-bit)](https://it.wikipedia.org/wiki/Codici_di_escape_ANSI)<sup>(<i>apre sito esterno</i>)</sup>;
-- :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), altrimenti non si vedono i colori nella CLI;
+- :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), altrimenti non verranno visualizzati i colori nel terminale;
 - :warning: Per mantenere la formattazione degli elementi di gioco, si consiglia di utilizzare un tipo di carattere monospazio come Courier New (Windows), Monospace (Linux) o Liberation Mono (Linux).
 
 Per l'interfaccia GUI:
@@ -232,7 +232,7 @@ Generally a system that runs Java 19+ applications.
 
 For CLI game:
  - A terminal that supports [8-bit (256) colours](https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit)<sup>(<i>opens external site</i>)</sup>;
- - :warning: If your computer runs Windows, please download and run as administrator [this batch script](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), otherwise the colours will not be printed on the terminal;
+ - :warning: If your computer runs Windows, please download and run as administrator [this batch script](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), otherwise the colours will not be displayed in the terminal;
  - :warning: In order to keep the correct proportions of the elements of the game, it's suggested to use a monospace font such as Courier New (Windows), Monospace (Linux) or Liberation Mono (Linux).
 
 For GUI game:
