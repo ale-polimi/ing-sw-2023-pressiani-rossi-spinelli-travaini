@@ -29,7 +29,8 @@ La maggior parte delle classi e dei metodi sono stati commentati e descritti seg
 
 ### JUnit testing
 
-I componenti del gioco sono stati testati singolarmente con JUnit e la copertura del codice è disponibile qui:
+I componenti del gioco sono stati testati singolarmente con JUnit e la copertura del codice è disponibile qui: [immagine di copertura da IntelliJ](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/junit-testing/JUnit_report.PNG), [report HTML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/junit-testing/htmlReport).<br>
+<i>Nota: al fine di testare il controller senza la necessità della rete, si è deciso di creare la classe ```OfflineControllerForTest.java```. Il codice per lo svolgimento del gioco è chiaramente il medesimo.</i>
 
 ### Librerie e plugin
 
@@ -155,7 +156,8 @@ The vast majority of the classes and methods of the application are commented an
 
 ### Junit testing
 
-The components of the game have been individually tested with Junit and the code coverage is available here:
+The components of the game have been individually tested with Junit and the code coverage is available here: [image of coverage within IntelliJ](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/junit-testing/JUnit_report.PNG), [HTML report](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/junit-testing/htmlReport).<br>
+<i>Note: the class ```OfflineControllerForTest.java``` was created in order to test the controller without the need for a server and connection. The rest of the code for the logic of the game has not been modified.</i> 
 
 ### Libraries and plugins
 
