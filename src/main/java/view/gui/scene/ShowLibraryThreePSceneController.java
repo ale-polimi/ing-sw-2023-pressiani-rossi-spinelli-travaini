@@ -36,7 +36,9 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     @FXML
     private Label nickname2Label;
 
-
+    /**
+     * show the other two libraries
+     */
     public ShowLibraryThreePSceneController(){
         stage = new Stage();
         stage.initOwner(SceneController.getActiveScene().getWindow());
@@ -46,6 +48,9 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
         yOffset = 0;
     }
 
+    /**
+     * initialises the scene
+     */
     @FXML
     public void initialize(){
         rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onRootPaneMousePressed);
@@ -56,37 +61,73 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
         System.out.println("init");
     }
 
+    /**
+     * sets the coordinates and allows to move the window on the screen
+     * @param event is the click of the user
+     */
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
     }
 
+    /**
+     * moves the window on the screen
+     * @param event is the click of the user
+     */
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
         stage.setY(event.getScreenY() + yOffset);
     }
 
+    /**
+     * closes the stage
+     * @param event is the click of the user
+     */
+
     private void onCloseButtonClick(MouseEvent event){
         stage.close();
     }
 
+    /**
+     * displays the popup window
+     */
     public void displayPopUp(){
         stage.showAndWait();
     }
 
+    /**
+     * sets the scene
+     * @param scene
+     */
     public void setScene(Scene scene){
         stage.setScene(scene);
     }
+
+    /**
+     * set the first other plyer nickname
+     * @param nicknames is the nickname
+     */
     public void setNickname1(String nicknames){
         nickname1 = nicknames;
         System.out.println("setter");
         nickname1Label.setText(nickname1);
     }
+
+    /**
+     * set the second other player nickname
+     * @param nicknames is the nickname
+     */
     public void setNickname2(String nicknames){
         nickname2 = nicknames;
         System.out.println("setter");
         nickname2Label.setText(nickname2);
     }
+
+
+    /**
+     * sets the first other player library
+     * @param playerLibrary is the library
+     */
 
     public void SetLibraryGrid1(Library playerLibrary){
         playerLibrary1 = playerLibrary;
@@ -228,6 +269,10 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     }
 
 
+    /**
+     * sets the second other player library
+     * @param playerLibrary is the library
+     */
     public void SetLibraryGrid2(Library playerLibrary){
         playerLibrary2 = playerLibrary;
         for (int x = 0; x < 6; x++) {

@@ -16,11 +16,18 @@ public class InsertNicknameSceneController extends ViewObservable implements Gen
     private Button submitButton;
 
 
+    /**
+     * initializes the scene
+     */
     public void initialize(){
         submitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onSubmitButtonClick);
     }
 
 
+    /**
+     * submit the player's nickname
+     * @param event is the click of the user
+     */
     private void onSubmitButtonClick(Event event){
         submitButton.setDisable(true);
 

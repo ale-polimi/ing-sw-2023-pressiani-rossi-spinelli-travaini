@@ -17,6 +17,9 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
     private Button fourPlayersButton;
 
 
+    /**
+     * initializes the scene
+     */
 
     public void initialize(){
         twoPlayersButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onTwoPlayersButtonClick);
@@ -25,6 +28,10 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
     }
 
+    /**
+     * sets the number of players, in this case 2
+     * @param event is the click of the user
+     */
     private void onTwoPlayersButtonClick(Event event){
         twoPlayersButton.setDisable(true);
         threePlayersButton.setDisable(true);
@@ -37,6 +44,10 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }
 
+    /**
+     * sets the number of players, in this case 3
+     * @param event is the click of the user
+     */
     private void onThreePlayersButtonClick(Event event){
         twoPlayersButton.setDisable(true);
         threePlayersButton.setDisable(true);
@@ -50,6 +61,10 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
         new Thread(() -> notifyObserver(obs -> obs.onMaxPlayers(players))).start();
     }
 
+    /**
+     * sets the number of players, in this case 4
+     * @param event is the click of the user
+     */
     private void onFourPlayersButtonClick(Event event){
         twoPlayersButton.setDisable(true);
         threePlayersButton.setDisable(true);

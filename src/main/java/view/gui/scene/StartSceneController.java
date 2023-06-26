@@ -33,6 +33,9 @@ public class StartSceneController extends ViewObservable implements GenericScene
     private ImageView exitImg;
 
 
+    /**
+     * initialises the scene
+     */
     @FXML
     public void initialize() {
       /*  Platform.runLater(() ->{
@@ -96,6 +99,10 @@ public class StartSceneController extends ViewObservable implements GenericScene
      */
 
 
+    /**
+     * start the game scene
+     * @param event is the click of the user
+     */
 
 
     private void onPlayButtonClick(Event event) {

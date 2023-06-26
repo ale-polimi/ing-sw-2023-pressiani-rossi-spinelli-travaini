@@ -30,6 +30,9 @@ public class PopUpSceneController implements GenericSceneController{
         yOffset = 0;
     }
 
+    /**
+     * initialises the scene
+     */
     @FXML
     public void initialize(){
         rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onRootPaneMousePressed);
@@ -37,23 +40,43 @@ public class PopUpSceneController implements GenericSceneController{
         confirmButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this:: onConfirmButtonClick);
     }
 
+    /**
+     * sets coordinates and allows to move the window in the screen
+     * @param event is the click of the user
+     */
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
     }
 
+    /**
+     * moves the windows
+     * @param event
+     */
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
         stage.setY(event.getScreenY() + yOffset);
     }
 
+    /**
+     * close the stage
+     * @param event is the click of the user
+     */
     private void onConfirmButtonClick(MouseEvent event){
         stage.close();
     }
 
+    /**
+     * shows the popup window
+     */
     public void displayPopUp(){
         stage.showAndWait();
     }
+
+    /**
+     * sets the scene
+     * @param scene
+     */
 
     public void setScene(Scene scene){
         stage.setScene(scene);

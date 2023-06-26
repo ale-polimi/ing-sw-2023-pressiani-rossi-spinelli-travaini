@@ -27,6 +27,9 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     private String third;
     private String fourth;
 
+    /**
+     * initilises the scene
+     */
     public void initialize(){
         closeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onCloseButtonClick);
         setWinner(winner);
@@ -35,6 +38,10 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
         setFourth(fourth);
     }
 
+    /**
+     * sets the winner
+     * @param winnerL is the winner
+     */
     public void setWinner(String winnerL){
         winner = winnerL;
         if (winnerLabel != null) {
@@ -42,18 +49,33 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
         }
 
     }
+
+    /**
+     * sets the second in the chart
+     * @param secondL
+     */
     public void setSecond(String secondL){
         second = secondL;
         if(secondLabel != null) {
             secondLabel.setText(second);
         }
     }
+
+    /**
+     * sets the third in the chart
+     * @param thirdL
+     */
     public void setThird(String thirdL){
         third = thirdL;
         if(thirdLabel!= null) {
             thirdLabel.setText(third);
         }
     }
+
+    /**
+     * sets the fourth in the chart
+     * @param fourthL
+     */
     public void setFourth(String fourthL){
         fourth = fourthL;
         if(fourthLabel != null) {
@@ -61,6 +83,10 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
         }
     }
 
+    /**
+     * close the window
+     * @param event is the click of the user
+     */
     private void onCloseButtonClick(MouseEvent event){
         System.exit(0);
     }

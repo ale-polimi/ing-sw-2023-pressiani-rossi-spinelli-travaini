@@ -63,6 +63,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private int objInHand = 0;
     private boolean boardFirstTurn = false;
 
+    /**
+     * this initializes first game window
+     */
     public void initialize(){
 
         for(Node node : boardGrid.getChildren()){
@@ -106,6 +109,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
     }
 
+    /**
+     * sets the image of the personal objectives
+     * @param personalObjective is the personal objective of the player
+     */
     public void setPersonalObjButton(PersonalObjective personalObjective){
         if(personalObjective != null){
             personalObjective1 = personalObjective;
@@ -165,6 +172,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
     }
 
+    /**
+     * sets the image of the first common objective
+     * @param commonObjective1 is the common objective
+     */
     public void setCommonObj1Button(CommonObjective commonObjective1){
        if( commonObjective1 != null){
         commonObjective11 = commonObjective1;
@@ -222,6 +233,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
 
     }
+
+    /**
+     * sets the image of the second common objective
+     * @param commonObjective2 is the common objective
+     */
     public void setCommonObj2Button(CommonObjective commonObjective2){
         commonObjective21 = commonObjective2;
         if(commonObj2Button != null && commonObjective2 != null){
@@ -277,7 +293,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
     }
 
-
+    /**
+     * sets the image of the current object in hand of the player
+     * @param playerObjInHand
+     */
 
     public void setPlayerObjInHand(ArrayList<ObjectCard> playerObjInHand){
 
@@ -443,6 +462,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         playerObjInHand1 = playerObjInHand;
     }
 
+    /**
+     * sets the image of the board tiles
+     * @param gameBoard is the board of the game
+     */
+
     public void setBoardGrid(Board gameBoard){
         gameBoard1 = gameBoard;
 
@@ -604,6 +628,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     }
 
+    /**
+     * sets the image of the tiles in the library
+     * @param playerLibrary is the library player
+     */
+
     public void setLibraryGrid(Library playerLibrary){
         playerLibrary1 = playerLibrary;
         for (int x = 0; x < 6; x++) {
@@ -744,6 +773,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
 
     }
+
+    /**
+     * picks up the tiles from the board and checks that these are not more than three
+     * @param event when the player picks up a tile from the board
+     */
     
     private void onBoardSpaceClick(MouseEvent event){
         Button clickedButton = (Button) event.getPickResult().getIntersectedNode();
@@ -786,6 +820,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         System.out.println(coordinatesToSend);
 
     }
+
+    /**
+     * select the column of the library for the tiles insertion
+     * @param event is the user click
+     */
     private void onLibrarySpaceClick(MouseEvent event){
         Button clickedButton = (Button) event.getPickResult().getIntersectedNode();
         System.out.println(GridPane.getColumnIndex(clickedButton));
@@ -802,6 +841,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     }
 
+    /**
+     * selects the tiles in objects in hand
+     * @param event is the user click
+     */
     private void onObjInHandClick(MouseEvent event){
         Button clickedButton = (Button) event.getPickResult().getIntersectedNode();
         System.out.println(GridPane.getColumnIndex(clickedButton));
@@ -819,6 +862,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     }
 
+
     private void onCommonObjClick(MouseEvent event){
         new Thread(() -> notifyObserver(obs -> obs.onRequestCommonObjectives())).start();
     }
@@ -829,6 +873,12 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private void onShowLibrariesClick(MouseEvent event){
         new Thread(() -> notifyObserver(obs -> obs.onRequestOthersLibrary())).start();
     }
+
+    /**
+     * the first time confirm the choice of the board tiles
+     * the second time confirm the choice of the order and the column for the library insertion
+     * @param event is the user click
+     */
 
     private void onConfirmButtonClick(MouseEvent event){
         if(playerObjInHand1.size() > 0 && objInHand > 0 ){
@@ -858,6 +908,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     }
 
+    /**
+     * sends the chat message
+     * @param event is the click of the user
+     */
 
     private void onSendButtonClick(MouseEvent event){
         String message = chatMsg.getText();
@@ -882,6 +936,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
     }
 
+    /**
+     * shows the chat
+     * @param sender is the sender of the message
+     * @param message
+     */
    public void updateChat(String sender, String message){
         if(sender==myPlayer){
           String  temp = chatLog +"\n"+ "        "+message;
@@ -894,10 +953,18 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         chatBox.setText(chatLog);
     }
 
+    /**
+     * saves the nickname of the player
+     * @param player
+     */
+
     public void savePlayer(String player){
         myPlayer = player;
     }
 
+    /**
+     * when called shows an error window
+     */
     public void resetErrorValues(){
         if(coordinatesToSend.size()>0){
             coordinatesToSend = new ArrayList<>();
@@ -916,7 +983,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             Platform.runLater(() -> SceneController.showPopUP(scene));
         }
     }
-
+    /**
+     * reset the board tiles when called
+     */
     public void resetBoardTiles(){
         boardFirstTurn = true;
         if(boardGrid != null) {
@@ -929,6 +998,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             }
         }
     }
+
+    /**
+     * reset the library tiles when called
+     */
     public void resetLibraryTiles(){
         if(libraryGrid != null) {
             for (Node node : libraryGrid.getChildren()) {
@@ -939,6 +1012,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
     }
 
+    /**
+     * reset the current object in hand when called
+     */
     public void resetObjInHandTiles(){
 
             for (Node node : objInHandGrid.getChildren()) {
@@ -949,6 +1025,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
 
     }
 
+    /**
+     * stops from picking up a tile from the board when is not allowed
+     */
     public void blockBoardTiles(){
         if(boardGrid != null) {
             for (Node node : boardGrid.getChildren()) {
@@ -958,6 +1037,10 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             }
         }
     }
+
+    /**
+     * stops from put a tile in the library when is not allowed
+     */
     public void blockLibraryTiles(){
         if(libraryGrid != null) {
             for (Node node : libraryGrid.getChildren()) {
@@ -967,6 +1050,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
             }
         }
     }
+
+    /**
+     * shows the players libraries
+     * @param librariesOfPlayers
+     */
 
     public void showLibraries(HashMap<String, Library> librariesOfPlayers){
         if(librariesOfPlayers.size() == 1){

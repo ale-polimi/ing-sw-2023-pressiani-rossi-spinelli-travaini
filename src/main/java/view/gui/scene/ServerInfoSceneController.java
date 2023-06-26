@@ -34,6 +34,9 @@ public class ServerInfoSceneController extends ViewObservable implements Generic
     @FXML
     private Button returnButton;
 
+    /**
+     * initializes the scene
+     */
 
     public void initialize(){
         submitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,  this :: onSubmitButtonClick);
@@ -41,7 +44,10 @@ public class ServerInfoSceneController extends ViewObservable implements Generic
     }
 
 
-
+    /**
+     * sets the connection settings
+     * @param event is the click of the user
+     */
     private void onSubmitButtonClick(Event event){
         String address = serverAddressField.getText();
         String port = serverPortField.getText();
@@ -62,6 +68,10 @@ public class ServerInfoSceneController extends ViewObservable implements Generic
 
     }
 
+    /**
+     * returns on the previous page
+     * @param event is the click of the user
+     */
     private void onReturnButtonClick(Event event){
         returnButton.setDisable(true);
         submitButton.setDisable(true);

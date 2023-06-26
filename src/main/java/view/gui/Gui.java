@@ -25,13 +25,19 @@ public class Gui extends ViewObservable implements View {
    private boolean boardUsed;
 
 
-
+    /**
+     * message to open insert nickname page
+     */
 
     @Override
     public void askNickname() {
         Platform.runLater(() -> SceneController.changeRootPane(observers, "Insert_Nickname.fxml" ));
 
     }
+
+    /**
+     * message to open the ask max player page
+     */
 
     @Override
     public void askMaxPlayer() {
@@ -40,6 +46,10 @@ public class Gui extends ViewObservable implements View {
         Platform.runLater(() -> SceneController.changeRootPane(smpsc,  "Select_Max_Players.fxml"));
 
     }
+
+    /**
+     * message to start a turn
+     */
 
     @Override
     public void askBoardMove() {
@@ -58,6 +68,9 @@ public class Gui extends ViewObservable implements View {
 
     }
 
+    /**
+     * message to insert tiles in the library
+     */
     @Override
     public void askLibraryMove() {
         System.out.println("LIBRARYMOVE");
@@ -74,6 +87,12 @@ public class Gui extends ViewObservable implements View {
 
     }
 
+    /**
+     * called when there is an error
+     * @param player is the recipient of the error.
+     * @param payload is the error's description.
+     */
+
     @Override
     public void showGenericError(String player, String payload) {
         BoardSceneController bsc = null;
@@ -85,6 +104,15 @@ public class Gui extends ViewObservable implements View {
         }
         bsc.resetErrorValues();
     }
+
+    /**
+     * resets turn
+     * @param player                    is the player currently playing.
+     * @param gameBoard                 is the board of the game.
+     * @param playerLibrary             is the player's library.
+     * @param playerObjInHand           are the objects the player currently has in hand.
+     * @param completedCommonObjectives is the array of points for each completed common objective.
+     */
 
     @Override
     public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
@@ -100,6 +128,13 @@ public class Gui extends ViewObservable implements View {
         //bsc.setLibraryGrid(playerLibrary);
     }
 
+    /**
+     * shows common objectives
+     * @param player                    is the player currently playing.
+     * @param commonObjective1          is the first common objective.
+     * @param commonObjective2          is the second common objective.
+     * @param completedCommonObjectives
+     */
     @Override
     public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
         System.out.println(commonObjective1);
@@ -112,7 +147,11 @@ public class Gui extends ViewObservable implements View {
     }
 
 
-
+    /**
+     * shows personal objective
+     * @param player is the player currently playing.
+     * @param personalObjective is the player's personal objective.
+     */
 
     @Override
     public void showPersonalObjective(String player, PersonalObjective personalObjective) {
@@ -120,6 +159,11 @@ public class Gui extends ViewObservable implements View {
         System.out.println(personalObjective.getPersonalOBJ());
         BoardSceneController bsc = getBoardSceneController(personalObjective);
     }
+
+    /**
+     * shows lobby when waiting for players
+     * @param players is an {@link ArrayList} containing the usernames of the currently connected players.
+     */
 
     @Override
     public void showLobby(ArrayList<String> players) {
@@ -139,7 +183,11 @@ public class Gui extends ViewObservable implements View {
         }
     }
 
-
+    /**
+     * shows the winner
+     * @param winner is the username of the winner.
+     * @param leaderboard is a {@link HashMap} containing the pairs (username, points).
+     */
 
     @Override
     public void showWinner(String winner, HashMap<String, Integer> leaderboard) {
@@ -197,12 +245,21 @@ public class Gui extends ViewObservable implements View {
         Platform.runLater(() -> SceneController.changeRootPane(sbsc,  "ScoreBoard.fxml"));
     }
 
+    /**
+     * shows only the board when is not the players turn
+     * @param gameBoard is the board of the game.
+     */
     @Override
     public void showNotMyTurn(Board gameBoard) {
         setMyTurn(false);
         System.out.println("notmyturn");
     }
 
+    /**
+     * shows the others library
+     * @param sender is the sender of the message.
+     * @param librariesOfPlayers is the {@link HashMap} containing the other players' usernames as keys and libraries as values.
+     */
     @Override
     public void showOthersLibrary(String sender, HashMap<String, Library> librariesOfPlayers) {
         BoardSceneController bsc = null;
@@ -213,6 +270,13 @@ public class Gui extends ViewObservable implements View {
         }
         bsc.showLibraries(librariesOfPlayers);
     }
+
+    /**
+     * shows the chat
+     * @param sender the sender of the message
+     * @param isPrivate indicate if the message is private
+     * @param message is the message text
+     */
 
     @Override
     public void showChat(String sender, boolean isPrivate, String message) {
@@ -226,20 +290,36 @@ public class Gui extends ViewObservable implements View {
 
     }
 
+    /**
+     * @return the turn
+     */
     @Override
     public boolean getMyTurn() {
         return myTurn;
     }
 
+    /**
+     *
+     * @param turn is the new value of the myTurn parameter
+     */
     @Override
     public void setMyTurn(boolean turn) {
         myTurn = turn;
 
     }
 
+    /**
+     * indicates if board is used
+     * @param boardUsed
+     */
     public void setBoardUsed(boolean boardUsed) {
         this.boardUsed = boardUsed;
     }
+
+    /**
+     *
+     * @return boolean boardUsed
+     */
     public boolean getBoardUsed(){
         return boardUsed;
     }
@@ -249,10 +329,15 @@ public class Gui extends ViewObservable implements View {
 
     }
 
+    /**
+     *
+     * @return false
+     */
     @Override
     public boolean getChatAbilitator() {
         return false;
     }
+
 
     @Override
     public void setChatAbilitator(boolean value) {
@@ -263,6 +348,13 @@ public class Gui extends ViewObservable implements View {
     public void showChat(String sender, String receiver,String message) {
         //Empty because is used in the network view simulation
     }
+
+    /**
+     * @param gameBoard is the current board of the game
+     * @param playerLibrary is the library of the player
+     * @param playerObjInHand are the tiles in object in hand
+     * @return bsc board scene controller
+     */
 
     private BoardSceneController getBoardSceneController(Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand) {
         BoardSceneController bsc;
@@ -282,6 +374,12 @@ public class Gui extends ViewObservable implements View {
         }
         return bsc;
     }
+
+    /**
+     * @param commonObjective1 is the first common objective
+     * @param commonObjective2 is the second common objective
+     * @return bsc board scene controller
+     */
     private BoardSceneController getBoardSceneController(CommonObjective commonObjective1, CommonObjective commonObjective2) {
         BoardSceneController bsc;
         try {
@@ -299,6 +397,10 @@ public class Gui extends ViewObservable implements View {
         return bsc;
     }
 
+    /**
+     * @param personalObjective is the personal objective of the player
+     * @return bsc board scene controler
+     */
     private BoardSceneController getBoardSceneController(PersonalObjective personalObjective) {
         BoardSceneController bsc;
         try {
@@ -315,6 +417,10 @@ public class Gui extends ViewObservable implements View {
         return bsc;
     }
 
+    /**
+     * @return bsc board scene controller
+     * @throws InterruptedException if is not available
+     */
     private BoardSceneController getBoardSceneController() throws InterruptedException {
         BoardSceneController bsc;
 

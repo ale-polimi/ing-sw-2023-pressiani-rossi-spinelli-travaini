@@ -29,6 +29,9 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     @FXML
     private Label nicknamesLabel;
 
+    /**
+     * shows the library when there are only two players
+     */
     public ShowLibraryTwoPSceneController(){
         stage = new Stage();
         stage.initOwner(SceneController.getActiveScene().getWindow());
@@ -37,6 +40,10 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
         xOffset = 0;
         yOffset = 0;
     }
+
+    /**
+     * initialises the scene
+     */
 
     @FXML
     public void initialize(){
@@ -47,32 +54,66 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
         System.out.println("init");
     }
 
+    /**
+     * sets the coordinates and allows to move the window on the screen
+     * @param event is the click of the user
+     */
+
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
     }
+
+    /**
+     * moves the window on the screen
+     * @param event is the click of the user
+     */
 
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
         stage.setY(event.getScreenY() + yOffset);
     }
 
+    /**
+     * closes the stage
+     * @param event is the click of the user
+     */
+
     private void onCloseButtonClick(MouseEvent event){
         stage.close();
     }
+
+    /**
+     * displays the popup window
+     */
 
     public void displayPopUp(){
         stage.showAndWait();
     }
 
+    /**
+     * sets the scene
+     * @param scene
+     */
+
     public void setScene(Scene scene){
         stage.setScene(scene);
     }
+
+    /**
+     * set the nickname of the other player
+     * @param nicknames is the nickname
+     */
     public void setNicknames(String nicknames){
         nickname = nicknames;
         System.out.println("setter");
         nicknamesLabel.setText(nickname);
     }
+
+    /**
+     * sets the library of the other player
+     * @param playerLibrary
+     */
 
     public void SetLibraryGrid(Library playerLibrary){
         playerLibrary1 = playerLibrary;
