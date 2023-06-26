@@ -1,6 +1,8 @@
 package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import enumerations.GameState;
 import enumerations.ObjectColour;
 import enumerations.TypeSpace;
@@ -13,6 +15,7 @@ import exceptions.player.TooManyObjectsInHandException;
 import model.Game;
 import model.commonobjective.*;
 import model.library.Library;
+import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.messages.*;
@@ -57,10 +60,7 @@ public class OfflineControllerForTest implements Observer {
         /* Subscribing the Controller to the Model (Game) */
         game.addObserver(this);
         game.setGameState(LOGIN);
-        //byte[] jsonData = Files.readAllBytes(Paths.get("src/main/resources/json/personalObjectives.json"));
         ObjectMapper objectMapper = new ObjectMapper();
-        //personalObjectives = objectMapper.readValue(jsonData,HashMap.class);
-
         Reader reader;
         reader = new InputStreamReader(Objects.requireNonNull(StartServerImpl.class.getResourceAsStream("/json/personalObjectives.json")));
         personalObjectives = objectMapper.readValue(reader,HashMap.class);
@@ -218,7 +218,7 @@ public class OfflineControllerForTest implements Observer {
                             }
                             break;
                         default:
-                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "Coordinates must be in pairs."));
+                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":BOARD"), "Coordinates must be in pairs."));
                     }
 
                 } else {
@@ -583,12 +583,7 @@ public class OfflineControllerForTest implements Observer {
             personalObjectivePoints = player.getPersonalObjective().compareTo(player.getLibrary());
             System.out.println("Player: " + player.getNickname() + " has received: " + personalObjectivePoints + " from: " + player.getPersonalObjective());
 
-            /*
-            for(int i = 0; i < ObjectColour.values().length; i += 3){
-                *//* Points for the adjacent objects cards *//*
-                boardPoints += player.getBoardPoints(ObjectColour.values()[i]);
-            }
-            */
+            boardPoints += player.getLibrary().getLibraryPoints();
 
             if(player.isFirstToEnd()){
                 player.addPoints(1);
