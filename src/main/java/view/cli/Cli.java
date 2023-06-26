@@ -215,6 +215,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askBoardMove(){
+        myTurn = true;
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
 
@@ -280,6 +281,7 @@ public class Cli extends ViewObservable implements View {
      */
     @Override
     public void askLibraryMove() {
+        myTurn = true;
         chatAbilitator = true;
         out.print(Colours.SHOW_CURSOR);
         boolean validInput;
@@ -310,17 +312,20 @@ public class Cli extends ViewObservable implements View {
             } else if(orderAndColumn.split("_")[0].equals("-c")){
                 String[] ncm = orderAndColumn.split("_");
                 if(ncm[1].equals("-p")){
+                    myTurn = false;
                     notifyObserver(viewObserver -> viewObserver.onChatMessage(null,ncm[2],ncm[3]));
                 }
                 else {
+                    myTurn = false;
                     notifyObserver(viewObserver -> viewObserver.onChatMessage(null,"all",ncm[1]));
                 }
-                validInput = true;;
+                validInput = true;
             } else if (orderAndColumn.equals("SEE")) {
+                myTurn = false;
                 notifyObserver(viewObserver -> viewObserver.onChatLogMessage());
                 validInput = true;
             } else if(ClientController.isInputValid(orderAndColumn)){
-
+                myTurn = false;
                 String[] parsedCoordinates = orderAndColumn.split(",");
                 ArrayList<Integer> orderAndColumnToSend = new ArrayList<>();
                 for(int i = 0; i < parsedCoordinates.length; i++){
