@@ -74,7 +74,7 @@ I jar compilati saranno disponibili nella cartella ```target/``` con i seguenti 
 
 Per avviare il server bisogna digitare in un terminale:
 ```
-java -jar myshelfie-server.jar [socket port](Opzionale) [RMI port](Opzionale)
+java -jar MyShelfie-server.jar [socket port](Opzionale) [RMI port](Opzionale)
 ```
 Se <b>entrambi</b> i valori non sono impostati, il server partirà con i valori di default:
 - 12345 per socket;
@@ -86,7 +86,7 @@ Si consiglia di non utilizzare porte già usate da altre applicazioni e di conse
 
 Per avviare il client bisogna digitare in un terminale:
 ```
-java -jar myshelfie-client.jar <UI> <Connessione>
+java -jar MyShelfie-client.jar <UI> <Connessione>
 ```
 Dove UI e Connessione sono parametri obbligatori.
 UI:
@@ -105,7 +105,7 @@ Questo programma richiede una versione Java 19 o superiore per eseguire corretta
 
 Per l'interfaccia CLI:
 - Un terminale che supporti [256 colori (8-bit)](https://it.wikipedia.org/wiki/Codici_di_escape_ANSI)<sup>(<i>apre sito esterno</i>)</sup>;
-- :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), altrimenti non si vedono i colori nella CLI;
+- :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), altrimenti non verranno visualizzati i colori nel terminale;
 - :warning: Per mantenere la formattazione degli elementi di gioco, si consiglia di utilizzare un tipo di carattere monospazio come Courier New (Windows), Monospace (Linux) o Liberation Mono (Linux).
 
 Per l'interfaccia GUI:
@@ -201,7 +201,7 @@ The packaged jars will be in the ```target/``` folder and are called ```MyShelfi
 
 To start a server run the following command in a terminal:
 ```
-java -jar myshelfie-server.jar [socket port](Optional) [RMI port](Optional)
+java -jar MyShelfie-server.jar [socket port](Optional) [RMI port](Optional)
 ```
 If <b>both</b> are not set the server will start using the default ports:
 - 12345 for socket;
@@ -213,7 +213,7 @@ Please be sure that the ports are not used by another application and are allowe
 
 To start a client run the following command in a terminal:
 ```
-java -jar myshelfie-client.jar <UI> <Connection>
+java -jar MyShelfie-client.jar <UI> <Connection>
 ```
 Where UI and Connection are both mandatory.
 UI:
@@ -232,7 +232,7 @@ Generally a system that runs Java 19+ applications.
 
 For CLI game:
  - A terminal that supports [8-bit (256) colours](https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit)<sup>(<i>opens external site</i>)</sup>;
- - :warning: If your computer runs Windows, please download and run as administrator [this batch script](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), otherwise the colours will not be printed on the terminal;
+ - :warning: If your computer runs Windows, please download and run as administrator [this batch script](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), otherwise the colours will not be displayed in the terminal;
  - :warning: In order to keep the correct proportions of the elements of the game, it's suggested to use a monospace font such as Courier New (Windows), Monospace (Linux) or Liberation Mono (Linux).
 
 For GUI game:
