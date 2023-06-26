@@ -29,7 +29,6 @@ public class ClientMain {
     public static void main(String[] args) {
 
         /* TODO - REMOVE COMMENT HERE FOR FINAL DEPLOYMENT */
-/*
         boolean isCli = true;
         boolean isSocket = true;
         boolean failedArgs = false;
@@ -67,15 +66,15 @@ public class ClientMain {
                 view.addObserver(clientController);
                 view.initCli();
             } else {
-                *//* TODO - GUI application launch *//*
-                //Application.launch(JavaFXGUI.class);
+                JavaFXGUI.setIsSocket(isSocket);
+                Application.launch(JavaFXGUI.class);
             }
         } else {
             System.exit(2);
         }
-*/
 
-        /* TODO - REMOVE THIS! ONLY FOR DEBUG */
+        /*
+        *//* TODO - REMOVE THIS! ONLY FOR DEBUG *//*
         boolean isCli = false;
         boolean isSocket = false;
 
@@ -85,10 +84,11 @@ public class ClientMain {
             view.addObserver(clientController);
             view.initCli();
         } else {
-            /* TODO - GUI application launch */
+            *//* TODO - GUI application launch *//*
             JavaFXGUI.setIsSocket(isSocket);
             Application.launch(JavaFXGUI.class);
         }
+        */
     }
 
 }
