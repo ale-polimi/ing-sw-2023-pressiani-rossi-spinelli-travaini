@@ -91,6 +91,7 @@ public class Gui extends ViewObservable implements View {
         System.out.println("TURNCALL");
         BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
         bsc.blockBoardTiles();
+        bsc.savePlayer(player);
 
 
 
@@ -215,6 +216,13 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void showChat(String sender, boolean isPrivate, String message) {
+        BoardSceneController bsc = null;
+        try {
+           bsc = getBoardSceneController();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        bsc.updateChat(sender,message);
 
     }
 

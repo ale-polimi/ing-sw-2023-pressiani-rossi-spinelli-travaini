@@ -76,7 +76,7 @@ public class ClientMain {
 */
 
         /* TODO - REMOVE THIS! ONLY FOR DEBUG */
-        boolean isCli = true;
+        boolean isCli = false;
         boolean isSocket = false;
 
         if (isCli) {
@@ -86,6 +86,7 @@ public class ClientMain {
             view.initCli();
         } else {
             /* TODO - GUI application launch */
+            JavaFXGUI.setIsSocket(isSocket);
             Application.launch(JavaFXGUI.class);
         }
     }

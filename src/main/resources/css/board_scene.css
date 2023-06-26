@@ -1,3 +1,10 @@
+@font-face {
+
+    src: url("fonts/Rancho/Rancho-Regular.ttf");
+}
+
+
+
 .rootPane {
 
     -fx-background-image: url("../images/sfondo_parquet.jpg");
@@ -30,4 +37,12 @@
 .objButton:hover{
 
     -fx-border-color: rgba(255, 235, 162, 0.9);
+}
+
+.label{
+
+
+    -fx-text-fill: black;
+    -fx-font-family: 'Rancho';
+    -fx-font-size: 18px;
 }
