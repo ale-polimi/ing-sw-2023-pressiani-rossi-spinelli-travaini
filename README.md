@@ -11,7 +11,7 @@ Scaglione Cugola, gruppo GC-019.
 - [Alessandro Travaini](https://github.com/ale-polimi)
 
 ## Obiettivo del progetto
-[<img src="other-documents/My_Shelfie_box_ITA-ENG.png" width="250"/>](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
+[<img src="other-documents/My_Shelfie_box_ITA-ENG.png" width="400"/>](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
 
 Ricreare il gioco da tavolo [MyShelfie](https://craniointernational.com/products/my-shelfie/)<sup>(<i>apre sito esterno</i>)</sup> pubblicato da Cranio Creations, seguendo i principi di buona ingegneria del software.<br>
 Il progetta punta a creare una copia virtuale del gioco come un'applicazione Java distribuita e in rete. Come viene insegnato nei corsi d'ingegneria del software, un programma così complesso deve seguire delle regole in modo tale da essere <b>mantenibile</b>, <b>riutilizzabile</b> e <b>aggiornabile</b> da altri sviluppatori.<br>
@@ -136,7 +136,7 @@ Software Engineering project for the 2022-2023 academic year.
 
 ## Project objective
 
-[<img src="other-documents/My_Shelfie_box_ITA-ENG.png" width="250"/>](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
+[<img src="other-documents/My_Shelfie_box_ITA-ENG.png" width="400"/>](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
 
 Recreate the board game [MyShelfie](https://craniointernational.com/products/my-shelfie/)<sup>(<i>opens external site</i>)</sup> published by Cranio Creations following the software engineering principles.<br>
 The project aims to create a virtual copy of the game as a distributed, online Java application. As taught in Software Engineering courses, a complex software such as this has to follow some rules in order to be <b>maintainable</b>, <b>reusable</b> and <b>updatable</b> by other developers.<br>
