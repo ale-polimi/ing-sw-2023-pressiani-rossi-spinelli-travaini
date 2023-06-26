@@ -152,7 +152,7 @@ public class Gui extends ViewObservable implements View {
                     count++;
                     String string = entry.getKey();
                     int points = entry.getValue();
-                    String score = string + points;
+                    String score = string +":  " +points;
                     if(count == 1){
                         sbsc.setWinner(score);
                     } else if (count==2) {
@@ -165,7 +165,7 @@ public class Gui extends ViewObservable implements View {
                     count++;
                     String string = entry.getKey();
                     int points = entry.getValue();
-                    String score = string + points;
+                    String score = string +":  " +points;
                     if(count == 1){
                         sbsc.setWinner(score);
                     } else if (count==2) {
@@ -180,7 +180,7 @@ public class Gui extends ViewObservable implements View {
                     count++;
                     String string = entry.getKey();
                     int points = entry.getValue();
-                    String score = string + points;
+                    String score = string +":  " +points;
                     if(count == 1){
                         sbsc.setWinner(score);
                     } else if (count==2) {
