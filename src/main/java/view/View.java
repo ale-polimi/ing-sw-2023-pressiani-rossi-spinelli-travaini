@@ -122,4 +122,15 @@ public interface View {
      * Handle the chat service when the player is not in turn
      */
     void askChat();
+
+    /**
+     * Return the value of the chatAbilitator parameter
+     * @return true if the chat service is still enabled
+     */
+    boolean getChatAbilitator();
+
+    /**
+     * Set the value of the chatAbilitator Parameter
+     */
+    void setChatAbilitator(boolean value);
 }

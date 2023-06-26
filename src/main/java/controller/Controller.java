@@ -440,7 +440,7 @@ public class Controller implements Observer {
                 break;
             case CHAT:
                 ChatMessage ncm = (ChatMessage) receivedMessage;
-                    game.addChatMessage(ncm);
+                    if(!ncm.getDest().equals("SEE"))game.addChatMessage(ncm);
                     this.update(ncm);
                 break;
             case CHATLOG:
