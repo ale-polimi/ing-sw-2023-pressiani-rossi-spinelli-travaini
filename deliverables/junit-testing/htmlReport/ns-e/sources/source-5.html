@@ -1,0 +1,170 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RMIHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: RMIHandler (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RMIHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;import network.messages.Message;
+&nbsp;import network.messages.MessageType;
+&nbsp;import network.messages.PingMessage;
+&nbsp;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;
+&nbsp;public class RMIHandler implements ClientHandler,Runnable{
+&nbsp;    private final Client client;
+&nbsp;    private final ServerRMI server;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor of RMIHandler class
+&nbsp;     * @param client It is the client to handle
+&nbsp;     * @param server It is the server who is handling the connection
+&nbsp;     */
+<b class="nc">&nbsp;    public RMIHandler(Client client, ServerRMI server){</b>
+<b class="nc">&nbsp;        this.client = client;</b>
+<b class="nc">&nbsp;        this.server = server;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Check that a client is still connected on the network
+&nbsp;     * @return true if the client is reachable, false otherwise
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public boolean isConnected() {
+&nbsp;        try {
+<b class="nc">&nbsp;            client.receivedMessage(new PingMessage(&quot;Server&quot;, MessageType.PING));</b>
+<b class="nc">&nbsp;        } catch (RemoteException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * disconnect the server
+&nbsp;     */
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void disconnect() {server.disconnect(this);}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Send the message from the server to the client
+&nbsp;     * @param message It is the message that has to be forwarded
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void receivedMessage(Message message) {
+&nbsp;        try {
+<b class="nc">&nbsp;            client.receivedMessage(message);</b>
+<b class="nc">&nbsp;        } catch (RemoteException e) {</b>
+<b class="nc">&nbsp;            server.disconnect(this);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void run() {
+<b class="nc">&nbsp;        while (!Thread.interrupted()){</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                Thread.sleep(5000);</b>
+<b class="nc">&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;                throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

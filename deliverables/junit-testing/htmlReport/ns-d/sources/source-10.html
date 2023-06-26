@@ -1,0 +1,143 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Message</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.messages</a>
+</div>
+
+<h1>Coverage Summary for Class: Message (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Message</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.messages;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract message class which must be extended by each message type.
+&nbsp; * Both server and clients will communicate using this generic type of message.
+&nbsp; * This avoids the usage of the &quot;instance of&quot; primitive.
+&nbsp; */
+&nbsp;public abstract class Message implements Serializable {
+&nbsp;
+&nbsp;    private final String sender;
+&nbsp;    private final MessageType messageType;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for abstract class Message.
+&nbsp;     * @param sender is the sender of the message.
+&nbsp;     * @param messageType is the type of the message.
+&nbsp;     */
+<b class="fc">&nbsp;    public Message(String sender, MessageType messageType){</b>
+<b class="fc">&nbsp;        this.sender = sender;</b>
+<b class="fc">&nbsp;        this.messageType = messageType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method to return the sender of the message.
+&nbsp;     * @return the sender as a String object.
+&nbsp;     */
+&nbsp;    public String getSender(){
+<b class="fc">&nbsp;        return this.sender;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method to return the type of the message.
+&nbsp;     * @return the type as a MessageType object.
+&nbsp;     */
+&nbsp;    public MessageType getType(){
+<b class="fc">&nbsp;        return this.messageType;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

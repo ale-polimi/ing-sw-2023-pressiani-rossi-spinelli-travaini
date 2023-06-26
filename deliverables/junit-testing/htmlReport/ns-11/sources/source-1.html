@@ -1,0 +1,440 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Gui</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view.gui</a>
+</div>
+
+<h1>Coverage Summary for Class: Gui (view.gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Gui</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/161)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view.gui;
+&nbsp;
+&nbsp;import javafx.application.Platform;
+&nbsp;import model.board.Board;
+&nbsp;import model.commonobjective.CommonObjective;
+&nbsp;import model.library.Library;
+&nbsp;import model.library.PersonalObjective;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import observer.ViewObservable;
+&nbsp;import view.View;
+&nbsp;import view.gui.scene.BoardSceneController;
+&nbsp;import view.gui.scene.ScoreboardSceneController;
+&nbsp;import view.gui.scene.SelectMaxPlayersSceneController;
+&nbsp;import view.gui.scene.WaitingForPlayersSceneController;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;
+<b class="nc">&nbsp;public class Gui extends ViewObservable implements View {</b>
+&nbsp;
+<b class="nc">&nbsp;    private  boolean myTurn= true;</b>
+&nbsp;
+&nbsp;   private boolean boardUsed;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askNickname() {
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; SceneController.changeRootPane(observers, &quot;Insert_Nickname.fxml&quot; ));</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askMaxPlayer() {
+<b class="nc">&nbsp;        SelectMaxPlayersSceneController smpsc = new SelectMaxPlayersSceneController();</b>
+<b class="nc">&nbsp;        smpsc.addAllObservers(observers);</b>
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; SceneController.changeRootPane(smpsc,  &quot;Select_Max_Players.fxml&quot;));</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askBoardMove() {
+<b class="nc">&nbsp;        System.out.println(&quot;BOARDMOVE&quot;);</b>
+<b class="nc">&nbsp;        setBoardUsed(false);</b>
+&nbsp;
+&nbsp;       // setMyTurn(true);
+<b class="nc">&nbsp;        BoardSceneController bsc = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = getBoardSceneController();</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        bsc.resetBoardTiles();</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askLibraryMove() {
+<b class="nc">&nbsp;        System.out.println(&quot;LIBRARYMOVE&quot;);</b>
+<b class="nc">&nbsp;        setBoardUsed(true);</b>
+<b class="nc">&nbsp;        BoardSceneController bsc = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = getBoardSceneController();</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        bsc.resetObjInHandTiles();</b>
+<b class="nc">&nbsp;        bsc.resetLibraryTiles();</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showGenericError(String player, String payload) {
+<b class="nc">&nbsp;        BoardSceneController bsc = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = getBoardSceneController();</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;           System.exit(0);</b>
+&nbsp;
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        bsc.resetErrorValues();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList&lt;ObjectCard&gt; playerObjInHand, int[] completedCommonObjectives) {
+<b class="nc">&nbsp;        System.out.println(&quot;TURNCALL&quot;);</b>
+<b class="nc">&nbsp;        BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);</b>
+<b class="nc">&nbsp;        bsc.blockBoardTiles();</b>
+<b class="nc">&nbsp;        bsc.savePlayer(player);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;        // bsc.setBoardGrid(gameBoard);
+&nbsp;        //bsc.setLibraryGrid(playerLibrary);
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+<b class="nc">&nbsp;        System.out.println(commonObjective1);</b>
+<b class="nc">&nbsp;        System.out.println(commonObjective2);</b>
+<b class="nc">&nbsp;        BoardSceneController bsc = getBoardSceneController(commonObjective1, commonObjective2);</b>
+<b class="nc">&nbsp;        if(getBoardUsed()){</b>
+<b class="nc">&nbsp;            bsc.blockBoardTiles();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showPersonalObjective(String player, PersonalObjective personalObjective) {
+<b class="nc">&nbsp;        System.out.println(personalObjective);</b>
+<b class="nc">&nbsp;        System.out.println(personalObjective.getPersonalOBJ());</b>
+<b class="nc">&nbsp;        BoardSceneController bsc = getBoardSceneController(personalObjective);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showLobby(ArrayList&lt;String&gt; players) {
+&nbsp;        WaitingForPlayersSceneController wfp;
+&nbsp;
+&nbsp;        try{
+<b class="nc">&nbsp;            wfp = (WaitingForPlayersSceneController) SceneController.getActiveController();</b>
+<b class="nc">&nbsp;            wfp.setNicknames(players);</b>
+<b class="nc">&nbsp;            Platform.runLater(wfp :: updateValues);</b>
+<b class="nc">&nbsp;        } catch (ClassCastException e) {</b>
+<b class="nc">&nbsp;            wfp = new WaitingForPlayersSceneController();</b>
+<b class="nc">&nbsp;            wfp.addAllObservers(observers);</b>
+<b class="nc">&nbsp;            wfp.setNicknames(players);</b>
+<b class="nc">&nbsp;            WaitingForPlayersSceneController finalWfp = wfp;</b>
+<b class="nc">&nbsp;            Platform.runLater(() -&gt; SceneController.changeRootPane(finalWfp, &quot;Waiting_For_Players.fxml&quot; ));</b>
+&nbsp;
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showWinner(String winner, HashMap&lt;String, Integer&gt; leaderboard) {
+<b class="nc">&nbsp;        int count = 0;</b>
+<b class="nc">&nbsp;        ScoreboardSceneController sbsc = new ScoreboardSceneController();</b>
+<b class="nc">&nbsp;        sbsc.addAllObservers(observers);</b>
+<b class="nc">&nbsp;        switch (leaderboard.size()){</b>
+&nbsp;            case 2 -&gt;{
+<b class="nc">&nbsp;                for(Map.Entry&lt;String,Integer&gt; entry : leaderboard.entrySet()) {</b>
+<b class="nc">&nbsp;                    count++;</b>
+<b class="nc">&nbsp;                    String string = entry.getKey();</b>
+<b class="nc">&nbsp;                    int points = entry.getValue();</b>
+<b class="nc">&nbsp;                    String score = string +&quot;:  &quot; +points;</b>
+<b class="nc">&nbsp;                    if(count == 1){</b>
+<b class="nc">&nbsp;                        sbsc.setWinner(score);</b>
+<b class="nc">&nbsp;                    } else if (count==2) {</b>
+<b class="nc">&nbsp;                        sbsc.setSecond(score);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            case 3 -&gt; {
+<b class="nc">&nbsp;                for(Map.Entry&lt;String,Integer&gt; entry : leaderboard.entrySet()) {</b>
+<b class="nc">&nbsp;                    count++;</b>
+<b class="nc">&nbsp;                    String string = entry.getKey();</b>
+<b class="nc">&nbsp;                    int points = entry.getValue();</b>
+<b class="nc">&nbsp;                    String score = string +&quot;:  &quot; +points;</b>
+<b class="nc">&nbsp;                    if(count == 1){</b>
+<b class="nc">&nbsp;                        sbsc.setWinner(score);</b>
+<b class="nc">&nbsp;                    } else if (count==2) {</b>
+<b class="nc">&nbsp;                        sbsc.setSecond(score);</b>
+<b class="nc">&nbsp;                    } else if (count == 3) {</b>
+<b class="nc">&nbsp;                        sbsc.setThird(score);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            case 4 -&gt; {
+<b class="nc">&nbsp;                for(Map.Entry&lt;String,Integer&gt; entry : leaderboard.entrySet()) {</b>
+<b class="nc">&nbsp;                    count++;</b>
+<b class="nc">&nbsp;                    String string = entry.getKey();</b>
+<b class="nc">&nbsp;                    int points = entry.getValue();</b>
+<b class="nc">&nbsp;                    String score = string +&quot;:  &quot; +points;</b>
+<b class="nc">&nbsp;                    if(count == 1){</b>
+<b class="nc">&nbsp;                        sbsc.setWinner(score);</b>
+<b class="nc">&nbsp;                    } else if (count==2) {</b>
+<b class="nc">&nbsp;                        sbsc.setSecond(score);</b>
+<b class="nc">&nbsp;                    } else if (count == 3) {</b>
+<b class="nc">&nbsp;                        sbsc.setThird(score);</b>
+<b class="nc">&nbsp;                    } else if (count == 4) {</b>
+<b class="nc">&nbsp;                        sbsc.setFourth(score);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Platform.runLater(() -&gt; SceneController.changeRootPane(sbsc,  &quot;ScoreBoard.fxml&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showNotMyTurn(Board gameBoard) {
+<b class="nc">&nbsp;        setMyTurn(false);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;notmyturn&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showOthersLibrary(String sender, HashMap&lt;String, Library&gt; librariesOfPlayers) {
+<b class="nc">&nbsp;        BoardSceneController bsc = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = getBoardSceneController();</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        bsc.showLibraries(librariesOfPlayers);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showChat(String sender, boolean isPrivate, String message) {
+<b class="nc">&nbsp;        BoardSceneController bsc = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;           bsc = getBoardSceneController();</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        bsc.updateChat(sender,message);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean getMyTurn() {
+<b class="nc">&nbsp;        return myTurn;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setMyTurn(boolean turn) {
+<b class="nc">&nbsp;        myTurn = turn;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBoardUsed(boolean boardUsed) {
+<b class="nc">&nbsp;        this.boardUsed = boardUsed;</b>
+&nbsp;    }
+&nbsp;    public boolean getBoardUsed(){
+<b class="nc">&nbsp;        return boardUsed;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askChat() {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean getChatAbilitator() {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setChatAbilitator(boolean value) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;    public void showChat(String sender, String receiver,String message) {
+&nbsp;        //Empty because is used in the network view simulation
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private BoardSceneController getBoardSceneController(Board gameBoard, Library playerLibrary, ArrayList&lt;ObjectCard&gt; playerObjInHand) {
+&nbsp;        BoardSceneController bsc;
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = (BoardSceneController) SceneController.getActiveController();</b>
+<b class="nc">&nbsp;            bsc.setBoardGrid(gameBoard);</b>
+<b class="nc">&nbsp;            bsc.setLibraryGrid(playerLibrary);</b>
+<b class="nc">&nbsp;            bsc.setPlayerObjInHand(playerObjInHand);</b>
+<b class="nc">&nbsp;        } catch (ClassCastException e) {</b>
+<b class="nc">&nbsp;            bsc = new BoardSceneController();</b>
+<b class="nc">&nbsp;            bsc.addAllObservers(observers);</b>
+<b class="nc">&nbsp;            bsc.setBoardGrid(gameBoard);</b>
+<b class="nc">&nbsp;            bsc.setLibraryGrid(playerLibrary);</b>
+<b class="nc">&nbsp;            bsc.setPlayerObjInHand(playerObjInHand);</b>
+<b class="nc">&nbsp;            BoardSceneController finalBsc = bsc;</b>
+<b class="nc">&nbsp;            Platform.runLater(() -&gt; SceneController.changeRootPane(finalBsc, &quot;Board.fxml&quot;));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return bsc;</b>
+&nbsp;    }
+&nbsp;    private BoardSceneController getBoardSceneController(CommonObjective commonObjective1, CommonObjective commonObjective2) {
+&nbsp;        BoardSceneController bsc;
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = (BoardSceneController) SceneController.getActiveController();</b>
+<b class="nc">&nbsp;            bsc.setCommonObj1Button(commonObjective1);</b>
+<b class="nc">&nbsp;            bsc.setCommonObj2Button(commonObjective2);</b>
+<b class="nc">&nbsp;        } catch (ClassCastException e) {</b>
+<b class="nc">&nbsp;            bsc = new BoardSceneController();</b>
+<b class="nc">&nbsp;            bsc.addAllObservers(observers);</b>
+<b class="nc">&nbsp;            bsc.setCommonObj1Button(commonObjective1);</b>
+<b class="nc">&nbsp;            bsc.setCommonObj2Button(commonObjective2);</b>
+<b class="nc">&nbsp;            BoardSceneController finalBsc = bsc;</b>
+<b class="nc">&nbsp;            Platform.runLater(() -&gt; SceneController.changeRootPane(finalBsc, &quot;Board.fxml&quot;));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return bsc;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BoardSceneController getBoardSceneController(PersonalObjective personalObjective) {
+&nbsp;        BoardSceneController bsc;
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = (BoardSceneController) SceneController.getActiveController();</b>
+<b class="nc">&nbsp;            bsc.setPersonalObjButton(personalObjective);</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (ClassCastException e) {</b>
+<b class="nc">&nbsp;            bsc = new BoardSceneController();</b>
+<b class="nc">&nbsp;            bsc.addAllObservers(observers);</b>
+<b class="nc">&nbsp;            bsc.setPersonalObjButton(personalObjective);</b>
+<b class="nc">&nbsp;            BoardSceneController finalBsc = bsc;</b>
+<b class="nc">&nbsp;            Platform.runLater(() -&gt; SceneController.changeRootPane(finalBsc, &quot;Board.fxml&quot;));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return bsc;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private BoardSceneController getBoardSceneController() throws InterruptedException {
+&nbsp;        BoardSceneController bsc;
+&nbsp;
+<b class="nc">&nbsp;        TimeUnit.MILLISECONDS.sleep(10);</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            bsc = (BoardSceneController) SceneController.getActiveController();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        } catch (ClassCastException e) {</b>
+<b class="nc">&nbsp;            bsc = new BoardSceneController();</b>
+<b class="nc">&nbsp;            bsc.addAllObservers(observers);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;            BoardSceneController finalBsc = bsc;</b>
+<b class="nc">&nbsp;            Platform.runLater(() -&gt; SceneController.changeRootPane(finalBsc, &quot;Board.fxml&quot;));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return bsc;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ServerRMI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: ServerRMI (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ServerRMI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;import network.messages.*;
+&nbsp;import observer.Observable;
+&nbsp;
+&nbsp;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class represents an instance for the RMI server.
+&nbsp; */
+&nbsp;public class ServerRMI extends Observable implements Server,Runnable{
+&nbsp;
+&nbsp;    private ArrayList&lt;ClientHandler&gt; clientsRMI;
+<b class="nc">&nbsp;    private ArrayList&lt;Message&gt; messages = new ArrayList&lt;&gt;();</b>
+&nbsp;    private final StartServerImpl startServer;
+<b class="nc">&nbsp;    private HashMap&lt;String, Boolean&gt; pingReceived=new HashMap&lt;&gt;();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor for the RMI server.
+&nbsp;     * @param startServer is the server&#39;s main that starts this instance.
+&nbsp;     * @throws RemoteException is thrown when the server is not reachable.
+&nbsp;     */
+&nbsp;    public ServerRMI(StartServerImpl startServer) throws RemoteException {
+<b class="nc">&nbsp;        super();</b>
+<b class="nc">&nbsp;        this.startServer = startServer;</b>
+<b class="nc">&nbsp;        this.clientsRMI = new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void registry(ClientHandler clientHandler) throws RemoteException {
+<b class="nc">&nbsp;        if(!clientsRMI.contains(clientHandler)){</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Received&quot;);</b>
+<b class="nc">&nbsp;            clientsRMI.add(clientHandler);</b>
+<b class="nc">&nbsp;            clientHandler.receivedMessage(new  AskNicknameMessage(&quot;Controller&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;     public void receiveMessage(Message message){
+<b class="nc">&nbsp;        if(!message.getType().equals(MessageType.PING))messages.add(message);</b>
+<b class="nc">&nbsp;        else {pingReceived.replace(message.getSender(), true);}</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void sendMessage(Message message){
+<b class="nc">&nbsp;        if(message.getType().equals(MessageType.SHOW_LOBBY)){</b>
+<b class="nc">&nbsp;            ShowLobbyMessage lm = (ShowLobbyMessage) message;</b>
+<b class="nc">&nbsp;            pingReceived.put(lm.getLobbyPlayers().get(lm.getNumOfPlayers() - 1), true);}</b>
+<b class="nc">&nbsp;        for(ClientHandler c : clientsRMI){</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                System.out.println(&quot;Message sent:&quot;);</b>
+<b class="nc">&nbsp;                c.receivedMessage(message);</b>
+<b class="nc">&nbsp;            } catch (RemoteException e) {</b>
+<b class="nc">&nbsp;               disconnect(c);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void disconnect(ClientHandler clientHandler) {
+<b class="nc">&nbsp;        clientsRMI.remove(clientHandler);</b>
+<b class="nc">&nbsp;       startServer.disconnect();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method disconnects all clients from this server.
+&nbsp;     */
+&nbsp;    public void disconnect(){
+<b class="nc">&nbsp;        for(ClientHandler c: clientsRMI){</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                c.receivedMessage(new GameClosedMessage(&quot;Controller&quot;,MessageType.GAME_CLOSED));</b>
+<b class="nc">&nbsp;            } catch (RemoteException e) {}</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        clientsRMI = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        pingReceived = new HashMap&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void ping() throws RemoteException {
+<b class="nc">&nbsp;        if(pingReceived.isEmpty())return;</b>
+<b class="nc">&nbsp;        if(pingReceived.containsValue(false)) startServer.disconnect();</b>
+<b class="nc">&nbsp;        for(String key : pingReceived.keySet()){</b>
+<b class="nc">&nbsp;            pingReceived.replace(key,true,false);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void run() {
+<b class="nc">&nbsp;        while(!Thread.interrupted()){</b>
+<b class="nc">&nbsp;            if(messages.size()&gt;0)notifyObserver(messages.remove(0));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the startServer parameter.
+&nbsp;     * @return the start server instance.
+&nbsp;     */
+<b class="nc">&nbsp;    public StartServerImpl getServer() {return startServer; }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

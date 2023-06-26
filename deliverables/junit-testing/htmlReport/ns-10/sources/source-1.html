@@ -1,0 +1,844 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Cli</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view.cli</a>
+</div>
+
+<h1>Coverage Summary for Class: Cli (view.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Cli</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/338)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view.cli;
+&nbsp;
+&nbsp;import controller.ClientController;
+&nbsp;import enumerations.ObjectColour;
+&nbsp;import enumerations.TypeSpace;
+&nbsp;import model.board.Board;
+&nbsp;import model.commonobjective.CommonObjective;
+&nbsp;import model.library.Library;
+&nbsp;import model.library.PersonalObjective;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import observer.ViewObservable;
+&nbsp;import view.View;
+&nbsp;
+&nbsp;import java.io.PrintStream;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.concurrent.ExecutionException;
+&nbsp;import java.util.concurrent.ExecutorService;
+&nbsp;import java.util.concurrent.Executors;
+&nbsp;import java.util.concurrent.FutureTask;
+&nbsp;
+&nbsp;/**
+&nbsp; * Command line interface (CLI) for the game.
+&nbsp; */
+&nbsp;public class Cli extends ViewObservable implements View {
+&nbsp;    private static final String STR_INPUT_CANCELED = &quot;User input canceled.&quot;;
+&nbsp;    private final boolean isSocket;
+&nbsp;    private final PrintStream out;
+&nbsp;    private Thread inputThread;
+<b class="nc">&nbsp;    private boolean myTurn = true;</b>
+&nbsp;
+<b class="nc">&nbsp;    private boolean chatAbilitator = true;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the CLI.
+&nbsp;     */
+<b class="nc">&nbsp;    public Cli(boolean isSocket) {</b>
+<b class="nc">&nbsp;        out = System.out;</b>
+<b class="nc">&nbsp;        this.isSocket = isSocket;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reads a line from the standard input.
+&nbsp;     *
+&nbsp;     * @return the string read from the input.
+&nbsp;     * @throws ExecutionException if the input stream thread is interrupted.
+&nbsp;     */
+&nbsp;    public String readLine() throws ExecutionException {
+<b class="nc">&nbsp;        FutureTask&lt;String&gt; futureTask = new FutureTask&lt;&gt;(new InputReadTask());</b>
+<b class="nc">&nbsp;        inputThread = new Thread(futureTask);</b>
+<b class="nc">&nbsp;        inputThread.start();</b>
+<b class="nc">&nbsp;        String input = null;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          input = futureTask.get();</b>
+<b class="nc">&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;            futureTask.cancel(true);</b>
+<b class="nc">&nbsp;            Thread.currentThread().interrupt();</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return input;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will start the CLI.
+&nbsp;     */
+&nbsp;    public void initCli(){
+<b class="nc">&nbsp;        out.println(&quot;&quot; + Colours.BOLD + Colours.GOLD + &quot;                                                                                                                        \n&quot; +</b>
+&nbsp;                &quot;                                                                                                                        \n&quot; +
+&nbsp;                &quot;                                                     ..                                                                 \n&quot; +
+&nbsp;                &quot;                                                  .-:-=-...                                                             \n&quot; +
+&nbsp;                &quot;          :::.-:    :...-=                        =.==:::.-.  ..                    ..:   ..---.                        \n&quot; +
+&nbsp;                &quot;           -..+.     ..:*.                       :-.* ::..+:  .:.=+                 ::* .::*-. ..-                      \n&quot; +
+&nbsp;                &quot;           -..-.    ...-:                        .-.-  .--.    -:+                  ::+ -.* ..:-.+.                     \n&quot; +
+&nbsp;                &quot;           -...-   ..:.-:     ....:.  ::.:-       ::..         -.+                  ::+.=:= .-==+=                      \n&quot; +
+&nbsp;                &quot;           -:-=:- .:==.-:    .-:..+  :-.-+.        .:....      -.=..::.             ::+ =.=     :.                      \n&quot; +
+&nbsp;                &quot;           -:---::::*-.=:       -::.:-.=+            ::....    -.:.::.:-:           -:+ .:-     -:==                    \n&quot; +
+&nbsp;                &quot;           --:=.-::*.-:=:        --::.==               ..:::.  =::+=:.::+  --+=-::. --+.::::--=..--  .-=+-:::.          \n&quot; +
+&nbsp;                &quot;           --:= -:=: =:=:         +::+-          .:::    ::-=  =:+:   -:+ =:-:..:-=.--+ --::=.. -:+: =:=:.:::+          \n&quot; +
+&nbsp;                &quot;           --:+ ==== =:=. :--::: .=:*-          :-::-=:  ::-+: =:+   .==- =:*---==- --+   :-=.  =-+ :==+---==-          \n&quot; +
+&nbsp;                &quot;           --:+     .=:=. +----+---*:           :--===+ :--+#  =-*   :=+. =-+  .---.==+   .-=-  =-* .=--  -::-          \n&quot; +
+&nbsp;                &quot;          :=---:   .=---: :=------*.             -=------=+*. :=-=: .=---  ---:--=*:=-=   --=- .=-+. .--::--=*          \n&quot; +
+&nbsp;                &quot;          .-----    -----. .-==+==                .-======-   .----  ---=   :-===-  ---   ----  ---.   :-===:           \n&quot; +
+&nbsp;                &quot;                                                                                                                        \n&quot; +
+&nbsp;                &quot;                                                                                                                        \n&quot;);
+<b class="nc">&nbsp;        out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;        out.println(Colours.BOLD + &quot;                                        Welcome to My Shelfie board game!&quot; + Colours.RESET);</b>
+&nbsp;
+&nbsp;        try{
+<b class="nc">&nbsp;            askServerInfo();</b>
+<b class="nc">&nbsp;        } catch (ExecutionException e){</b>
+<b class="nc">&nbsp;            out.println(STR_INPUT_CANCELED);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method asks the user the server IP address and port.
+&nbsp;     * @throws ExecutionException if {@link Cli#readLine()} fails.
+&nbsp;     */
+&nbsp;    private void askServerInfo() throws ExecutionException{
+<b class="nc">&nbsp;        Map&lt;String, String&gt; serverInfo = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        String defaultAddress = &quot;localhost&quot;;</b>
+<b class="nc">&nbsp;        String defaultSocketPort = &quot;12345&quot;;</b>
+<b class="nc">&nbsp;        String defaultRMIPort = &quot;1099&quot;;</b>
+&nbsp;        boolean validInput;
+&nbsp;
+<b class="nc">&nbsp;        out.println(&quot;Please enter the connection settings.&quot;);</b>
+&nbsp;        do{
+<b class="nc">&nbsp;            out.print(&quot;Enter the server address (default: &quot; + defaultAddress + &quot;):&quot;);</b>
+<b class="nc">&nbsp;            Scanner addrScanner = new Scanner(System.in);  // Create a Scanner object</b>
+<b class="nc">&nbsp;            String address = addrScanner.nextLine();</b>
+&nbsp;            //String address = readLine();
+&nbsp;
+<b class="nc">&nbsp;            if(address.equals(&quot;&quot;)){</b>
+<b class="nc">&nbsp;                serverInfo.put(&quot;address&quot;, defaultAddress);</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if (ClientController.isAddressValid(address)) {</b>
+<b class="nc">&nbsp;                serverInfo.put(&quot;address&quot;, address);</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                out.println(&quot;&quot; + Colours.BOLD + Colours.RED + &quot;Invalid input!&quot; + Colours.RESET);</b>
+<b class="nc">&nbsp;                validInput = false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } while (validInput == false);</b>
+&nbsp;
+&nbsp;        do{
+<b class="nc">&nbsp;            if(isSocket){</b>
+<b class="nc">&nbsp;                out.print(&quot;Enter the server port (default: &quot; + defaultSocketPort + &quot;):&quot;);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                out.print(&quot;Enter the server port (default: &quot; + defaultRMIPort + &quot;):&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            Scanner portScanner = new Scanner(System.in);  // Create a Scanner object</b>
+<b class="nc">&nbsp;            String port = portScanner.nextLine();</b>
+&nbsp;
+<b class="nc">&nbsp;            if(port.equals(&quot;&quot;)){</b>
+<b class="nc">&nbsp;                if(isSocket) {</b>
+<b class="nc">&nbsp;                    serverInfo.put(&quot;port&quot;, defaultSocketPort);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    serverInfo.put(&quot;port&quot;, defaultRMIPort);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if (ClientController.isPortValid(port)) {</b>
+<b class="nc">&nbsp;                serverInfo.put(&quot;port&quot;, port);</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                out.println(&quot;&quot; + Colours.BOLD + Colours.RED + &quot;Invalid input!&quot; + Colours.RESET);</b>
+<b class="nc">&nbsp;                validInput = false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } while (!validInput);</b>
+&nbsp;
+<b class="nc">&nbsp;        notifyObserver(viewObserver -&gt; viewObserver.onUpdateServerInfo(serverInfo));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method asks the user the username that will be used in the game.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void askNickname() {
+&nbsp;        boolean validInput;
+&nbsp;
+&nbsp;        do {
+<b class="nc">&nbsp;            out.print(&quot;Enter your nickname: &quot;);</b>
+<b class="nc">&nbsp;            Scanner nameScanner = new Scanner(System.in);  // Create a Scanner object</b>
+<b class="nc">&nbsp;            String nickname = nameScanner.nextLine();</b>
+&nbsp;
+<b class="nc">&nbsp;            if(nickname.equals(&quot;Controller&quot;) || nickname.equals(&quot;Model&quot;) || nickname.equals(&quot;Client&quot;) || nickname.equals(&quot;Server&quot;)){</b>
+<b class="nc">&nbsp;                out.println(&quot;The nickname \&quot;&quot; + nickname + &quot;\&quot; is not permitted.&quot;);</b>
+<b class="nc">&nbsp;                validInput = false;</b>
+&nbsp;            }  else {
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onUpdateNickname(nickname));</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } while (!validInput);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method asks the user the number of players for the game.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void askMaxPlayer() {
+&nbsp;        String num;
+&nbsp;        int numOfPlayers;
+&nbsp;        boolean validInput;
+&nbsp;
+&nbsp;        do {
+<b class="nc">&nbsp;            out.print(&quot;How many players are going to play?\n&quot; +</b>
+&nbsp;                    &quot;Minimum: 2\n&quot; +
+&nbsp;                    &quot;Maximum: 4\n&quot;);
+&nbsp;
+<b class="nc">&nbsp;            Scanner numScanner = new Scanner(System.in);  // Create a Scanner object</b>
+<b class="nc">&nbsp;            num = numScanner.nextLine();</b>
+&nbsp;
+&nbsp;            try{
+<b class="nc">&nbsp;                numOfPlayers = Integer.parseInt(num);</b>
+<b class="nc">&nbsp;                if(numOfPlayers &gt;= 2 &amp;&amp; numOfPlayers &lt;= 4){</b>
+<b class="nc">&nbsp;                    validInput = true;</b>
+<b class="nc">&nbsp;                    int finalNumOfPlayers = numOfPlayers;</b>
+<b class="nc">&nbsp;                    notifyObserver(viewObserver -&gt; viewObserver.onMaxPlayers(finalNumOfPlayers));</b>
+<b class="nc">&nbsp;                } else {</b>
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;The number is not within the correct bounds. It must be 2 &lt;= players &lt;= 4&quot; + Colours.RESET);</b>
+<b class="nc">&nbsp;                    validInput = false;</b>
+&nbsp;                }
+<b class="nc">&nbsp;            } catch (NumberFormatException e){</b>
+<b class="nc">&nbsp;                out.println(&quot;&quot; + Colours.RED + Colours.BOLD + e.getMessage() + Colours.RESET);</b>
+<b class="nc">&nbsp;                validInput = false;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        } while (!validInput);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method asks the user which cards he wants to pick from the board.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void askBoardMove(){
+<b class="nc">&nbsp;        out.print(Colours.SHOW_CURSOR);</b>
+&nbsp;        boolean validInput;
+&nbsp;
+&nbsp;        do{
+<b class="nc">&nbsp;            out.println(&quot;&quot; + Colours.BOLD + Colours.GREEN + &quot;YOUR TURN!&quot; + Colours.RESET);</b>
+<b class="nc">&nbsp;            out.print(&quot;Which cards do you want to pick?\n&quot; +</b>
+&nbsp;                    &quot;You can pick up to 3 cards as: Row1,Column1,Row2,Column2,Row3,Column3\n&quot; +
+&nbsp;                    &quot;(Separate the coordinates with a comma)\n&quot;+
+&nbsp;                    &quot;The objects must be in line (same row or column), adjacent and with ad least one side free.\n&quot;+
+&nbsp;                    &quot;Type -showcommon to show the common objectives\n&quot;+
+&nbsp;                    &quot;Type -showpersonal to show your personal objective\n&quot;+
+&nbsp;                    &quot;Type -showothers to show the opponents&#39; library\n&quot;+
+&nbsp;                    &quot;Type -c_message to send a public chat message\n&quot;+
+&nbsp;                    &quot;Type -c_-p_Receiver_message to send a private message\n&quot;+
+&nbsp;                    &quot;Type SEE to se all chat messages received\n&quot;
+&nbsp;            );
+&nbsp;
+<b class="nc">&nbsp;            Scanner coordScanner = new Scanner(System.in);  // Create a Scanner object</b>
+<b class="nc">&nbsp;            String coordinates = coordScanner.nextLine();</b>
+&nbsp;
+<b class="nc">&nbsp;            if(coordinates.equals(&quot;-showcommon&quot;)){</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onRequestCommonObjectives());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if (coordinates.equals(&quot;-showpersonal&quot;)){</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onRequestPersonalObjective());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if (coordinates.equals(&quot;-showothers&quot;)){</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onRequestOthersLibrary());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            }else if(coordinates.split(&quot;_&quot;)[0].equals(&quot;-c&quot;)){</b>
+<b class="nc">&nbsp;              String[] ncm = coordinates.split(&quot;_&quot;);</b>
+<b class="nc">&nbsp;              if(ncm[1].equals(&quot;-p&quot;)){</b>
+<b class="nc">&nbsp;                  notifyObserver(viewObserver -&gt; viewObserver.onChatMessage(null,ncm[2],ncm[3]));</b>
+&nbsp;              }
+&nbsp;              else{
+<b class="nc">&nbsp;                  notifyObserver(viewObserver -&gt; viewObserver.onChatMessage(null,&quot;all&quot;,ncm[1]));</b>
+&nbsp;              }
+<b class="nc">&nbsp;              validInput = true;;</b>
+<b class="nc">&nbsp;            } else if (coordinates.equals(&quot;SEE&quot;)) {</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onChatLogMessage());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if(ClientController.isInputValid(coordinates)){</b>
+&nbsp;
+<b class="nc">&nbsp;                String[] parsedCoordinates = coordinates.split(&quot;,&quot;);</b>
+<b class="nc">&nbsp;                ArrayList&lt;Integer&gt; coordinatesToSend = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                for (int i = 0; i &lt; parsedCoordinates.length; i++) {</b>
+<b class="nc">&nbsp;                    coordinatesToSend.add(Integer.parseInt(parsedCoordinates[i]));</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onUpdateBoardMove(coordinatesToSend));</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input!&quot;);</b>
+<b class="nc">&nbsp;                out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;                validInput = false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } while (!validInput);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method asks the user the order and column in which to put the cards.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void askLibraryMove() {
+<b class="nc">&nbsp;        chatAbilitator = true;</b>
+<b class="nc">&nbsp;        out.print(Colours.SHOW_CURSOR);</b>
+&nbsp;        boolean validInput;
+&nbsp;
+&nbsp;        do{
+<b class="nc">&nbsp;            out.print(&quot;Please put the order followed by the column in which you wish to add the cards to your library\n&quot; +</b>
+&nbsp;                    &quot;You must put all the objects you have in hand as: First_To_Be_Added,Second_To_Be_Added,Third_To_Be_Added,Column\n&quot;+
+&nbsp;                    &quot;Type -showcommon to show the common objectives\n&quot;+
+&nbsp;                    &quot;Type -showpersonal to show your personal objective\n&quot;+
+&nbsp;                    &quot;Type -showothers to show the opponents&#39; library\n&quot;+
+&nbsp;                    &quot;Type -c_message to send a public chat message\n&quot;+
+&nbsp;                    &quot;Type -c_-p_Receiver_message to send a private message\n&quot;+
+&nbsp;                    &quot;Type SEE to se all chat messages received\n&quot;
+&nbsp;            );
+&nbsp;
+<b class="nc">&nbsp;            Scanner orderAndColumnScanner = new Scanner(System.in);  // Create a Scanner object</b>
+<b class="nc">&nbsp;            String orderAndColumn = orderAndColumnScanner.nextLine();</b>
+&nbsp;
+<b class="nc">&nbsp;            if(orderAndColumn.equals(&quot;-showcommon&quot;)){</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onRequestCommonObjectives());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if (orderAndColumn.equals(&quot;-showpersonal&quot;)){</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onRequestPersonalObjective());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if (orderAndColumn.equals(&quot;-showothers&quot;)){</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onRequestOthersLibrary());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if(orderAndColumn.split(&quot;_&quot;)[0].equals(&quot;-c&quot;)){</b>
+<b class="nc">&nbsp;                String[] ncm = orderAndColumn.split(&quot;_&quot;);</b>
+<b class="nc">&nbsp;                if(ncm[1].equals(&quot;-p&quot;)){</b>
+<b class="nc">&nbsp;                    notifyObserver(viewObserver -&gt; viewObserver.onChatMessage(null,ncm[2],ncm[3]));</b>
+&nbsp;                }
+&nbsp;                else {
+<b class="nc">&nbsp;                    notifyObserver(viewObserver -&gt; viewObserver.onChatMessage(null,&quot;all&quot;,ncm[1]));</b>
+&nbsp;                }
+<b class="nc">&nbsp;                validInput = true;;</b>
+<b class="nc">&nbsp;            } else if (orderAndColumn.equals(&quot;SEE&quot;)) {</b>
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onChatLogMessage());</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else if(ClientController.isInputValid(orderAndColumn)){</b>
+&nbsp;
+<b class="nc">&nbsp;                String[] parsedCoordinates = orderAndColumn.split(&quot;,&quot;);</b>
+<b class="nc">&nbsp;                ArrayList&lt;Integer&gt; orderAndColumnToSend = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                for(int i = 0; i &lt; parsedCoordinates.length; i++){</b>
+<b class="nc">&nbsp;                    orderAndColumnToSend.add(Integer.parseInt(parsedCoordinates[i]));</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                notifyObserver(viewObserver -&gt; viewObserver.onUpdateLibraryMove(orderAndColumnToSend));</b>
+<b class="nc">&nbsp;                validInput = true;</b>
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input!&quot;);</b>
+<b class="nc">&nbsp;                out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;                validInput = false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } while (!validInput);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method shows the turn to the player.
+&nbsp;     *
+&nbsp;     * @param player                    is the {@link model.player.Player player&#39;s nickname}, used in {@link ClientController} to check whether the message is for this user.
+&nbsp;     * @param rcvGameBoard              is the {@link Board game board}.
+&nbsp;     * @param rcvPlayerLibrary          is the {@link Library player&#39;s library}.
+&nbsp;     * @param rcvObjectsInHand          is the {@link ArrayList} of objects that a player currently has in hand.
+&nbsp;     * @param completedCommonObjectives is the array containing the points the player has received from each common objective.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList&lt;ObjectCard&gt; rcvObjectsInHand, int[] completedCommonObjectives){
+<b class="nc">&nbsp;        clearCli();</b>
+<b class="nc">&nbsp;        out.print(Colours.HIDE_CURSOR);</b>
+<b class="nc">&nbsp;        out.println(Colours.BOLD + player + &quot;&#39;s turn&quot; + Colours.RESET);</b>
+<b class="nc">&nbsp;        showBoard(rcvGameBoard);</b>
+<b class="nc">&nbsp;        showObjInHand(rcvObjectsInHand);</b>
+<b class="nc">&nbsp;        showLibrary(rcvPlayerLibrary);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method shows the board when it&#39;s not my turn, so that the current user does not see an outdated game board.
+&nbsp;     * @param rcvGameBoard is the {@link Board game board}.
+&nbsp;     */
+&nbsp;    public void showNotMyTurn(Board rcvGameBoard){
+<b class="nc">&nbsp;        clearCli();</b>
+<b class="nc">&nbsp;        showBoard(rcvGameBoard);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method show the lobby to the user.
+&nbsp;     * @param players are the usernames of the players currently connected to the game.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showLobby(ArrayList&lt;String&gt; players) {
+<b class="nc">&nbsp;        clearCli();</b>
+<b class="nc">&nbsp;        out.println(&quot;Connected players:&quot;);</b>
+&nbsp;        for (String playerName:
+<b class="nc">&nbsp;             players) {</b>
+<b class="nc">&nbsp;            out.println(playerName);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints the board.
+&nbsp;     * @param gameBoard is the board passed by the {@link ClientController}.
+&nbsp;     */
+&nbsp;    private void showBoard(Board gameBoard){
+<b class="nc">&nbsp;        int columnsToPrint = 9;</b>
+<b class="nc">&nbsp;        out.print(printColumnNumbers(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;        for(int row = 0; row &lt; 9; row++){</b>
+<b class="nc">&nbsp;            out.print(printRowNumber(row));</b>
+<b class="nc">&nbsp;            for(int col = 0; col &lt; 9; col++){</b>
+<b class="nc">&nbsp;                if(gameBoard.getSpace(row,col).getTypeSpace().equals(TypeSpace.UNUSABLE) || gameBoard.getSpace(row,col).getObject() == null){</b>
+<b class="nc">&nbsp;                    out.print(&quot;   |&quot;);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.GREEN + &quot;?&quot; + Colours.RESET+ &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.WHITE1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.WHITE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.YELLOW + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.BLUE1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.LIGHT_BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(gameBoard.getSpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.PINK1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.PINK + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            out.print(Colours.RESET + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;            out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        out.println(Colours.RESET);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints the objects in hand for a player.
+&nbsp;     * @param rcvObjectsInHand is the array of objects that a player currently has in hand.
+&nbsp;     */
+&nbsp;    private void showObjInHand(ArrayList&lt;ObjectCard&gt; rcvObjectsInHand) {
+<b class="nc">&nbsp;        int columnsToPrint = 3;</b>
+<b class="nc">&nbsp;        out.print(printColumnNumbers(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;        out.print(printRowNumber(0));</b>
+<b class="nc">&nbsp;        for(int i = 0; i &lt; 3; i++){</b>
+<b class="nc">&nbsp;            if((rcvObjectsInHand.get(i) == null) || (rcvObjectsInHand.get(i).getObjectColour().equals(ObjectColour.EMPTY))){</b>
+<b class="nc">&nbsp;                out.print(&quot;   |&quot;);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.GREEN1)){</b>
+<b class="nc">&nbsp;                    out.print(&quot; &quot; + Colours.GREEN + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.WHITE1)){</b>
+<b class="nc">&nbsp;                    out.print(&quot; &quot; + Colours.WHITE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.YELLOW1)){</b>
+<b class="nc">&nbsp;                    out.print(&quot; &quot; + Colours.YELLOW + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.BLUE1)){</b>
+<b class="nc">&nbsp;                    out.print(&quot; &quot; + Colours.BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){</b>
+<b class="nc">&nbsp;                    out.print(&quot; &quot; + Colours.LIGHT_BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                } else if(rcvObjectsInHand.get(i).getObjectColour().isEquals(ObjectColour.PINK1)){</b>
+<b class="nc">&nbsp;                    out.print(&quot; &quot; + Colours.PINK + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        out.println(Colours.RESET);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints the player&#39;s library.
+&nbsp;     * @param playerLibrary is the library passed by the {@link ClientController}.
+&nbsp;     */
+&nbsp;    private void showLibrary(Library playerLibrary){
+<b class="nc">&nbsp;        int columnsToPrint = 5;</b>
+<b class="nc">&nbsp;        out.print(printColumnNumbers(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;        for(int row = 0; row &lt; 6; row++){</b>
+<b class="nc">&nbsp;            out.print(printRowNumber(row));</b>
+<b class="nc">&nbsp;            for(int col = 0; col &lt; 5; col++){</b>
+<b class="nc">&nbsp;                if(playerLibrary.getLibrarySpace(row, col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){</b>
+<b class="nc">&nbsp;                    out.print(&quot;   |&quot;);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.GREEN1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.GREEN + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.WHITE1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.WHITE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.YELLOW + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.BLUE1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.LIGHT_BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if(playerLibrary.getLibrarySpace(row,col).getObject().getObjectColour().isEquals(ObjectColour.PINK1)){</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.PINK + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;            out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        out.println(Colours.RESET);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints the current {@link CommonObjective common objectives}.
+&nbsp;     *
+&nbsp;     * @param commonObjective1          is the first common objective of the game.
+&nbsp;     * @param commonObjective2          is the second common objective of the game.
+&nbsp;     * @param completedCommonObjectives is the array of points for each completed common objective.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+&nbsp;
+<b class="nc">&nbsp;        out.println(&quot;FIRST CO VALUE: &quot; + completedCommonObjectives[0] + &quot; SECOND CO VALUE: &quot; + completedCommonObjectives[1]);</b>
+&nbsp;
+<b class="nc">&nbsp;        out.println(&quot;The common objectives are:&quot;);</b>
+<b class="nc">&nbsp;        switch(commonObjective1.getObjectiveNumeral()){</b>
+&nbsp;            case 0:
+<b class="nc">&nbsp;                out.print(commonObjective1.getDescription());</b>
+<b class="nc">&nbsp;                out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;                if(completedCommonObjectives[0] &gt; 0){</b>
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.GREEN + &quot;COMPLETED WITH &quot; + completedCommonObjectives[0] + &quot; POINTS!&quot; + Colours.RESET);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.RED + &quot;NOT DONE YET!&quot; + Colours.RESET);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                out.print(commonObjective2.getDescription());</b>
+<b class="nc">&nbsp;                out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;                if(completedCommonObjectives[1] &gt; 0){</b>
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.GREEN + &quot;COMPLETED WITH &quot; + completedCommonObjectives[1] + &quot; POINTS!&quot; + Colours.RESET);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.RED + &quot;NOT DONE YET!&quot; + Colours.RESET);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case 1:
+<b class="nc">&nbsp;                out.print(commonObjective2.getDescription());</b>
+<b class="nc">&nbsp;                out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;                if(completedCommonObjectives[0] &gt; 0){</b>
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.GREEN + &quot;COMPLETED WITH &quot; + completedCommonObjectives[0] + &quot; POINTS!&quot; + Colours.RESET);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.RED + &quot;NOT DONE YET!&quot; + Colours.RESET);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                out.print(commonObjective1.getDescription());</b>
+<b class="nc">&nbsp;                out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;                if(completedCommonObjectives[1] &gt; 0){</b>
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.GREEN + &quot;COMPLETED WITH &quot; + completedCommonObjectives[1] + &quot; POINTS!&quot; + Colours.RESET);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    out.println(&quot;&quot; + Colours.BOLD + Colours.RED + &quot;NOT DONE YET!&quot; + Colours.RESET);</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method shows the current {@link PersonalObjective personal objective} of the player.
+&nbsp;     * @param personalObjective is the personal objective of the player.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showPersonalObjective(String player, PersonalObjective personalObjective) {
+<b class="nc">&nbsp;        out.println(&quot;Your personal objective is:&quot;);</b>
+<b class="nc">&nbsp;        printPersonalObjective(personalObjective);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method shows the other players&#39; library.
+&nbsp;     * @param sender is the sender of the message.
+&nbsp;     * @param librariesOfPlayers is the {@link HashMap} containing the other players&#39; usernames as keys and libraries as values.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showOthersLibrary(String sender, HashMap&lt;String, Library&gt; librariesOfPlayers) {
+<b class="nc">&nbsp;        for(String username : librariesOfPlayers.keySet()){</b>
+<b class="nc">&nbsp;            out.println(Colours.BOLD + username + &quot;&#39;s library:&quot; + Colours.RESET);</b>
+<b class="nc">&nbsp;            showLibrary(librariesOfPlayers.get(username));</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showChat(String sender,boolean isPrivate, String message) {
+&nbsp;        String senderOut;
+<b class="nc">&nbsp;        if(isPrivate){senderOut = &quot;PRIVATE | &quot; + sender;}</b>
+<b class="nc">&nbsp;        else{senderOut = sender;}</b>
+<b class="nc">&nbsp;        out.println(&quot;&quot; + Colours.BOLD + Colours.GREEN + senderOut + Colours.RESET + &quot;: &quot; + message);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints an error.
+&nbsp;     * @param errorString is the explanation of the error as shown in most {@link exceptions.MyShelfieRuntimeExceptions runtime exceptions}.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showGenericError(String player, String errorString){
+<b class="nc">&nbsp;        clearCli();</b>
+&nbsp;
+<b class="nc">&nbsp;        out.print(&quot;&quot; + Colours.BOLD + Colours.RED + errorString + Colours.RESET);</b>
+<b class="nc">&nbsp;        out.print(&quot;\n\n&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method shows the winner at the end of the game.
+&nbsp;     * @param winner is the username of the winner.
+&nbsp;     * @param leaderboard is the leaderboard of the game (Username: Points).
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void showWinner(String winner, HashMap&lt;String, Integer&gt; leaderboard) {
+<b class="nc">&nbsp;        clearCli();</b>
+&nbsp;
+<b class="nc">&nbsp;        out.println(&quot;Player: \&quot;&quot; + winner + &quot;\&quot; has won!&quot;);</b>
+<b class="nc">&nbsp;        out.println(&quot;Leaderboard:\n&quot;);</b>
+<b class="nc">&nbsp;        leaderboard.forEach((username, points) -&gt; out.println(&quot;Player: &quot; + username + &quot; || Points: &quot; + points));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints the current {@link PersonalObjective personal objective} of the player.
+&nbsp;     * @param personalObjective is the personal objective of the player.
+&nbsp;     */
+&nbsp;    private void printPersonalObjective(PersonalObjective personalObjective) {
+<b class="nc">&nbsp;        int columnsToPrint = 5;</b>
+<b class="nc">&nbsp;        out.print(printColumnNumbers(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;        for(int row = 0; row &lt; 6; row++) {</b>
+<b class="nc">&nbsp;            out.print(printRowNumber(row));</b>
+<b class="nc">&nbsp;            for (int col = 0; col &lt; 5; col++) {</b>
+<b class="nc">&nbsp;                if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().equals(ObjectColour.EMPTY)) {</b>
+<b class="nc">&nbsp;                    out.print(&quot;   |&quot;);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.GREEN1)) {</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.GREEN + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.WHITE1)) {</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.WHITE + &quot;?&quot; + Colours.RESET+ &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.YELLOW1)) {</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.YELLOW + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.BLUE1)) {</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.LIGHT_BLUE1)) {</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.LIGHT_BLUE + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+<b class="nc">&nbsp;                    } else if (personalObjective.getLibraryGrid()[row][col].getObject().getObjectColour().isEquals(ObjectColour.PINK1)) {</b>
+<b class="nc">&nbsp;                        out.print(&quot; &quot; + Colours.PINK + &quot;?&quot; + Colours.RESET + &quot; |&quot;);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            out.print(&quot;\n&quot;);</b>
+<b class="nc">&nbsp;            out.print(printSeparator(columnsToPrint) + &quot;\n&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        out.println(Colours.RESET);</b>
+&nbsp;
+<b class="nc">&nbsp;        out.print(&quot; Done &quot; + Colours.UNDERLINED + &quot; 1 | 2 | 3 | 4 | 5 | 6 &quot; + Colours.RESET + &quot;\n&quot; +</b>
+&nbsp;                  &quot; Pts. &quot; + Colours.UNDERLINED + &quot; 1 | 2 | 4 | 6 | 9 | 12&quot; + Colours.RESET + &quot;\n&quot;);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method preapres the row numbers for both the board and the library.
+&nbsp;     * @param row is the row to be printed.
+&nbsp;     * @return the formatted string.
+&nbsp;     */
+&nbsp;    private String printRowNumber(int row) {
+<b class="nc">&nbsp;        StringBuilder strRowBld = new StringBuilder(&quot; &quot;);</b>
+<b class="nc">&nbsp;        strRowBld.append(row).append(&quot; |&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        return strRowBld.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prepares the row separator.
+&nbsp;     * @param maxColumns is the number of columns of the object to print.
+&nbsp;     * @return the formatted string.
+&nbsp;     */
+&nbsp;    private String printSeparator(int maxColumns){
+<b class="nc">&nbsp;        StringBuilder strSeparatorBld = new StringBuilder(&quot;   +&quot;);</b>
+<b class="nc">&nbsp;        for(int i = 0; i &lt; maxColumns; i++){</b>
+<b class="nc">&nbsp;            strSeparatorBld.append(&quot;---+&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return strSeparatorBld.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method prints the column numbers for both the board and the library.
+&nbsp;     * @param maxColumns is the number of columns of the object to print.
+&nbsp;     * @return the formatted string.
+&nbsp;     */
+&nbsp;    private String printColumnNumbers(int maxColumns) {
+<b class="nc">&nbsp;        StringBuilder strIndexBld = new StringBuilder(&quot;   &quot;);</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; maxColumns; i++) {</b>
+<b class="nc">&nbsp;            strIndexBld.append(&quot;  &quot;).append(i).append(&quot; &quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return strIndexBld.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears the CLI terminal.
+&nbsp;     */
+&nbsp;    private void clearCli() {
+<b class="nc">&nbsp;        out.println(Colours.CLEAR);</b>
+<b class="nc">&nbsp;        out.flush();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter for myTurn parameter
+&nbsp;     * @return myTurn value
+&nbsp;     */
+<b class="nc">&nbsp;    public boolean getMyTurn(){return myTurn;}</b>
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void setMyTurn(boolean turn) {this.myTurn=turn;}</b>
+&nbsp;    @Override
+&nbsp;    public void askChat() {
+<b class="nc">&nbsp;        if(myTurn)return;</b>
+&nbsp;        boolean validInput;
+&nbsp;        do{
+<b class="nc">&nbsp;            System.out.println(</b>
+&nbsp;                 &quot;Chat service out of your turn:\n&quot; +
+&nbsp;                         &quot;Type -c_message to send a public chat message\n&quot; +
+&nbsp;                         &quot;Type -c_-p_Receiver_message to send a private message\n&quot; +
+&nbsp;                         &quot;Type SEE to see the chat log\n&quot;+
+&nbsp;                         &quot;Type EXIT to exit chat&quot;);
+&nbsp;            try {
+<b class="nc">&nbsp;                String[] text = readLine().split(&quot;_&quot;);</b>
+<b class="nc">&nbsp;                switch (text[0]) {</b>
+&nbsp;                    case &quot;EXIT&quot; -&gt; {
+<b class="nc">&nbsp;                        out.println(&quot;Exiting chat service&quot;);</b>
+<b class="nc">&nbsp;                        chatAbilitator = false;</b>
+&nbsp;                        return;
+&nbsp;                    }
+&nbsp;                    case &quot;-c&quot; -&gt; {
+<b class="nc">&nbsp;                        validInput = true;</b>
+<b class="nc">&nbsp;                        if (text[1].equals(&quot;-p&quot;))</b>
+<b class="nc">&nbsp;                            notifyObserver(viewObserver -&gt; viewObserver.onChatMessage(null, text[2], text[3]));</b>
+<b class="nc">&nbsp;                        else notifyObserver(viewObserver -&gt; viewObserver.onChatMessage(null, &quot;all&quot;, text[1]));</b>
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                    case &quot;SEE&quot; -&gt; {
+<b class="nc">&nbsp;                        validInput = true;</b>
+<b class="nc">&nbsp;                        notifyObserver(viewObserver -&gt; viewObserver.onChatLogMessage());</b>
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                    default -&gt; {
+<b class="nc">&nbsp;                        out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input!&quot;);</b>
+<b class="nc">&nbsp;                        out.print(Colours.RESET);</b>
+<b class="nc">&nbsp;                        validInput = false;</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;            } catch (ExecutionException e) {</b>
+<b class="nc">&nbsp;                throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }while(!validInput);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public boolean getChatAbilitator() {return chatAbilitator;}</b>
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void setChatAbilitator(boolean value) {this.chatAbilitator = value;}</b>
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

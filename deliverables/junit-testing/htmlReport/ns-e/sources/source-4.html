@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > NetworkView</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: NetworkView (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NetworkView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;import model.board.Board;
+&nbsp;import model.commonobjective.CommonObjective;
+&nbsp;import model.library.Library;
+&nbsp;import model.library.PersonalObjective;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import network.messages.*;
+&nbsp;import view.View;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class hides the network to the controller.
+&nbsp; */
+&nbsp;public class NetworkView implements View {
+&nbsp;    private final StartServerImpl server;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor of NetworkView
+&nbsp;     * @param server is the server who is handling the client connection
+&nbsp;     */
+<b class="nc">&nbsp;    public NetworkView(StartServerImpl server) {this.server = server;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gives the client related to the NetworkView
+&nbsp;     * @return The server parameter of the NetworkView object
+&nbsp;     */
+<b class="nc">&nbsp;    public StartServerImpl getServer(){return server;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Send the update of the model to the clients
+&nbsp;     * @param message It is the message containing the update of the model
+&nbsp;     */
+&nbsp;   public void sendMessageTo(Message message) {
+<b class="nc">&nbsp;       server.sendMessage(message);</b>
+&nbsp;   }
+&nbsp;
+&nbsp;   @Override
+&nbsp;    public void showLobby(ArrayList&lt;String&gt; players) {
+<b class="nc">&nbsp;        server.sendMessage(new ShowLobbyMessage(players));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askNickname() {
+<b class="nc">&nbsp;        server.sendMessage(new AskNicknameMessage(&quot;Controller&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askMaxPlayer() {
+<b class="nc">&nbsp;        server.sendMessage(new AskMaxPlayerMessage(&quot;Controller&quot;) );</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askBoardMove() {
+<b class="nc">&nbsp;        server.sendMessage(new AskBoardMoveMessage(&quot;Controller&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askLibraryMove() {
+<b class="nc">&nbsp;        server.sendMessage(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList&lt;ObjectCard&gt; playerObjInHand, int[] completedCommonObjectives) {
+<b class="nc">&nbsp;        server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand, completedCommonObjectives));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showWinner(String winner, HashMap&lt;String, Integer&gt; leaderboard) {
+<b class="nc">&nbsp;        server.sendMessage(new EndGameMessage(winner, leaderboard));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void showNotMyTurn(Board gameBoard) {}</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+<b class="nc">&nbsp;        server.sendMessage(new ShowCommonObjectiveMessage(player,commonObjective1,commonObjective2));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showPersonalObjective(String player,PersonalObjective personalObjective) {
+<b class="nc">&nbsp;        server.sendMessage(new ShowPersonalObjectiveMessage(player,personalObjective));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showGenericError(String player, String payload) {
+<b class="nc">&nbsp;        server.sendMessage(new GenericErrorMessage(player, payload));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void showOthersLibrary(String sender, HashMap&lt;String, Library&gt; librariesOfPlayers) {
+<b class="nc">&nbsp;        server.sendMessage(new ShowLibrariesMessage(sender, librariesOfPlayers));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void showChat(String sender,boolean isPrivate, String message) {}</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean getMyTurn() {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setMyTurn(boolean turn) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void askChat() {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean getChatAbilitator() {
+<b class="nc">&nbsp;       return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setChatAbilitator(boolean value) {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;    public void showChat(ChatMessage message) {server.sendMessage(message);}</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

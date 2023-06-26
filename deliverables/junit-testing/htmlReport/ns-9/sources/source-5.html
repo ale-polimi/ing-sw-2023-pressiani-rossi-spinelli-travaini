@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FourByFourNew</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.commonobjective</a>
+</div>
+
+<h1>Coverage Summary for Class: FourByFourNew (model.commonobjective)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FourByFourNew</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (42/42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.commonobjective;
+&nbsp;
+&nbsp;import enumerations.ObjectColour;
+&nbsp;import model.library.Library;
+&nbsp;import view.cli.Colours;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="fc">&nbsp;public class FourByFourNew extends CommonObjective{</b>
+&nbsp;    private Library library ;
+&nbsp;    private static final int MIN_GROUP_SIZE = 4;
+&nbsp;    private static final int MIN_GROUP_COUNT = 5;
+&nbsp;    int groupCount;
+<b class="fc">&nbsp;    int count = 1;</b>
+&nbsp;
+<b class="fc">&nbsp;    private final String description = &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot;\n&quot; +</b>
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|  Four groups each containing at least\n&quot; +
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|  4 tiles of the same type (not necessarily\n&quot; +
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|  in the depicted shape).\n&quot; +
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|  The tiles of one group can be different\n&quot; +
+&nbsp;            &quot; x4  from those of another group.&quot;;
+&nbsp;    @Override
+&nbsp;    public boolean applyObjectiveRules(Library library, int x, int y) {
+<b class="fc">&nbsp;        this.library= library;</b>
+<b class="fc">&nbsp;       return hasValidGroups();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String getDescription() {
+<b class="fc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public boolean hasValidGroups() {
+<b class="fc">&nbsp;             groupCount = 0;</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                    ObjectColour colour = library.getLibrarySpace(i,j).getObject().getObjectColour();</b>
+<b class="fc">&nbsp;                    if (colour != ObjectColour.EMPTY) {</b>
+&nbsp;
+<b class="fc">&nbsp;                        List&lt;int[]&gt; group = getAdjacentCells(i, j, colour);</b>
+<b class="fc">&nbsp;                        if (group.size() &gt;= MIN_GROUP_SIZE) {</b>
+&nbsp;
+<b class="fc">&nbsp;                            if (isUniqueGroup(group)) {</b>
+&nbsp;
+<b class="fc">&nbsp;                                 groupCount = countGroup(group);</b>
+&nbsp;
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                    library.getLibrarySpace(i,j).setGroup(0);</b>
+<b class="fc">&nbsp;                    library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            if (groupCount &gt;= MIN_GROUP_COUNT) {</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        private List&lt;int[]&gt; getAdjacentCells(int i, int j, ObjectColour colour) {
+<b class="fc">&nbsp;            List&lt;int[]&gt; group = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            if (i &gt;= 0 &amp;&amp; i &lt; 6 &amp;&amp; j &gt;= 0 &amp;&amp; j &lt; 5 &amp;&amp; !library.getLibrarySpace(i, j).isVisited()) {</b>
+<b class="fc">&nbsp;                ObjectColour currentColour = library.getLibrarySpace(i,j).getObject().getObjectColour();</b>
+<b class="fc">&nbsp;                if (currentColour != null &amp;&amp; currentColour.isEquals(colour)) {</b>
+<b class="fc">&nbsp;                    library.getLibrarySpace(i,j).setVisited(true);</b>
+<b class="fc">&nbsp;                    group.add(new int[] {i, j});</b>
+<b class="fc">&nbsp;                    if(i != 0) group.addAll(getAdjacentCells(i - 1, j, colour));</b>
+<b class="fc">&nbsp;                    if(i != 5) group.addAll(getAdjacentCells(i + 1, j, colour));</b>
+<b class="fc">&nbsp;                    if(j != 0) group.addAll(getAdjacentCells(i, j - 1, colour));</b>
+<b class="fc">&nbsp;                    if(j != 4) group.addAll(getAdjacentCells(i, j + 1, colour));</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            return group;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;        private boolean isUniqueGroup(List&lt;int[]&gt; group) {
+<b class="fc">&nbsp;            int row = group.get(0)[0];</b>
+<b class="fc">&nbsp;            int col = group.get(0)[1];</b>
+<b class="fc">&nbsp;            return library.getLibrarySpace(row,col).getGroup() == 0;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;        private int countGroup(List&lt;int[]&gt; group) {
+&nbsp;
+<b class="fc">&nbsp;            for (int i = 0; i &lt; group.size(); i++) {</b>
+<b class="fc">&nbsp;                int[] cell = group.get(i);</b>
+<b class="fc">&nbsp;                int row = cell[0];</b>
+<b class="fc">&nbsp;                int col = cell[1];</b>
+<b class="fc">&nbsp;                library.getLibrarySpace(row, col).setGroup(count);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return ++count; //</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

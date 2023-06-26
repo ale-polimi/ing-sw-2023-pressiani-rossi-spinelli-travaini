@@ -1,0 +1,138 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Colours</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view.cli</a>
+</div>
+
+<h1>Coverage Summary for Class: Colours (view.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Colours</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view.cli;
+&nbsp;
+&nbsp;/**
+&nbsp; * Enumeration that holds the colours for the CLI.
+&nbsp; */
+<b class="fc">&nbsp;public enum Colours {</b>
+&nbsp;    /* Clear color to clear the cli */
+<b class="fc">&nbsp;    CLEAR(&quot;\033[H\033[2J&quot;),</b>
+<b class="fc">&nbsp;    RESET(&quot;\033[0m&quot;),</b>
+<b class="fc">&nbsp;    UNDERLINED(&quot;\033[4m&quot;),</b>
+<b class="fc">&nbsp;    BOLD(&quot;\033[1m&quot;),</b>
+<b class="fc">&nbsp;    DELETE_INPUT(&quot;\033[2K&quot;),</b>
+<b class="fc">&nbsp;    HIDE_CURSOR(&quot;\033[?25l&quot;),</b>
+<b class="fc">&nbsp;    SHOW_CURSOR(&quot;\033[?25h&quot;),</b>
+<b class="fc">&nbsp;    BLACK(&quot;\033[38;5;0m&quot;),</b>
+<b class="fc">&nbsp;    GREEN(&quot;\033[38;5;10m&quot;),</b>
+<b class="fc">&nbsp;    WHITE(&quot;\033[38;5;15m&quot;),</b>
+<b class="fc">&nbsp;    YELLOW(&quot;\033[38;5;220m&quot;),</b>
+<b class="fc">&nbsp;    BLUE(&quot;\033[38;5;21m&quot;),</b>
+<b class="fc">&nbsp;    LIGHT_BLUE(&quot;\033[38;5;14m&quot;),</b>
+<b class="fc">&nbsp;    PINK(&quot;\033[38;5;13m&quot;),</b>
+<b class="fc">&nbsp;    RED(&quot;\033[38;5;9m&quot;),</b>
+<b class="fc">&nbsp;    GOLD(&quot;\033[38;5;214m&quot;);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    private final String code;
+<b class="fc">&nbsp;    Colours(String code){</b>
+<b class="fc">&nbsp;        this.code = code;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return code;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

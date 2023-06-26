@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BoardSpace</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.board</a>
+</div>
+
+<h1>Coverage Summary for Class: BoardSpace (model.board)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BoardSpace</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.board;
+&nbsp;
+&nbsp;import enumerations.TypeSpace;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import observer.Observable;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;
+&nbsp;public class BoardSpace extends Observable implements Serializable {
+&nbsp;    private TypeSpace typeSpace;
+&nbsp;    private ObjectCard objectContained;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor method. The tile will have the required typespace and will be empty.
+&nbsp;     * @param typespace is the type of the board space. There are multiple {@link TypeSpace typespaces}.
+&nbsp;     */
+<b class="fc">&nbsp;    public BoardSpace(TypeSpace typespace){</b>
+<b class="fc">&nbsp;        this.typeSpace = typespace;</b>
+<b class="fc">&nbsp;        this.objectContained = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     * @return the type of the tile.
+&nbsp;     */
+&nbsp;    public TypeSpace getTypeSpace() {
+<b class="fc">&nbsp;        return typeSpace;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     * @return the object card contained in the tile.
+&nbsp;     */
+&nbsp;    public ObjectCard getObject(){
+<b class="fc">&nbsp;        return objectContained;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Set to null the parameter objectContained. Useful for {@link Board#pickupObjectFrom(BoardSpace) pickupObjectFrom} method
+&nbsp;     */
+&nbsp;    public void removeObject(){
+<b class="fc">&nbsp;        objectContained = null;</b>
+&nbsp;        /* notifyObserver(new GenericModelChangeMessage()); */
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method allows you to put an object in this tile. Useful for {@link Board#putObjectIn(BoardSpace, ObjectCard) putObjectIn} method.
+&nbsp;     * @param objectCard is the object card that needs to be put in the tile.
+&nbsp;     */
+&nbsp;    public void insertObject(ObjectCard objectCard){
+<b class="fc">&nbsp;        objectContained = objectCard;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

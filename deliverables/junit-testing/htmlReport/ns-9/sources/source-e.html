@@ -1,0 +1,412 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TwoByFour</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.commonobjective</a>
+</div>
+
+<h1>Coverage Summary for Class: TwoByFour (model.commonobjective)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TwoByFour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (141/141)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TwoByFour$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (142/142)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.commonobjective;
+&nbsp;
+&nbsp;import model.library.Library;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import view.cli.Colours;
+&nbsp;
+<b class="fc">&nbsp;public class TwoByFour extends TwoEqualsInColumn {</b>
+&nbsp;
+<b class="fc">&nbsp;    private final String description = &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot;   Two groups each containing 4 tiles of\n&quot; +</b>
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|  the same type in a 2x2 square. The tiles\n&quot; +
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|  of one square must be the same of\n&quot; +
+&nbsp;            &quot;  x2   those of the other square.&quot;;
+&nbsp;    @Override
+&nbsp;    public boolean applyObjectiveRules(Library library, int x, int y) {
+<b class="fc">&nbsp;        if(rule == true) {</b>
+<b class="fc">&nbsp;            return super.applyObjectiveRules(library, x, y);</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="fc">&nbsp;            return controlObjective(library);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private int countBlue = 0;</b>
+<b class="fc">&nbsp;    private int countLightBlue = 0;</b>
+<b class="fc">&nbsp;    private int countGreen = 0;</b>
+<b class="fc">&nbsp;    private int countWhite = 0;</b>
+<b class="fc">&nbsp;    private int countPink = 0;</b>
+<b class="fc">&nbsp;    private int countYellow = 0;</b>
+&nbsp;    private boolean rule;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will check the presence of two squares composed by four spaces containing objects of the same colour(the two squares must be the same colour)
+&nbsp;     * @param library is the personal library of the players
+&nbsp;     */
+&nbsp;    public boolean controlObjective(Library library) {
+<b class="fc">&nbsp;         countBlue = 0;</b>
+<b class="fc">&nbsp;         countLightBlue = 0;</b>
+<b class="fc">&nbsp;         countGreen = 0;</b>
+<b class="fc">&nbsp;         countWhite = 0;</b>
+<b class="fc">&nbsp;         countPink = 0;</b>
+<b class="fc">&nbsp;         countYellow = 0;</b>
+<b class="fc">&nbsp;         rule = true;</b>
+<b class="fc">&nbsp;        ObjectCard tempCard = null;</b>
+<b class="fc">&nbsp;        for (int x = 0; x &lt; 5; x = x+2) {</b>
+<b class="fc">&nbsp;            for (int y = 0; y &lt; 5; y++) {</b>
+<b class="fc">&nbsp;                if (applyObjectiveRules(library, x, y)) {</b>
+<b class="fc">&nbsp;                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) &amp;&amp; library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())&amp;&amp;</b>
+<b class="fc">&nbsp;                    !library.getLibrarySpace(x,y).isVisited() &amp;&amp; !library.getLibrarySpace(x,y+1).isVisited() &amp;&amp; !library.getLibrarySpace(x+1,y+1).isVisited() &amp;&amp; !library.getLibrarySpace(x+1,y).isVisited()) {</b>
+<b class="fc">&nbsp;                        library.getLibrarySpace(x,y).setVisited(true);</b>
+<b class="fc">&nbsp;                        library.getLibrarySpace(x,y+1).setVisited(true);</b>
+<b class="fc">&nbsp;                        library.getLibrarySpace(x+1,y+1).setVisited(true);</b>
+<b class="fc">&nbsp;                        library.getLibrarySpace(x+1,y).setVisited(true);</b>
+<b class="fc">&nbsp;                        tempCard = library.getLibrarySpace(x, y).getObject();</b>
+<b class="fc">&nbsp;                        switch (tempCard.getObjectColour()) {</b>
+&nbsp;                            case BLUE1, BLUE2, BLUE3 -&gt; {
+<b class="fc">&nbsp;                                countBlue++;</b>
+<b class="fc">&nbsp;                                if (countBlue == 2) {</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case PINK1, PINK2, PINK3 -&gt; {
+<b class="fc">&nbsp;                                countPink++;</b>
+<b class="fc">&nbsp;                                if (countPink == 2) {</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case GREEN1, GREEN2, GREEN3 -&gt; {
+<b class="fc">&nbsp;                                countGreen++;</b>
+<b class="fc">&nbsp;                                if (countGreen == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;
+&nbsp;                            }
+&nbsp;                            case WHITE1, WHITE2, WHITE3 -&gt; {
+<b class="fc">&nbsp;                                countWhite ++;</b>
+<b class="fc">&nbsp;                                if(countWhite == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case YELLOW1,YELLOW2,YELLOW3 -&gt; {
+<b class="fc">&nbsp;                                countYellow ++;</b>
+<b class="fc">&nbsp;                                if (countYellow == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case LIGHT_BLUE1, LIGHT_BLUE2, LIGHT_BLUE3 -&gt; {
+<b class="fc">&nbsp;                                countLightBlue ++;</b>
+<b class="fc">&nbsp;                                if (countLightBlue == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                        }
+<b class="fc">&nbsp;                        y++;</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        for (int x = 1; x &lt;5; x = x+2) {</b>
+<b class="fc">&nbsp;            for (int y = 0; y &lt; 5; y++) {</b>
+<b class="fc">&nbsp;                if (applyObjectiveRules(library, x, y)) {</b>
+<b class="fc">&nbsp;                    if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) &amp;&amp; library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())&amp;&amp;</b>
+<b class="fc">&nbsp;                            !library.getLibrarySpace(x,y).isVisited() &amp;&amp; !library.getLibrarySpace(x,y+1).isVisited() &amp;&amp; !library.getLibrarySpace(x+1,y+1).isVisited() &amp;&amp; !library.getLibrarySpace(x+1,y).isVisited()) {</b>
+<b class="fc">&nbsp;                        if((library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x-1, y).getObject().getObjectColour()) &amp;&amp; library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x -1, y+1).getObject().getObjectColour()))||</b>
+<b class="fc">&nbsp;                                (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x+2, y).getObject().getObjectColour()) &amp;&amp; library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x +2, y+1).getObject().getObjectColour()))){</b>
+&nbsp;
+&nbsp;                        }else {
+<b class="fc">&nbsp;                            library.getLibrarySpace(x,y).setVisited(true);</b>
+<b class="fc">&nbsp;                            library.getLibrarySpace(x,y+1).setVisited(true);</b>
+<b class="fc">&nbsp;                            library.getLibrarySpace(x+1,y+1).setVisited(true);</b>
+<b class="fc">&nbsp;                            library.getLibrarySpace(x+1,y).setVisited(true);</b>
+<b class="fc">&nbsp;                        tempCard = library.getLibrarySpace(x, y).getObject();</b>
+<b class="fc">&nbsp;                        switch (tempCard.getObjectColour()) {</b>
+&nbsp;                            case BLUE1, BLUE2, BLUE3 -&gt; {
+<b class="fc">&nbsp;                                countBlue++;</b>
+<b class="fc">&nbsp;                                if (countBlue == 2) {</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case PINK1, PINK2, PINK3 -&gt; {
+<b class="fc">&nbsp;                                countPink++;</b>
+<b class="fc">&nbsp;                                if (countPink == 2) {</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case GREEN1, GREEN2, GREEN3 -&gt; {
+<b class="fc">&nbsp;                                countGreen++;</b>
+<b class="fc">&nbsp;                                if (countGreen == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;
+&nbsp;                            }
+&nbsp;                            case WHITE1, WHITE2, WHITE3 -&gt; {
+<b class="fc">&nbsp;                                countWhite ++;</b>
+<b class="fc">&nbsp;                                if(countWhite == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case YELLOW1,YELLOW2,YELLOW3 -&gt; {
+<b class="fc">&nbsp;                                countYellow ++;</b>
+<b class="fc">&nbsp;                                if (countYellow == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            case LIGHT_BLUE1, LIGHT_BLUE2, LIGHT_BLUE3 -&gt; {
+<b class="fc">&nbsp;                                countLightBlue ++;</b>
+<b class="fc">&nbsp;                                if (countLightBlue == 2){</b>
+<b class="fc">&nbsp;                                    rule = false;</b>
+<b class="fc">&nbsp;                                    for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;                                        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                                            library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;                                        }
+&nbsp;
+&nbsp;                                    }
+<b class="fc">&nbsp;                                    return true;</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                        }
+<b class="fc">&nbsp;                            y++;</b>
+&nbsp;                     }
+&nbsp;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        rule = false;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 6; i++) {</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc">&nbsp;                library.getLibrarySpace(i,j).setVisited(false);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountBlue() {
+<b class="fc">&nbsp;        return countBlue;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountGreen() {
+<b class="fc">&nbsp;        return countGreen;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountLightBlue() {
+<b class="fc">&nbsp;        return countLightBlue;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountPink() {
+<b class="fc">&nbsp;        return countPink;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountWhite() {
+<b class="fc">&nbsp;        return countWhite;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountYellow() {
+<b class="fc">&nbsp;        return countYellow;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDescription() {
+<b class="fc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

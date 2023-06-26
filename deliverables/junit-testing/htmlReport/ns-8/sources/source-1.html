@@ -1,0 +1,257 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Board</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.board</a>
+</div>
+
+<h1>Coverage Summary for Class: Board (model.board)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94,6%
+  </span>
+  <span class="absValue">
+    (53/56)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.board;
+&nbsp;
+&nbsp;import enumerations.TypeSpace;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import network.messages.Message;
+&nbsp;import observer.Observable;
+&nbsp;import observer.Observer;
+&nbsp;
+&nbsp;import java.beans.PropertyChangeListener;
+&nbsp;import java.io.Serializable;
+&nbsp;
+&nbsp;public class Board extends Observable implements Serializable, Observer {
+&nbsp;    private BoardSpace[][] boardSpaces;
+&nbsp;    PropertyChangeListener listener;
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Board class custom constructor
+&nbsp;     */
+<b class="fc">&nbsp;    public Board(){</b>
+<b class="fc">&nbsp;        boardSpaces = new BoardSpace[9][9];</b>
+<b class="fc">&nbsp;        for(int i = 0; i &lt;= 8; i++){</b>
+<b class="fc">&nbsp;            for(int j = 0; j &lt;= 8; j++){</b>
+<b class="fc">&nbsp;                if((i == 0 &amp;&amp; j == 4) || (i == 1 &amp;&amp; j == 5) || (i == 3 &amp;&amp; j == 1) || (i == 4 &amp;&amp; j == 0) || (i == 4 &amp;&amp; j == 8) || (i == 5 &amp;&amp; j == 7) || (i == 7 &amp;&amp; j == 3) || (i == 8 &amp;&amp; j == 4)){</b>
+<b class="fc">&nbsp;                    boardSpaces[i][j] = new BoardSpace(TypeSpace.FOR_FOUR_PLAYERS);</b>
+<b class="fc">&nbsp;                }else if((i == 0 &amp;&amp; j == 3) || (i == 2 &amp;&amp; j == 2) || (i == 2 &amp;&amp; j == 6) || (i == 3 &amp;&amp; j == 8) || (i == 5 &amp;&amp; j == 0) || (i == 6 &amp;&amp; j == 2) || (i == 6 &amp;&amp; j == 6) || (i == 8 &amp;&amp; j == 5)){</b>
+<b class="fc">&nbsp;                    boardSpaces[i][j] = new BoardSpace(TypeSpace.FOR_THREE_PLAYERS);</b>
+<b class="fc">&nbsp;                } else if((i == 1 &amp;&amp; (j &gt;= 3 &amp;&amp; j &lt;= 4)) || (i == 2 &amp;&amp; (j &gt;= 3 &amp;&amp; j &lt;= 5)) || (i == 3 &amp;&amp; (j &gt;= 2 &amp;&amp; j &lt;= 7)) || (i == 4 &amp;&amp; (j &gt;= 1 &amp;&amp; j &lt;= 7)) || (i == 5 &amp;&amp; (j &gt;= 1 &amp;&amp; j &lt;= 6)) || (i == 6 &amp;&amp; (j &gt;= 3 &amp;&amp; j &lt;= 5)) || (i == 7 &amp;&amp; (j &gt;= 4 &amp;&amp; j &lt;= 5))){</b>
+<b class="fc">&nbsp;                    boardSpaces[i][j] = new BoardSpace(TypeSpace.FOR_TWO_PLAYERS);</b>
+&nbsp;                } else {
+<b class="fc">&nbsp;                    boardSpaces[i][j] = new BoardSpace(TypeSpace.UNUSABLE);</b>
+&nbsp;                }
+&nbsp;                /* Subscribing to the observable boardSpaces */
+&nbsp;                //boardSpaces[i][j].addObserver(this);
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns the specified space in the board
+&nbsp;     * @param x is the X coordinate of the tile in the board.
+&nbsp;     * @param y is the Y coordinate of the tile in the board.
+&nbsp;     * @return the tile at the requested (X,Y) coordinates.
+&nbsp;     */
+&nbsp;    public BoardSpace getSpace(int x, int y){
+<b class="fc">&nbsp;        return boardSpaces[x][y];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method allows players to pick up an object from a tile of the board.
+&nbsp;     * @param boardSpace is the tile where the player wants to pick up an object card from.
+&nbsp;     * @return the object contained in the tile.
+&nbsp;     */
+&nbsp;    public ObjectCard pickupObjectFrom(BoardSpace boardSpace){
+<b class="fc">&nbsp;        ObjectCard objectPicked = boardSpace.getObject();</b>
+<b class="fc">&nbsp;        boardSpace.removeObject();</b>
+<b class="fc">&nbsp;        return objectPicked;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method allows you to put an object in the specified tile.
+&nbsp;     * @param boardSpace is the tile the server wants to put the object card in.
+&nbsp;     * @param objectCard is the object card that will be in the tile.
+&nbsp;     */
+&nbsp;    public void putObjectIn(BoardSpace boardSpace, ObjectCard objectCard) {
+<b class="fc">&nbsp;        boardSpace.insertObject(objectCard);</b>
+&nbsp;        //notifyObserver(new GenericModelChangeMessage());
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method is a checker used in {@link controller.Controller#pickObjectFromBoard(int, int) the pick object method} in the controller.
+&nbsp;     * @param row is the row of the object.
+&nbsp;     * @param column is the column of the object.
+&nbsp;     * @return {@code true} if the space is surrounded by other objects, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public boolean isSpaceSurrounded(int row, int column) {
+<b class="fc">&nbsp;        if(row == 0){</b>
+<b class="fc">&nbsp;            if((getSpace(row + 1, column).getObject() != null) &amp;&amp; (getSpace(row, column + 1).getObject() != null) &amp;&amp; (getSpace(row, column - 1).getObject() != null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else  if (row == 8){</b>
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() != null) &amp;&amp; (getSpace(row, column + 1).getObject() != null) &amp;&amp; (getSpace(row, column - 1).getObject() != null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else  if (column == 0){</b>
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() != null) &amp;&amp; (getSpace(row + 1, column).getObject() != null) &amp;&amp; (getSpace(row, column + 1).getObject() != null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else  if (column == 8){</b>
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() != null) &amp;&amp; (getSpace(row + 1, column).getObject() != null) &amp;&amp; (getSpace(row, column - 1).getObject() != null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() != null) &amp;&amp; (getSpace(row + 1, column).getObject() != null) &amp;&amp; (getSpace(row, column - 1).getObject() != null) &amp;&amp; (getSpace(row, column + 1).getObject() != null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method is a checker used in the controller to check whether the board needs to be restored.
+&nbsp;     * @param row is the row of the object.
+&nbsp;     * @param column is the column of the object.
+&nbsp;     * @return {@code true} if the space is surrounded only by empty spaces, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public boolean isSpaceSurroundedByNull(int row, int column) {
+<b class="fc">&nbsp;        if(row == 0){</b>
+<b class="fc">&nbsp;            if((getSpace(row + 1, column).getObject() == null) &amp;&amp; (getSpace(row, column + 1).getObject() == null) &amp;&amp; (getSpace(row, column - 1).getObject() == null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else  if (row == 8){</b>
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() == null) &amp;&amp; (getSpace(row, column + 1).getObject() == null) &amp;&amp; (getSpace(row, column - 1).getObject() == null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else  if (column == 0){</b>
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() == null) &amp;&amp; (getSpace(row + 1, column).getObject() == null) &amp;&amp; (getSpace(row, column + 1).getObject() == null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else  if (column == 8){</b>
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() == null) &amp;&amp; (getSpace(row + 1, column).getObject() == null) &amp;&amp; (getSpace(row, column - 1).getObject() == null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="fc">&nbsp;            if((getSpace(row - 1, column).getObject() == null) &amp;&amp; (getSpace(row + 1, column).getObject() == null) &amp;&amp; (getSpace(row, column - 1).getObject() == null) &amp;&amp; (getSpace(row, column + 1).getObject() == null)){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void update(Message message) {
+<b class="nc">&nbsp;        System.out.println(this.getClass().toString() + &quot;: I have been notified!&quot;);</b>
+<b class="nc">&nbsp;        notifyObserver(message);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

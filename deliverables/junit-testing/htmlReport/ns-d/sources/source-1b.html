@@ -1,0 +1,140 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ShowLobbyMessage</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.messages</a>
+</div>
+
+<h1>Coverage Summary for Class: ShowLobbyMessage (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShowLobbyMessage</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33,3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.messages;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;/**
+&nbsp; * This message shows the lobby while the players are connecting.
+&nbsp; */
+&nbsp;public class ShowLobbyMessage extends Message {
+&nbsp;    ArrayList&lt;String&gt; players;
+&nbsp;    int numOfPlayers;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Default constructor.
+&nbsp;     * @param players are the players currently connected to the game.
+&nbsp;     */
+&nbsp;    public ShowLobbyMessage(ArrayList&lt;String&gt; players) {
+<b class="fc">&nbsp;        super(&quot;Controller&quot;, MessageType.SHOW_LOBBY);</b>
+<b class="fc">&nbsp;        this.players = players;</b>
+<b class="fc">&nbsp;        this.numOfPlayers = players.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method to return the currently connected players.
+&nbsp;     * @return the players.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;String&gt; getLobbyPlayers() {
+<b class="nc">&nbsp;        return players;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method to return the number of currently connected players.
+&nbsp;     * @return the number of players.
+&nbsp;     */
+&nbsp;    public int getNumOfPlayers() {
+<b class="nc">&nbsp;        return numOfPlayers;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

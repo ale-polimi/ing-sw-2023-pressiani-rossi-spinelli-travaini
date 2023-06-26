@@ -1,0 +1,425 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Game</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model</a>
+</div>
+
+<h1>Coverage Summary for Class: Game (model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,5%
+  </span>
+  <span class="absValue">
+    (23/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93%
+  </span>
+  <span class="absValue">
+    (66/71)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Game$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    88,9%
+  </span>
+  <span class="absValue">
+    (24/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,1%
+  </span>
+  <span class="absValue">
+    (67/72)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model;
+&nbsp;
+&nbsp;import controller.Controller;
+&nbsp;import enumerations.GameState;
+&nbsp;import enumerations.TypeSpace;
+&nbsp;import exceptions.game.TooManyPlayersException;
+&nbsp;import model.board.Board;
+&nbsp;import model.commonobjective.CommonObjective;
+&nbsp;import model.objects.ObjectsDeck;
+&nbsp;import model.player.Player;
+&nbsp;import network.messages.AddedPlayerMessage;
+&nbsp;import network.messages.ChatLogMessage;
+&nbsp;import network.messages.ChatMessage;
+&nbsp;import network.messages.Message;
+&nbsp;import network.structure.NetworkView;
+&nbsp;import observer.Observable;
+&nbsp;import observer.Observer;
+&nbsp;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;public class Game extends Observable implements Observer {
+&nbsp;    private Board board;
+&nbsp;    private GameState gameState;
+&nbsp;    private ArrayList&lt;Player&gt; players;
+&nbsp;    private Player playerInTurn;
+<b class="fc">&nbsp;    public static int MAX_PLAYERS = 4;</b>
+<b class="fc">&nbsp;    private int chosenPlayersNumber = 1;</b>
+&nbsp;    private ObjectsDeck objectsDeck;
+&nbsp;    private HashMap&lt;CommonObjective, ArrayList&lt;Integer&gt;&gt; commonObjectivesPoints;
+<b class="fc">&nbsp;    private final ArrayList&lt;ChatMessage&gt; chatLog = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor.
+&nbsp;     */
+<b class="fc">&nbsp;    public Game() {</b>
+<b class="fc">&nbsp;        this.board = new Board();</b>
+<b class="fc">&nbsp;        board.addObserver(this);</b>
+<b class="fc">&nbsp;        this.players = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        this.objectsDeck = new ObjectsDeck();</b>
+<b class="fc">&nbsp;        this.commonObjectivesPoints = new HashMap&lt;&gt;(2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method adds a common objective and its points to the game.
+&nbsp;     * @param commonObjective is a common objective created by the {@link Controller controller} in the {@link Controller#setupCommonObjectives() appropriate method}.
+&nbsp;     */
+&nbsp;    public void addCommonObjective(CommonObjective commonObjective){
+<b class="fc">&nbsp;        switch(players.size()){</b>
+&nbsp;            case 2:
+<b class="fc">&nbsp;                commonObjectivesPoints.put(commonObjective, new ArrayList&lt;&gt;(Arrays.asList(8,4)));</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case 3:
+<b class="fc">&nbsp;                commonObjectivesPoints.put(commonObjective, new ArrayList&lt;&gt;(Arrays.asList(8,6,4)));</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case 4:
+<b class="fc">&nbsp;                commonObjectivesPoints.put(commonObjective, new ArrayList&lt;&gt;(Arrays.asList(8,6,4,2)));</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            default:
+&nbsp;                ;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method to return the common objectives for this game.
+&nbsp;     * @return the map of common objectives and relative available points.
+&nbsp;     */
+&nbsp;    public HashMap&lt;CommonObjective, ArrayList&lt;Integer&gt;&gt; getCommonObjectives() {
+<b class="fc">&nbsp;        return commonObjectivesPoints;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks if the number of players is within the permitted bounds.
+&nbsp;     * @param chosenMaxPlayers is the number of players chose by the first player.
+&nbsp;     * @return {@code true} if the number is within the bounds, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public boolean isInBounds(int chosenMaxPlayers){
+<b class="fc">&nbsp;        if (chosenMaxPlayers &gt;= 2 &amp;&amp; chosenMaxPlayers &lt;= 4){</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will set the maximum number of players in this game.
+&nbsp;     * @param chosenMaxPlayers is the number of players allowed in this game.
+&nbsp;     */
+&nbsp;    public void setMaxPlayers(int chosenMaxPlayers) {
+<b class="fc">&nbsp;        this.chosenPlayersNumber = chosenMaxPlayers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method that returns this game&#39;s max players.
+&nbsp;     * @return the number of players allowed in this game.
+&nbsp;     */
+&nbsp;    public int getMaxPlayers(){
+<b class="fc">&nbsp;        return this.chosenPlayersNumber;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method sets the first player of the game.
+&nbsp;     */
+&nbsp;    public void setFirstPlayer(){
+<b class="fc">&nbsp;        players.get(0).setAsFirst();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method returns the first player of the game.
+&nbsp;     * @return the first {@link Player player} of the game.
+&nbsp;     */
+&nbsp;    public Player getFirstPlayer() {
+<b class="fc">&nbsp;        Player firstPlayer = null;</b>
+<b class="fc">&nbsp;        for (Player player: players){</b>
+<b class="fc">&nbsp;            if(player.isFirstPlayer()){</b>
+<b class="fc">&nbsp;                firstPlayer = player;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return firstPlayer;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Setter method for the state of the game.
+&nbsp;     * @param gameState is the new state of the game.
+&nbsp;     */
+&nbsp;    public void setGameState(GameState gameState){
+<b class="fc">&nbsp;        this.gameState = gameState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method that returns the state of the game.
+&nbsp;     * @return the current state of this game.
+&nbsp;     */
+&nbsp;    public GameState getGameState(){
+<b class="fc">&nbsp;        return this.gameState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Player getPlayerInTurn() {
+<b class="fc">&nbsp;        return playerInTurn;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPlayerInTurn(Player playerInTurn) {
+<b class="fc">&nbsp;        this.playerInTurn = playerInTurn;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method that will return the maximum number of player for this game.
+&nbsp;     * @return will return the maximum number of players for this game.
+&nbsp;     */
+&nbsp;    public int numOfPlayers(){
+<b class="fc">&nbsp;        return chosenPlayersNumber;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method that returns this board.
+&nbsp;     * @return will return the board of this game.
+&nbsp;     */
+&nbsp;    public Board getBoard() {
+<b class="fc">&nbsp;        return this.board;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method that returns the players in this game.
+&nbsp;     * @return the players in this game.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;Player&gt; getPlayers() {
+<b class="fc">&nbsp;        return players;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns the player who has to play next
+&nbsp;     * @return the next player in the game
+&nbsp;     */
+&nbsp;    public Player getNextPlayer(){
+<b class="fc">&nbsp;        int currPlayerIndex = getPlayers().indexOf(playerInTurn);</b>
+<b class="fc">&nbsp;        return getPlayers().get((currPlayerIndex + 1) % getMaxPlayers());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Setter of the playerInTurn with the player who has to play next
+&nbsp;     */
+&nbsp;    public void setNextPlayer(){
+<b class="fc">&nbsp;        this.playerInTurn = getNextPlayer();</b>
+&nbsp;        //notifyObserver(new NextTurnMessage());
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method that returns the deck of this game.
+&nbsp;     * @return the deck of this game.
+&nbsp;     */
+&nbsp;    public ObjectsDeck getObjectsDeck() {
+<b class="fc">&nbsp;        return objectsDeck;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will add a player to the game, if there&#39;s enough space.
+&nbsp;     * @param player is the player that will be added to this game.
+&nbsp;     * @throws TooManyPlayersException if the game has already enough players. The maximum number of players for this game has been set in {@link model.Game#setMaxPlayers(int) setMaxPlayers method}.
+&nbsp;     */
+&nbsp;    public void addToGame(Player player) throws TooManyPlayersException {
+<b class="fc">&nbsp;        if(players.size() &gt;= chosenPlayersNumber){</b>
+<b class="fc">&nbsp;            throw new TooManyPlayersException();</b>
+<b class="fc">&nbsp;        } else if (player.getNickname() == null) {</b>
+<b class="fc">&nbsp;            throw new NullPointerException();</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            players.add(player);</b>
+<b class="fc">&nbsp;            notifyObserver(new AddedPlayerMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will check if a player nickname has already been used.
+&nbsp;     * @param playerNickname is the username of the player.
+&nbsp;     * @return true if the username has already been used, false otherwise.
+&nbsp;     */
+&nbsp;    public boolean isNicknameTaken(String playerNickname){
+&nbsp;
+<b class="fc">&nbsp;        for (Player player : players) {</b>
+<b class="fc">&nbsp;            if (playerNickname.equals(player.getNickname())) {</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will restore the board, filling it with object cards.
+&nbsp;     * @param board is the board of this game.
+&nbsp;     */
+&nbsp;    public void restoreBoard(Board board) {
+<b class="fc">&nbsp;        for (int x = 0; x &lt; 9; x++) {</b>
+<b class="fc">&nbsp;            for (int y = 0; y &lt; 9; y++) {</b>
+<b class="fc">&nbsp;                if(objectsDeck.getAvailableObjects()==0)return;</b>
+<b class="fc">&nbsp;                if (!board.getSpace(x, y).getTypeSpace().equals(TypeSpace.UNUSABLE)) {</b>
+<b class="fc">&nbsp;                    switch (board.getSpace(x, y).getTypeSpace()) {</b>
+&nbsp;                        case FOR_FOUR_PLAYERS -&gt; {
+<b class="fc">&nbsp;                            if (players.size() == 4) {</b>
+&nbsp;
+<b class="fc">&nbsp;                                if (board.getSpace(x, y).getObject() == null) {</b>
+<b class="fc">&nbsp;                                    board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                        case FOR_THREE_PLAYERS -&gt; {
+<b class="fc">&nbsp;                            if (players.size() &gt;= 3) {</b>
+<b class="fc">&nbsp;                                if (board.getSpace(x, y).getObject() == null) {</b>
+<b class="fc">&nbsp;                                    board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;
+&nbsp;                        }
+&nbsp;                        case FOR_TWO_PLAYERS -&gt; {
+<b class="fc">&nbsp;                            if (players.size() &gt;= 2) {</b>
+<b class="fc">&nbsp;                                if (board.getSpace(x, y).getObject() == null) {</b>
+<b class="fc">&nbsp;                                    board.putObjectIn(board.getSpace(x, y), objectsDeck.removeFromDeck());</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;        //notifyObserver(new GenericModelChangeMessage());
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void update(Message message) {
+<b class="nc">&nbsp;        System.out.println(this.getClass().toString() + &quot;: I have been notified!&quot;);</b>
+<b class="nc">&nbsp;        notifyObserver(message);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ends the game.
+&nbsp;     */
+&nbsp;    public void endGame(){
+<b class="fc">&nbsp;        gameState = GameState.END;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Add a received chat message to the chat messages list
+&nbsp;     * @param chatMessage the ChatMessage to add
+&nbsp;     */
+<b class="nc">&nbsp;    public void addChatMessage(ChatMessage chatMessage){this.chatLog.add(chatMessage);}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for chat log parameter
+&nbsp;     * @return the chat log parameter
+&nbsp;     */
+<b class="nc">&nbsp;    public ArrayList&lt;ChatMessage&gt; getChatLog(){return chatLog;}</b>
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

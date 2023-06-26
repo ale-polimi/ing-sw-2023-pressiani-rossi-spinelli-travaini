@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ThreeColumnsMaxThreeDifferent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.commonobjective</a>
+</div>
+
+<h1>Coverage Summary for Class: ThreeColumnsMaxThreeDifferent (model.commonobjective)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThreeColumnsMaxThreeDifferent</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (36/36)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ThreeColumnsMaxThreeDifferent$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (37/37)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.commonobjective;
+&nbsp;
+&nbsp;import model.library.Library;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import view.cli.Colours;
+&nbsp;
+<b class="fc">&nbsp;public class ThreeColumnsMaxThreeDifferent extends CommonObjective {</b>
+&nbsp;    private int countObj;
+<b class="fc">&nbsp;    private final String description = &quot;  &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot;\n&quot; +</b>
+&nbsp;            &quot; |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|\n&quot; +
+&nbsp;            &quot; |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|     Three columns each formed by 6 tiles\n&quot; +
+&nbsp;            &quot; |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|     of maximum three different types. One\n&quot; +
+&nbsp;            &quot; |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|     column can show the same or a different\n&quot; +
+&nbsp;            &quot; |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|     combination of another column\n&quot; +
+&nbsp;            &quot; |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|\n&quot; +
+&nbsp;            &quot;  x3\n&quot; +
+&nbsp;            &quot;Max 3 =&quot;;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will check the presence of three columns where each column can have a maximum of three different colour
+&nbsp;     * @param library is the personal library of the players
+&nbsp;     * @param x is the row coordinate
+&nbsp;     * @param y is the column coordinate
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public boolean applyObjectiveRules(Library library, int x, int y) {
+<b class="fc">&nbsp;         countObj = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        for ( y = 0; y &lt; 5; y++) {</b>
+<b class="fc">&nbsp;            int countColours = 0;</b>
+<b class="fc">&nbsp;            int checkGreen = 0;</b>
+<b class="fc">&nbsp;            int checkWhite = 0;</b>
+<b class="fc">&nbsp;            int checkYellow = 0;</b>
+<b class="fc">&nbsp;            int checkBlue = 0;</b>
+<b class="fc">&nbsp;            int checkLightBlue = 0;</b>
+<b class="fc">&nbsp;            int checkPink = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;            for ( x = 0; x &lt;6 ; x++) {</b>
+<b class="fc">&nbsp;                ObjectCard tempCard = library.getLibrarySpace(x,y).getObject();</b>
+<b class="fc">&nbsp;                switch (tempCard.getObjectColour()){</b>
+&nbsp;                    case BLUE1,BLUE2,BLUE3 -&gt; {
+<b class="fc">&nbsp;                        checkBlue = 1;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                    case PINK1,PINK2,PINK3 -&gt; {
+<b class="fc">&nbsp;                        checkPink = 1;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                    case GREEN1,GREEN2,GREEN3 -&gt; {
+<b class="fc">&nbsp;                        checkGreen = 1;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                    case WHITE1,WHITE2,WHITE3 -&gt; {
+<b class="fc">&nbsp;                        checkWhite = 1;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                    case YELLOW1,YELLOW2,YELLOW3 -&gt; {
+<b class="fc">&nbsp;                        checkYellow = 1;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                    case LIGHT_BLUE1,LIGHT_BLUE2,LIGHT_BLUE3 -&gt; {
+<b class="fc">&nbsp;                        checkLightBlue = 1;</b>
+<b class="fc">&nbsp;                    }</b>
+&nbsp;                    case EMPTY -&gt; {
+<b class="fc">&nbsp;                        x=6;</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="fc">&nbsp;                if(x==5){</b>
+<b class="fc">&nbsp;                    countColours = checkPink+checkBlue+checkGreen+checkLightBlue+checkWhite+checkYellow;</b>
+<b class="fc">&nbsp;                    if(countColours&lt;4 &amp;&amp; countColours &gt; 0){</b>
+<b class="fc">&nbsp;                        countObj++;</b>
+<b class="fc">&nbsp;                        if(countObj==3){</b>
+<b class="fc">&nbsp;                            return true;</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getCountObj() {
+<b class="fc">&nbsp;        return countObj;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDescription() {
+<b class="fc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

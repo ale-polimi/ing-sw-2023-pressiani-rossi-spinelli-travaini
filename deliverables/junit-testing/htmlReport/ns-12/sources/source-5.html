@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > SelectMaxPlayersSceneController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view.gui.scene</a>
+</div>
+
+<h1>Coverage Summary for Class: SelectMaxPlayersSceneController (view.gui.scene)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SelectMaxPlayersSceneController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view.gui.scene;
+&nbsp;
+&nbsp;import javafx.event.Event;
+&nbsp;import javafx.fxml.FXML;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.input.MouseEvent;
+&nbsp;import observer.ViewObservable;
+&nbsp;import view.gui.Gui;
+&nbsp;
+<b class="nc">&nbsp;public class SelectMaxPlayersSceneController extends ViewObservable implements GenericSceneController {</b>
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Button twoPlayersButton;
+&nbsp;    @FXML
+&nbsp;    private Button threePlayersButton;
+&nbsp;    @FXML
+&nbsp;    private Button fourPlayersButton;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public void initialize(){
+<b class="nc">&nbsp;        twoPlayersButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onTwoPlayersButtonClick);</b>
+<b class="nc">&nbsp;        threePlayersButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onThreePlayersButtonClick);</b>
+<b class="nc">&nbsp;        fourPlayersButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onFourPlayersButtonClick);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onTwoPlayersButtonClick(Event event){
+<b class="nc">&nbsp;        twoPlayersButton.setDisable(true);</b>
+<b class="nc">&nbsp;        threePlayersButton.setDisable(true);</b>
+<b class="nc">&nbsp;        fourPlayersButton.setDisable(true);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        int players = 2;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        new Thread(() -&gt; notifyObserver(obs -&gt; obs.onMaxPlayers(players))).start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onThreePlayersButtonClick(Event event){
+<b class="nc">&nbsp;        twoPlayersButton.setDisable(true);</b>
+<b class="nc">&nbsp;        threePlayersButton.setDisable(true);</b>
+<b class="nc">&nbsp;        fourPlayersButton.setDisable(true);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        int players = 3;</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        new Thread(() -&gt; notifyObserver(obs -&gt; obs.onMaxPlayers(players))).start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onFourPlayersButtonClick(Event event){
+<b class="nc">&nbsp;        twoPlayersButton.setDisable(true);</b>
+<b class="nc">&nbsp;        threePlayersButton.setDisable(true);</b>
+<b class="nc">&nbsp;        fourPlayersButton.setDisable(true);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        int players = 4;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        new Thread(() -&gt; notifyObserver(obs -&gt; obs.onMaxPlayers(players))).start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

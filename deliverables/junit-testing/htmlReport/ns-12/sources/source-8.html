@@ -1,0 +1,498 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ShowLibraryThreePSceneController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view.gui.scene</a>
+</div>
+
+<h1>Coverage Summary for Class: ShowLibraryThreePSceneController (view.gui.scene)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShowLibraryThreePSceneController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/238)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ShowLibraryThreePSceneController$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/239)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view.gui.scene;
+&nbsp;
+&nbsp;import javafx.fxml.FXML;
+&nbsp;import javafx.scene.Node;
+&nbsp;import javafx.scene.Scene;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.scene.image.Image;
+&nbsp;import javafx.scene.input.MouseEvent;
+&nbsp;import javafx.scene.layout.*;
+&nbsp;import javafx.stage.Modality;
+&nbsp;import javafx.stage.Stage;
+&nbsp;import model.library.Library;
+&nbsp;import view.gui.SceneController;
+&nbsp;
+&nbsp;public class ShowLibraryThreePSceneController implements GenericSceneController{
+&nbsp;
+&nbsp;    private final Stage stage;
+&nbsp;    private double xOffset;
+&nbsp;    private double yOffset;
+&nbsp;    private Library playerLibrary1;
+&nbsp;    private Library playerLibrary2;
+&nbsp;    private String nickname1;
+&nbsp;    private String nickname2;
+&nbsp;    @FXML
+&nbsp;    private AnchorPane rootPane;
+&nbsp;    @FXML
+&nbsp;    private Button closeButton;
+&nbsp;    @FXML
+&nbsp;    private GridPane libraryGrid1;
+&nbsp;    @FXML
+&nbsp;    private GridPane libraryGrid2;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Label nickname1Label;
+&nbsp;    @FXML
+&nbsp;    private Label nickname2Label;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;    public ShowLibraryThreePSceneController(){</b>
+<b class="nc">&nbsp;        stage = new Stage();</b>
+<b class="nc">&nbsp;        stage.initOwner(SceneController.getActiveScene().getWindow());</b>
+<b class="nc">&nbsp;        stage.initModality(Modality.APPLICATION_MODAL);</b>
+<b class="nc">&nbsp;        stage.setAlwaysOnTop(true);</b>
+<b class="nc">&nbsp;        xOffset = 0;</b>
+<b class="nc">&nbsp;        yOffset = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    public void initialize(){
+<b class="nc">&nbsp;        rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, this::onRootPaneMousePressed);</b>
+<b class="nc">&nbsp;        rootPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, this::onRootPaneMouseDragged);</b>
+<b class="nc">&nbsp;        closeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this:: onCloseButtonClick);</b>
+<b class="nc">&nbsp;        SetLibraryGrid1(playerLibrary1);</b>
+<b class="nc">&nbsp;        SetLibraryGrid2(playerLibrary2);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;init&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onRootPaneMousePressed(MouseEvent event) {
+<b class="nc">&nbsp;        xOffset = stage.getX() - event.getScreenX();</b>
+<b class="nc">&nbsp;        yOffset = stage.getY() - event.getScreenY();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onRootPaneMouseDragged(MouseEvent event) {
+<b class="nc">&nbsp;        stage.setX(event.getScreenX() + xOffset);</b>
+<b class="nc">&nbsp;        stage.setY(event.getScreenY() + yOffset);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onCloseButtonClick(MouseEvent event){
+<b class="nc">&nbsp;        stage.close();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void displayPopUp(){
+<b class="nc">&nbsp;        stage.showAndWait();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setScene(Scene scene){
+<b class="nc">&nbsp;        stage.setScene(scene);</b>
+&nbsp;    }
+&nbsp;    public void setNickname1(String nicknames){
+<b class="nc">&nbsp;        nickname1 = nicknames;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;setter&quot;);</b>
+<b class="nc">&nbsp;        nickname1Label.setText(nickname1);</b>
+&nbsp;    }
+&nbsp;    public void setNickname2(String nicknames){
+<b class="nc">&nbsp;        nickname2 = nicknames;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;setter&quot;);</b>
+<b class="nc">&nbsp;        nickname2Label.setText(nickname2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void SetLibraryGrid1(Library playerLibrary){
+<b class="nc">&nbsp;        playerLibrary1 = playerLibrary;</b>
+<b class="nc">&nbsp;        for (int x = 0; x &lt; 6; x++) {</b>
+<b class="nc">&nbsp;            for (int y = 0; y &lt; 5; y++) {</b>
+<b class="nc">&nbsp;                if(libraryGrid1 != null) {</b>
+<b class="nc">&nbsp;                    for (Node node : libraryGrid1.getChildren()) {</b>
+<b class="nc">&nbsp;                        if ((GridPane.getRowIndex(node)== null &amp;&amp; x==0 &amp;&amp; GridPane.getColumnIndex(node) == null &amp;&amp; y== 0)</b>
+<b class="nc">&nbsp;                                ||(GridPane.getRowIndex(node)!= null &amp;&amp; GridPane.getColumnIndex(node) == null &amp;&amp;(GridPane.getRowIndex(node)==  x  &amp;&amp; y== 0))</b>
+<b class="nc">&nbsp;                                ||  (GridPane.getRowIndex(node)== null &amp;&amp; GridPane.getColumnIndex(node) != null &amp;&amp; x==0 &amp;&amp; GridPane.getColumnIndex(node) == y)||</b>
+<b class="nc">&nbsp;                                (GridPane.getRowIndex(node)!= null &amp;&amp; GridPane.getColumnIndex(node) != null &amp;&amp;(GridPane.getRowIndex(node) == x &amp;&amp; GridPane.getColumnIndex(node) == y)))  {</b>
+<b class="nc">&nbsp;                            Button b = (Button) node;</b>
+<b class="nc">&nbsp;                            if(playerLibrary!= null &amp;&amp; playerLibrary.getLibrarySpace(x,y) != null) {</b>
+<b class="nc">&nbsp;                                switch (playerLibrary.getLibrarySpace(x, y).getObject().getObjectColour()) {</b>
+&nbsp;                                    case GREEN1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/GREEN1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case GREEN2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/GREEN2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case GREEN3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/GREEN3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case BLUE1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/BLUE1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case BLUE2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/BLUE2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case BLUE3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/BLUE3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case WHITE1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/WHITE1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case WHITE2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/WHITE2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case WHITE3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/WHITE3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case LIGHT_BLUE1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/LIGHTBLUE1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case LIGHT_BLUE2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/LIGHTBLUE2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case LIGHT_BLUE3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/LIGHTBLUE3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case PINK1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/PINK1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case PINK2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/PINK2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case PINK3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/PINK3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case YELLOW1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/YELLOW1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case YELLOW2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/YELLOW2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case YELLOW3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/YELLOW3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case EMPTY -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(&quot;-fx-background-color: transparent&quot;);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                }
+&nbsp;                            }else{
+<b class="nc">&nbsp;                                b.setStyle(&quot;-fx-background-color: transparent&quot;);</b>
+&nbsp;                            }
+&nbsp;
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void SetLibraryGrid2(Library playerLibrary){
+<b class="nc">&nbsp;        playerLibrary2 = playerLibrary;</b>
+<b class="nc">&nbsp;        for (int x = 0; x &lt; 6; x++) {</b>
+<b class="nc">&nbsp;            for (int y = 0; y &lt; 5; y++) {</b>
+<b class="nc">&nbsp;                if(libraryGrid2 != null) {</b>
+<b class="nc">&nbsp;                    for (Node node : libraryGrid2.getChildren()) {</b>
+<b class="nc">&nbsp;                        if ((GridPane.getRowIndex(node)== null &amp;&amp; x==0 &amp;&amp; GridPane.getColumnIndex(node) == null &amp;&amp; y== 0)</b>
+<b class="nc">&nbsp;                                ||(GridPane.getRowIndex(node)!= null &amp;&amp; GridPane.getColumnIndex(node) == null &amp;&amp;(GridPane.getRowIndex(node)==  x  &amp;&amp; y== 0))</b>
+<b class="nc">&nbsp;                                ||  (GridPane.getRowIndex(node)== null &amp;&amp; GridPane.getColumnIndex(node) != null &amp;&amp; x==0 &amp;&amp; GridPane.getColumnIndex(node) == y)||</b>
+<b class="nc">&nbsp;                                (GridPane.getRowIndex(node)!= null &amp;&amp; GridPane.getColumnIndex(node) != null &amp;&amp;(GridPane.getRowIndex(node) == x &amp;&amp; GridPane.getColumnIndex(node) == y)))  {</b>
+<b class="nc">&nbsp;                            Button b = (Button) node;</b>
+<b class="nc">&nbsp;                            if(playerLibrary!= null &amp;&amp; playerLibrary.getLibrarySpace(x,y) != null) {</b>
+<b class="nc">&nbsp;                                switch (playerLibrary.getLibrarySpace(x, y).getObject().getObjectColour()) {</b>
+&nbsp;                                    case GREEN1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/GREEN1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case GREEN2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/GREEN2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case GREEN3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/GREEN3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case BLUE1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/BLUE1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case BLUE2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/BLUE2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case BLUE3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/BLUE3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case WHITE1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/WHITE1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case WHITE2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/WHITE2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case WHITE3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/WHITE3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case LIGHT_BLUE1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/LIGHTBLUE1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case LIGHT_BLUE2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/LIGHTBLUE2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case LIGHT_BLUE3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/LIGHTBLUE3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case PINK1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/PINK1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case PINK2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/PINK2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case PINK3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/PINK3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case YELLOW1 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/YELLOW1XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case YELLOW2 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/YELLOW2XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case YELLOW3 -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(null);</b>
+<b class="nc">&nbsp;                                        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource(&quot;/images/YELLOW3XS.png&quot;).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);</b>
+<b class="nc">&nbsp;                                        Background background = new Background(backgroundImage);</b>
+<b class="nc">&nbsp;                                        b.setBackground(background);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                    case EMPTY -&gt; {
+<b class="nc">&nbsp;                                        b.setStyle(&quot;-fx-background-color: transparent&quot;);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;                                }
+&nbsp;                            }else{
+<b class="nc">&nbsp;                                b.setStyle(&quot;-fx-background-color: transparent&quot;);</b>
+&nbsp;                            }
+&nbsp;
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,356 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Player</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.player</a>
+</div>
+
+<h1>Coverage Summary for Class: Player (model.player)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Player</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.player;
+&nbsp;
+&nbsp;import enumerations.ObjectColour;
+&nbsp;import enumerations.PlayerState;
+&nbsp;import exceptions.player.EmptyDeckException;
+&nbsp;import exceptions.player.TooManyObjectsInHandException;
+&nbsp;import model.commonobjective.CommonObjective;
+&nbsp;import model.library.Library;
+&nbsp;import model.library.LibrarySpace;
+&nbsp;import model.library.PersonalObjective;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import network.messages.GenericModelChangeMessage;
+&nbsp;import observer.Observable;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class Player extends Observable {
+&nbsp;    private final String nickname;
+&nbsp;    private boolean firstPlayer;
+&nbsp;    private boolean firstToEnd;
+<b class="fc">&nbsp;    public static int MAX_OBJECTS_IN_HAND = 3;</b>
+<b class="fc">&nbsp;    private ArrayList&lt;ObjectCard&gt; objectsInHand = new ArrayList&lt;&gt;(Arrays.asList(null, null, null));</b>
+&nbsp;    private final Library library;
+&nbsp;    private final PersonalObjective personalObjective;
+<b class="fc">&nbsp;    int[] completedCommonObjectives = {0,0};</b>
+&nbsp;    private PlayerState playerState;
+&nbsp;    private int points;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor of the Player class
+&nbsp;     * @param username is the username of the player, given to the server by the player.
+&nbsp;     * @param json is the string containing the parameters of the personal objective, given to the player by the server
+&nbsp;     */
+<b class="fc">&nbsp;    public Player(String username, String json) {</b>
+<b class="fc">&nbsp;        this.nickname = username;</b>
+<b class="fc">&nbsp;        this.library = new Library();</b>
+<b class="fc">&nbsp;        this.personalObjective = new PersonalObjective(json);</b>
+<b class="fc">&nbsp;        this.firstPlayer = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns the player&#39;s nickname
+&nbsp;     * @return the nickname of the player.
+&nbsp;     */
+&nbsp;    public String getNickname() {
+<b class="fc">&nbsp;        return nickname;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Set the player as first player
+&nbsp;     */
+&nbsp;    public void setAsFirst(){
+<b class="fc">&nbsp;        this.firstPlayer = true;</b>
+<b class="fc">&nbsp;        notifyObserver(new GenericModelChangeMessage());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns if the player is the first player of the game
+&nbsp;     * @return true if the player is the first player of the game.
+&nbsp;     */
+&nbsp;    public boolean isFirstPlayer() {
+<b class="fc">&nbsp;        return firstPlayer;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns if the player is the first to complete is library
+&nbsp;     * @return true if the player is the first to have ended a game.
+&nbsp;     */
+&nbsp;    public boolean isFirstToEnd() {
+<b class="fc">&nbsp;        return firstToEnd;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Setter of the first player to end the game
+&nbsp;     * @param firstToEnd is the player who finished the game first
+&nbsp;     */
+&nbsp;    public void setFirstToEnd(boolean firstToEnd) {
+<b class="fc">&nbsp;        this.firstToEnd = firstToEnd;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns the total points scored by the player
+&nbsp;     * @return the points scored by the player.
+&nbsp;     */
+&nbsp;    public int getPoints() {
+<b class="fc">&nbsp;        return points;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will add points to the player.
+&nbsp;     * @param points are the points to add.
+&nbsp;     */
+&nbsp;    public void addPoints(int points) {
+<b class="fc">&nbsp;        this.points += points;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will tell which common objectives the player has already done.
+&nbsp;     * @param commonObjective is the completed common objective.
+&nbsp;     * @param points are the points gained by the player associated to the common objective.
+&nbsp;     */
+&nbsp;    public void setCompletedCommonObjectiveType(CommonObjective commonObjective, int points){
+<b class="fc">&nbsp;        completedCommonObjectives[commonObjective.getObjectiveNumeral()] = points;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method returns the array of completed common objective points of this player.
+&nbsp;     * @return the array of completed common objective points of this player.
+&nbsp;     */
+&nbsp;    public int[] getCompletedCommonObjectives() {
+<b class="fc">&nbsp;        return completedCommonObjectives;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the personal objective of this player.
+&nbsp;     * @return the player&#39;s personal objective.
+&nbsp;     */
+&nbsp;    public PersonalObjective getPersonalObjective() {
+<b class="fc">&nbsp;        return personalObjective;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the player&#39;s library
+&nbsp;     * @return the player&#39;s library
+&nbsp;     */
+&nbsp;    public Library getLibrary(){
+<b class="fc">&nbsp;        return this.library;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Dummy method to add the object to the library.
+&nbsp;     * @param objectCard is the object that will be added to the library.
+&nbsp;     * @param librarySpace is the space the {@code objectCard} will occupy.
+&nbsp;     */
+&nbsp;    public void addObjectToLibrary(ObjectCard objectCard, LibrarySpace librarySpace){
+<b class="fc">&nbsp;        this.library.addObject(objectCard, librarySpace);</b>
+&nbsp;        //notifyObserver(new GenericModelChangeMessage());
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initialize the player&#39;s hand
+&nbsp;     */
+&nbsp;    public void initObjectsInHand(){
+<b class="fc">&nbsp;        this.objectsInHand = new ArrayList&lt;&gt;(Arrays.asList(null, null, null));</b>
+&nbsp;        //notifyObserver(new GenericModelChangeMessage());
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * DEPRECATED - DO NOT USE, MAY BE REMOVED
+&nbsp;     * Reset the player&#39;s hand
+&nbsp;     */
+&nbsp;    @Deprecated
+&nbsp;    public void resetObjectsInHand(){
+<b class="fc">&nbsp;        this.objectsInHand = null;</b>
+<b class="fc">&nbsp;        notifyObserver(new GenericModelChangeMessage());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns if the player has a hand
+&nbsp;     * @return true if objectsInHand isn&#39;t null, false otherwise
+&nbsp;     */
+&nbsp;    public boolean hasObjectsInHand(){
+<b class="fc">&nbsp;        return objectsInHand != null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Insert an objectCard in the player&#39;s hand
+&nbsp;     * @param objectCard is the card that has to be added to the hand
+&nbsp;     * @throws TooManyObjectsInHandException if the hand is already full
+&nbsp;     */
+&nbsp;    public void addToObjectsInHand(ObjectCard objectCard) throws TooManyObjectsInHandException{
+&nbsp;        /* TODO - Debug print */
+<b class="fc">&nbsp;        System.out.println(this.getClass().toString() + &quot;: INSIDE addToObjectsInHand&quot;);</b>
+<b class="fc">&nbsp;        if(objectsInHand.get(2) == null){</b>
+<b class="fc">&nbsp;            for(int i = 0; i &lt; MAX_OBJECTS_IN_HAND; i++){</b>
+<b class="fc">&nbsp;                if(objectsInHand.get(i) == null){</b>
+<b class="fc">&nbsp;                    objectsInHand.set(i, objectCard);</b>
+<b class="fc">&nbsp;                    break;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            /* TODO - Debug print */
+<b class="fc">&nbsp;            System.out.print(&quot;The current objects in hand are: &quot;);</b>
+&nbsp;            String toPrint;
+<b class="fc">&nbsp;            for(int i = 0; i &lt; MAX_OBJECTS_IN_HAND; i++){</b>
+<b class="fc">&nbsp;                if(objectsInHand.get(i) == null){</b>
+<b class="fc">&nbsp;                    toPrint = &quot;null&quot;;</b>
+&nbsp;                } else {
+<b class="fc">&nbsp;                    toPrint = objectsInHand.get(i).getObjectColour().toString();</b>
+&nbsp;                }
+<b class="fc">&nbsp;                System.out.print(toPrint + &quot;, &quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;            System.out.print(&quot;\n&quot;);</b>
+&nbsp;            //notifyObserver(new GenericModelChangeMessage());
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new TooManyObjectsInHandException(MAX_OBJECTS_IN_HAND);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the object in the specified position of the player&#39;s hand
+&nbsp;     * @param positionInDeck is the position of the card in the player&#39;s turn deck.
+&nbsp;     * @return the object in the specified position.
+&nbsp;     * @throws EmptyDeckException if the hand deck does not contain any card.
+&nbsp;     */
+&nbsp;    public ObjectCard getObjectInHand(int positionInDeck) throws EmptyDeckException {
+<b class="fc">&nbsp;        if(!objectsInHand.stream().allMatch(x -&gt; x == null)){</b>
+<b class="fc">&nbsp;            return objectsInHand.get(positionInDeck);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new EmptyDeckException();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Return the number of objects in the player&#39;s hand
+&nbsp;     * @return the number of object cards this player currently has in hand.
+&nbsp;     */
+&nbsp;    public int getObjectsInHandSize(){
+<b class="fc">&nbsp;       int num=0;</b>
+<b class="fc">&nbsp;       for(int i = 0;  i &lt; getObjectsInHand().size();i++){</b>
+<b class="fc">&nbsp;           if(getObjectsInHand().get(i)!= null){num++;}</b>
+&nbsp;       }
+<b class="fc">&nbsp;       return num;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method returns the {@link ArrayList} of objects in hand;
+&nbsp;     * @return the objects in hand as an {@link ArrayList}.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;ObjectCard&gt; getObjectsInHand() {
+<b class="fc">&nbsp;        return objectsInHand;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Setter method to change the player&#39;s state.
+&nbsp;     * @param playerState is the new state for this player.
+&nbsp;     */
+&nbsp;    public void setPlayerState(PlayerState playerState){
+<b class="fc">&nbsp;        this.playerState = playerState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *Returns the player&#39;s state
+&nbsp;     * @return the state of the player.
+&nbsp;     */
+&nbsp;    public PlayerState getPlayerState(){
+<b class="fc">&nbsp;        return this.playerState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

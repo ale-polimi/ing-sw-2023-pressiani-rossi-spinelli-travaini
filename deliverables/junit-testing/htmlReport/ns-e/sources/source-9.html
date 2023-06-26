@@ -1,0 +1,383 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StartServerImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: StartServerImpl (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StartServerImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/108)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;import controller.Controller;
+&nbsp;import enumerations.GameState;
+&nbsp;import network.messages.Message;
+&nbsp;import network.messages.MessageType;
+&nbsp;import observer.Observer;
+&nbsp;import view.cli.Colours;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.lang.reflect.Array;
+&nbsp;import java.net.*;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.rmi.registry.LocateRegistry;
+&nbsp;import java.rmi.registry.Registry;
+&nbsp;import java.rmi.server.UnicastRemoteObject;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Enumeration;
+&nbsp;import java.util.concurrent.ExecutorService;
+&nbsp;import java.util.concurrent.Executors;
+&nbsp;
+&nbsp;public class StartServerImpl implements Observer, Runnable {
+&nbsp;    private ServerRMI serverRMI;
+&nbsp;    private SocketServer socketServer;
+&nbsp;    //private final ArrayList&lt;Tuple&gt; games = new ArrayList&lt;&gt;();
+&nbsp;    private Controller controller;
+&nbsp;    private static ExecutorService executor;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor for StartServerImpl class
+&nbsp;     * @throws IOException When there is an error during the creation of the RMI or socket connection
+&nbsp;     */
+<b class="nc">&nbsp;    public StartServerImpl(int socketPort, int RMIPort) throws IOException {</b>
+<b class="nc">&nbsp;        String[] stringToSplit = getLocalHostLANAddress().toString().split(&quot;/&quot;);</b>
+<b class="nc">&nbsp;        String IPAddress = stringToSplit[1];</b>
+<b class="nc">&nbsp;        System.out.println(&quot;The LAN IP address for the server is: &quot; + Colours.BOLD + Colours.GREEN + IPAddress + Colours.RESET);</b>
+<b class="nc">&nbsp;        startRMI(RMIPort);</b>
+<b class="nc">&nbsp;        startSocket(socketPort);</b>
+<b class="nc">&nbsp;        controller = new Controller(this);</b>
+<b class="nc">&nbsp;        executor.submit(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method returns the host LAN address. It filters out the virtual NICs for VirtualBox users, others may vary.
+&nbsp;     * @return the IPv4 LAN address of the machine.
+&nbsp;     * @throws UnknownHostException if it fails to find a valid IP address.
+&nbsp;     */
+&nbsp;    private static InetAddress getLocalHostLANAddress() throws UnknownHostException {
+&nbsp;        try {
+<b class="nc">&nbsp;            InetAddress candidateAddress = null;</b>
+&nbsp;            // Iterate all NICs (network interface cards)...
+<b class="nc">&nbsp;            for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {</b>
+<b class="nc">&nbsp;                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();</b>
+&nbsp;                //Exclude VirtualBox NICs
+<b class="nc">&nbsp;                if(!iface.getDisplayName().contains(&quot;Virtual&quot;)) {</b>
+&nbsp;                    // Iterate all IP addresses assigned to each card...
+<b class="nc">&nbsp;                    for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements(); ) {</b>
+<b class="nc">&nbsp;                        InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();</b>
+<b class="nc">&nbsp;                        if (!inetAddr.isLoopbackAddress()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                            if (inetAddr.isSiteLocalAddress()) {</b>
+&nbsp;                                // Found non-loopback site-local address. Return it immediately...
+<b class="nc">&nbsp;                                return inetAddr;</b>
+<b class="nc">&nbsp;                            } else if (candidateAddress == null) {</b>
+&nbsp;                                // Found non-loopback address, but not necessarily site-local.
+&nbsp;                                // Store it as a candidate to be returned if site-local address is not subsequently found...
+<b class="nc">&nbsp;                                candidateAddress = inetAddr;</b>
+&nbsp;                                // Note that we don&#39;t repeatedly assign non-loopback non-site-local addresses as candidates,
+&nbsp;                                // only the first. For subsequent iterations, candidate will be non-null.
+&nbsp;                            }
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                }
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            if (candidateAddress != null) {</b>
+&nbsp;                // We did not find a site-local address, but we found some other non-loopback address.
+&nbsp;                // Server might have a non-site-local address assigned to its NIC (or it might be running
+&nbsp;                // IPv6 which deprecates the &quot;site-local&quot; concept).
+&nbsp;                // Return this non-loopback candidate address...
+<b class="nc">&nbsp;                return candidateAddress;</b>
+&nbsp;            }
+&nbsp;            // At this point, we did not find a non-loopback address.
+&nbsp;            // Fall back to returning whatever InetAddress.getLocalHost() returns...
+<b class="nc">&nbsp;            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();</b>
+<b class="nc">&nbsp;            if (jdkSuppliedAddress == null) {</b>
+<b class="nc">&nbsp;                throw new UnknownHostException(&quot;The JDK InetAddress.getLocalHost() method unexpectedly returned null.&quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return jdkSuppliedAddress;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (Exception e) {</b>
+<b class="nc">&nbsp;            UnknownHostException unknownHostException = new UnknownHostException(&quot;Failed to determine LAN address: &quot; + e);</b>
+<b class="nc">&nbsp;            unknownHostException.initCause(e);</b>
+<b class="nc">&nbsp;            throw unknownHostException;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Main method, used to create the instance of the server.
+&nbsp;     * The user can decide on which ports the servers (socket and RMI) will start:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *     &lt;li&gt;First parameter: will define the port for the socket connection.&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;Second parameter: will define the port for the RMI connection.&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     */
+&nbsp;    public static void main(String[] args){
+<b class="nc">&nbsp;        boolean failedArgs = false;</b>
+<b class="nc">&nbsp;        final int defaultSocketPort = 12345;</b>
+<b class="nc">&nbsp;        final int defaultRMIPort = 1099;</b>
+<b class="nc">&nbsp;        int socketPort = 0;</b>
+<b class="nc">&nbsp;        int RMIPort = 0;</b>
+<b class="nc">&nbsp;        executor = Executors.newCachedThreadPool();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (args.length == 0) {</b>
+<b class="nc">&nbsp;            socketPort = defaultSocketPort;</b>
+<b class="nc">&nbsp;            RMIPort = defaultRMIPort;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            if (args.length != 2) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid number of parameters. Required: 2; Provided: &quot; + args.length + Colours.RESET);</b>
+<b class="nc">&nbsp;                failedArgs = true;</b>
+&nbsp;            } else {
+&nbsp;
+&nbsp;                /* Clean the command line parameters */
+&nbsp;                try {
+<b class="nc">&nbsp;                    socketPort = Integer.parseInt(args[0]);</b>
+<b class="nc">&nbsp;                } catch (NumberFormatException e) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input: &quot; + args[0] + Colours.RESET);</b>
+<b class="nc">&nbsp;                    failedArgs = true;</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                try {
+<b class="nc">&nbsp;                    RMIPort = Integer.parseInt(args[1]);</b>
+<b class="nc">&nbsp;                } catch (NumberFormatException e) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input: &quot; + args[1] + Colours.RESET);</b>
+<b class="nc">&nbsp;                    failedArgs = true;</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                /* Check for the first argument */
+<b class="nc">&nbsp;                if (!isPortValid(socketPort)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input: &quot; + socketPort + Colours.RESET);</b>
+<b class="nc">&nbsp;                    failedArgs = true;</b>
+<b class="nc">&nbsp;                } else if (!isPortValid(RMIPort)) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid input: &quot; + RMIPort + Colours.RESET);</b>
+<b class="nc">&nbsp;                    failedArgs = true;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (!failedArgs) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                new StartServerImpl(socketPort, RMIPort);</b>
+<b class="nc">&nbsp;            } catch (IOException e) {</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+<b class="nc">&nbsp;                System.err.println(&quot;Cannot instantiate the server structure&quot;);</b>
+<b class="nc">&nbsp;                System.exit(-1);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            System.exit(2);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks if the port is valid.
+&nbsp;     * @param portToCheck is the port to verify.
+&nbsp;     * @return {@code true} if the port is valid, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public static boolean isPortValid(int portToCheck){
+<b class="nc">&nbsp;        int port = portToCheck;</b>
+<b class="nc">&nbsp;        if(port &gt;= 1 &amp;&amp; port &lt;= 65535) {</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Return the instance of the RMI server
+&nbsp;     * @return the serverRMI
+&nbsp;     */
+<b class="nc">&nbsp;    public ServerRMI getServerRMI() {return serverRMI; }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Return the instance of the socket server
+&nbsp;     * @return The socket server
+&nbsp;     */
+<b class="nc">&nbsp;    public SocketServer getSocketServer() {return socketServer; }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Start the server RMI
+&nbsp;     * @param port is the port for the RMI server.
+&nbsp;     * @throws RemoteException Threw when the server cannot be reached
+&nbsp;     */
+&nbsp;    private void startRMI(int port) throws RemoteException {
+&nbsp;        //Start RMI server instance
+<b class="nc">&nbsp;        serverRMI = new ServerRMI(this);</b>
+<b class="nc">&nbsp;        Server stubRMI = (Server) UnicastRemoteObject.exportObject(serverRMI,port);</b>
+<b class="nc">&nbsp;        LocateRegistry.createRegistry(port);</b>
+<b class="nc">&nbsp;        Registry registry = LocateRegistry.getRegistry(port);</b>
+<b class="nc">&nbsp;        registry.rebind(&quot;server&quot;, stubRMI);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;RMI server started on port: &quot; + Colours.BOLD + Colours.GREEN + port + Colours.RESET + &quot;, waiting for clients...&quot;);</b>
+<b class="nc">&nbsp;        serverRMI.addObserver(this);</b>
+<b class="nc">&nbsp;        getExecutor().submit(serverRMI);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Start the server socket thread
+&nbsp;     * @param port is the port for the Socket server
+&nbsp;     */
+&nbsp;    private void startSocket(int port){
+&nbsp;        //Start Socket server instance
+<b class="nc">&nbsp;        socketServer = new SocketServer(this, port);</b>
+<b class="nc">&nbsp;        getExecutor().submit(socketServer);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Socket server started on port: &quot; + Colours.BOLD + Colours.GREEN + port + Colours.RESET + &quot;, waiting for clients...&quot;);</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Return the thread pool executor
+&nbsp;     * @return The Executor service related to the server
+&nbsp;     */
+<b class="nc">&nbsp;    public ExecutorService getExecutor(){return executor;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Send a message received from the clients to the controller
+&nbsp;     * @param message The message to forward
+&nbsp;     */
+&nbsp;    public void receiveMessage(Message message){
+<b class="nc">&nbsp;        if(!(!(message.getType().equals(MessageType.USER_INFO)||message.getType().equals(MessageType.MAX_PLAYERS_FOR_GAME))&amp;&amp;(controller.getGame().getGameState().equals(GameState.LOGIN))))</b>
+<b class="nc">&nbsp;            controller.onMessageReceived(message);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Send the message from the model to the views in the clients
+&nbsp;     * @param message The message for the clients
+&nbsp;     */
+<b class="nc">&nbsp;    public void sendMessage(Message message){serverRMI.sendMessage(message);socketServer.sendMessage(message);}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Close a game when one or more players disconnect from the game
+&nbsp;     */
+&nbsp;    public  void disconnect(){
+<b class="nc">&nbsp;        serverRMI.disconnect();</b>
+<b class="nc">&nbsp;        socketServer.disconnect();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            controller = new Controller(this);</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handle the messages coming from RMI
+&nbsp;     * @param message is the message used to share information.
+&nbsp;     */
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void update(Message message) { receiveMessage(message);}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Run method of the server
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void run() {
+<b class="nc">&nbsp;        while (!Thread.interrupted()) {</b>
+&nbsp;           try {
+<b class="nc">&nbsp;                serverRMI.ping();</b>
+<b class="nc">&nbsp;            } catch (RemoteException e) {</b>
+<b class="nc">&nbsp;                disconnect();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                socketServer.ping();</b>
+<b class="nc">&nbsp;            } catch (RemoteException e) {</b>
+<b class="nc">&nbsp;                disconnect();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                Thread.sleep(6000);</b>
+<b class="nc">&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;                throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

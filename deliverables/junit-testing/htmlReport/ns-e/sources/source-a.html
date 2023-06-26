@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Tuple</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: Tuple (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Tuple</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;import controller.Controller;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;
+&nbsp;public class Tuple implements Runnable{
+&nbsp;    //Controller of the game related to the clients
+&nbsp;    private final Controller controller;
+&nbsp;    //Clients which correspond to the players of the game
+&nbsp;    private final ArrayList&lt;ClientHandler&gt; clientHandlers;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * constructor
+&nbsp;     * @param controller is the controller of the game
+&nbsp;     * @param clientHandlers is the list of clients
+&nbsp;     */
+<b class="nc">&nbsp;    public Tuple(Controller controller, ArrayList&lt;ClientHandler&gt; clientHandlers){</b>
+<b class="nc">&nbsp;        this.controller = controller;</b>
+<b class="nc">&nbsp;        this.clientHandlers = clientHandlers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter of controller parameter
+&nbsp;     * @return the controller parameter of the Tuple object
+&nbsp;     */
+<b class="nc">&nbsp;    public Controller getController() {return controller;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter of clients parameter
+&nbsp;     * @return the clients parameter of the Tuple object
+&nbsp;     */
+<b class="nc">&nbsp;    public ArrayList&lt;ClientHandler&gt; getClientHandlers() {return clientHandlers;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Add a client to the clients list
+&nbsp;     * @param clientHandler The client handler that has to be added to the clientHandlers parameter
+&nbsp;     */
+<b class="nc">&nbsp;    public void addClientHandler(ClientHandler clientHandler){clientHandlers.add(clientHandler);}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * connection to the game
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void run() {
+&nbsp;        /*TODO implementare la connessione al gioco*/
+<b class="nc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

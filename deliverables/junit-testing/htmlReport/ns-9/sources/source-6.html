@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FourCorners</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.commonobjective</a>
+</div>
+
+<h1>Coverage Summary for Class: FourCorners (model.commonobjective)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FourCorners</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.commonobjective;
+&nbsp;
+&nbsp;import enumerations.ObjectColour;
+&nbsp;import model.library.Library;
+&nbsp;import view.cli.Colours;
+&nbsp;
+<b class="fc">&nbsp;public class FourCorners extends CommonObjective {</b>
+<b class="fc">&nbsp;    private final String description = &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; \n&quot; +</b>
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|     |&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|\n&quot; +
+&nbsp;            &quot;|         |\n&quot; +
+&nbsp;            &quot;|         |  Four tiles of the same type in the four\n&quot; +
+&nbsp;            &quot;|         |  corners of the bookshelf.\n&quot; +
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot;       &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot;|\n&quot; +
+&nbsp;            &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|&quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot; &quot; + Colours.UNDERLINED + &quot; &quot; + Colours.RESET + &quot;|&quot; + Colours.UNDERLINED + &quot;?&quot; + Colours.RESET + &quot;|&quot;;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will check if the four spaces placed in the four corners of the library are the same colour
+&nbsp;     * @param library is the personal library of the players
+&nbsp;     * @param x is the row coordinate
+&nbsp;     * @param y is the column coordinate
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public boolean applyObjectiveRules(Library library, int x, int y) {
+<b class="fc">&nbsp;        x = 0;</b>
+<b class="fc">&nbsp;        y = 0;</b>
+<b class="fc">&nbsp;        if(library.getLibrarySpace(x, y).getObject().getObjectColour().equals(ObjectColour.EMPTY) || library.getLibrarySpace(x, y + 4).getObject().getObjectColour().equals(ObjectColour.EMPTY) || library.getLibrarySpace(x + 5, y).getObject().getObjectColour().equals(ObjectColour.EMPTY) || library.getLibrarySpace(x + 5, y + 4).getObject().getObjectColour().equals(ObjectColour.EMPTY)){</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x, y + 4).getObject().getObjectColour()) &amp;&amp;</b>
+<b class="fc">&nbsp;                    library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 5, y).getObject().getObjectColour()) &amp;&amp;</b>
+<b class="fc">&nbsp;                    library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 5, y + 4).getObject().getObjectColour());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDescription() {
+<b class="fc">&nbsp;        return description;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

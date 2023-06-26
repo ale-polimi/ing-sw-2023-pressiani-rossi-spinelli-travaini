@@ -1,0 +1,252 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ClientSocket</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientSocket (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientSocket</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;
+&nbsp;import network.messages.*;
+&nbsp;import observer.Observable;
+&nbsp;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.ObjectInputStream;
+&nbsp;import java.io.ObjectOutputStream;
+&nbsp;
+&nbsp;import java.net.Socket;
+&nbsp;import java.rmi.RemoteException;
+&nbsp;import java.util.concurrent.*;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * this class represents a socket client
+&nbsp; */
+&nbsp;
+&nbsp;public class ClientSocket extends Observable implements Client {
+&nbsp;
+&nbsp;    private ObjectOutputStream oos ;
+&nbsp;    private ObjectInputStream ois;
+&nbsp;    private Socket socket;
+&nbsp;    private final int port;
+<b class="nc">&nbsp;    private final ExecutorService executor = Executors.newSingleThreadExecutor();</b>
+&nbsp;    private String nickname;
+&nbsp;    Server server;
+&nbsp;    final String address;
+<b class="nc">&nbsp;    boolean getConnected =false;</b>
+&nbsp;    ScheduledExecutorService timer;
+&nbsp;
+<b class="nc">&nbsp;    private final Logger LOGGER = Logger.getLogger(getClass().getName());</b>
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Default constructor for the socket client with the connection to the server.
+&nbsp;     * @param address is the IP of the server.
+&nbsp;     * @param port is the port for the connection.
+&nbsp;     */
+<b class="nc">&nbsp;    public ClientSocket(String address, int port){</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Entrato in client&quot;);</b>
+<b class="nc">&nbsp;        this.address=address;</b>
+<b class="nc">&nbsp;        this.port = port;</b>
+<b class="nc">&nbsp;        try{connection();}</b>
+<b class="nc">&nbsp;        catch(IOException e){System.err.println(&quot;Error connecting to the socket&quot;); System.exit(1);}</b>
+<b class="nc">&nbsp;        receivedMessage();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void connection() throws IOException {
+&nbsp;
+&nbsp;       try {
+<b class="nc">&nbsp;           socket= new Socket(address, port);</b>
+<b class="nc">&nbsp;           this.oos = new ObjectOutputStream(socket.getOutputStream());</b>
+&nbsp;           //System.out.println(socket.getInputStream());
+<b class="nc">&nbsp;           this.ois= new ObjectInputStream(socket.getInputStream());</b>
+<b class="nc">&nbsp;           this.timer = Executors.newSingleThreadScheduledExecutor();</b>
+<b class="nc">&nbsp;           getConnected=true;</b>
+&nbsp;       }
+<b class="nc">&nbsp;       catch (IOException e){</b>
+<b class="nc">&nbsp;           System.err.println(&quot;couldn&#39;t get IO for the connection&quot;);</b>
+<b class="nc">&nbsp;           closeConnection();</b>
+<b class="nc">&nbsp;           notifyObserver(new GenericErrorMessage(null,&quot;Connection unable&quot;));</b>
+<b class="nc">&nbsp;       }</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void sendMessage(Message message) {
+&nbsp;        try {
+<b class="nc">&nbsp;            if(message.getType().equals(MessageType.USER_INFO))nickname = message.getSender();</b>
+<b class="nc">&nbsp;            oos.writeObject(message);</b>
+<b class="nc">&nbsp;            oos.flush();</b>
+<b class="nc">&nbsp;            oos.reset();</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                closeConnection();</b>
+<b class="nc">&nbsp;            } catch (IOException exception) {</b>
+<b class="nc">&nbsp;                System.exit(1);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            getConnected = false;</b>
+<b class="nc">&nbsp;            notifyObserver(new GenericErrorMessage(&quot;client&quot;, &quot;Impossible send message&quot;));</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method receives a message from the network.
+&nbsp;     */
+&nbsp;    public void receivedMessage() {
+<b class="nc">&nbsp;        executor.execute(()-&gt;{</b>
+<b class="nc">&nbsp;        while(!executor.isShutdown()){</b>
+&nbsp;            Message message;
+&nbsp;        try {
+<b class="nc">&nbsp;            message = (Message) ois.readObject();</b>
+&nbsp;            //LOGGER.info(&quot;Received: &quot;+ message);
+&nbsp;
+&nbsp;            /* TODO - Debug print */
+&nbsp;            //System.out.println(message.getSender()+&quot; &quot;+ message.getType());
+<b class="nc">&nbsp;            notifyObserver(message);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (IOException e) {</b>
+<b class="nc">&nbsp;            executor.shutdownNow();</b>
+<b class="nc">&nbsp;            disconnect();</b>
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        catch (ClassNotFoundException e) {</b>
+&nbsp;            //it doesn&#39;t read the message (?)
+<b class="nc">&nbsp;        }}});</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void closeConnection() throws IOException {
+<b class="nc">&nbsp;        if (!socket.isClosed()){</b>
+<b class="nc">&nbsp;            socket.close();</b>
+<b class="nc">&nbsp;            getConnected=false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        ois=null;</b>
+<b class="nc">&nbsp;        oos=null;</b>
+<b class="nc">&nbsp;        notifyObserver(new ServerDisconnectedMessage());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean isConnected() {
+<b class="nc">&nbsp;        return getConnected;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void disconnect() {
+&nbsp;        try{
+<b class="nc">&nbsp;            closeConnection();;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        catch (IOException e){</b>
+<b class="nc">&nbsp;            Logger.getLogger(&quot;client&quot;).severe(e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void receivedMessage(Message message) {
+&nbsp;        //Voluntarily leaved empty
+<b class="nc">&nbsp;    }</b>
+&nbsp;    
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void ping() {timer.scheduleAtFixedRate(() -&gt; sendMessage(new PingMessage(nickname, MessageType.PING)), 0, 5000, TimeUnit.MILLISECONDS);}</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

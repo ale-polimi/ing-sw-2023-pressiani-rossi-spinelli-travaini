@@ -1,0 +1,140 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ViewObserver</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">observer</a>
+</div>
+
+<h1>Coverage Summary for Class: ViewObserver (observer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ViewObserver</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package observer;
+&nbsp;
+&nbsp;import view.View;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * Observer interface used only for the {@link view.View view}.
+&nbsp; */
+&nbsp;public interface ViewObserver {
+&nbsp;    /**
+&nbsp;     * This method will send the necessary info to open a socket with the server.
+&nbsp;     * @param serverInfo is a {@link Map} that has the address as key and the IP address as value.
+&nbsp;     */
+&nbsp;    void onUpdateServerInfo(Map&lt;String, String&gt; serverInfo);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will send the username on the network.
+&nbsp;     * @param nickname is the nickname passed by the {@link View}.
+&nbsp;     */
+&nbsp;    void onUpdateNickname(String nickname);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will send the maximum number of players for the game.
+&nbsp;     * @param numOfPlayers is the number of players for the game.
+&nbsp;     */
+&nbsp;    void onMaxPlayers(int numOfPlayers);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will send the coordinates of the object cards the player wants to pick.
+&nbsp;     * @param coordinatesToSend are the coordinates, stored as an {@link ArrayList}.
+&nbsp;     */
+&nbsp;    void onUpdateBoardMove(ArrayList&lt;Integer&gt; coordinatesToSend);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will send the order in which the picked cards will be put in the library.
+&nbsp;     * It will send the column where the cards will be put as well.
+&nbsp;     * @param orderAndColumnToSend are the order and the column, stored as an {@link ArrayList}.
+&nbsp;     */
+&nbsp;    void onUpdateLibraryMove(ArrayList&lt;Integer&gt; orderAndColumnToSend);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will be used by the {@link View} to show the common objectives on screen.
+&nbsp;     * This method is particularly useful in the {@link view.cli.Cli CLI}.
+&nbsp;     */
+&nbsp;    void onRequestCommonObjectives();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will be used by the {@link View} to show the personal objective on screen.
+&nbsp;     * This method is particularly useful in the {@link view.cli.Cli CLI}.
+&nbsp;     */
+&nbsp;    void onRequestPersonalObjective();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will be used by the {@link View} to show the other players&#39; library on screen.
+&nbsp;     * This method is particularly useful in the {@link view.cli.Cli CLI}.
+&nbsp;     */
+&nbsp;    void onRequestOthersLibrary();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will be used to send the message in the chat to the other players
+&nbsp;     * @param sender is the player who is sending the message
+&nbsp;     * @param receiver is the player/players who is receiving the message
+&nbsp;     * @param text is the message text
+&nbsp;     */
+&nbsp;    void onChatMessage(String sender, String receiver, String text);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method used to show the chat log
+&nbsp;     */
+&nbsp;    void onChatLogMessage();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

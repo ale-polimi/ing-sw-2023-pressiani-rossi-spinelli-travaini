@@ -1,0 +1,147 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ObjectsDeck</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">model.objects</a>
+</div>
+
+<h1>Coverage Summary for Class: ObjectsDeck (model.objects)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ObjectsDeck</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package model.objects;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;public class ObjectsDeck {
+&nbsp;    private ArrayList&lt;ObjectCard&gt; objectsDeck;
+&nbsp;    private int availableObjects ;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Custom constructor of ObjectsDeck class
+&nbsp;     */
+<b class="fc">&nbsp;    public ObjectsDeck (){</b>
+<b class="fc">&nbsp;        objectsDeck = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        availableObjects = 132;</b>
+<b class="fc">&nbsp;        int[] tempCards = {7,7,8,7,7,8,7,7,8,7,7,8,7,7,8,7,7,8,0};</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 132; i++){</b>
+&nbsp;            ObjectCard tempCard;
+&nbsp;            do {
+<b class="fc">&nbsp;                tempCard = new ObjectCard();</b>
+<b class="fc">&nbsp;                if(tempCards[tempCard.getObjectColour().ordinal()]&gt; 0)</b>
+<b class="fc">&nbsp;                    tempCards[tempCard.getObjectColour().ordinal()]-=1;</b>
+&nbsp;                else
+<b class="fc">&nbsp;                    tempCard = null;</b>
+<b class="fc">&nbsp;            }while(tempCard==null);</b>
+<b class="fc">&nbsp;            objectsDeck.add(tempCard);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns an object in the deck
+&nbsp;     * @return the first objectCard in the ArrayList
+&nbsp;     */
+&nbsp;    public ObjectCard removeFromDeck(){
+<b class="fc">&nbsp;        availableObjects -= 1;</b>
+<b class="fc">&nbsp;        return objectsDeck.remove(0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of cards in the deck
+&nbsp;     * @return the size of the objectsDeck ArrayList
+&nbsp;     */
+&nbsp;    public int getAvailableObjects(){
+<b class="fc">&nbsp;        return objectsDeck.size();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

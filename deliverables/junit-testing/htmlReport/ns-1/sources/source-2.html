@@ -1,0 +1,1107 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Controller</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">controller</a>
+</div>
+
+<h1>Coverage Summary for Class: Controller (controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Controller</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/481)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Controller$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/482)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package controller;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import com.google.gson.Gson;
+&nbsp;import com.google.gson.reflect.TypeToken;
+&nbsp;import enumerations.GameState;
+&nbsp;import enumerations.ObjectColour;
+&nbsp;import enumerations.TypeSpace;
+&nbsp;import exceptions.controller.EmptySpaceException;
+&nbsp;import exceptions.controller.IncompatibleStateException;
+&nbsp;import exceptions.controller.NotEnoughSpaceException;
+&nbsp;import exceptions.controller.SpaceSurroundedException;
+&nbsp;import exceptions.game.TooManyPlayersException;
+&nbsp;import exceptions.player.TooManyObjectsInHandException;
+&nbsp;import model.Game;
+&nbsp;import model.commonobjective.*;
+&nbsp;import model.library.Library;
+&nbsp;import model.library.PersonalObjective;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import model.player.Player;
+&nbsp;import network.messages.*;
+&nbsp;import network.structure.NetworkView;
+&nbsp;import network.structure.StartServerImpl;
+&nbsp;import observer.Observer;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStreamReader;
+&nbsp;import java.io.Reader;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;import static enumerations.GameState.IN_GAME;
+&nbsp;import static enumerations.GameState.LOGIN;
+&nbsp;import static enumerations.PlayerState.IN_LIBRARY;
+&nbsp;import static enumerations.PlayerState.PICKUP;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class will control the flow of the game.
+&nbsp; * Broadly speaking, it will receive a message from the network then it will update the model and
+&nbsp; * it will finally send a response back to the client with the updated model.
+&nbsp; * This stays server side.
+&nbsp; */
+&nbsp;public class Controller implements Observer {
+&nbsp;
+&nbsp;    private Game game;
+<b class="nc">&nbsp;    private HashMap&lt;String, Integer&gt; playersPoints = new HashMap&lt;&gt;();</b>
+&nbsp;    private String winner;
+&nbsp;    private HashMap personalObjectives;
+&nbsp;    private HashMap&lt;Integer, CommonObjective&gt; availableCommonObjectives;
+<b class="nc">&nbsp;    private HashMap&lt;String, Library&gt; librariesOfPlayers = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;    int firstRow, firstCol, secondRow, secondCol, thirdRow, thirdCol = 0;</b>
+&nbsp;    private final NetworkView networkView;
+&nbsp;    boolean allGood;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the controller.
+&nbsp;     */
+<b class="nc">&nbsp;    public Controller(StartServerImpl server) throws IOException {</b>
+<b class="nc">&nbsp;        this.game = new Game();</b>
+&nbsp;        /* Subscribing the Controller to the Model (Game) */
+<b class="nc">&nbsp;        game.addObserver(this);</b>
+<b class="nc">&nbsp;        networkView = new NetworkView(server);</b>
+<b class="nc">&nbsp;        game.setGameState(LOGIN);</b>
+&nbsp;
+<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+&nbsp;        Reader reader;
+<b class="nc">&nbsp;        reader = new InputStreamReader(Objects.requireNonNull(StartServerImpl.class.getResourceAsStream(&quot;/json/personalObjectives.json&quot;)));</b>
+<b class="nc">&nbsp;        personalObjectives = objectMapper.readValue(reader,HashMap.class);</b>
+&nbsp;
+&nbsp;
+&nbsp;        /* Creating all the common objectives; when the game starts we will randomly select only two */
+<b class="nc">&nbsp;        availableCommonObjectives = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(0, new Diagonal());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(1, new EightEquals());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(2, new FiveX());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(3, new FourByFourNew());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(4, new FourCorners());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(5, new FourRowsMaxThreeDifferent());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(6, new SixByTwoNew());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(7, new Stairs());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(8, new ThreeColumnsMaxThreeDifferent());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(9, new TotalDifferentColumns());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(10, new TotalDifferentRows());</b>
+<b class="nc">&nbsp;        availableCommonObjectives.put(11, new TwoByFour());</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Controller creato&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Main method for the controller that will manage the course of the game.
+&nbsp;     * @param receivedMessage is the message received from the &quot;client&quot;.
+&nbsp;     */
+&nbsp;    public void onMessageReceived(Message receivedMessage) {
+&nbsp;        /* TODO - Debug print */
+<b class="nc">&nbsp;        System.out.println(&quot;Ricevuto messaggio da: &quot; + receivedMessage.getSender() + &quot; Di tipo: &quot; + receivedMessage.getType().toString());</b>
+<b class="nc">&nbsp;        switch (receivedMessage.getType()) {</b>
+&nbsp;            case MAX_PLAYERS_FOR_GAME:
+<b class="nc">&nbsp;                MaxPlayersMessage maxPlayersMessage = (MaxPlayersMessage) receivedMessage;</b>
+<b class="nc">&nbsp;                if (game.getGameState().equals(LOGIN)) {</b>
+<b class="nc">&nbsp;                    if (game.getMaxPlayers() &gt; 1) {</b>
+<b class="nc">&nbsp;                        this.update(new GenericErrorMessage(maxPlayersMessage.getSender().concat(&quot;:GENERIC&quot;), &quot;The players for this game are already set.&quot;));</b>
+<b class="nc">&nbsp;                    } else if (game.isInBounds(maxPlayersMessage.getPlayers()) == false) {</b>
+<b class="nc">&nbsp;                        allGood = false;</b>
+<b class="nc">&nbsp;                        this.update(new GenericErrorMessage(maxPlayersMessage.getSender().concat(&quot;:OUT_OF_BOUNDS&quot;), &quot;The number is not within the correct bounds. It must be 2 &lt;= players &lt;= &quot; + Game.MAX_PLAYERS));</b>
+&nbsp;                        //this.update(new AskMaxPlayerMessage(&quot;Controller&quot;));
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        game.setMaxPlayers(maxPlayersMessage.getPlayers());</b>
+<b class="nc">&nbsp;                        allGood = true;</b>
+<b class="nc">&nbsp;                        ArrayList&lt;String&gt; players = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                        for (Player p : game.getPlayers()) players.add(p.getNickname());</b>
+<b class="nc">&nbsp;                        this.update(new ShowLobbyMessage(players));</b>
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    this.update(new GenericErrorMessage(maxPlayersMessage.getSender().concat(&quot;:GENERIC&quot;), &quot;This message type: &quot; + receivedMessage.getType().toString() + &quot; is not available for this game state: &quot; + game.getGameState().toString()));</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                System.out.println(&quot;allGood is: &quot; + allGood);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case USER_INFO:
+<b class="nc">&nbsp;                UserInfoForLoginMessage userInfoForLoginMessage = (UserInfoForLoginMessage) receivedMessage;</b>
+<b class="nc">&nbsp;                if (game.getGameState().equals(LOGIN)) {</b>
+<b class="nc">&nbsp;                    if (game.isNicknameTaken(userInfoForLoginMessage.getUsername())) {</b>
+<b class="nc">&nbsp;                        this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender().concat(&quot;:NICKNAME&quot;), &quot;Username is already taken.&quot;));</b>
+<b class="nc">&nbsp;                        this.update(new AskNicknameMessage(&quot;Controller&quot;));</b>
+&nbsp;                    } else {
+&nbsp;                        try {
+<b class="nc">&nbsp;                            Random rand = new Random();</b>
+<b class="nc">&nbsp;                            game.addToGame(new Player(userInfoForLoginMessage.getUsername(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));</b>
+<b class="nc">&nbsp;                        } catch (TooManyPlayersException exception) {</b>
+<b class="nc">&nbsp;                            this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender().concat(&quot;:GENERIC&quot;), exception.getMessage()));</b>
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                        if (game.getMaxPlayers() != 1 &amp;&amp; game.getPlayers().size() == game.getMaxPlayers()) {</b>
+<b class="nc">&nbsp;                            initGame(game);</b>
+<b class="nc">&nbsp;                            this.update(new GenericModelChangeMessage());</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender().concat(&quot;:GENERIC&quot;), &quot;This message type: &quot; + receivedMessage.getType().toString() + &quot; is not available for this game state: &quot; + game.getGameState().toString()));</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case PICK_OBJECT:
+&nbsp;
+<b class="nc">&nbsp;                PickObjectMessage pickObjectMessage = (PickObjectMessage) receivedMessage;</b>
+<b class="nc">&nbsp;                this.librariesOfPlayers = new HashMap&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;                if (game.getGameState().equals(IN_GAME)) {</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (!(game.getPlayerInTurn().hasObjectsInHand())) {</b>
+<b class="nc">&nbsp;                        game.getPlayerInTurn().initObjectsInHand();</b>
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    switch (pickObjectMessage.getCoordinates().size()) {</b>
+&nbsp;
+&nbsp;                        case 2:
+<b class="nc">&nbsp;                            firstRow = pickObjectMessage.getCoordinates().get(0);</b>
+<b class="nc">&nbsp;                            firstCol = pickObjectMessage.getCoordinates().get(1);</b>
+&nbsp;                            try {
+<b class="nc">&nbsp;                                pickObjectFromBoard(firstRow, firstCol);</b>
+<b class="nc">&nbsp;                                game.getPlayerInTurn().setPlayerState(IN_LIBRARY);</b>
+<b class="nc">&nbsp;                                this.update(new GenericModelChangeMessage());</b>
+<b class="nc">&nbsp;                            } catch (IncompatibleStateException e) {</b>
+<b class="nc">&nbsp;                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                            } catch (SpaceSurroundedException | EmptySpaceException e){</b>
+<b class="nc">&nbsp;                                this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                this.update(new AskBoardMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                            }</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case 4:
+<b class="nc">&nbsp;                            firstRow = pickObjectMessage.getCoordinates().get(0);</b>
+<b class="nc">&nbsp;                            firstCol = pickObjectMessage.getCoordinates().get(1);</b>
+<b class="nc">&nbsp;                            secondRow = pickObjectMessage.getCoordinates().get(2);</b>
+<b class="nc">&nbsp;                            secondCol = pickObjectMessage.getCoordinates().get(3);</b>
+&nbsp;
+<b class="nc">&nbsp;                            if (!(firstRow == secondRow &amp;&amp; areAdjacentColumns(firstCol, secondCol)) &amp;&amp; !(firstCol == secondCol &amp;&amp; areAdjacentRows(firstRow, secondRow))) {</b>
+<b class="nc">&nbsp;                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), &quot;You must pick objects from the same row or column!&quot;));</b>
+<b class="nc">&nbsp;                            } else if (game.getBoard().isSpaceSurrounded(firstRow, firstCol) || game.getBoard().isSpaceSurrounded(secondRow, secondCol)){</b>
+<b class="nc">&nbsp;                                this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), new SpaceSurroundedException().getMessage()));</b>
+&nbsp;                            } else {
+&nbsp;
+&nbsp;                                try {
+<b class="nc">&nbsp;                                    pickObjectFromBoard(firstRow, firstCol);</b>
+<b class="nc">&nbsp;                                    pickObjectFromBoard(secondRow, secondCol);</b>
+<b class="nc">&nbsp;                                    game.getPlayerInTurn().setPlayerState(IN_LIBRARY);</b>
+<b class="nc">&nbsp;                                    this.update(new GenericModelChangeMessage());</b>
+<b class="nc">&nbsp;                                } catch (IncompatibleStateException e) {</b>
+<b class="nc">&nbsp;                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                } catch (SpaceSurroundedException | EmptySpaceException e){</b>
+<b class="nc">&nbsp;                                    this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                }</b>
+&nbsp;
+&nbsp;                            }
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case 6:
+<b class="nc">&nbsp;                            firstRow = pickObjectMessage.getCoordinates().get(0);</b>
+<b class="nc">&nbsp;                            firstCol = pickObjectMessage.getCoordinates().get(1);</b>
+<b class="nc">&nbsp;                            secondRow = pickObjectMessage.getCoordinates().get(2);</b>
+<b class="nc">&nbsp;                            secondCol = pickObjectMessage.getCoordinates().get(3);</b>
+<b class="nc">&nbsp;                            thirdRow = pickObjectMessage.getCoordinates().get(4);</b>
+<b class="nc">&nbsp;                            thirdCol = pickObjectMessage.getCoordinates().get(5);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;                            if (!(firstRow == secondRow &amp;&amp; secondRow == thirdRow &amp;&amp; ((areAdjacentColumns(firstCol, secondCol) &amp;&amp; areAdjacentColumns(secondCol, thirdCol)) || (areAdjacentColumns(firstCol, secondCol) &amp;&amp; areAdjacentColumns(firstCol, thirdCol)) || (areAdjacentColumns(firstCol, thirdCol) &amp;&amp; areAdjacentColumns(secondCol, thirdCol)))) &amp;&amp; !(firstCol == secondCol &amp;&amp; secondCol == thirdCol &amp;&amp; ((areAdjacentRows(firstRow, secondRow) &amp;&amp; areAdjacentRows(secondRow, thirdRow)) || (areAdjacentRows(firstRow, secondRow) &amp;&amp; areAdjacentRows(firstRow, thirdRow)) || (areAdjacentRows(firstRow, thirdRow) &amp;&amp; areAdjacentRows(secondRow, thirdRow))))) {</b>
+<b class="nc">&nbsp;                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), &quot;You must pick objects from the same row or column!&quot;));</b>
+<b class="nc">&nbsp;                            } else if (game.getBoard().isSpaceSurrounded(firstRow, firstCol) || game.getBoard().isSpaceSurrounded(secondRow, secondCol) || game.getBoard().isSpaceSurrounded(thirdRow, thirdCol)){</b>
+<b class="nc">&nbsp;                                this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), new SpaceSurroundedException().getMessage()));</b>
+&nbsp;                            } else {
+&nbsp;                                try {
+<b class="nc">&nbsp;                                    pickObjectFromBoard(firstRow, firstCol);</b>
+<b class="nc">&nbsp;                                    pickObjectFromBoard(secondRow, secondCol);</b>
+<b class="nc">&nbsp;                                    pickObjectFromBoard(thirdRow, thirdCol);</b>
+<b class="nc">&nbsp;                                    game.getPlayerInTurn().setPlayerState(IN_LIBRARY);</b>
+<b class="nc">&nbsp;                                    this.update(new GenericModelChangeMessage());</b>
+<b class="nc">&nbsp;                                } catch (IncompatibleStateException e) {</b>
+<b class="nc">&nbsp;                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                } catch (SpaceSurroundedException | EmptySpaceException e){</b>
+<b class="nc">&nbsp;                                    this.update(new BoardErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                }</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        default:
+<b class="nc">&nbsp;                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), &quot;Coordinates must be in pairs.&quot;));</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;                } else {
+<b class="nc">&nbsp;                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), &quot;This message type: &quot; + receivedMessage.getType().toString() + &quot; is not available for this game state: &quot; + game.getGameState().toString()));</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case PUT_OBJECT:
+&nbsp;
+<b class="nc">&nbsp;                PutObjectInLibraryMessage putObjectInLibraryMessage = (PutObjectInLibraryMessage) receivedMessage;</b>
+&nbsp;
+<b class="nc">&nbsp;                if (game.getGameState().equals(IN_GAME)) {</b>
+&nbsp;
+<b class="nc">&nbsp;                    resetCoordinateValues();</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (putObjectInLibraryMessage.getOrderArray().size() - 1 &lt; game.getPlayerInTurn().getObjectsInHandSize()) {</b>
+<b class="nc">&nbsp;                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), &quot;You must put all the objects you have in hand in the library.&quot;));</b>
+<b class="nc">&nbsp;                        this.update(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                    } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 &gt; game.getPlayerInTurn().getObjectsInHandSize()) {</b>
+<b class="nc">&nbsp;                        int value = putObjectInLibraryMessage.getOrderArray().size() - 1;</b>
+<b class="nc">&nbsp;                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), &quot;You do not have &quot; + value + &quot; objects in hand. You have only: &quot; + game.getPlayerInTurn().getObjectsInHandSize()));</b>
+<b class="nc">&nbsp;                        this.update(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                    } else if (putObjectInLibraryMessage.getOrderArray().size() - 1 == game.getPlayerInTurn().getObjectsInHandSize()) {</b>
+&nbsp;
+<b class="nc">&nbsp;                        boolean foundNull = false;</b>
+<b class="nc">&nbsp;                        for(int i = 0; i &lt; putObjectInLibraryMessage.getOrderArray().size() - 1; i++) {</b>
+<b class="nc">&nbsp;                            if (game.getPlayerInTurn().getObjectsInHand().get(putObjectInLibraryMessage.getOrderArray().get(i)) == null) {</b>
+<b class="nc">&nbsp;                                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), &quot;You do not have an object card in position: &quot; + game.getPlayerInTurn().getObjectsInHand().indexOf(game.getPlayerInTurn().getObjectsInHand().get(putObjectInLibraryMessage.getOrderArray().get(i)))));</b>
+<b class="nc">&nbsp;                                foundNull = true;</b>
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;
+<b class="nc">&nbsp;                        if(!foundNull) {</b>
+<b class="nc">&nbsp;                            switch (putObjectInLibraryMessage.getOrderArray().size()) {</b>
+&nbsp;                                case 2 -&gt; {
+&nbsp;                                    try {
+<b class="nc">&nbsp;                                        addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1));</b>
+&nbsp;
+&nbsp;                                        /* Resetting the player&#39;s objects in hand, so they&#39;ll start from scratch in the next turn */
+<b class="nc">&nbsp;                                        game.getPlayerInTurn().initObjectsInHand();</b>
+&nbsp;
+&nbsp;                                        /* Check if the player has completed a common objective */
+<b class="nc">&nbsp;                                        checkCommonObjectives();</b>
+&nbsp;
+<b class="nc">&nbsp;                                        if (checkLibrarySpaces() == 0) {</b>
+<b class="nc">&nbsp;                                            boolean nobodyIsFirst = true;</b>
+<b class="nc">&nbsp;                                            for(Player player : game.getPlayers()){</b>
+<b class="nc">&nbsp;                                                if (player.isFirstToEnd() == true) {</b>
+<b class="nc">&nbsp;                                                    nobodyIsFirst = false;</b>
+<b class="nc">&nbsp;                                                    break;</b>
+&nbsp;                                                }
+<b class="nc">&nbsp;                                            }</b>
+&nbsp;
+<b class="nc">&nbsp;                                            if(nobodyIsFirst){</b>
+<b class="nc">&nbsp;                                                game.getPlayerInTurn().setFirstToEnd(true);</b>
+&nbsp;                                            }
+&nbsp;                                        }
+&nbsp;
+<b class="nc">&nbsp;                                        if (isLastTurn()) {</b>
+<b class="nc">&nbsp;                                            if(endGame(game)){</b>
+<b class="nc">&nbsp;                                                this.update(new EndGameMessage(winner, playersPoints));</b>
+<b class="nc">&nbsp;                                                break;</b>
+&nbsp;                                            }
+&nbsp;                                        }
+&nbsp;
+<b class="nc">&nbsp;                                        if (boardNeedsRestore()) {</b>
+<b class="nc">&nbsp;                                            game.restoreBoard(game.getBoard());</b>
+&nbsp;                                        }
+&nbsp;
+<b class="nc">&nbsp;                                        this.update(new EndTurnMessage());</b>
+&nbsp;
+<b class="nc">&nbsp;                                        System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname() + &quot; In state: &quot; + game.getPlayerInTurn().getPlayerState().toString());</b>
+<b class="nc">&nbsp;                                        game.setNextPlayer();</b>
+<b class="nc">&nbsp;                                        resetPlayersState(game);</b>
+<b class="nc">&nbsp;                                        for (Player player : game.getPlayers()) {</b>
+<b class="nc">&nbsp;                                            System.out.println(&quot;Player in turn is: &quot; + player.getNickname() + &quot; In state: &quot; + player.getPlayerState().toString());</b>
+<b class="nc">&nbsp;                                        }</b>
+&nbsp;
+<b class="nc">&nbsp;                                        this.update(new NextTurnMessage());</b>
+<b class="nc">&nbsp;                                        System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname() + &quot; In state: &quot; + game.getPlayerInTurn().getPlayerState().toString());</b>
+&nbsp;
+<b class="nc">&nbsp;                                    } catch (NotEnoughSpaceException e) {</b>
+<b class="nc">&nbsp;                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                        this.update(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                                    } catch (IncompatibleStateException e) {</b>
+<b class="nc">&nbsp;                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                    }</b>
+<b class="nc">&nbsp;                                }</b>
+&nbsp;                                case 3 -&gt; {
+<b class="nc">&nbsp;                                    if (putObjectInLibraryMessage.getOrderArray().get(0) == putObjectInLibraryMessage.getOrderArray().get(1)) {</b>
+<b class="nc">&nbsp;                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), &quot;You must put all the objects you have in hand in the library.&quot;));</b>
+&nbsp;                                    } else {
+&nbsp;                                        try {
+<b class="nc">&nbsp;                                            addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2));</b>
+&nbsp;
+&nbsp;                                            /* Resetting the player&#39;s objects in hand, so they&#39;ll start from scratch in the next turn */
+<b class="nc">&nbsp;                                            game.getPlayerInTurn().initObjectsInHand();</b>
+&nbsp;
+&nbsp;                                            /* The player must be in PICKUP state for the next turn, else he won&#39;t be able to pick any object */
+<b class="nc">&nbsp;                                            game.getPlayerInTurn().setPlayerState(PICKUP);</b>
+&nbsp;
+&nbsp;                                            /* Check if the player has completed a common objective */
+<b class="nc">&nbsp;                                            checkCommonObjectives();</b>
+&nbsp;
+<b class="nc">&nbsp;                                            if (checkLibrarySpaces() == 0) {</b>
+<b class="nc">&nbsp;                                                boolean nobodyIsFirst = true;</b>
+<b class="nc">&nbsp;                                                for(Player player : game.getPlayers()){</b>
+<b class="nc">&nbsp;                                                    if (player.isFirstToEnd() == true) {</b>
+<b class="nc">&nbsp;                                                        nobodyIsFirst = false;</b>
+<b class="nc">&nbsp;                                                        break;</b>
+&nbsp;                                                    }
+<b class="nc">&nbsp;                                                }</b>
+&nbsp;
+<b class="nc">&nbsp;                                                if(nobodyIsFirst){</b>
+<b class="nc">&nbsp;                                                    game.getPlayerInTurn().setFirstToEnd(true);</b>
+&nbsp;                                                }
+&nbsp;                                            }
+&nbsp;
+<b class="nc">&nbsp;                                            if (isLastTurn()) {</b>
+<b class="nc">&nbsp;                                                if(endGame(game)){</b>
+<b class="nc">&nbsp;                                                    this.update(new EndGameMessage(winner, playersPoints));</b>
+<b class="nc">&nbsp;                                                    break;</b>
+&nbsp;                                                }
+&nbsp;                                            }
+&nbsp;
+<b class="nc">&nbsp;                                            if (boardNeedsRestore()) {</b>
+<b class="nc">&nbsp;                                                game.restoreBoard(game.getBoard());</b>
+&nbsp;                                            }
+&nbsp;
+<b class="nc">&nbsp;                                            this.update(new EndTurnMessage());</b>
+&nbsp;
+<b class="nc">&nbsp;                                            System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname() + &quot; In state: &quot; + game.getPlayerInTurn().getPlayerState().toString());</b>
+<b class="nc">&nbsp;                                            game.setNextPlayer();</b>
+<b class="nc">&nbsp;                                            resetPlayersState(game);</b>
+<b class="nc">&nbsp;                                            for (Player player : game.getPlayers()) {</b>
+<b class="nc">&nbsp;                                                System.out.println(&quot;Player in turn is: &quot; + player.getNickname() + &quot; In state: &quot; + player.getPlayerState().toString());</b>
+<b class="nc">&nbsp;                                            }</b>
+&nbsp;
+<b class="nc">&nbsp;                                            this.update(new NextTurnMessage());</b>
+<b class="nc">&nbsp;                                            System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname() + &quot; In state: &quot; + game.getPlayerInTurn().getPlayerState().toString());</b>
+&nbsp;
+<b class="nc">&nbsp;                                        } catch (NotEnoughSpaceException | IncompatibleStateException e) {</b>
+<b class="nc">&nbsp;                                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                            this.update(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                                        }</b>
+&nbsp;                                    }
+<b class="nc">&nbsp;                                }</b>
+&nbsp;                                case 4 -&gt; {
+<b class="nc">&nbsp;                                    if ((putObjectInLibraryMessage.getOrderArray().get(0) == putObjectInLibraryMessage.getOrderArray().get(1)) || (putObjectInLibraryMessage.getOrderArray().get(0) == putObjectInLibraryMessage.getOrderArray().get(2)) || (putObjectInLibraryMessage.getOrderArray().get(1) == putObjectInLibraryMessage.getOrderArray().get(2))) {</b>
+<b class="nc">&nbsp;                                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), &quot;You must put all the objects you have in hand in the library.&quot;));</b>
+&nbsp;                                    } else {
+&nbsp;                                        try {
+<b class="nc">&nbsp;                                            addObjectToLibrary(putObjectInLibraryMessage.getOrderArray().get(0), putObjectInLibraryMessage.getOrderArray().get(1), putObjectInLibraryMessage.getOrderArray().get(2), putObjectInLibraryMessage.getOrderArray().get(3));</b>
+&nbsp;
+&nbsp;                                            /* Resetting the player&#39;s objects in hand, so they&#39;ll start from scratch in the next turn */
+<b class="nc">&nbsp;                                            game.getPlayerInTurn().initObjectsInHand();</b>
+&nbsp;
+&nbsp;                                            /* The player must be in PICKUP state for the next turn, else he won&#39;t be able to pick any object */
+<b class="nc">&nbsp;                                            game.getPlayerInTurn().setPlayerState(PICKUP);</b>
+&nbsp;
+&nbsp;                                            /* Check if the player has completed a common objective */
+<b class="nc">&nbsp;                                            checkCommonObjectives();</b>
+&nbsp;
+<b class="nc">&nbsp;                                            if (checkLibrarySpaces() == 0) {</b>
+<b class="nc">&nbsp;                                                boolean nobodyIsFirst = true;</b>
+<b class="nc">&nbsp;                                                for(Player player : game.getPlayers()){</b>
+<b class="nc">&nbsp;                                                    if (player.isFirstToEnd() == true) {</b>
+<b class="nc">&nbsp;                                                        nobodyIsFirst = false;</b>
+<b class="nc">&nbsp;                                                        break;</b>
+&nbsp;                                                    }
+<b class="nc">&nbsp;                                                }</b>
+&nbsp;
+<b class="nc">&nbsp;                                                if(nobodyIsFirst){</b>
+<b class="nc">&nbsp;                                                    game.getPlayerInTurn().setFirstToEnd(true);</b>
+&nbsp;                                                }
+&nbsp;                                            }
+&nbsp;
+<b class="nc">&nbsp;                                            if (isLastTurn()) {</b>
+<b class="nc">&nbsp;                                                if(endGame(game)){</b>
+<b class="nc">&nbsp;                                                    this.update(new EndGameMessage(winner, playersPoints));</b>
+<b class="nc">&nbsp;                                                    break;</b>
+&nbsp;                                                }
+&nbsp;                                            }
+&nbsp;
+<b class="nc">&nbsp;                                            if (boardNeedsRestore()) {</b>
+<b class="nc">&nbsp;                                                game.restoreBoard(game.getBoard());</b>
+&nbsp;                                            }
+&nbsp;
+<b class="nc">&nbsp;                                            this.update(new EndTurnMessage());</b>
+&nbsp;
+<b class="nc">&nbsp;                                            System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname() + &quot; In state: &quot; + game.getPlayerInTurn().getPlayerState().toString());</b>
+<b class="nc">&nbsp;                                            game.setNextPlayer();</b>
+<b class="nc">&nbsp;                                            resetPlayersState(game);</b>
+<b class="nc">&nbsp;                                            for (Player player : game.getPlayers()) {</b>
+<b class="nc">&nbsp;                                                System.out.println(&quot;Player in turn is: &quot; + player.getNickname() + &quot; In state: &quot; + player.getPlayerState().toString());</b>
+<b class="nc">&nbsp;                                            }</b>
+&nbsp;
+<b class="nc">&nbsp;                                            this.update(new NextTurnMessage());</b>
+<b class="nc">&nbsp;                                            System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname() + &quot; In state: &quot; + game.getPlayerInTurn().getPlayerState().toString());</b>
+&nbsp;
+<b class="nc">&nbsp;                                        } catch (NotEnoughSpaceException e) {</b>
+<b class="nc">&nbsp;                                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                            this.update(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                                        } catch (IncompatibleStateException e) {</b>
+<b class="nc">&nbsp;                                            this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                                        }</b>
+&nbsp;                                    }
+<b class="nc">&nbsp;                                }</b>
+&nbsp;                                default -&gt; {
+<b class="nc">&nbsp;                                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:LIBRARY&quot;), &quot;Invalid number of objects.&quot;));</b>
+<b class="nc">&nbsp;                                    this.update(new AskLibraryMoveMessage(&quot;Controller&quot;));</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), &quot;This message type: &quot; + receivedMessage.getType().toString() + &quot; is not available for this game state: &quot; + game.getGameState().toString()));</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case CHAT:
+<b class="nc">&nbsp;                ChatMessage ncm = (ChatMessage) receivedMessage;</b>
+<b class="nc">&nbsp;                    if(!ncm.getDest().equals(&quot;SEE&quot;))game.addChatMessage(ncm);</b>
+<b class="nc">&nbsp;                    this.update(ncm);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case CHATLOG:
+<b class="nc">&nbsp;                ChatLogMessage clm = (ChatLogMessage)receivedMessage;</b>
+<b class="nc">&nbsp;                this.update(new ChatLogMessage(clm.getSender(),game.getChatLog()));</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            default:
+<b class="nc">&nbsp;                this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:GENERIC&quot;), &quot;Message type: &quot; + receivedMessage.getType().toString() + &quot; is not valid.&quot;));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks if the board needs to be restored.
+&nbsp;     * @return {@code true} if it needs to be restored, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    private boolean boardNeedsRestore() {
+<b class="nc">&nbsp;        for(int i = 0; i &lt; 9; i++){</b>
+<b class="nc">&nbsp;            for(int j = 0; j &lt; 9; j++){</b>
+<b class="nc">&nbsp;                if(game.getBoard().getSpace(i,j).getObject() != null){</b>
+<b class="nc">&nbsp;                    if(game.getBoard().isSpaceSurroundedByNull(i,j) == false){</b>
+<b class="nc">&nbsp;                        return false;</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method initializes the game controlled by this controller. It can be called only after all the required players have been added to the game.
+&nbsp;     * @param game is the game of this controller.
+&nbsp;     */
+&nbsp;    private void initGame(Game game){
+<b class="nc">&nbsp;        game.setFirstPlayer();</b>
+<b class="nc">&nbsp;        game.setPlayerInTurn(game.getFirstPlayer());</b>
+<b class="nc">&nbsp;        setupCommonObjectives();</b>
+&nbsp;        /* Subscribe to the players&#39; updates */
+&nbsp;        for (Player player:
+<b class="nc">&nbsp;             game.getPlayers()) {</b>
+<b class="nc">&nbsp;            player.addObserver(this);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;        /* Sends the common objectives and the personal objectives to all the connected players. */
+<b class="nc">&nbsp;        for(Player player: game.getPlayers()){</b>
+<b class="nc">&nbsp;            this.update(new ShowCommonObjectiveMessage(player.getNickname(), (CommonObjective) game.getCommonObjectives().keySet().toArray()[0], (CommonObjective) game.getCommonObjectives().keySet().toArray()[1]));</b>
+<b class="nc">&nbsp;            this.update(new ShowPersonalObjectiveMessage(player.getNickname(), player.getPersonalObjective()));</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        sendOtherPlayersLibrary(game);</b>
+&nbsp;
+<b class="nc">&nbsp;        resetPlayersState(game);</b>
+&nbsp;        /* TODO - Debug print */
+<b class="nc">&nbsp;        System.out.println(&quot;Player in turn is: &quot; + game.getPlayerInTurn().getNickname());</b>
+<b class="nc">&nbsp;        game.restoreBoard(game.getBoard());</b>
+&nbsp;
+<b class="nc">&nbsp;        game.setGameState(IN_GAME);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method resets the players&#39; state after each turn.
+&nbsp;     * @param game is the controller&#39;s game.
+&nbsp;     */
+&nbsp;    private static void resetPlayersState(Game game) {
+<b class="nc">&nbsp;        for(Player player: game.getPlayers()) {</b>
+<b class="nc">&nbsp;            if (player.equals(game.getPlayerInTurn())) {</b>
+<b class="nc">&nbsp;                player.setPlayerState(PICKUP);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                player.setPlayerState(IN_LIBRARY);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will create the common objectives for the game.
+&nbsp;     */
+&nbsp;    private void setupCommonObjectives(){
+&nbsp;        /* TODO - La combinazione rand1 = 7/6 e rand2 = 3 ogni tanto causa il crash del controller */
+<b class="nc">&nbsp;        int rand1 = new Random().nextInt(availableCommonObjectives.size());</b>
+&nbsp;        int rand2;
+&nbsp;        do{
+<b class="nc">&nbsp;            rand2 = new Random().nextInt(availableCommonObjectives.size());</b>
+<b class="nc">&nbsp;        } while(rand1 == rand2);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;First number: &quot; + rand1);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Second number: &quot; + rand2);</b>
+&nbsp;
+&nbsp;        /* First I get the objectives from the hashmap */
+<b class="nc">&nbsp;        CommonObjective objective1 = availableCommonObjectives.remove(rand1);</b>
+<b class="nc">&nbsp;        CommonObjective objective2 = availableCommonObjectives.remove(rand2);</b>
+&nbsp;
+&nbsp;        /* TODO - Debug print */
+<b class="nc">&nbsp;        System.out.println(objective1.getClass().toString() + &quot; I&#39;m the first objective.&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(objective2.getClass().toString() + &quot; I&#39;m the second objective.&quot;);</b>
+&nbsp;
+&nbsp;        /* Then I set their numeral */
+<b class="nc">&nbsp;        objective1.setObjectiveNumeral(ObjectiveNumeral.ONE);</b>
+<b class="nc">&nbsp;        objective2.setObjectiveNumeral(ObjectiveNumeral.TWO);</b>
+&nbsp;
+&nbsp;        /* Finally I add the objectives to the game */
+<b class="nc">&nbsp;        game.addCommonObjective(objective1);</b>
+<b class="nc">&nbsp;        game.addCommonObjective(objective2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will add the common objective points to the player&#39;s points.
+&nbsp;     */
+&nbsp;    private void checkCommonObjectives() {
+<b class="nc">&nbsp;        for (CommonObjective commonObjective : game.getCommonObjectives().keySet()) {</b>
+&nbsp;
+&nbsp;            /* TODO - Debug print */
+<b class="nc">&nbsp;            System.out.println(&quot;BEFORE applying: Available points for objective &quot; + commonObjective.getClass() + &quot;: &quot; + game.getCommonObjectives().get(commonObjective));</b>
+&nbsp;
+&nbsp;            /* We apply the common objective only if it still has some points left */
+<b class="nc">&nbsp;            if(game.getCommonObjectives().get(commonObjective).size() &gt; 0) {</b>
+&nbsp;                /* If the player hasn&#39;t already completed the objective, it will get the points */
+<b class="nc">&nbsp;                if(game.getPlayerInTurn().getCompletedCommonObjectives()[commonObjective.getObjectiveNumeral()] == 0) {</b>
+<b class="nc">&nbsp;                    if (commonObjective.applyObjectiveRules(game.getPlayerInTurn().getLibrary(), 0, 0)) {</b>
+<b class="nc">&nbsp;                        int points = game.getCommonObjectives().get(commonObjective).remove(0);</b>
+&nbsp;
+&nbsp;                        /* TODO - Debug print */
+<b class="nc">&nbsp;                        System.out.println(&quot;AFTER applying: available points for objective &quot; + commonObjective.getClass() + &quot;: &quot; + game.getCommonObjectives().get(commonObjective));</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Player: &quot; + game.getPlayerInTurn().getNickname() + &quot; has received: &quot; + points + &quot; points from: &quot; + commonObjective.getClass());</b>
+&nbsp;
+<b class="nc">&nbsp;                        game.getPlayerInTurn().addPoints(points);</b>
+<b class="nc">&nbsp;                        game.getPlayerInTurn().setCompletedCommonObjectiveType(commonObjective, points);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method ends the game and checks the points of the players, declaring the winner.
+&nbsp;     * @param game is the game of this controller.
+&nbsp;     */
+&nbsp;    private boolean endGame(Game game){
+<b class="nc">&nbsp;        if(game.getNextPlayer().isFirstPlayer()){</b>
+<b class="nc">&nbsp;            game.setGameState(GameState.END);</b>
+<b class="nc">&nbsp;            calcPoints();</b>
+<b class="nc">&nbsp;            getPointsAndUsernames();</b>
+<b class="nc">&nbsp;            this.winner = declareWinner();</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will calculate the points each player has made in the game.
+&nbsp;     */
+&nbsp;    private void calcPoints(){
+&nbsp;
+<b class="nc">&nbsp;        for (Player player : game.getPlayers()) {</b>
+<b class="nc">&nbsp;            int personalObjectivePoints = 0;</b>
+<b class="nc">&nbsp;            int boardPoints = 0;</b>
+&nbsp;            /* Points for the personal objective */
+<b class="nc">&nbsp;            personalObjectivePoints = player.getPersonalObjective().compareTo(player.getLibrary());</b>
+&nbsp;
+&nbsp;            /* TODO - Debug print */
+<b class="nc">&nbsp;            System.out.println(&quot;Player: &quot; + player.getNickname() + &quot; has received: &quot; + personalObjectivePoints + &quot; from: &quot; + player.getPersonalObjective());</b>
+&nbsp;
+<b class="nc">&nbsp;           boardPoints += player.getLibrary().getLibraryPoints();</b>
+&nbsp;
+<b class="nc">&nbsp;            if(player.isFirstToEnd()){</b>
+<b class="nc">&nbsp;                player.addPoints(1);</b>
+&nbsp;
+&nbsp;                /* TODO - Debug print */
+<b class="nc">&nbsp;                System.out.println(&quot;Player: &quot; + player.getNickname() + &quot; has received 1 point as player.isFirstToEnd() is: &quot; + player.isFirstToEnd());</b>
+&nbsp;            }
+<b class="nc">&nbsp;            player.addPoints(personalObjectivePoints);</b>
+<b class="nc">&nbsp;            player.addPoints(boardPoints);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks the points of this game.
+&nbsp;     */
+&nbsp;    private void getPointsAndUsernames(){
+<b class="nc">&nbsp;        for(int i = 0; i &lt; game.getMaxPlayers(); i++){</b>
+<b class="nc">&nbsp;            playersPoints.put(game.getPlayers().get(i).getNickname(), game.getPlayers().get(i).getPoints());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will declare the winner of the game.
+&nbsp;     * @return the username of the winner.
+&nbsp;     */
+&nbsp;    private String declareWinner(){
+<b class="nc">&nbsp;        int maxPoints = Collections.max(playersPoints.values());</b>
+<b class="nc">&nbsp;        List&lt;String&gt; usernames = playersPoints.entrySet().stream()</b>
+<b class="nc">&nbsp;                                                         .filter(entry -&gt; entry.getValue() == maxPoints)</b>
+<b class="nc">&nbsp;                                                         .map(entry -&gt; entry.getKey())</b>
+<b class="nc">&nbsp;                                                         .toList();</b>
+&nbsp;
+<b class="nc">&nbsp;        if(usernames.size() &gt; 1){</b>
+&nbsp;            /* This means that there are players with the same number of points */
+<b class="nc">&nbsp;            int furthestPlayerIndex = 0;</b>
+<b class="nc">&nbsp;            for(int i = 0; i &lt; game.getMaxPlayers(); i++){</b>
+<b class="nc">&nbsp;                if(usernames.contains(game.getPlayers().get(i).getNickname())){</b>
+<b class="nc">&nbsp;                    if(i &gt; furthestPlayerIndex){</b>
+<b class="nc">&nbsp;                        furthestPlayerIndex = i;</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            return usernames.get(furthestPlayerIndex);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return usernames.get(0);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will check if the game is in its final turn.
+&nbsp;     * @return {@code true} if the game is in its final turn, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    private boolean isLastTurn(){
+<b class="nc">&nbsp;        for(int i = 0; i &lt; game.getMaxPlayers(); i++){</b>
+<b class="nc">&nbsp;            if(game.getPlayers().get(i).isFirstToEnd()){</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will count the number of free spaces in a player&#39;s library. It is used to see whether a player has finished as first.
+&nbsp;     * @return the number of free spaces in the player&#39;s library.
+&nbsp;     */
+&nbsp;    private int checkLibrarySpaces(){
+<b class="nc">&nbsp;        int freeSpaces = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;        for(int i = 0; i &lt; 6; i++){</b>
+<b class="nc">&nbsp;            for(int j = 0; j &lt; 5; j++){</b>
+<b class="nc">&nbsp;                if(game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, j)).getObjectColour().equals(ObjectColour.EMPTY)){</b>
+<b class="nc">&nbsp;                    freeSpaces++;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return freeSpaces;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Resets the coordinates values for the following turn.
+&nbsp;     */
+&nbsp;    private void resetCoordinateValues(){
+<b class="nc">&nbsp;        firstRow = 0;</b>
+<b class="nc">&nbsp;        firstCol = 0;</b>
+<b class="nc">&nbsp;        secondRow = 0;</b>
+<b class="nc">&nbsp;        secondCol = 0;</b>
+<b class="nc">&nbsp;        thirdRow = 0;</b>
+<b class="nc">&nbsp;        thirdCol = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method sends the players&#39; libraries to the current player, so he can check what his opponents are doing.
+&nbsp;     * @param game is the game of this controller.
+&nbsp;     */
+&nbsp;    private void sendOtherPlayersLibrary(Game game) {
+<b class="nc">&nbsp;        for (Player player : game.getPlayers()) {</b>
+<b class="nc">&nbsp;            librariesOfPlayers.put(player.getNickname(), player.getLibrary());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        this.update(new ShowLibrariesMessage(game.getPlayerInTurn().getNickname(), librariesOfPlayers));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks if two columns are next to each other.
+&nbsp;     * @param firstCol is the first column.
+&nbsp;     * @param secondCol is the second column.
+&nbsp;     * @return {@code true} if the two columns are next to each other, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    private boolean areAdjacentColumns(int firstCol, int secondCol) {
+<b class="nc">&nbsp;        if (firstCol &lt; secondCol) {</b>
+<b class="nc">&nbsp;            if(secondCol == firstCol + 1){</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (firstCol &gt; secondCol) {</b>
+<b class="nc">&nbsp;            if(firstCol == secondCol + 1){</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks if two rows are next to each other.
+&nbsp;     * @param firstRow is the first row.
+&nbsp;     * @param secondRow is the second row.
+&nbsp;     * @return {@code true} if the two rows are next to each other, {@code false} otherwise.
+&nbsp;     */
+&nbsp;    private boolean areAdjacentRows(int firstRow, int secondRow) {
+<b class="nc">&nbsp;        if (firstRow &lt; secondRow) {</b>
+<b class="nc">&nbsp;            if(secondRow == firstRow + 1){</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (firstRow &gt; secondRow) {</b>
+<b class="nc">&nbsp;            if(firstRow == secondRow + 1){</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The player will select the card to pick from the board one by one
+&nbsp;     * @param coordX is the X coordinate of the card on the board.
+&nbsp;     * @param coordY is the Y coordinate of the card on the board.
+&nbsp;     * @throws IncompatibleStateException if the player is not in PICKUP state.
+&nbsp;     */
+&nbsp;    private void pickObjectFromBoard(int coordX, int coordY) throws SpaceSurroundedException, EmptySpaceException, IncompatibleStateException{
+<b class="nc">&nbsp;        if(game.getPlayerInTurn().getPlayerState().equals(PICKUP)) {</b>
+&nbsp;
+&nbsp;            /* TODO - Debug print */
+&nbsp;            String debugPrint;
+<b class="nc">&nbsp;            if(game.getBoard().getSpace(coordX, coordY).getObject() == null){</b>
+<b class="nc">&nbsp;                debugPrint = &quot;null&quot;;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                debugPrint = game.getBoard().getSpace(coordX, coordY).getObject().getObjectColour().toString();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;Object to pick up from row: &quot; + coordX + &quot;, column: &quot; + coordY + &quot; is of type: &quot; + debugPrint);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;            if (game.getBoard().getSpace(coordX, coordY).getObject() != null &amp;&amp; !(game.getBoard().getSpace(coordX, coordY).getTypeSpace().equals(TypeSpace.UNUSABLE))) {</b>
+<b class="nc">&nbsp;                if(game.getBoard().isSpaceSurrounded(coordX, coordY)){</b>
+<b class="nc">&nbsp;                    throw new SpaceSurroundedException();</b>
+&nbsp;                } else {
+&nbsp;
+&nbsp;                    try {
+<b class="nc">&nbsp;                        game.getPlayerInTurn().addToObjectsInHand(game.getBoard().getSpace(coordX, coordY).getObject());</b>
+<b class="nc">&nbsp;                        game.getBoard().getSpace(coordX, coordY).removeObject();</b>
+<b class="nc">&nbsp;                    } catch (TooManyObjectsInHandException e) {</b>
+<b class="nc">&nbsp;                        this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(&quot;:BOARD&quot;), e.getMessage()));</b>
+<b class="nc">&nbsp;                        this.update(new AskBoardMoveMessage(&quot;Controller&quot;));</b>
+<b class="nc">&nbsp;                    }</b>
+&nbsp;
+&nbsp;                }
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new EmptySpaceException();</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            throw new IncompatibleStateException(PICKUP, game.getPlayerInTurn().getPlayerState());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The player can select in which order the object cards have to be put in the specified column
+&nbsp;     * @param cardID1 is the first card to be put in the specified column.
+&nbsp;     * @param column is the player specified column.
+&nbsp;     * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
+&nbsp;     * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
+&nbsp;     */
+&nbsp;    private void addObjectToLibrary(int cardID1, int column) throws IncompatibleStateException, NotEnoughSpaceException{
+<b class="nc">&nbsp;        if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {</b>
+<b class="nc">&nbsp;            ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);</b>
+<b class="nc">&nbsp;            int firstEmpty = -1;</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int i = 5; i &gt;= 0; i--) {</b>
+<b class="nc">&nbsp;                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {</b>
+<b class="nc">&nbsp;                    firstEmpty = i;</b>
+&nbsp;                    /* TODO - Debug print */
+<b class="nc">&nbsp;                    System.out.println(&quot;First empty row is: &quot; + firstEmpty);</b>
+<b class="nc">&nbsp;                    break;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            if (firstEmpty &gt;= 0) {</b>
+<b class="nc">&nbsp;                game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new NotEnoughSpaceException(column);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            throw new IncompatibleStateException(IN_LIBRARY, game.getPlayerInTurn().getPlayerState());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The player can select in which order the object cards have to be put in the specified column
+&nbsp;     * @param cardID1 is the first card to be put in the specified column.
+&nbsp;     * @param cardID2 is the second card to be put in the specified column.
+&nbsp;     * @param column is the player specified column.
+&nbsp;     * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
+&nbsp;     * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
+&nbsp;     */
+&nbsp;    private void addObjectToLibrary(int cardID1, int cardID2, int column) throws IncompatibleStateException, NotEnoughSpaceException{
+<b class="nc">&nbsp;        if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {</b>
+<b class="nc">&nbsp;            ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);</b>
+<b class="nc">&nbsp;            ObjectCard objectCard2 = game.getPlayerInTurn().getObjectInHand(cardID2);</b>
+<b class="nc">&nbsp;            int firstEmpty = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int i = 5; i &gt;= 0; i--) {</b>
+<b class="nc">&nbsp;                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {</b>
+<b class="nc">&nbsp;                    firstEmpty = i;</b>
+<b class="nc">&nbsp;                    break;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            if (!((firstEmpty - 1 &lt; 0)) ) {</b>
+<b class="nc">&nbsp;                game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));</b>
+<b class="nc">&nbsp;                game.getPlayerInTurn().addObjectToLibrary(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new NotEnoughSpaceException(column);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            throw new IncompatibleStateException(IN_LIBRARY, game.getPlayerInTurn().getPlayerState());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The player can select in which order the object cards have to be put in the specified column
+&nbsp;     * @param cardID1 is the first card to be put in the specified column.
+&nbsp;     * @param cardID2 is the second card to be put in the specified column.
+&nbsp;     * @param cardID3 is the third card to be put in the specified column.
+&nbsp;     * @param column is the player specified column.
+&nbsp;     * @throws IncompatibleStateException if the player is not in IN_LIBRARY state.
+&nbsp;     * @throws NotEnoughSpaceException if the chosen column does not have enough space for the desired cards.
+&nbsp;     */
+&nbsp;    private void addObjectToLibrary(int cardID1, int cardID2, int cardID3, int column) throws IncompatibleStateException, NotEnoughSpaceException{
+<b class="nc">&nbsp;        if(game.getPlayerInTurn().getPlayerState().equals(IN_LIBRARY)) {</b>
+<b class="nc">&nbsp;            ObjectCard objectCard1 = game.getPlayerInTurn().getObjectInHand(cardID1);</b>
+<b class="nc">&nbsp;            ObjectCard objectCard2 = game.getPlayerInTurn().getObjectInHand(cardID2);</b>
+<b class="nc">&nbsp;            ObjectCard objectCard3 = game.getPlayerInTurn().getObjectInHand(cardID3);</b>
+<b class="nc">&nbsp;            int firstEmpty = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int i = 5; i &gt;= 0; i--) {</b>
+<b class="nc">&nbsp;                if (game.getPlayerInTurn().getLibrary().getObject(game.getPlayerInTurn().getLibrary().getLibrarySpace(i, column)).getObjectColour().equals(ObjectColour.EMPTY)) {</b>
+<b class="nc">&nbsp;                    firstEmpty = i;</b>
+<b class="nc">&nbsp;                    break;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            if (!((firstEmpty - 2 &lt; 0))) {</b>
+<b class="nc">&nbsp;                game.getPlayerInTurn().addObjectToLibrary(objectCard1, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty, column));</b>
+<b class="nc">&nbsp;                game.getPlayerInTurn().addObjectToLibrary(objectCard2, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 1, column));</b>
+<b class="nc">&nbsp;                game.getPlayerInTurn().addObjectToLibrary(objectCard3, game.getPlayerInTurn().getLibrary().getLibrarySpace(firstEmpty - 2, column));</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new NotEnoughSpaceException(column);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            throw new IncompatibleStateException(IN_LIBRARY, game.getPlayerInTurn().getPlayerState());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the events notified by the game
+&nbsp;     * @param message is the message used to share information.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void update(Message message){
+<b class="nc">&nbsp;        switch(message.getType()){</b>
+&nbsp;            case ADDED_PLAYER:
+<b class="nc">&nbsp;                if(game.getPlayers().size() == 1) {</b>
+<b class="nc">&nbsp;                    networkView.askMaxPlayer();</b>
+&nbsp;                }else {
+<b class="nc">&nbsp;                    ArrayList&lt;String&gt; players = new ArrayList&lt;&gt;();</b>
+&nbsp;                    for (Player player :
+<b class="nc">&nbsp;                            game.getPlayers()) {</b>
+<b class="nc">&nbsp;                        players.add(player.getNickname());</b>
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                    networkView.showLobby(players);</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case SHOW_LOBBY:
+<b class="nc">&nbsp;                ShowLobbyMessage lobbyMessage = (ShowLobbyMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showLobby(lobbyMessage.getLobbyPlayers());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case NEXT_TURN:
+<b class="nc">&nbsp;                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());</b>
+&nbsp;
+<b class="nc">&nbsp;                sendOtherPlayersLibrary(game);</b>
+&nbsp;
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case GENERIC_MODEL_CHANGE:
+<b class="nc">&nbsp;                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());</b>
+&nbsp;
+<b class="nc">&nbsp;                sendOtherPlayersLibrary(game);</b>
+&nbsp;
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case END_TURN:
+<b class="nc">&nbsp;                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(&quot;:END_TURN&quot;), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());</b>
+&nbsp;
+<b class="nc">&nbsp;                sendOtherPlayersLibrary(game);</b>
+&nbsp;
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case SHOW_OTHERS_LIBRARY:
+<b class="nc">&nbsp;                ShowLibrariesMessage showLibrariesMessage = (ShowLibrariesMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showOthersLibrary(showLibrariesMessage.getSender(), showLibrariesMessage.getLibrariesOfPlayers());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case SHOW_COMMON_OBJECTIVE:
+<b class="nc">&nbsp;                ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2(), new int[]{0,0});</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case SHOW_PERSONAL_OBJECTIVE:
+<b class="nc">&nbsp;                ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showPersonalObjective(showPersonalObjectiveMessage.getSender(), showPersonalObjectiveMessage.getPersonalObjective());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case END_GAME:
+<b class="nc">&nbsp;                EndGameMessage endGameMessage = (EndGameMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showWinner(endGameMessage.getWinner(), endGameMessage.getPlayersPoints());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case GENERIC_ERROR:
+<b class="nc">&nbsp;                GenericErrorMessage errorMessage = (GenericErrorMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showGenericError(errorMessage.getSender(), errorMessage.getPayload());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case BOARD_ERROR:
+<b class="nc">&nbsp;                BoardErrorMessage boardErrorMessage = (BoardErrorMessage) message;</b>
+<b class="nc">&nbsp;                networkView.showGenericError(boardErrorMessage.getSender(), boardErrorMessage.getPayload());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case CHAT:
+<b class="nc">&nbsp;                networkView.showChat((ChatMessage) message);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case CHATLOG:
+<b class="nc">&nbsp;                networkView.sendMessageTo(message);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            default:
+&nbsp;                ;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Return the game which is controlled by the controller
+&nbsp;     * @return the game controlled by the controller
+&nbsp;     */
+<b class="nc">&nbsp;    public Game getGame(){return game;}</b>
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

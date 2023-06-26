@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ServerInfoSceneController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view.gui.scene</a>
+</div>
+
+<h1>Coverage Summary for Class: ServerInfoSceneController (view.gui.scene)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ServerInfoSceneController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view.gui.scene;
+&nbsp;
+&nbsp;import controller.ClientController;
+&nbsp;import javafx.css.PseudoClass;
+&nbsp;import javafx.event.Event;
+&nbsp;import javafx.fxml.FXML;
+&nbsp;import javafx.scene.Parent;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.TextField;
+&nbsp;import javafx.scene.input.MouseEvent;
+&nbsp;import javafx.scene.layout.AnchorPane;
+&nbsp;import observer.ViewObservable;
+&nbsp;import view.gui.SceneController;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+<b class="nc">&nbsp;public class ServerInfoSceneController extends ViewObservable implements GenericSceneController {</b>
+&nbsp;
+<b class="nc">&nbsp;    private final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass(&quot;error&quot;);</b>
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private AnchorPane rootPane;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private TextField serverAddressField;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private TextField serverPortField;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Button submitButton;
+&nbsp;    @FXML
+&nbsp;    private Button returnButton;
+&nbsp;
+&nbsp;
+&nbsp;    public void initialize(){
+<b class="nc">&nbsp;        submitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,  this :: onSubmitButtonClick);</b>
+<b class="nc">&nbsp;        returnButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onReturnButtonClick);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    private void onSubmitButtonClick(Event event){
+<b class="nc">&nbsp;        String address = serverAddressField.getText();</b>
+<b class="nc">&nbsp;        String port = serverPortField.getText();</b>
+&nbsp;
+<b class="nc">&nbsp;        boolean isAddressValid = ClientController.isAddressValid(address);</b>
+<b class="nc">&nbsp;        boolean isPortValid = ClientController.isPortValid(port);</b>
+&nbsp;
+<b class="nc">&nbsp;        serverAddressField.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, !isAddressValid);</b>
+<b class="nc">&nbsp;        serverPortField.pseudoClassStateChanged(ERROR_PSEUDO_CLASS, !isPortValid);</b>
+&nbsp;
+<b class="nc">&nbsp;        if(isAddressValid &amp;&amp; isPortValid) {</b>
+<b class="nc">&nbsp;            returnButton.setDisable(true);</b>
+<b class="nc">&nbsp;            submitButton.setDisable(true);</b>
+&nbsp;
+<b class="nc">&nbsp;            Map&lt;String, String&gt;  updateServerInfo = Map.of(&quot;address&quot;,address,&quot;port&quot;, port);</b>
+<b class="nc">&nbsp;            new Thread(() -&gt; notifyObserver(obs -&gt; obs.onUpdateServerInfo(updateServerInfo))).start();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private void onReturnButtonClick(Event event){
+<b class="nc">&nbsp;        returnButton.setDisable(true);</b>
+<b class="nc">&nbsp;        submitButton.setDisable(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        SceneController.changeRootPane(observers, event, &quot;Start.fxml&quot;);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

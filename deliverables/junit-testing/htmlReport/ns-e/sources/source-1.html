@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ClientMain</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.structure</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientMain (network.structure)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientMain</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.structure;
+&nbsp;
+&nbsp;import controller.ClientController;
+&nbsp;//import javafx.application.Application;
+&nbsp;//import javafx.stage.Stage;
+&nbsp;//import view.Gui;
+&nbsp;import javafx.application.Application;
+&nbsp;import view.cli.*;
+&nbsp;import view.gui.Gui;
+&nbsp;import view.gui.JavaFXGUI;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Main class of the client application. The user can decide what type of client to launch with the following command line parameters:
+&nbsp; * &lt;ul&gt;
+&nbsp; *     &lt;li&gt;First parameter:&lt;/li&gt;
+&nbsp; *     &lt;ul&gt;
+&nbsp; *         &lt;li&gt;&quot;{@code -cli}&quot; or &quot;{@code -c}&quot; will start the CLI game;&lt;/li&gt;
+&nbsp; *         &lt;li&gt;&quot;{@code -gui}&quot; or &quot;{@code -g}&quot; will start the GUI game;&lt;/li&gt;
+&nbsp; *     &lt;/ul&gt;
+&nbsp; *     &lt;li&gt;Second parameter:&lt;/li&gt;
+&nbsp; *     &lt;ul&gt;
+&nbsp; *         &lt;li&gt;&quot;{@code -socket}&quot; or &quot;{@code -s}&quot; will start the game based on a socket connection;&lt;/li&gt;
+&nbsp; *         &lt;li&gt;&quot;{@code -rmi}&quot; or &quot;{@code -r}&quot; will start the game based on a RMI connection;&lt;/li&gt;
+&nbsp; *     &lt;/ul&gt;
+&nbsp; * &lt;/ul&gt;
+&nbsp; */
+<b class="nc">&nbsp;public class ClientMain {</b>
+&nbsp;    public static void main(String[] args) {
+&nbsp;
+&nbsp;        /* TODO - REMOVE COMMENT HERE FOR FINAL DEPLOYMENT */
+&nbsp;/*
+&nbsp;        boolean isCli = true;
+&nbsp;        boolean isSocket = true;
+&nbsp;        boolean failedArgs = false;
+&nbsp;
+&nbsp;        if (args.length != 2) {
+&nbsp;            System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid number of parameters. Required: 2; Provided: &quot; + args.length + Colours.RESET);
+&nbsp;            failedArgs = true;
+&nbsp;        } else {
+&nbsp;
+&nbsp;            *//* Check for the first argument *//*
+&nbsp;            if (args[0].equals(&quot;-cli&quot;) || args[0].equals(&quot;-c&quot;)) {
+&nbsp;                isCli = true;
+&nbsp;            } else if (args[0].equals(&quot;-gui&quot;) || args[0].equals(&quot;-g&quot;)) {
+&nbsp;                isCli = false;
+&nbsp;            } else {
+&nbsp;                System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid parameter: &quot; + args[0] + Colours.RESET);
+&nbsp;                failedArgs = true;
+&nbsp;            }
+&nbsp;
+&nbsp;            *//* Check for the second argument *//*
+&nbsp;            if (args[1].equals(&quot;-socket&quot;) || args[1].equals(&quot;-s&quot;)) {
+&nbsp;                isSocket = true;
+&nbsp;            } else if (args[1].equals(&quot;-rmi&quot;) || args[1].equals(&quot;-r&quot;)) {
+&nbsp;                isSocket = false;
+&nbsp;            } else {
+&nbsp;                System.out.println(&quot;&quot; + Colours.RED + Colours.BOLD + &quot;Invalid parameter: &quot; + args[1] + Colours.RESET);
+&nbsp;                failedArgs = true;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        if (!failedArgs) {
+&nbsp;            if (isCli) {
+&nbsp;                Cli view = new Cli();
+&nbsp;                ClientController clientController = new ClientController(view, isSocket);
+&nbsp;                view.addObserver(clientController);
+&nbsp;                view.initCli();
+&nbsp;            } else {
+&nbsp;                *//* TODO - GUI application launch *//*
+&nbsp;                //Application.launch(JavaFXGUI.class);
+&nbsp;            }
+&nbsp;        } else {
+&nbsp;            System.exit(2);
+&nbsp;        }
+&nbsp;*/
+&nbsp;
+&nbsp;        /* TODO - REMOVE THIS! ONLY FOR DEBUG */
+<b class="nc">&nbsp;        boolean isCli = false;</b>
+<b class="nc">&nbsp;        boolean isSocket = false;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (isCli) {</b>
+<b class="nc">&nbsp;            Cli view = new Cli(isSocket);</b>
+<b class="nc">&nbsp;            ClientController clientController = new ClientController(view, isSocket);</b>
+<b class="nc">&nbsp;            view.addObserver(clientController);</b>
+<b class="nc">&nbsp;            view.initCli();</b>
+<b class="nc">&nbsp;        } else {</b>
+&nbsp;            /* TODO - GUI application launch */
+<b class="nc">&nbsp;            JavaFXGUI.setIsSocket(isSocket);</b>
+<b class="nc">&nbsp;            Application.launch(JavaFXGUI.class);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

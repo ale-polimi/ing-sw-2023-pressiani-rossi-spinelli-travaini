@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > View</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">view</a>
+</div>
+
+<h1>Coverage Summary for Class: View (view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">View</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package view;
+&nbsp;
+&nbsp;import model.board.Board;
+&nbsp;import model.commonobjective.CommonObjective;
+&nbsp;import model.library.Library;
+&nbsp;import model.library.PersonalObjective;
+&nbsp;import model.objects.ObjectCard;
+&nbsp;import network.messages.Message;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;/**
+&nbsp; * This interface will be implemented by both the {@link view.cli.Cli CLI} and the {@link view.gui.Gui GUI}.
+&nbsp; * It&#39;s also implemented in the {@link network.structure.NetworkView networkview}.
+&nbsp; */
+&nbsp;public interface View {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ask to insert the player&#39;s nickname
+&nbsp;     */
+&nbsp;    public void askNickname();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ask to insert the maximum number of players for the match
+&nbsp;     */
+&nbsp;    public void askMaxPlayer();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ask to insert a move regarding the board
+&nbsp;     */
+&nbsp;    public void askBoardMove();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Ask to insert a move regarding the library
+&nbsp;     */
+&nbsp;    public void askLibraryMove();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show a generic error.
+&nbsp;     * @param player is the recipient of the error.
+&nbsp;     * @param payload is the error&#39;s description.
+&nbsp;     */
+&nbsp;    void showGenericError(String player, String payload);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the current turn of the game, whether it&#39;s for the player in turn or not. It will be up to
+&nbsp;     * the client to {@link controller.ClientController#update(Message) check if it&#39;s for him}.
+&nbsp;     *
+&nbsp;     * @param player                    is the player currently playing.
+&nbsp;     * @param gameBoard                 is the board of the game.
+&nbsp;     * @param playerLibrary             is the player&#39;s library.
+&nbsp;     * @param playerObjInHand           are the objects the player currently has in hand.
+&nbsp;     * @param completedCommonObjectives is the array of points for each completed common objective.
+&nbsp;     */
+&nbsp;    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList&lt;ObjectCard&gt; playerObjInHand, int[] completedCommonObjectives);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the {@link CommonObjective common objectives} to the player.
+&nbsp;     *
+&nbsp;     * @param player                    is the player currently playing.
+&nbsp;     * @param commonObjective1          is the first common objective.
+&nbsp;     * @param commonObjective2          is the second common objective.
+&nbsp;     * @param completedCommonObjectives
+&nbsp;     */
+&nbsp;    void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the {@link PersonalObjective personal objective} to the player.
+&nbsp;     * @param player is the player currently playing.
+&nbsp;     * @param personalObjective is the player&#39;s personal objective.
+&nbsp;     */
+&nbsp;    void showPersonalObjective(String player, PersonalObjective personalObjective);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the lobby while all the players are connecting to the game.
+&nbsp;     * @param players is an {@link ArrayList} containing the usernames of the currently connected players.
+&nbsp;     */
+&nbsp;    void showLobby(ArrayList&lt;String&gt; players);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the winner and the leaderboard when the game ends.
+&nbsp;     * @param winner is the username of the winner.
+&nbsp;     * @param leaderboard is a {@link HashMap} containing the pairs (username, points).
+&nbsp;     */
+&nbsp;    void showWinner(String winner, HashMap&lt;String, Integer&gt; leaderboard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the board when the player currently in its turn.
+&nbsp;     * @param gameBoard is the board of the game.
+&nbsp;     */
+&nbsp;    void showNotMyTurn(Board gameBoard);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the other players&#39; library to the player in turn.
+&nbsp;     * @param sender is the sender of the message.
+&nbsp;     * @param librariesOfPlayers is the {@link HashMap} containing the other players&#39; usernames as keys and libraries as values.
+&nbsp;     */
+&nbsp;    void showOthersLibrary(String sender, HashMap&lt;String, Library&gt; librariesOfPlayers);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method will show the chat message
+&nbsp;     * @param sender the sender of the message
+&nbsp;     * @param isPrivate indicate if the message is private
+&nbsp;     * @param message is the message text
+&nbsp;     */
+&nbsp;    void showChat(String sender,boolean isPrivate,String message);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Return if the player is the player in turn
+&nbsp;     * @return true if the player is the player in turn
+&nbsp;     */
+&nbsp;    boolean getMyTurn();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the myTurn parameter
+&nbsp;     * @param turn is the new value of the myTurn parameter
+&nbsp;     */
+&nbsp;    void setMyTurn(boolean turn);
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handle the chat service when the player is not in turn
+&nbsp;     */
+&nbsp;    void askChat();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Return the value of the chatAbilitator parameter
+&nbsp;     * @return true if the chat service is still enabled
+&nbsp;     */
+&nbsp;    boolean getChatAbilitator();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the value of the chatAbilitator Parameter
+&nbsp;     */
+&nbsp;    void setChatAbilitator(boolean value);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>

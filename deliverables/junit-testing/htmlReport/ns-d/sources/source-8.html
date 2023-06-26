@@ -1,0 +1,132 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ChatMessage</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">network.messages</a>
+</div>
+
+<h1>Coverage Summary for Class: ChatMessage (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChatMessage</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package network.messages;
+&nbsp;
+&nbsp;public class ChatMessage  extends Message{
+&nbsp;
+&nbsp;    private final String text;
+&nbsp;    private final String receiver;
+&nbsp;    /**
+&nbsp;     *Custom constructor for ChatMessage class
+&nbsp;     * @param sender      is the sender of the message.
+&nbsp;     * @param text is the message the player wants to send in the chat
+&nbsp;     */
+&nbsp;    public ChatMessage(String sender, String receiver,String text) {
+<b class="nc">&nbsp;        super(sender, MessageType.CHAT);</b>
+<b class="nc">&nbsp;        this.text=text;</b>
+<b class="nc">&nbsp;        this.receiver = receiver;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the text parameter
+&nbsp;     * @return the String object in text parameter
+&nbsp;     */
+<b class="nc">&nbsp;    public String getText(){return text;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the chat message receiver
+&nbsp;     * @return the String object in receiver parameter
+&nbsp;     */
+<b class="nc">&nbsp;    public String getDest() {return receiver;}</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-26 15:44</div>
+</div>
+</body>
+</html>
