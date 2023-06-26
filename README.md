@@ -11,7 +11,7 @@ Scaglione Cugola, gruppo GC-019.
 - [Alessandro Travaini](https://github.com/ale-polimi)
 
 ## Obiettivo del progetto
-![alt text](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
+[<img src="other-documents/My_Shelfie_box_ITA-ENG.png" width="400"/>](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
 
 Ricreare il gioco da tavolo [MyShelfie](https://craniointernational.com/products/my-shelfie/)<sup>(<i>apre sito esterno</i>)</sup> pubblicato da Cranio Creations, seguendo i principi di buona ingegneria del software.<br>
 Il progetta punta a creare una copia virtuale del gioco come un'applicazione Java distribuita e in rete. Come viene insegnato nei corsi d'ingegneria del software, un programma così complesso deve seguire delle regole in modo tale da essere <b>mantenibile</b>, <b>riutilizzabile</b> e <b>aggiornabile</b> da altri sviluppatori.<br>
@@ -55,6 +55,20 @@ I componenti del gioco sono stati testati singolarmente con JUnit e la copertura
 | Persistenza                    | :x:             |
 | Resilienza alle disconnessioni | :x:             |
 
+## Compilazione file sorgente
+### Utilizzando i jar precompilati (consigliato)
+
+Si possono utilizzare i jar precompilati che possono essere trovati qui: [client](), [server]().
+
+### Compilazione manuale
+
+Si possono compilare i file sorgente direttamente sulla propria macchina, usando [Maven](https://maven.apache.org/)<sup>(<i>apre sito esterno</i>)</sup> (deve essere installato sulla propria macchina).<br>
+Per compilare autonomamente, posizionarsi nella cartella radice del progetto e lanciare il seguente comando:
+```
+mvn clean package
+```
+I jar compilati saranno disponibili nella cartella ```target/``` con i seguenti nomi: ```MyShelfie-client.jar``` per il client e ```MyShelfie-server.jar``` per il server.
+
 ## Esecuzione
 ### Avvio del server
 
@@ -94,6 +108,9 @@ Per l'interfaccia CLI:
 - :warning: Se si utilizza Windows, bisogna scaricare ed eseguire come amministratore [questo script batch](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), altrimenti non si vedono i colori nella CLI;
 - :warning: Per mantenere la formattazione degli elementi di gioco, si consiglia di utilizzare un tipo di carattere monospazio come Courier New (Windows), Monospace (Linux) o Liberation Mono (Linux).
 
+Per l'interfaccia GUI:
+- Uno schermo con risoluzione maggiore di 1366x768 px;
+
 ### Compatibilità dell'applicazione
 
 Il client e il server sono stati provati su macchine con i seguenti sistemi operativi:
@@ -119,7 +136,8 @@ Software Engineering project for the 2022-2023 academic year.
 
 ## Project objective
 
-![alt text](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
+[<img src="other-documents/My_Shelfie_box_ITA-ENG.png" width="400"/>](other-documents/My_Shelfie_box_ITA-ENG.png)<br>
+
 Recreate the board game [MyShelfie](https://craniointernational.com/products/my-shelfie/)<sup>(<i>opens external site</i>)</sup> published by Cranio Creations following the software engineering principles.<br>
 The project aims to create a virtual copy of the game as a distributed, online Java application. As taught in Software Engineering courses, a complex software such as this has to follow some rules in order to be <b>maintainable</b>, <b>reusable</b> and <b>updatable</b> by other developers.<br>
 In order to accomplish this, the project uses many [design patterns](https://en.wikipedia.org/wiki/Software_design_pattern)<sup>(<i>opens external site</i>)</sup> such as the <i>Model-View-Controller</i> pattern for the core division of information layers in the application.<br> 
@@ -165,7 +183,20 @@ The components of the game have been individually tested with Junit and the code
 | Disconnection resilience | :x:             |
 
 
-## Execution
+## Compiling sources
+### Using precompiled jars (recommended)
+
+The already packaged jars can be found here: [client](), [server]().
+
+### Manual packaging
+You can compile the sources on your machine using [Maven](https://maven.apache.org/)<sup>(<i>opens external site</i>)</sup> (must be installed on your computer).<br>
+Go to the project's root directory and run this command:
+```
+mvn clean package
+```
+The packaged jars will be in the ```target/``` folder and are called ```MyShelfie-client.jar``` for the client and ```MyShelfie-server.jar``` for the server.
+
+## Execution 
 ### Starting a server
 
 To start a server run the following command in a terminal:
@@ -203,6 +234,9 @@ For CLI game:
  - A terminal that supports [8-bit (256) colours](https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit)<sup>(<i>opens external site</i>)</sup>;
  - :warning: If your computer runs Windows, please download and run as administrator [this batch script](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/other-documents/change_registry_for_cli.bat), otherwise the colours will not be printed on the terminal;
  - :warning: In order to keep the correct proportions of the elements of the game, it's suggested to use a monospace font such as Courier New (Windows), Monospace (Linux) or Liberation Mono (Linux).
+
+For GUI game:
+ - A screen larger than 1366x768 px;
 
 ### Application Compatibility
 
