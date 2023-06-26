@@ -46,7 +46,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="977.0" prefWidth="1519.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="confirmButton" layoutX="1100.0" layoutY="505.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="200.0" styleClass="confButton">
+            <Button fx:id="confirmButton" layoutX="1043.0" layoutY="507.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="200.0" styleClass="confButton">
                <graphic>
                   <ImageView fitHeight="75.0" fitWidth="234.0">
                      <image>
@@ -63,12 +63,12 @@
                   <Image url="@../images/livingroom.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="353.0" fitWidth="323.0" layoutX="1067.0" layoutY="31.0">
+            <ImageView fitHeight="353.0" fitWidth="323.0" layoutX="1007.0" layoutY="31.0">
                <image>
                   <Image url="@../images/bookshelf_orth.png" />
                </image>
             </ImageView>
-            <GridPane fx:id="libraryGrid" layoutX="1100.0" layoutY="49.0" prefHeight="296.0" prefWidth="251.0">
+            <GridPane fx:id="libraryGrid" layoutX="1040.0" layoutY="49.0" prefHeight="296.0" prefWidth="251.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -586,11 +586,11 @@
                      </cursor></Button>
                </children>
             </GridPane>
-            <Button id="commonObj1Button" fx:id="commonObj1Button" layoutX="122.0" layoutY="667.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css">
+            <Button id="commonObj1Button" fx:id="commonObj1Button" layoutX="122.0" layoutY="567.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="commonObj2Button" layoutX="634.0" layoutY="667.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css">
+            <Button fx:id="commonObj2Button" layoutX="634.0" layoutY="567.0" mnemonicParsing="false" prefHeight="165.0" prefWidth="250.0" styleClass="objButton" stylesheets="@../css/board_scene.css">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
@@ -598,7 +598,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="librariesButton" layoutX="1100.0" layoutY="405.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" styleClass="confButton">
+            <Button fx:id="librariesButton" layoutX="1043.0" layoutY="405.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" styleClass="confButton">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
