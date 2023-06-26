@@ -87,6 +87,8 @@ Se <b>entrambi</b> i valori non sono impostati, il server partirà con i valori 
 - 12345 per socket;
 - 1099 per RMI;
 
+:warning: Si consiglia di disabilitare le schede di rete virtuali o inutilizzate, altrimenti il server RMI potrebbe non funzionare correttamente.<br>
+
 Si consiglia di non utilizzare porte già usate da altre applicazioni e di consentire le connessioni su tali porte nel vostro firewall e router.
 
 ### Avvio del client
@@ -219,6 +221,8 @@ java -jar MyShelfie-server.jar [socket port](Optional) [RMI port](Optional)
 If <b>both</b> are not set the server will start using the default ports:
 - 12345 for socket;
 - 1099 for RMI;
+
+:warning: Disable all your virtual and unused NICs otherwise the RMI server may not work correctly.<br>
 
 Please be sure that the ports are not used by another application and are allowed through your firewall and router.
 
