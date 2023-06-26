@@ -210,7 +210,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     }
 
     @Override
-    public synchronized void update(Message message) {
+    public void update(Message message) {
         switch (message.getType()){
             case SHOW_LOBBY:
                 inLobby = true;
