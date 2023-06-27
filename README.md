@@ -20,7 +20,7 @@ I requisiti del progetto sono disponibili qui: [requisiti](https://github.com/al
 
 ## Documentazione
 ### UML
-- [UML iniziali]();
+- [UML iniziali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/9b9074f8e68b82d4b1df46013449e0ffbcf4ba67/deliverables/junit-testing/JUnit_report.PNG);
 - [UML finali]();
 
 ### JavaDoc
@@ -155,7 +155,7 @@ The project's requirements are available here: [requirements](https://github.com
 ## Documentation
 ### UML
 
-- [Initial UML]();
+- [Initial UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/9b9074f8e68b82d4b1df46013449e0ffbcf4ba67/deliverables/junit-testing/JUnit_report.PNG);
 - [Completed UML]();
 
 ### JavaDoc
