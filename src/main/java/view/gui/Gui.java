@@ -105,15 +105,17 @@ public class Gui extends ViewObservable implements View {
 
     /**
      * Resets the turn.
+     *
      * @param player                         is the player currently playing.
      * @param gameBoard                      is the board of the game.
      * @param playerLibrary                  is the player's library.
      * @param playerObjInHand                are the objects the player currently has in hand.
      * @param completedCommonObjectives      is the array of points for each completed common objective.
      * @param availableCommonObjectivePoints is the array of available points for each common objective.
+     * @param firstPlayerToEnd
      */
     @Override
-    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd) {
         System.out.println("TURNCALL");
         BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
         bsc.blockBoardTiles();

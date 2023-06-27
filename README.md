@@ -1,6 +1,6 @@
 # [ITA] Prova Finale di Ingegneria del Software - A.A 2022-2023 (English follows)
 
-Prova finale di ingegneria del software per l'anno accedemico 2022-2023.<br>
+Prova finale di ingegneria del software per l'anno accademico 2022-2023.<br>
 Scaglione Cugola, gruppo GC-019.
 
 ## Componenti del gruppo

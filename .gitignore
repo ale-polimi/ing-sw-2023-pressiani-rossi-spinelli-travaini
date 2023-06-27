@@ -25,6 +25,8 @@ hs_err_pid*
 #IntelliJ IDEA
 .idea/
 *.iml
+/src/main/resources/META-INF/
+
 #Peer Review Folder
 peer_review_players/
 
@@ -47,3 +49,4 @@ src/main/java/model/player/PlayerView.java
 src/main/java/network/messages/ShowBoardMessage.java
 src/main/java/network/messages/ShowLibraryMessage.java
 src/main/java/network/messages/ShowObjectsInHandMessage.java
+

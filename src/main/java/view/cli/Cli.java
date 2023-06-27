@@ -348,13 +348,17 @@ public class Cli extends ViewObservable implements View {
      * @param rcvPlayerLibrary               is the {@link Library player's library}.
      * @param rcvObjectsInHand               is the {@link ArrayList} of objects that a player currently has in hand.
      * @param completedCommonObjectives      is the array containing the points the player has received from each common objective.
-     * @param availableCommonObjectivePoints
+     * @param availableCommonObjectivePoints is the array containing the points still available for the common objectives.
+     * @param firstPlayerToEnd               is the nickname of the first player that has finished the game.
      */
     @Override
-    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints){
+    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
+        if(firstPlayerToEnd != null && player.equals(firstPlayerToEnd)){
+            out.println("" + Colours.BOLD + Colours.GOLD + "YOU ARE THE FIRST PLAYER TO END!" + Colours.RESET);
+        }
         showBoard(rcvGameBoard);
         showObjInHand(rcvObjectsInHand);
         showLibrary(rcvPlayerLibrary);

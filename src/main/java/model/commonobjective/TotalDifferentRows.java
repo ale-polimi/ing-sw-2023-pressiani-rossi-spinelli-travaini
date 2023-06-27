@@ -26,17 +26,13 @@ public class TotalDifferentRows extends CommonObjective {
         x=0;
         y=0;
 
-        HashSet<ObjectColour> firstSet;
         boolean different=true;
 
         for (int row = 0; row < 6; row++) {
             different = true;
-            firstSet = new HashSet<>();
-            for (int col = 0; col < 5 && different; col++) {
-                if(library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
-                    different = false;
-                } else {
-                    if(!firstSet.add(library.getLibrarySpace(row,col).getObject().getObjectColour())){
+            for (int col = 0; col < 4 && different; col++) {
+                for(int othercol = col + 1; othercol < 5 && different; othercol++){
+                    if(library.getLibrarySpace(row, col).getObject().getObjectColour().isEquals(library.getLibrarySpace(row, othercol).getObject().getObjectColour()) || library.getLibrarySpace(row, othercol).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
                         different = false;
                     }
                 }

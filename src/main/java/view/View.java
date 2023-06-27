@@ -53,8 +53,9 @@ public interface View {
      * @param playerObjInHand                are the objects the player currently has in hand.
      * @param completedCommonObjectives      is the array of points for each completed common objective.
      * @param availableCommonObjectivePoints is the array of available points for each common objective.
+     * @param firstPlayerToEnd               is the nickname of the first player that has finished the game.
      */
-    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints);
+    void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd);
 
     /**
      * This method will show the {@link CommonObjective common objectives} to the player.

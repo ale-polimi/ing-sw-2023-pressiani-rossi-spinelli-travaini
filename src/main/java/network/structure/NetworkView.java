@@ -63,8 +63,8 @@ public class NetworkView implements View {
     }
 
     @Override
-    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
-        server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand, completedCommonObjectives, availableCommonObjectivePoints));
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd) {
+        server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand, completedCommonObjectives, availableCommonObjectivePoints, firstPlayerToEnd));
     }
 
     @Override

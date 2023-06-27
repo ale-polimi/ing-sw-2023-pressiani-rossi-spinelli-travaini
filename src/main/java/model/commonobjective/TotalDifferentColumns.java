@@ -25,20 +25,16 @@ public class TotalDifferentColumns extends CommonObjective {
      * @param x is the row coordinate
      * @param y is the column coordinate
      */
-
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
-        HashSet<ObjectColour> firstSet;
+
         boolean different=true;
 
         for (int col = 0; col < 5; col++) {
             different = true;
-            firstSet = new HashSet<>();
-            for (int row = 0; row < 6 && different; row++) {
-                if(library.getLibrarySpace(row,col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
-                    different = false;
-                } else {
-                    if(!firstSet.add(library.getLibrarySpace(row,col).getObject().getObjectColour())){
+            for (int row = 0; row < 5 && different; row++) {
+                for(int otherrow = row + 1; otherrow < 6 && different; otherrow++){
+                    if(library.getLibrarySpace(row, col).getObject().getObjectColour().isEquals(library.getLibrarySpace(otherrow, col).getObject().getObjectColour()) || library.getLibrarySpace(otherrow, col).getObject().getObjectColour().equals(ObjectColour.EMPTY)){
                         different = false;
                     }
                 }

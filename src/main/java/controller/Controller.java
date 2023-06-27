@@ -920,19 +920,19 @@ public class Controller implements Observer {
                 break;
             case NEXT_TURN:
 
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints(), getNicknameOfFirstPlayerToEnd());
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case GENERIC_MODEL_CHANGE:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints(), getNicknameOfFirstPlayerToEnd());
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case END_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(),getAvailablePoints());
+                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(),getAvailablePoints(), getNicknameOfFirstPlayerToEnd());
 
                 sendOtherPlayersLibrary(game);
 
@@ -970,6 +970,22 @@ public class Controller implements Observer {
             default:
                 ;
         }
+    }
+
+    /**
+     * This method returns the nickname of the first player that has finished the game.
+     * @return the nickname of the first player that has finished the game.
+     */
+    private String getNicknameOfFirstPlayerToEnd() {
+        String firstPlayerToEnd = null;
+        for(Player player: game.getPlayers()){
+            if(player.isFirstToEnd() == true){
+                firstPlayerToEnd = player.getNickname();
+                break;
+            }
+        }
+
+        return firstPlayerToEnd;
     }
 
     /**

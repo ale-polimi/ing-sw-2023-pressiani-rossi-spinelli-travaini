@@ -16,23 +16,26 @@ public class ShowTurnMessage extends Message{
     private final ArrayList<ObjectCard> playerObjInHand;
     private final int[] completedCommonObjectives;
     private final int[] availableCommonObjectivePoints;
+    private final String firstPlayerToEnd;
 
     /**
      * Constructor for abstract class Message.
      *
-     * @param sender is the sender of the message.
-     * @param gameBoard is the {@link Board board} of the game.
-     * @param playerLibrary is the {@link Library library} of the player.
-     * @param playerObjInHand is the array of ObjectsInHand of the player.
+     * @param sender                    is the sender of the message.
+     * @param gameBoard                 is the {@link Board board} of the game.
+     * @param playerLibrary             is the {@link Library library} of the player.
+     * @param playerObjInHand           is the array of ObjectsInHand of the player.
      * @param completedCommonObjectives is the array of points for each completed common objective.
+     * @param firstPlayerToEnd
      */
-    public ShowTurnMessage(String sender, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
+    public ShowTurnMessage(String sender, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd) {
         super(sender, MessageType.SHOW_TURN);
         this.gameBoard = gameBoard;
         this.playerLibrary = playerLibrary;
         this.playerObjInHand = playerObjInHand;
         this.completedCommonObjectives = completedCommonObjectives;
         this.availableCommonObjectivePoints = availableCommonObjectivePoints;
+        this.firstPlayerToEnd = firstPlayerToEnd;
     }
 
     /**
@@ -73,5 +76,13 @@ public class ShowTurnMessage extends Message{
      */
     public int[] getAvailableCommonObjectivePoints() {
         return availableCommonObjectivePoints;
+    }
+
+    /**
+     * Getter method for the name of the first player that has finished the game.
+     * @return the nickname of the first player that has finished the game.
+     */
+    public String getFirstPlayerToEnd() {
+        return firstPlayerToEnd;
     }
 }
