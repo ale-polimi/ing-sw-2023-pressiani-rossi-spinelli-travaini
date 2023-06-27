@@ -7,6 +7,9 @@ import javafx.scene.input.MouseEvent;
 import observer.ViewObservable;
 import view.gui.Gui;
 
+/*
+This class represents the Select Max Player Controller.
+ */
 public class SelectMaxPlayersSceneController extends ViewObservable implements GenericSceneController {
 
     @FXML
@@ -18,7 +21,7 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
 
 
     /**
-     * initializes the scene
+     * This method initializes the scene.
      */
 
     public void initialize(){
@@ -29,8 +32,8 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
     }
 
     /**
-     * sets the number of players, in this case 2
-     * @param event is the click of the user
+     * This method sets the number of players, in this case 2.
+     * @param event is the click of the user.
      */
     private void onTwoPlayersButtonClick(Event event){
         twoPlayersButton.setDisable(true);
@@ -45,8 +48,8 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
     }
 
     /**
-     * sets the number of players, in this case 3
-     * @param event is the click of the user
+     * This method sets the number of players, in this case 3.
+     * @param event is the click of the user.
      */
     private void onThreePlayersButtonClick(Event event){
         twoPlayersButton.setDisable(true);
@@ -62,8 +65,8 @@ public class SelectMaxPlayersSceneController extends ViewObservable implements G
     }
 
     /**
-     * sets the number of players, in this case 4
-     * @param event is the click of the user
+     * This method sets the number of players, in this case 4.
+     * @param event is the click of the user.
      */
     private void onFourPlayersButtonClick(Event event){
         twoPlayersButton.setDisable(true);

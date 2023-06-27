@@ -11,6 +11,9 @@ import observer.ViewObservable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the scene controller of the lobby.
+ */
 public class WaitingForPlayersSceneController extends ViewObservable implements GenericSceneController {
     private ArrayList<String> nicknames = new ArrayList<>();
 
@@ -22,7 +25,7 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
 
 
     /**
-     * initialises the scene
+     * This method initialises the scene.
      */
     public void initialize(){
         playersNicknameLabel.setText(String.join(", ", nicknames ));
@@ -32,8 +35,8 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
 
 
     /**
-     * sets the nicknames of the players
-     * @param nicknames is the list of the players' nickname
+     * This method sets the nicknames of the players.
+     * @param nicknames is the list of the players' nickname.
      */
     public void setNicknames(ArrayList<String> nicknames) {
         this.nicknames =  nicknames;
@@ -41,7 +44,7 @@ public class WaitingForPlayersSceneController extends ViewObservable implements 
 
 
     /**
-     * replace the number and the name
+     *This method replaces the number and the name.
      */
     public void updateValues(){
         playersNicknameLabel.setText(String.join(", ", this.nicknames));

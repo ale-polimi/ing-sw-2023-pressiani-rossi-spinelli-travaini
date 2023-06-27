@@ -13,6 +13,9 @@ import javafx.stage.Stage;
 import model.library.Library;
 import view.gui.SceneController;
 
+/**
+ * This class represents the Show Library Scene Controller when there are two players.
+ */
 public class ShowLibraryTwoPSceneController implements GenericSceneController{
 
     private final Stage stage;
@@ -30,7 +33,7 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     private Label nicknamesLabel;
 
     /**
-     * shows the library when there are only two players
+     * Constructor.
      */
     public ShowLibraryTwoPSceneController(){
         stage = new Stage();
@@ -42,7 +45,7 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     }
 
     /**
-     * initialises the scene
+     * This method initialises the scene.
      */
 
     @FXML
@@ -55,28 +58,26 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the coordinates and allows to move the window on the screen
-     * @param event is the click of the user
+     * This method sets coordinates of the screen.
+     * @param event is the click of the user.
      */
-
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
     }
 
     /**
-     * moves the window on the screen
-     * @param event is the click of the user
+     * This method allows to move the windows on the screen.
+     * @param event is the click of the user.
      */
-
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
         stage.setY(event.getScreenY() + yOffset);
     }
 
     /**
-     * closes the stage
-     * @param event is the click of the user
+     * This method closes the stage.
+     * @param event is the click of the user.
      */
 
     private void onCloseButtonClick(MouseEvent event){
@@ -84,7 +85,7 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     }
 
     /**
-     * displays the popup window
+     * This method displays the pop-up window.
      */
 
     public void displayPopUp(){
@@ -92,8 +93,8 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the scene
-     * @param scene
+     * This method sets the scene.
+     * @param scene is the scene that has to be set.
      */
 
     public void setScene(Scene scene){
@@ -101,8 +102,8 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     }
 
     /**
-     * set the nickname of the other player
-     * @param nicknames is the nickname
+     * This method sets the nickname of the other player.
+     * @param nicknames is the player's nickname.
      */
     public void setNicknames(String nicknames){
         nickname = nicknames;
@@ -111,8 +112,8 @@ public class ShowLibraryTwoPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the library of the other player
-     * @param playerLibrary
+     * This method sets the library of the other player.
+     * @param playerLibrary is the library of the other player.
      */
 
     public void SetLibraryGrid(Library playerLibrary){

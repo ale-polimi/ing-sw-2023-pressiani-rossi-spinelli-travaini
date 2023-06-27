@@ -13,6 +13,9 @@ import javafx.stage.Stage;
 import model.library.Library;
 import view.gui.SceneController;
 
+/**
+ * This class represents the Show Library Scene Controller for four players.
+ */
 public class ShowLibraryFourPSceneController implements GenericSceneController{
 
     private final Stage stage;
@@ -44,7 +47,7 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
 
 
     /**
-     *
+     *This is the constructor
      */
     public ShowLibraryFourPSceneController(){
         stage = new Stage();
@@ -56,7 +59,7 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * initialises the scene
+     * This method initialises the scene.
      */
     @FXML
     public void initialize(){
@@ -68,9 +71,10 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
         System.out.println("init");
     }
 
+
     /**
-     * sets the coordinates and allows to move the window on the screen
-     * @param event is the click of the user
+     * This method sets coordinates of the screen.
+     * @param event is the click of the user.
      */
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
@@ -78,8 +82,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * moves the window on the screen
-     * @param event is the click of the user
+     * This method allows to move the windows on the screen.
+     * @param event is the click of the user.
      */
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
@@ -87,8 +91,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * closes the stage
-     * @param event is the click of the user
+     * This method closes the stage.
+     * @param event is the click of the user.
      */
 
     private void onCloseButtonClick(MouseEvent event){
@@ -96,7 +100,7 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * displays the popup window
+     * This method displays the pop-up window.
      */
 
     public void displayPopUp(){
@@ -104,16 +108,16 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the scene
-     * @param scene
+     * This method sets the scene.
+     * @param scene is the scene that  has to be set.
      */
     public void setScene(Scene scene){
         stage.setScene(scene);
     }
 
     /**
-     * set the first other player nickname
-     * @param nicknames is the nickname player
+     * This method sets the first other player's nickname.
+     * @param nicknames is the player's nickname.
      */
     public void setNickname1(String nicknames){
         nickname1 = nicknames;
@@ -122,8 +126,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * set the second other player nickname
-     * @param nicknames is the nickname player
+     * This method sets the second other player's nickname.
+     * @param nicknames is the player's nickname.
      */
     public void setNickname2(String nicknames){
         nickname2 = nicknames;
@@ -132,8 +136,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * set the third other player nickname
-     * @param nicknames is the nickname
+     * This method sets the third other player's nickname.
+     * @param nicknames is the player's nickname.
      */
     public void setNickname3(String nicknames){
         nickname3 = nicknames;
@@ -142,8 +146,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the other first player library
-     * @param playerLibrary is the library
+     * This method sets the other first player's library.
+     * @param playerLibrary is the player's library.
      */
     public void SetLibraryGrid1(Library playerLibrary){
         playerLibrary1 = playerLibrary;
@@ -285,8 +289,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the other second player library
-     * @param playerLibrary is the library
+     *This method sets the other second player's library.
+     * @param playerLibrary is the player's library.
      */
     public void SetLibraryGrid2(Library playerLibrary){
         playerLibrary2 = playerLibrary;
@@ -428,8 +432,8 @@ public class ShowLibraryFourPSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the other third player library
-     * @param playerLibrary is the library
+     * This method sets the other third player's library.
+     * @param playerLibrary is the player's library.
      */
 
     public void SetLibraryGrid3(Library playerLibrary){

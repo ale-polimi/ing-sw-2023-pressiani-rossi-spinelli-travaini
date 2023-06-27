@@ -7,6 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import observer.ViewObservable;
 
+/**
+ * Class for the insertion of the Nickname during the game.
+ */
 public class InsertNicknameSceneController extends ViewObservable implements GenericSceneController {
 
     @FXML
@@ -17,7 +20,7 @@ public class InsertNicknameSceneController extends ViewObservable implements Gen
 
 
     /**
-     * initializes the scene
+     * This method initializes the scene.
      */
     public void initialize(){
         submitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onSubmitButtonClick);
@@ -25,8 +28,8 @@ public class InsertNicknameSceneController extends ViewObservable implements Gen
 
 
     /**
-     * submit the player's nickname
-     * @param event is the click of the user
+     * This method submits the player's nickname.
+     * @param event is the click of the user.
      */
     private void onSubmitButtonClick(Event event){
         submitButton.setDisable(true);

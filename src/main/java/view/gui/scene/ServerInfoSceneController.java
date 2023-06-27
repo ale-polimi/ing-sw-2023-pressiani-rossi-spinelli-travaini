@@ -16,6 +16,9 @@ import view.gui.SceneController;
 
 import java.util.Map;
 
+/**
+ * This class represents the Server Info Scene Controller
+ */
 public class ServerInfoSceneController extends ViewObservable implements GenericSceneController {
 
     private final PseudoClass ERROR_PSEUDO_CLASS = PseudoClass.getPseudoClass("error");
@@ -35,7 +38,7 @@ public class ServerInfoSceneController extends ViewObservable implements Generic
     private Button returnButton;
 
     /**
-     * initializes the scene
+     * This method initializes the scene.
      */
 
     public void initialize(){
@@ -45,8 +48,8 @@ public class ServerInfoSceneController extends ViewObservable implements Generic
 
 
     /**
-     * sets the connection settings
-     * @param event is the click of the user
+     * This method sets the connection settings
+     * @param event is the click of the user.
      */
     private void onSubmitButtonClick(Event event){
         String address = serverAddressField.getText();
@@ -69,8 +72,8 @@ public class ServerInfoSceneController extends ViewObservable implements Generic
     }
 
     /**
-     * returns on the previous page
-     * @param event is the click of the user
+     * This method returns on the previous page.
+     * @param event is the click of the user.
      */
     private void onReturnButtonClick(Event event){
         returnButton.setDisable(true);
