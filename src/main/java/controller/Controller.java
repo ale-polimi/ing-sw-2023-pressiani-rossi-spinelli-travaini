@@ -42,6 +42,7 @@ public class Controller implements Observer {
     private HashMap<String, Integer> playersPoints = new HashMap<>();
     private String winner;
     private HashMap personalObjectives;
+    private ArrayList<Integer> choosenPersonal = new ArrayList<>();
     private HashMap<Integer, CommonObjective> availableCommonObjectives;
     private HashMap<String, Library> librariesOfPlayers = new HashMap<>();
     int firstRow, firstCol, secondRow, secondCol, thirdRow, thirdCol = 0;
@@ -121,7 +122,12 @@ public class Controller implements Observer {
                     } else {
                         try {
                             Random rand = new Random();
-                            game.addToGame(new Player(userInfoForLoginMessage.getUsername(), (String) personalObjectives.remove(String.valueOf(rand.nextInt(personalObjectives.size())))));
+                            int r;
+                            do{
+                                r= rand.nextInt(personalObjectives.size());
+                            }while (choosenPersonal.contains(r));
+                            choosenPersonal.add(r);
+                            game.addToGame(new Player(userInfoForLoginMessage.getUsername(), (String) personalObjectives.get(String.valueOf(r))));
                         } catch (TooManyPlayersException exception) {
                             this.update(new GenericErrorMessage(userInfoForLoginMessage.getSender().concat(":GENERIC"), exception.getMessage()));
                         }
@@ -440,7 +446,7 @@ public class Controller implements Observer {
                 break;
             case CHATLOG:
                 ChatLogMessage clm = (ChatLogMessage)receivedMessage;
-                this.update(new ChatLogMessage(clm.getSender(),game.getChatLog()));
+                this.update(new ChatLogMessage(clm.getSender(),game.getChatLog(),clm.getTurnState()));
                 break;
             default:
                 this.update(new GenericErrorMessage(game.getPlayerInTurn().getNickname().concat(":GENERIC"), "Message type: " + receivedMessage.getType().toString() + " is not valid."));

@@ -4,15 +4,17 @@ public class ChatMessage  extends Message{
 
     private final String text;
     private final String receiver;
+    private final boolean turnState;
     /**
      *Custom constructor for ChatMessage class
      * @param sender      is the sender of the message.
      * @param text is the message the player wants to send in the chat
      */
-    public ChatMessage(String sender, String receiver,String text) {
+    public ChatMessage(String sender, String receiver,String text,boolean turnState) {
         super(sender, MessageType.CHAT);
         this.text=text;
         this.receiver = receiver;
+        this.turnState= turnState;
     }
 
     /**
@@ -26,4 +28,10 @@ public class ChatMessage  extends Message{
      * @return the String object in receiver parameter
      */
     public String getDest() {return receiver;}
+
+    /**
+     * Getter method for the turnState parameter
+     * @return the turnState parameter
+     */
+    public boolean getTurnState() {return turnState;}
 }

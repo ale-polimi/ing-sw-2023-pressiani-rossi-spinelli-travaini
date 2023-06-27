@@ -44,6 +44,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private final ExecutorService taskQueue;
     private final boolean isSocket;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ArrayList<ChatMessage> chatLog = new ArrayList<>();
 
     public ClientController(View view,boolean isSocket){
         this.view = view;
@@ -155,8 +156,11 @@ public class ClientController extends Observable implements ViewObserver, Observ
 
     @Override
     public void onChatMessage(String sender, String receiver, String text) {
+        ChatMessage c = new ChatMessage(nickname,receiver,text, view.getMyTurn());
+        chatLog.add(c);
+        chatHandling(c);
         try {
-            client.sendMessage(new ChatMessage(nickname,receiver,text));
+            client.sendMessage(c);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -164,8 +168,11 @@ public class ClientController extends Observable implements ViewObserver, Observ
 
     @Override
     public void onChatLogMessage() {
+        for(ChatMessage c: chatLog){
+            chatHandling(c);
+        }
         try {
-            client.sendMessage(new ChatLogMessage(nickname,null));
+            client.sendMessage(new ChatLogMessage(nickname,chatLog, view.getMyTurn()));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -354,37 +361,46 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 view.showGenericError(nickname, serverDisconnectedMessage.getDisconnectionError());
                 System.exit(0);
                 break;
-            case CHATLOG:
-                ChatLogMessage cm = (ChatLogMessage) message;
-                if(!cm.getSender().equals(nickname))return;
-               for(ChatMessage c: cm.getChatlog()){
-                   chatHandling(c);
-               }
-                if(view.getMyTurn()) {
-                    if (inLibrary && !inPickup) {
-                        view.askLibraryMove();
-                    } else if (!inLibrary && inPickup) {
-                        view.askBoardMove();
-                    }
-                }else{
-                    view.askChat();
-                }
-                break;
             case CHAT:
                 ChatMessage c = (ChatMessage) message;
-                chatHandling(c);
-                if(view.getMyTurn()&&c.getSender().equals(nickname)) {
-                    if (inLibrary && !inPickup) {
-                        view.askLibraryMove();
-                    } else if (!inLibrary && inPickup) {
-                        view.askBoardMove();
-                    }
-                }else if(!view.getMyTurn() && c.getSender().equals(nickname)){
-                    view.askChat();
-                }else if(!view.getMyTurn() && !c.getSender().equals(nickname)){
-                    if(!view.getChatAbilitator()){
-                            System.out.println("" + Colours.BOLD + Colours.YELLOW + "Abilitating the chat service only for a message as you closed the service\n" + Colours.RESET);
-                             view.askChat();
+              if(!c.getSender().equals(nickname)) {
+                  chatLog.add(c);
+                  chatHandling(c);
+                  if(!view.getMyTurn()&& !view.getChatAbilitator()&& c.getTurnState()== view.getMyTurn()){
+                      System.out.println("" + Colours.BOLD + Colours.YELLOW + "Abilitating the chat service only for a message as you closed the service\n" + Colours.RESET);
+                      view.askChat();
+                  }
+              }else{
+                  if(c.getTurnState()== view.getMyTurn()){
+                      if(view.getMyTurn()) {
+                          if (inLibrary && !inPickup) {
+                              view.askLibraryMove();
+                          } else if (!inLibrary && inPickup) {
+                              view.askBoardMove();
+                          }
+                      }else{
+                          view.askChat();
+                      }
+                  }
+              }
+
+
+
+
+
+
+                break;
+            case CHATLOG:
+                ChatLogMessage clm = (ChatLogMessage) message;
+                if(clm.getSender().equals(nickname)&&clm.getTurnState()== view.getMyTurn()){
+                    if(view.getMyTurn()) {
+                        if (inLibrary && !inPickup) {
+                            view.askLibraryMove();
+                        } else if (!inLibrary && inPickup) {
+                            view.askBoardMove();
+                        }
+                    }else{
+                        view.askChat();
                     }
                 }
                 break;
@@ -401,10 +417,8 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private void chatHandling(ChatMessage c) {
         if (c.getDest().equals("all")) {
             view.showChat(c.getSender(), false, c.getText());
-        } else if (c.getDest().equals(nickname)) {
+        } else if (c.getDest().equals(nickname)||c.getSender().equals(nickname)) {
             view.showChat(c.getSender()+" to "+ c.getDest(), true, c.getText());
-        }else if(c.getSender().equals(nickname)){
-            view.showChat(c.getDest()+" to "+ c.getSender(), true, c.getText());
         }
     }
 
