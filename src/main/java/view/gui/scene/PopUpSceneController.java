@@ -11,6 +11,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.gui.SceneController;
 
+/**
+ * This class represents the Pop-up Scene Controller.
+ */
 public class PopUpSceneController implements GenericSceneController{
 
     private final Stage stage;
@@ -21,6 +24,9 @@ public class PopUpSceneController implements GenericSceneController{
     @FXML
     private Button confirmButton;
 
+    /**
+     * Constructor
+     */
     public PopUpSceneController(){
         stage = new Stage();
         stage.initOwner(SceneController.getActiveScene().getWindow());
@@ -31,7 +37,7 @@ public class PopUpSceneController implements GenericSceneController{
     }
 
     /**
-     * initialises the scene
+     * This method initialises the scene.
      */
     @FXML
     public void initialize(){
@@ -41,8 +47,8 @@ public class PopUpSceneController implements GenericSceneController{
     }
 
     /**
-     * sets coordinates and allows to move the window in the screen
-     * @param event is the click of the user
+     * This method sets coordinates of the screen.
+     * @param event is the click of the user.
      */
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
@@ -50,8 +56,8 @@ public class PopUpSceneController implements GenericSceneController{
     }
 
     /**
-     * moves the windows
-     * @param event
+     * This method allows to move the windows on the screen.
+     * @param event is the click of the user.
      */
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
@@ -59,25 +65,24 @@ public class PopUpSceneController implements GenericSceneController{
     }
 
     /**
-     * close the stage
-     * @param event is the click of the user
+     * This method closes the stage.
+     * @param event is the click of the user.
      */
     private void onConfirmButtonClick(MouseEvent event){
         stage.close();
     }
 
     /**
-     * shows the popup window
+     * This method displays the pop-up window.
      */
     public void displayPopUp(){
         stage.showAndWait();
     }
 
     /**
-     * sets the scene
-     * @param scene
+     * This method sets the scene.
+     * @param scene is the scene that has to be set.
      */
-
     public void setScene(Scene scene){
         stage.setScene(scene);
     }

@@ -7,6 +7,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import observer.ViewObservable;
 
+/**
+ * This class represents the Scoreboard Scene Controller
+ */
 public class ScoreboardSceneController extends ViewObservable implements GenericSceneController {
 
     @FXML
@@ -28,7 +31,7 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     private String fourth;
 
     /**
-     * initilises the scene
+     * This method initialises the scene.
      */
     public void initialize(){
         closeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this :: onCloseButtonClick);
@@ -39,8 +42,8 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     }
 
     /**
-     * sets the winner
-     * @param winnerL is the winner
+     * This method sets the winner's label.
+     * @param winnerL is the winner's label.
      */
     public void setWinner(String winnerL){
         winner = winnerL;
@@ -51,8 +54,8 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     }
 
     /**
-     * sets the second in the chart
-     * @param secondL
+     * This method sets the second player in the chart.
+     * @param secondL is the second player's label.
      */
     public void setSecond(String secondL){
         second = secondL;
@@ -62,8 +65,8 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     }
 
     /**
-     * sets the third in the chart
-     * @param thirdL
+     * This method sets the third player in the chart.
+     * @param thirdL is the third player's label.
      */
     public void setThird(String thirdL){
         third = thirdL;
@@ -73,8 +76,8 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     }
 
     /**
-     * sets the fourth in the chart
-     * @param fourthL
+     *This method sets the fourth player in the chart.
+     * @param fourthL is the fourth player's label.
      */
     public void setFourth(String fourthL){
         fourth = fourthL;
@@ -84,8 +87,8 @@ public class ScoreboardSceneController extends ViewObservable implements Generic
     }
 
     /**
-     * close the window
-     * @param event is the click of the user
+     *This method closes the window.
+     * @param event is the click of the user.
      */
     private void onCloseButtonClick(MouseEvent event){
         System.exit(0);

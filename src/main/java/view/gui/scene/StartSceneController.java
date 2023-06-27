@@ -15,6 +15,9 @@ import javafx.stage.Window;
 import observer.ViewObservable;
 import view.gui.SceneController;
 
+/**
+ * This class represents the Start Scene Controller.
+ */
 public class StartSceneController extends ViewObservable implements GenericSceneController {
 
     @FXML
@@ -34,7 +37,7 @@ public class StartSceneController extends ViewObservable implements GenericScene
 
 
     /**
-     * initialises the scene
+     * This method initialises the scene.
      */
     @FXML
     public void initialize() {
@@ -100,11 +103,9 @@ public class StartSceneController extends ViewObservable implements GenericScene
 
 
     /**
-     * start the game scene
-     * @param event is the click of the user
+     * This method sets the game scene.
+     * @param event is the click of the user.
      */
-
-
     private void onPlayButtonClick(Event event) {
         SceneController.changeRootPane(observers, event, "ServerInfo.fxml");
     }

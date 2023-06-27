@@ -13,6 +13,9 @@ import javafx.stage.Stage;
 import model.library.Library;
 import view.gui.SceneController;
 
+/**
+ * This method represents the Show Library Scene Controller for three players.
+ */
 public class ShowLibraryThreePSceneController implements GenericSceneController{
 
     private final Stage stage;
@@ -37,7 +40,7 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     private Label nickname2Label;
 
     /**
-     * show the other two libraries
+     * This is the constructor.
      */
     public ShowLibraryThreePSceneController(){
         stage = new Stage();
@@ -49,7 +52,7 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     }
 
     /**
-     * initialises the scene
+     * This method initialises the scene.
      */
     @FXML
     public void initialize(){
@@ -62,8 +65,8 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     }
 
     /**
-     * sets the coordinates and allows to move the window on the screen
-     * @param event is the click of the user
+     * This method sets coordinates of the screen.
+     * @param event is the click of the user.
      */
     private void onRootPaneMousePressed(MouseEvent event) {
         xOffset = stage.getX() - event.getScreenX();
@@ -71,8 +74,8 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     }
 
     /**
-     * moves the window on the screen
-     * @param event is the click of the user
+     * This method allows to move the windows on the screen.
+     * @param event is the click of the user.
      */
     private void onRootPaneMouseDragged(MouseEvent event) {
         stage.setX(event.getScreenX() + xOffset);
@@ -80,32 +83,31 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     }
 
     /**
-     * closes the stage
-     * @param event is the click of the user
+     * This method closes the stage.
+     * @param event is the click of the user.
      */
-
     private void onCloseButtonClick(MouseEvent event){
         stage.close();
     }
 
     /**
-     * displays the popup window
+     * This method displays the pop-up window.
      */
     public void displayPopUp(){
         stage.showAndWait();
     }
 
     /**
-     * sets the scene
-     * @param scene
+     * This method sets the scene.
+     * @param scene is the scene that has to be set.
      */
     public void setScene(Scene scene){
         stage.setScene(scene);
     }
 
     /**
-     * set the first other plyer nickname
-     * @param nicknames is the nickname
+     * This method sets the first other player's nickname.
+     * @param nicknames is the player's nickname.
      */
     public void setNickname1(String nicknames){
         nickname1 = nicknames;
@@ -114,8 +116,8 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
     }
 
     /**
-     * set the second other player nickname
-     * @param nicknames is the nickname
+     * This method sets the second other player's nickname.
+     * @param nicknames is the player's nickname.
      */
     public void setNickname2(String nicknames){
         nickname2 = nicknames;
@@ -125,10 +127,9 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
 
 
     /**
-     * sets the first other player library
-     * @param playerLibrary is the library
+     * This method sets the first other player's library.
+     * @param playerLibrary is the player's library.
      */
-
     public void SetLibraryGrid1(Library playerLibrary){
         playerLibrary1 = playerLibrary;
         for (int x = 0; x < 6; x++) {
@@ -270,8 +271,8 @@ public class ShowLibraryThreePSceneController implements GenericSceneController{
 
 
     /**
-     * sets the second other player library
-     * @param playerLibrary is the library
+     * sets the second other player's library.
+     * @param playerLibrary is the player's library.
      */
     public void SetLibraryGrid2(Library playerLibrary){
         playerLibrary2 = playerLibrary;
