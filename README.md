@@ -50,12 +50,12 @@ I componenti del gioco sono stati testati singolarmente con JUnit e la copertura
 
 ### Avanzate
 
-| Funzionalità                   | Implementata    |
-|--------------------------------|-----------------|
-| Chat                           | :yellow_circle: |
-| Partite multiple               | :x:             |
-| Persistenza                    | :x:             |
-| Resilienza alle disconnessioni | :x:             |
+| Funzionalità                   | Implementata       |
+|--------------------------------|--------------------|
+| Chat                           | :white_check_mark: |
+| Partite multiple               | :x:                |
+| Persistenza                    | :x:                |
+| Resilienza alle disconnessioni | :x:                |
 
 Legenda:
 - :white_check_mark: : implementata;
@@ -186,12 +186,12 @@ The components of the game have been individually tested with Junit and the code
 
 ### Advanced
 
-| Function                 | Implemented     |
-|--------------------------|-----------------|
-| Chat                     | :yellow_circle: |
-| Multiple games           | :x:             |
-| Persistence              | :x:             |
-| Disconnection resilience | :x:             |
+| Function                 | Implemented        |
+|--------------------------|--------------------|
+| Chat                     | :white_check_mark: |
+| Multiple games           | :x:                |
+| Persistence              | :x:                |
+| Disconnection resilience | :x:                |
 
 Legend:
 - :white_check_mark: : implemented;

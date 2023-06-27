@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * This class represents the Board Scene Controller, which controls the board scenes.
+ */
 public class BoardSceneController extends ViewObservable implements GenericSceneController {
 
     @FXML
@@ -64,7 +67,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private boolean boardFirstTurn = false;
 
     /**
-     * this initializes first game window
+     * This method initializes first game window.
      */
     public void initialize(){
 
@@ -110,8 +113,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sets the image of the personal objectives
-     * @param personalObjective is the personal objective of the player
+     * This method sets the image of the personal objectives.
+     * @param personalObjective is the personal objective of the player.
      */
     public void setPersonalObjButton(PersonalObjective personalObjective){
         if(personalObjective != null){
@@ -173,8 +176,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sets the image of the first common objective
-     * @param commonObjective1 is the common objective
+     * This method sets the image of the first common objective.
+     * @param commonObjective1 is the common objective.
      */
     public void setCommonObj1Button(CommonObjective commonObjective1){
        if( commonObjective1 != null){
@@ -235,8 +238,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sets the image of the second common objective
-     * @param commonObjective2 is the common objective
+     * This method sets the image of the second common objective.
+     * @param commonObjective2 is the common objective.
      */
     public void setCommonObj2Button(CommonObjective commonObjective2){
         commonObjective21 = commonObjective2;
@@ -294,8 +297,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sets the image of the current object in hand of the player
-     * @param playerObjInHand
+     * This method sets the image of the current object in hand of the player.
+     * @param playerObjInHand are the objects currently in hand of the player.
      */
 
     public void setPlayerObjInHand(ArrayList<ObjectCard> playerObjInHand){
@@ -463,10 +466,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sets the image of the board tiles
-     * @param gameBoard is the board of the game
+     * This method sets the image of the board tiles.
+     * @param gameBoard is the board of the game.
      */
-
     public void setBoardGrid(Board gameBoard){
         gameBoard1 = gameBoard;
 
@@ -629,10 +631,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sets the image of the tiles in the library
-     * @param playerLibrary is the library player
+     * This method sets the image of the tiles in the library.
+     * @param playerLibrary is the player's library.
      */
-
     public void setLibraryGrid(Library playerLibrary){
         playerLibrary1 = playerLibrary;
         for (int x = 0; x < 6; x++) {
@@ -775,10 +776,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * picks up the tiles from the board and checks that these are not more than three
-     * @param event when the player picks up a tile from the board
+     * This method responds to a click on the board, checking that there are no more than three picked tiles.
+     * @param event when the player picks up a tile from the board.
      */
-    
     private void onBoardSpaceClick(MouseEvent event){
         Button clickedButton = (Button) event.getPickResult().getIntersectedNode();
 
@@ -822,7 +822,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * select the column of the library for the tiles insertion
+     * This method responds to a click on the library.
      * @param event is the user click
      */
     private void onLibrarySpaceClick(MouseEvent event){
@@ -842,7 +842,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * selects the tiles in objects in hand
+     * This method responds to a click on the objects in hand.
      * @param event is the user click
      */
     private void onObjInHandClick(MouseEvent event){
@@ -875,11 +875,11 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * the first time confirm the choice of the board tiles
-     * the second time confirm the choice of the order and the column for the library insertion
+     * This method responds to a click on the "Confirm" button.
+     * The first click confirms the choice of the board tiles.
+     * The second time confirms the choice of the order and the column for the library insertion.
      * @param event is the user click
      */
-
     private void onConfirmButtonClick(MouseEvent event){
         if(playerObjInHand1.size() > 0 && objInHand > 0 ){
             objInHand = 0;
@@ -909,10 +909,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * sends the chat message
-     * @param event is the click of the user
+     * This method sends a chat message.
+     * @param event is the click of the user.
      */
-
     private void onSendButtonClick(MouseEvent event){
         String message = chatMsg.getText();
         String messageToSend = null;
@@ -937,9 +936,9 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * shows the chat
-     * @param sender is the sender of the message
-     * @param message
+     * This method updates the chat.
+     * @param sender is the sender of the message.
+     * @param message is the chat message.
      */
    public void updateChat(String sender, String message){
         if(sender==myPlayer){
@@ -954,16 +953,15 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * saves the nickname of the player
-     * @param player
+     * This method saves the nickname of the player.
+     * @param player is the {@link model.player.Player player}.
      */
-
     public void savePlayer(String player){
         myPlayer = player;
     }
 
     /**
-     * when called shows an error window
+     * This method shows the various errors throughout the game.
      */
     public void resetErrorValues(){
         if(coordinatesToSend.size()>0){
@@ -984,7 +982,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         }
     }
     /**
-     * reset the board tiles when called
+     * This method reset the board tiles when called.
      */
     public void resetBoardTiles(){
         boardFirstTurn = true;
@@ -1000,7 +998,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * reset the library tiles when called
+     * This method reset the library tiles when called.
      */
     public void resetLibraryTiles(){
         if(libraryGrid != null) {
@@ -1013,7 +1011,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * reset the current object in hand when called
+     * This method reset the current object in hand when called.
      */
     public void resetObjInHandTiles(){
 
@@ -1026,7 +1024,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * stops from picking up a tile from the board when is not allowed
+     * This method stops from picking up a tile from the board when is not allowed.
      */
     public void blockBoardTiles(){
         if(boardGrid != null) {
@@ -1039,7 +1037,7 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * stops from put a tile in the library when is not allowed
+     * This method stops from put a tile in the library when is not allowed.
      */
     public void blockLibraryTiles(){
         if(libraryGrid != null) {
@@ -1052,8 +1050,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     }
 
     /**
-     * shows the players libraries
-     * @param librariesOfPlayers
+     * This method shows the players' libraries.
+     * @param librariesOfPlayers is the {@link HashMap} containing the other players' usernames as keys and libraries as values.
      */
 
     public void showLibraries(HashMap<String, Library> librariesOfPlayers){
