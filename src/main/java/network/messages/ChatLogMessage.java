@@ -8,8 +8,9 @@ public class ChatLogMessage extends Message {
     /**
      * Constructor for abstract class Message.
      *
-     * @param sender  is the sender of the message.
-     * @param chatLog is the payload of the message
+     * @param sender  Is the sender of the message.
+     * @param chatLog Is the payload of the message
+     * @param turnState Indicates if the player was the player in turn when he sent the message
      */
     public ChatLogMessage(String sender, ArrayList<ChatMessage> chatLog,boolean turnState) {
         super(sender, MessageType.CHATLOG);

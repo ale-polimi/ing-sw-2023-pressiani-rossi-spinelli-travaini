@@ -7,8 +7,10 @@ public class ChatMessage  extends Message{
     private final boolean turnState;
     /**
      *Custom constructor for ChatMessage class
-     * @param sender      is the sender of the message.
+     * @param sender      Is the sender of the message.
+     * @param receiver    Is the receiver of the message
      * @param text is the message the player wants to send in the chat
+     * @param turnState Indicates if the player was the player in turn when he sent the message
      */
     public ChatMessage(String sender, String receiver,String text,boolean turnState) {
         super(sender, MessageType.CHAT);
