@@ -107,15 +107,17 @@ public class Gui extends ViewObservable implements View {
 
     /**
      * resets turn
-     * @param player                    is the player currently playing.
-     * @param gameBoard                 is the board of the game.
-     * @param playerLibrary             is the player's library.
-     * @param playerObjInHand           are the objects the player currently has in hand.
-     * @param completedCommonObjectives is the array of points for each completed common objective.
+     *
+     * @param player                         is the player currently playing.
+     * @param gameBoard                      is the board of the game.
+     * @param playerLibrary                  is the player's library.
+     * @param playerObjInHand                are the objects the player currently has in hand.
+     * @param completedCommonObjectives      is the array of points for each completed common objective.
+     * @param availableCommonObjectivePoints
      */
 
     @Override
-    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
         System.out.println("TURNCALL");
         BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
         bsc.blockBoardTiles();
@@ -130,13 +132,15 @@ public class Gui extends ViewObservable implements View {
 
     /**
      * shows common objectives
-     * @param player                    is the player currently playing.
-     * @param commonObjective1          is the first common objective.
-     * @param commonObjective2          is the second common objective.
+     *
+     * @param player                         is the player currently playing.
+     * @param commonObjective1               is the first common objective.
+     * @param commonObjective2               is the second common objective.
      * @param completedCommonObjectives
+     * @param availableCommonObjectivePoints
      */
     @Override
-    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
         System.out.println(commonObjective1);
         System.out.println(commonObjective2);
         BoardSceneController bsc = getBoardSceneController(commonObjective1, commonObjective2);

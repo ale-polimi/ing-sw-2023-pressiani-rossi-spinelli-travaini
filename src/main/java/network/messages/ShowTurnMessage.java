@@ -15,6 +15,7 @@ public class ShowTurnMessage extends Message{
     private final Library playerLibrary;
     private final ArrayList<ObjectCard> playerObjInHand;
     private final int[] completedCommonObjectives;
+    private final int[] availableCommonObjectivePoints;
 
     /**
      * Constructor for abstract class Message.
@@ -25,12 +26,13 @@ public class ShowTurnMessage extends Message{
      * @param playerObjInHand is the array of ObjectsInHand of the player.
      * @param completedCommonObjectives is the array of points for each completed common objective.
      */
-    public ShowTurnMessage(String sender, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
+    public ShowTurnMessage(String sender, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
         super(sender, MessageType.SHOW_TURN);
         this.gameBoard = gameBoard;
         this.playerLibrary = playerLibrary;
         this.playerObjInHand = playerObjInHand;
         this.completedCommonObjectives = completedCommonObjectives;
+        this.availableCommonObjectivePoints = availableCommonObjectivePoints;
     }
 
     /**
@@ -63,5 +65,13 @@ public class ShowTurnMessage extends Message{
      */
     public int[] getCompletedCommonObjectives() {
         return completedCommonObjectives;
+    }
+
+    /**
+     * Getter method for the available common objective points.
+     * @return an int {@link java.lang.reflect.Array array} containing the available points for each common objective.
+     */
+    public int[] getAvailableCommonObjectivePoints() {
+        return availableCommonObjectivePoints;
     }
 }

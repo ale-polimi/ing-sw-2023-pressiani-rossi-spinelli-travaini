@@ -63,8 +63,8 @@ public class NetworkView implements View {
     }
 
     @Override
-    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives) {
-        server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand, completedCommonObjectives));
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
+        server.sendMessage(new ShowTurnMessage(player, gameBoard, playerLibrary, playerObjInHand, completedCommonObjectives, availableCommonObjectivePoints));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class NetworkView implements View {
     public void showNotMyTurn(Board gameBoard) {}
 
     @Override
-    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
         server.sendMessage(new ShowCommonObjectiveMessage(player,commonObjective1,commonObjective2));
     }
 

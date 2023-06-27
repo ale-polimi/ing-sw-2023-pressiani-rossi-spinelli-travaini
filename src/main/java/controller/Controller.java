@@ -1,8 +1,6 @@
 package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import enumerations.GameState;
 import enumerations.ObjectColour;
 import enumerations.TypeSpace;
@@ -15,7 +13,6 @@ import exceptions.player.TooManyObjectsInHandException;
 import model.Game;
 import model.commonobjective.*;
 import model.library.Library;
-import model.library.PersonalObjective;
 import model.objects.ObjectCard;
 import model.player.Player;
 import network.messages.*;
@@ -26,8 +23,6 @@ import observer.Observer;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static enumerations.GameState.IN_GAME;
@@ -918,19 +913,20 @@ public class Controller implements Observer {
                 networkView.showLobby(lobbyMessage.getLobbyPlayers());
                 break;
             case NEXT_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
+
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints());
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case GENERIC_MODEL_CHANGE:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints());
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case END_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives());
+                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(),getAvailablePoints());
 
                 sendOtherPlayersLibrary(game);
 
@@ -941,7 +937,7 @@ public class Controller implements Observer {
                 break;
             case SHOW_COMMON_OBJECTIVE:
                 ShowCommonObjectiveMessage showCommonObjectiveMessage = (ShowCommonObjectiveMessage) message;
-                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2(), new int[]{0,0});
+                networkView.showCommonObjectives(showCommonObjectiveMessage.getSender(), showCommonObjectiveMessage.getCommonObjective1(), showCommonObjectiveMessage.getCommonObjective2(), new int[]{0,0}, getAvailablePoints());
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
                 ShowPersonalObjectiveMessage showPersonalObjectiveMessage = (ShowPersonalObjectiveMessage) message;
@@ -968,6 +964,26 @@ public class Controller implements Observer {
             default:
                 ;
         }
+    }
+
+    /**
+     * This method will return the first available points for each common objective.
+     * @return an int {@link java.lang.reflect.Array array} containing the first available point for each common objective.
+     */
+    private int[] getAvailablePoints() {
+        int[] availablePoints = new int[2];
+        for(CommonObjective commonObjective: game.getCommonObjectives().keySet()){
+            if(!game.getCommonObjectives().get(commonObjective).isEmpty()){
+                availablePoints[commonObjective.getObjectiveNumeral()] = game.getCommonObjectives().get(commonObjective).get(0);
+            } else {
+                availablePoints[commonObjective.getObjectiveNumeral()] = 0;
+            }
+        }
+
+        /* TODO - Debug print */
+        System.out.println("First CO available point: " + availablePoints[0] + " Second CO available points: " + availablePoints[1]);
+
+        return availablePoints;
     }
 
     /**

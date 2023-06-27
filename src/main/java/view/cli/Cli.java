@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -345,14 +343,15 @@ public class Cli extends ViewObservable implements View {
     /**
      * This method shows the turn to the player.
      *
-     * @param player                    is the {@link model.player.Player player's nickname}, used in {@link ClientController} to check whether the message is for this user.
-     * @param rcvGameBoard              is the {@link Board game board}.
-     * @param rcvPlayerLibrary          is the {@link Library player's library}.
-     * @param rcvObjectsInHand          is the {@link ArrayList} of objects that a player currently has in hand.
-     * @param completedCommonObjectives is the array containing the points the player has received from each common objective.
+     * @param player                         is the {@link model.player.Player player's nickname}, used in {@link ClientController} to check whether the message is for this user.
+     * @param rcvGameBoard                   is the {@link Board game board}.
+     * @param rcvPlayerLibrary               is the {@link Library player's library}.
+     * @param rcvObjectsInHand               is the {@link ArrayList} of objects that a player currently has in hand.
+     * @param completedCommonObjectives      is the array containing the points the player has received from each common objective.
+     * @param availableCommonObjectivePoints
      */
     @Override
-    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives){
+    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
@@ -496,14 +495,17 @@ public class Cli extends ViewObservable implements View {
     /**
      * This method prints the current {@link CommonObjective common objectives}.
      *
-     * @param commonObjective1          is the first common objective of the game.
-     * @param commonObjective2          is the second common objective of the game.
-     * @param completedCommonObjectives is the array of points for each completed common objective.
+     * @param commonObjective1               is the first common objective of the game.
+     * @param commonObjective2               is the second common objective of the game.
+     * @param completedCommonObjectives      is the array of points for each completed common objective.
+     * @param availableCommonObjectivePoints is the array of available points for each common objective.
      */
     @Override
-    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives) {
+    public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
 
+        /* TODO - Debug print */
         out.println("FIRST CO VALUE: " + completedCommonObjectives[0] + " SECOND CO VALUE: " + completedCommonObjectives[1]);
+        out.println("FIRST AVAILABLE CO VALUE: " + availableCommonObjectivePoints[0] + " SECOND AVAILABLE CO VALUE: " + availableCommonObjectivePoints[1]);
 
         out.println("The common objectives are:");
         switch(commonObjective1.getObjectiveNumeral()){
@@ -514,6 +516,7 @@ public class Cli extends ViewObservable implements View {
                     out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[0] + " POINTS!" + Colours.RESET);
                 } else {
                     out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                    out.println("" + Colours.BOLD + Colours.GOLD + "HIGHEST AVAILABLE POINT: " + availableCommonObjectivePoints[0] + Colours.RESET);
                 }
                 out.print(commonObjective2.getDescription());
                 out.print("\n");
@@ -521,6 +524,7 @@ public class Cli extends ViewObservable implements View {
                     out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[1] + " POINTS!" + Colours.RESET);
                 } else {
                     out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                    out.println("" + Colours.BOLD + Colours.GOLD + "HIGHEST AVAILABLE POINT: " + availableCommonObjectivePoints[1] + Colours.RESET);
                 }
                 break;
             case 1:
@@ -530,6 +534,7 @@ public class Cli extends ViewObservable implements View {
                     out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[0] + " POINTS!" + Colours.RESET);
                 } else {
                     out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                    out.println("" + Colours.BOLD + Colours.GOLD + "HIGHEST AVAILABLE POINT: " + availableCommonObjectivePoints[0] + Colours.RESET);
                 }
                 out.print(commonObjective1.getDescription());
                 out.print("\n");
@@ -537,6 +542,7 @@ public class Cli extends ViewObservable implements View {
                     out.println("" + Colours.BOLD + Colours.GREEN + "COMPLETED WITH " + completedCommonObjectives[1] + " POINTS!" + Colours.RESET);
                 } else {
                     out.println("" + Colours.BOLD + Colours.RED + "NOT DONE YET!" + Colours.RESET);
+                    out.println("" + Colours.BOLD + Colours.GOLD + "HIGHEST AVAILABLE POINT: " + availableCommonObjectivePoints[1] + Colours.RESET);
                 }
                 break;
         }

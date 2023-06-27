@@ -34,6 +34,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
     private CommonObjective commonObjective1;
     private CommonObjective commonObjective2;
     private int[] completedCommonObjectives = new int[]{0,0};
+    private int[] availableCommonObjectivePoints = new int[]{8,8};
     private PersonalObjective personalObjective;
     private Library playerLibrary = new Library();
     private HashMap<String, Library> otherPlayersLibrary = new HashMap<>();
@@ -118,7 +119,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
 
     @Override
     public void onRequestCommonObjectives() {
-        view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2, this.completedCommonObjectives);
+        view.showCommonObjectives(this.nickname, this.commonObjective1, this.commonObjective2, this.completedCommonObjectives, this.availableCommonObjectivePoints);
         if(view.getMyTurn()){
             if(!inLibrary && inPickup){
                 view.askBoardMove();
@@ -234,20 +235,22 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     if (type.equals("END_TURN")) {
                         this.playerLibrary = turnMessage.getPlayerLibrary();
                         this.completedCommonObjectives = turnMessage.getCompletedCommonObjectives();
-                        view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives);
+                        this.availableCommonObjectivePoints = turnMessage.getAvailableCommonObjectivePoints();
+                        view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives, turnMessage.getAvailableCommonObjectivePoints());
                     } else {
                         if (inLibrary && !inPickup) {
-                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
+                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives(), turnMessage.getAvailableCommonObjectivePoints());
                             view.askLibraryMove();
                         } else if (!inLibrary && inPickup) {
-                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives());
+                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives(), turnMessage.getAvailableCommonObjectivePoints());
                             view.askBoardMove();
                         }
                     }
                 } else {
                     view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
-                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives);
+                    this.availableCommonObjectivePoints = turnMessage.getAvailableCommonObjectivePoints();
+                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives, turnMessage.getAvailableCommonObjectivePoints());
                     if(view.getChatAbilitator())view.askChat();
                 }
                 break;
