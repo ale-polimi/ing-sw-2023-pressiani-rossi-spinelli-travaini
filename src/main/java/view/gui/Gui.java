@@ -113,9 +113,10 @@ public class Gui extends ViewObservable implements View {
      * @param completedCommonObjectives      is the array of points for each completed common objective.
      * @param availableCommonObjectivePoints is the array of available points for each common objective.
      * @param firstPlayerToEnd
+     * @param playerNickname
      */
     @Override
-    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd) {
+    public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd, String playerNickname) {
         System.out.println("TURNCALL");
         BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
         bsc.blockBoardTiles();

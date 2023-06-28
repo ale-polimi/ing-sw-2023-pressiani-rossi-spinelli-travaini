@@ -920,19 +920,19 @@ public class Controller implements Observer {
                 break;
             case NEXT_TURN:
 
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints(), getNicknameOfFirstPlayerToEnd());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints(), getNicknameOfFirstPlayerToEnd(), null);
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case GENERIC_MODEL_CHANGE:
-                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints(), getNicknameOfFirstPlayerToEnd());
+                networkView.showTurn(game.getPlayerInTurn().getNickname(), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(), getAvailablePoints(), getNicknameOfFirstPlayerToEnd(), null);
 
                 sendOtherPlayersLibrary(game);
 
                 break;
             case END_TURN:
-                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(),getAvailablePoints(), getNicknameOfFirstPlayerToEnd());
+                networkView.showTurn(game.getPlayerInTurn().getNickname().concat(":END_TURN"), game.getBoard(), game.getPlayerInTurn().getLibrary(), game.getPlayerInTurn().getObjectsInHand(), game.getPlayerInTurn().getCompletedCommonObjectives(),getAvailablePoints(), getNicknameOfFirstPlayerToEnd(), null);
 
                 sendOtherPlayersLibrary(game);
 

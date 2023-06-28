@@ -243,13 +243,13 @@ public class ClientController extends Observable implements ViewObserver, Observ
                         this.playerLibrary = turnMessage.getPlayerLibrary();
                         this.completedCommonObjectives = turnMessage.getCompletedCommonObjectives();
                         this.availableCommonObjectivePoints = turnMessage.getAvailableCommonObjectivePoints();
-                        view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives, turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd());
+                        view.showTurn(sender, turnMessage.getGameBoard(), playerLibrary, this.objInHand, this.completedCommonObjectives, turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd(), this.nickname);
                     } else {
                         if (inLibrary && !inPickup) {
-                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives(), turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd());
+                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives(), turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd(), this.nickname);
                             view.askLibraryMove();
                         } else if (!inLibrary && inPickup) {
-                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives(), turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd());
+                            view.showTurn(sender, turnMessage.getGameBoard(), turnMessage.getPlayerLibrary(), turnMessage.getPlayerObjInHand(), turnMessage.getCompletedCommonObjectives(), turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd(), this.nickname);
                             view.askBoardMove();
                         }
                     }
@@ -257,7 +257,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     view.setMyTurn(false);
                     ShowTurnMessage turnMessage = (ShowTurnMessage) message;
                     this.availableCommonObjectivePoints = turnMessage.getAvailableCommonObjectivePoints();
-                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives, turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd());
+                    view.showTurn(sender, turnMessage.getGameBoard(), this.playerLibrary, this.objInHand, this.completedCommonObjectives, turnMessage.getAvailableCommonObjectivePoints(), turnMessage.getFirstPlayerToEnd(), this.nickname);
                     if(view.getChatAbilitator())view.askChat();
                 }
                 break;

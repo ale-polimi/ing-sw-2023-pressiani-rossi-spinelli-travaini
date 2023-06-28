@@ -3,6 +3,7 @@ package model.commonobjective;
 import model.library.*;
 import model.objects.ObjectCard;
 import org.junit.*;
+import view.cli.Cli;
 import view.cli.Colours;
 
 import static org.junit.Assert.*;
@@ -69,6 +70,48 @@ public class TotalDifferentColumnsTest  {
         testLibrary.addObject(new ObjectCard("BLUE1"),testLibrary.getLibrarySpace(3,2));
         testLibrary.addObject(new ObjectCard("YELLOW1"),testLibrary.getLibrarySpace(4,2));
         testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(5,2));
+
+        assertFalse(totalDifferentColumns.applyObjectiveRules(testLibrary, 0, 0));
+    }
+
+    @Test
+    public void noDifferentColumnsFromAGame(){
+        testLibrary.addObject(new ObjectCard("GREEN2"),testLibrary.getLibrarySpace(2,4));
+        testLibrary.addObject(new ObjectCard("PINK1"),testLibrary.getLibrarySpace(3,0));
+        testLibrary.addObject(new ObjectCard("LIGHT_BLUE2"),testLibrary.getLibrarySpace(3,1));
+        testLibrary.addObject(new ObjectCard("PINK2"),testLibrary.getLibrarySpace(3,2));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,3));
+        testLibrary.addObject(new ObjectCard("WHITE2"),testLibrary.getLibrarySpace(3,4));
+        testLibrary.addObject(new ObjectCard("WHITE3"),testLibrary.getLibrarySpace(4,0));
+        testLibrary.addObject(new ObjectCard("PINK3"),testLibrary.getLibrarySpace(4,1));
+        testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(4,2));
+        testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(4,3));
+        testLibrary.addObject(new ObjectCard("YELLOW2"),testLibrary.getLibrarySpace(4,4));
+        testLibrary.addObject(new ObjectCard("PINK1"),testLibrary.getLibrarySpace(5,0));
+        testLibrary.addObject(new ObjectCard("BLUE2"),testLibrary.getLibrarySpace(5,1));
+        testLibrary.addObject(new ObjectCard("PINK3"),testLibrary.getLibrarySpace(5,2));
+        testLibrary.addObject(new ObjectCard("YELLOW3"),testLibrary.getLibrarySpace(5,3));
+        testLibrary.addObject(new ObjectCard("BLUE1"),testLibrary.getLibrarySpace(5,4));
+
+        assertFalse(totalDifferentColumns.applyObjectiveRules(testLibrary, 0, 0));
+    }
+
+    @Test
+    public void noDifferentColumnsFromAGame2(){
+        testLibrary.addObject(new ObjectCard("YELLOW2"),testLibrary.getLibrarySpace(0,3));
+        testLibrary.addObject(new ObjectCard("WHITE1"),testLibrary.getLibrarySpace(1,3));
+        testLibrary.addObject(new ObjectCard("PINK2"),testLibrary.getLibrarySpace(2,3));
+        testLibrary.addObject(new ObjectCard("GREEN1"),testLibrary.getLibrarySpace(3,0));
+        testLibrary.addObject(new ObjectCard("GREEN2"),testLibrary.getLibrarySpace(3,2));
+        testLibrary.addObject(new ObjectCard("LIGHT_BLUE1"),testLibrary.getLibrarySpace(3,3));
+        testLibrary.addObject(new ObjectCard("WHITE3"),testLibrary.getLibrarySpace(4,0));
+        testLibrary.addObject(new ObjectCard("GREEN3"),testLibrary.getLibrarySpace(4,1));
+        testLibrary.addObject(new ObjectCard("LIGHT_BLUE2"),testLibrary.getLibrarySpace(4,2));
+        testLibrary.addObject(new ObjectCard("BLUE1"),testLibrary.getLibrarySpace(4,3));
+        testLibrary.addObject(new ObjectCard("GREEN2"),testLibrary.getLibrarySpace(5,0));
+        testLibrary.addObject(new ObjectCard("BLUE2"),testLibrary.getLibrarySpace(5,1));
+        testLibrary.addObject(new ObjectCard("GREEN3"),testLibrary.getLibrarySpace(5,2));
+        testLibrary.addObject(new ObjectCard("GREEN2"),testLibrary.getLibrarySpace(5,3));
 
         assertFalse(totalDifferentColumns.applyObjectiveRules(testLibrary, 0, 0));
     }

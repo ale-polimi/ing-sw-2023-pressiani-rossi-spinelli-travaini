@@ -350,9 +350,10 @@ public class Cli extends ViewObservable implements View {
      * @param completedCommonObjectives      is the array containing the points the player has received from each common objective.
      * @param availableCommonObjectivePoints is the array containing the points still available for the common objectives.
      * @param firstPlayerToEnd               is the nickname of the first player that has finished the game.
+     * @param playerNickname                 is the nickname of this player. Needed for the GUI.
      */
     @Override
-    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd){
+    public void showTurn(String player, Board rcvGameBoard, Library rcvPlayerLibrary, ArrayList<ObjectCard> rcvObjectsInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd, String playerNickname){
         clearCli();
         out.print(Colours.HIDE_CURSOR);
         out.println(Colours.BOLD + player + "'s turn" + Colours.RESET);
