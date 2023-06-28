@@ -51,7 +51,6 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void askBoardMove() {
-        System.out.println("BOARDMOVE");
         setBoardUsed(false);
 
        // setMyTurn(true);
@@ -71,7 +70,6 @@ public class Gui extends ViewObservable implements View {
      */
     @Override
     public void askLibraryMove() {
-        System.out.println("LIBRARYMOVE");
         setBoardUsed(true);
         BoardSceneController bsc = null;
         try {
@@ -112,15 +110,16 @@ public class Gui extends ViewObservable implements View {
      * @param playerObjInHand                are the objects the player currently has in hand.
      * @param completedCommonObjectives      is the array of points for each completed common objective.
      * @param availableCommonObjectivePoints is the array of available points for each common objective.
-     * @param firstPlayerToEnd
-     * @param playerNickname
+     * @param firstPlayerToEnd               is the string containing the nickname of the first player to finish.
+     * @param playerNickname                 is the string containing the nickname of the  player .
      */
     @Override
     public void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd, String playerNickname) {
-        System.out.println("TURNCALL");
         BoardSceneController bsc = getBoardSceneController(gameBoard, playerLibrary,playerObjInHand);
         bsc.blockBoardTiles();
-        bsc.savePlayer(player);
+        bsc.savePlayer(playerNickname);
+        bsc.setAvailablePoints(availableCommonObjectivePoints);
+        bsc.setFirstButton(firstPlayerToEnd);
 
 
 
@@ -139,8 +138,6 @@ public class Gui extends ViewObservable implements View {
      */
     @Override
     public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
-        System.out.println(commonObjective1);
-        System.out.println(commonObjective2);
         BoardSceneController bsc = getBoardSceneController(commonObjective1, commonObjective2);
         if(getBoardUsed()){
             bsc.blockBoardTiles();
@@ -156,8 +153,6 @@ public class Gui extends ViewObservable implements View {
      */
     @Override
     public void showPersonalObjective(String player, PersonalObjective personalObjective) {
-        System.out.println(personalObjective);
-        System.out.println(personalObjective.getPersonalOBJ());
         BoardSceneController bsc = getBoardSceneController(personalObjective);
     }
 
@@ -251,7 +246,7 @@ public class Gui extends ViewObservable implements View {
     @Override
     public void showNotMyTurn(Board gameBoard) {
         setMyTurn(false);
-        System.out.println("notmyturn");
+
     }
 
     /**

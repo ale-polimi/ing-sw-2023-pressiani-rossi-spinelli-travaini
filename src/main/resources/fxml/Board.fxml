@@ -632,6 +632,10 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
+            <Button fx:id="availablePoints1" layoutX="411.0" layoutY="614.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" />
+            <Button fx:id="availablePoints2" layoutX="921.0" layoutY="614.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" />
+            <Button fx:id="first" layoutX="403.0" layoutY="345.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" rotate="9.2" />
+            <Button fx:id="firsttofinish" layoutX="570.0" layoutY="79.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" />
       </children>
          <cursor>
             <Cursor fx:constant="DEFAULT" />

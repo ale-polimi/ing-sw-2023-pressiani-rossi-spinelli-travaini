@@ -35,7 +35,6 @@ public class InsertNicknameSceneController extends ViewObservable implements Gen
         submitButton.setDisable(true);
 
         String nickname = nicknameField.getText();
-
         new Thread(() -> notifyObserver(obs -> obs.onUpdateNickname(nickname))).start();
     }
 }

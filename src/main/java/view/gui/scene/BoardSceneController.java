@@ -48,6 +48,14 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     @FXML
     private Button personalObjButton;
     @FXML
+    private Button availablePoints1;
+    @FXML
+    private Button availablePoints2;
+    @FXML
+    private Button first;
+    @FXML
+    private Button firsttofinish;
+    @FXML
     private TextField chatMsg;
     @FXML
     private TextArea chatBox;
@@ -62,9 +70,13 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private PersonalObjective personalObjective1;
     private String myPlayer;
     private String chatLog ;
+    private String firstToFinish;
 
     private int objInHand = 0;
     private boolean boardFirstTurn = false;
+    private int available_points1 = 0;
+    private int available_points2 = 0;
+    private int [] available_commonObj_points;
 
     /**
      * This method initializes first game window.
@@ -97,6 +109,8 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         setCommonObj1Button(commonObjective11);
         setCommonObj2Button(commonObjective21);
         setPersonalObjButton(personalObjective1);
+        setAvailablePoints(available_commonObj_points);
+        setFirstButton(firstToFinish);
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/common_Obj1_Button.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
         commonObj1Button.setBackground(background);
@@ -110,6 +124,108 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         if(boardFirstTurn){
             resetBoardTiles();
         }
+    }
+
+    /**
+     * This method sets the first player tile based on if it has been taken or not
+     * @param firstPlayerToEnd this parameter contains the string nickname of the first player to finish.
+     */
+    public void setFirstButton(String firstPlayerToEnd){
+        if(firstPlayerToEnd != null && first != null){
+            first.setStyle("-fx-background-color: transparent");
+            if(firstPlayerToEnd.equals(myPlayer)  && firsttofinish != null) {
+                System.out.println("ARRIVATO");
+                firsttofinish.setStyle(null);
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/end_game_tile.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                firsttofinish.setBackground(background);
+            }
+        }else{
+            if(first != null) {
+                BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/end_game_tile.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                Background background = new Background(backgroundImage);
+                first.setBackground(background);
+            }
+            if(firsttofinish != null){
+                firsttofinish.setStyle("-fx-background-color: transparent");
+            }
+        }
+        firstToFinish = firstPlayerToEnd;
+
+
+    }
+
+    /**
+     * this method sets the image showing how many points are still available for both common objectives
+     * @param availableCommonObjectivePoints is an int array containing the remaining points for both common objectives
+     */
+    public void setAvailablePoints(int[] availableCommonObjectivePoints) {
+       if(availableCommonObjectivePoints != null){
+           available_points1 = availableCommonObjectivePoints[0];
+           available_points2 = availableCommonObjectivePoints[1];
+           available_commonObj_points = availableCommonObjectivePoints;
+       }
+
+       if(availablePoints1 != null && availableCommonObjectivePoints != null){
+           switch (availableCommonObjectivePoints[0]){
+               case 8 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_8.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints1.setBackground(background);
+               }
+               case 6 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_6.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints1.setBackground(background);
+               }
+               case 4 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_4.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints1.setBackground(background);
+               }
+               case 2 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_2.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints1.setBackground(background);
+               }
+               case 0 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_back_EMPTY.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints1.setBackground(background);
+               }
+           }
+       }
+
+       if(availablePoints2 != null && availableCommonObjectivePoints != null){
+           switch (availableCommonObjectivePoints[1]){
+               case 8 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_8.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints2.setBackground(background);
+               }
+               case 6 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_6.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints2.setBackground(background);
+               }
+               case 4 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_4.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints2.setBackground(background);
+               }
+               case 2 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_2.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints2.setBackground(background);
+               }
+               case 0 ->{
+                   BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResource("/images/scoring_back_EMPTY.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                   Background background = new Background(backgroundImage);
+                   availablePoints2.setBackground(background);
+               }
+           }
+
+       }
     }
 
     /**
@@ -915,7 +1031,6 @@ public class BoardSceneController extends ViewObservable implements GenericScene
     private void onSendButtonClick(MouseEvent event){
         String message = chatMsg.getText();
         String messageToSend = null;
-        System.out.println(message.split("_").length);
         if( message.split("_").length > 1) {
             messageToSend = message.split("_")[1];
 
@@ -924,13 +1039,16 @@ public class BoardSceneController extends ViewObservable implements GenericScene
         if(message.split("_")[0].equals("all")|| message.split("_").length ==1){
             if( message.split("_").length == 1){
                String messageToSend2 = message.split("_")[0];
+               chatMsg.setText(null);
                 new Thread(() -> notifyObserver(obs -> obs.onChatMessage(myPlayer, "all", messageToSend2))).start();
             }else {
+                chatMsg.setText(null);
                 new Thread(() -> notifyObserver(obs -> obs.onChatMessage(myPlayer, "all", messageToSend1))).start();
             }
         }else {
             String receiver = message.split("_")[0];
             System.out.println(receiver);
+            chatMsg.setText(null);
             new Thread(() -> notifyObserver(obs -> obs.onChatMessage(myPlayer,receiver,messageToSend1))).start();
         }
     }
@@ -941,15 +1059,26 @@ public class BoardSceneController extends ViewObservable implements GenericScene
      * @param message is the chat message.
      */
    public void updateChat(String sender, String message){
-        if(sender==myPlayer){
-          String  temp = chatLog +"\n"+ "        "+message;
-          chatLog = temp;
+        if(sender.equals(myPlayer)){
+            if(chatLog == null){
+                String  temp = "\n"+ "                                                              "+message;
+                chatLog = temp;
+            }else {
+                String temp = chatLog + "\n" + "                                                              " + message;
+                chatLog = temp;
+            }
         }else{
-            String temp = chatLog +"\n"+sender+":  "+message;
-            chatLog = temp;
+            if(chatLog == null){
+                String temp = "\n"+sender+":  "+message;
+                chatLog = temp;
+            }else {
+                String temp = chatLog + "\n" + sender + ":  " + message;
+                chatLog = temp;
+            }
         }
-
+        chatBox.setEditable(true);
         chatBox.setText(chatLog);
+        chatBox.setEditable(false);
     }
 
     /**

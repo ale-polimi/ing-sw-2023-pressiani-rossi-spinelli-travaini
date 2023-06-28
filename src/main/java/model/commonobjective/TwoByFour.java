@@ -42,7 +42,7 @@ public class TwoByFour extends TwoEqualsInColumn {
          rule = true;
         ObjectCard tempCard = null;
         for (int x = 0; x < 5; x = x+2) {
-            for (int y = 0; y < 5; y++) {
+            for (int y = 0; y < 4; y++) {
                 if (applyObjectiveRules(library, x, y)) {
                     if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())&&
                     !library.getLibrarySpace(x,y).isVisited() && !library.getLibrarySpace(x,y+1).isVisited() && !library.getLibrarySpace(x+1,y+1).isVisited() && !library.getLibrarySpace(x+1,y).isVisited()) {
@@ -141,7 +141,7 @@ public class TwoByFour extends TwoEqualsInColumn {
 
         }
         for (int x = 1; x <5; x = x+2) {
-            for (int y = 0; y < 5; y++) {
+            for (int y = 0; y < 4; y++) {
                 if (applyObjectiveRules(library, x, y)) {
                     if (library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x , y+1).getObject().getObjectColour()) && library.getLibrarySpace(x, y).getObject().getObjectColour().isEquals(library.getLibrarySpace(x + 1, y + 1).getObject().getObjectColour())&&
                             !library.getLibrarySpace(x,y).isVisited() && !library.getLibrarySpace(x,y+1).isVisited() && !library.getLibrarySpace(x+1,y+1).isVisited() && !library.getLibrarySpace(x+1,y).isVisited()) {
