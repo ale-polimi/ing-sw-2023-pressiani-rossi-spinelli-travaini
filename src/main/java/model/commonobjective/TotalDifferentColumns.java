@@ -29,9 +29,9 @@ public class TotalDifferentColumns extends CommonObjective {
     @Override
     public boolean applyObjectiveRules(Library library, int x, int y) {
 
+        count = 0;
         ArrayList<ObjectColour> firstSet;
         boolean different;
-
         for (int col = 0; col < 5; col++) {
             different = true;
             firstSet = new ArrayList<>();
@@ -46,7 +46,7 @@ public class TotalDifferentColumns extends CommonObjective {
             for(int i = 0; i < firstSet.size() - 1 && different; i++){
                 for(int j = i + 1; j < firstSet.size() && different; j++){
                     if(firstSet.get(i).isEquals(firstSet.get(j))){
-                        different = false;
+                       different= false;
                     }
                 }
             }

@@ -27,6 +27,7 @@ public class TotalDifferentRows extends CommonObjective {
         x=0;
         y=0;
 
+        count = 0;
         ArrayList<ObjectColour> firstSet;
         boolean different=true;
 
