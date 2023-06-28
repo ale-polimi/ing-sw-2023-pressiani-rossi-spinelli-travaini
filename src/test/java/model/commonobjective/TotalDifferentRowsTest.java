@@ -52,6 +52,67 @@ public class TotalDifferentRowsTest {
     }
 
     @Test
+    public void NoDifferentRowsFromGame(){
+        testTotDiffRows.addObject(new ObjectCard("PINK1"),testTotDiffRows.getLibrarySpace(0,0));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE1"),testTotDiffRows.getLibrarySpace(0,1));
+        testTotDiffRows.addObject(new ObjectCard("BLUE2"),testTotDiffRows.getLibrarySpace(0,2));
+        testTotDiffRows.addObject(new ObjectCard("BLUE2"),testTotDiffRows.getLibrarySpace(1,0));
+        testTotDiffRows.addObject(new ObjectCard("BLUE3"),testTotDiffRows.getLibrarySpace(1,1));
+        testTotDiffRows.addObject(new ObjectCard("GREEN1"),testTotDiffRows.getLibrarySpace(1,2));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE1"),testTotDiffRows.getLibrarySpace(2,0));
+        testTotDiffRows.addObject(new ObjectCard("YELLOW1"),testTotDiffRows.getLibrarySpace(2,1));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE3"),testTotDiffRows.getLibrarySpace(2,2));
+        testTotDiffRows.addObject(new ObjectCard("GREEN2"),testTotDiffRows.getLibrarySpace(3,0));
+        testTotDiffRows.addObject(new ObjectCard("BLUE1"),testTotDiffRows.getLibrarySpace(3,1));
+        testTotDiffRows.addObject(new ObjectCard("WHITE2"),testTotDiffRows.getLibrarySpace(3,2));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE3"),testTotDiffRows.getLibrarySpace(3,3));
+        testTotDiffRows.addObject(new ObjectCard("WHITE2"),testTotDiffRows.getLibrarySpace(4,0));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE1"),testTotDiffRows.getLibrarySpace(4,1));
+        testTotDiffRows.addObject(new ObjectCard("PINK1"),testTotDiffRows.getLibrarySpace(4,2));
+        testTotDiffRows.addObject(new ObjectCard("PINK1"),testTotDiffRows.getLibrarySpace(4,3));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE3"),testTotDiffRows.getLibrarySpace(5,0));
+        testTotDiffRows.addObject(new ObjectCard("YELLOW2"),testTotDiffRows.getLibrarySpace(5,1));
+        testTotDiffRows.addObject(new ObjectCard("BLUE1"),testTotDiffRows.getLibrarySpace(5,2));
+        testTotDiffRows.addObject(new ObjectCard("WHITE3"),testTotDiffRows.getLibrarySpace(5,3));
+
+        assertFalse(totalDifferentRows.applyObjectiveRules(testTotDiffRows, 0, 0));
+
+    }
+
+    @Test
+    public void NoDifferentRowsFromGame2(){
+        testTotDiffRows.addObject(new ObjectCard("BLUE1"),testTotDiffRows.getLibrarySpace(0,1));
+        testTotDiffRows.addObject(new ObjectCard("BLUE1"),testTotDiffRows.getLibrarySpace(0,2));
+        testTotDiffRows.addObject(new ObjectCard("PINK1"),testTotDiffRows.getLibrarySpace(0,3));
+        testTotDiffRows.addObject(new ObjectCard("WHITE1"),testTotDiffRows.getLibrarySpace(0,4));
+        testTotDiffRows.addObject(new ObjectCard("BLUE3"),testTotDiffRows.getLibrarySpace(1,1));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE1"),testTotDiffRows.getLibrarySpace(1,2));
+        testTotDiffRows.addObject(new ObjectCard("GREEN1"),testTotDiffRows.getLibrarySpace(1,3));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE2"),testTotDiffRows.getLibrarySpace(1,4));
+        testTotDiffRows.addObject(new ObjectCard("GREEN3"),testTotDiffRows.getLibrarySpace(2,1));
+        testTotDiffRows.addObject(new ObjectCard("PINK2"),testTotDiffRows.getLibrarySpace(2,2));
+        testTotDiffRows.addObject(new ObjectCard("GREEN1"),testTotDiffRows.getLibrarySpace(2,3));
+        testTotDiffRows.addObject(new ObjectCard("GREEN3"),testTotDiffRows.getLibrarySpace(2,4));
+        testTotDiffRows.addObject(new ObjectCard("GREEN2"),testTotDiffRows.getLibrarySpace(3,1));
+        testTotDiffRows.addObject(new ObjectCard("GREEN1"),testTotDiffRows.getLibrarySpace(3,2));
+        testTotDiffRows.addObject(new ObjectCard("GREEN2"),testTotDiffRows.getLibrarySpace(3,3));
+        testTotDiffRows.addObject(new ObjectCard("WHITE1"),testTotDiffRows.getLibrarySpace(3,4));
+        testTotDiffRows.addObject(new ObjectCard("GREEN3"),testTotDiffRows.getLibrarySpace(4,0));
+        testTotDiffRows.addObject(new ObjectCard("BLUE2"),testTotDiffRows.getLibrarySpace(4,1));
+        testTotDiffRows.addObject(new ObjectCard("YELLOW2"),testTotDiffRows.getLibrarySpace(4,2));
+        testTotDiffRows.addObject(new ObjectCard("LIGHT_BLUE2"),testTotDiffRows.getLibrarySpace(4,3));
+        testTotDiffRows.addObject(new ObjectCard("WHITE1"),testTotDiffRows.getLibrarySpace(4,4));
+        testTotDiffRows.addObject(new ObjectCard("BLUE1"),testTotDiffRows.getLibrarySpace(5,0));
+        testTotDiffRows.addObject(new ObjectCard("YELLOW1"),testTotDiffRows.getLibrarySpace(5,1));
+        testTotDiffRows.addObject(new ObjectCard("GREEN3"),testTotDiffRows.getLibrarySpace(5,2));
+        testTotDiffRows.addObject(new ObjectCard("WHITE1"),testTotDiffRows.getLibrarySpace(5,3));
+        testTotDiffRows.addObject(new ObjectCard("BLUE1"),testTotDiffRows.getLibrarySpace(5,4));
+
+        assertFalse(totalDifferentRows.applyObjectiveRules(testTotDiffRows, 0, 0));
+
+    }
+
+    @Test
     public void NoDifferentRowsSameType(){
         testTotDiffRows.addObject(new ObjectCard("GREEN1"),testTotDiffRows.getLibrarySpace(0,0));
         testTotDiffRows.addObject(new ObjectCard("GREEN2"),testTotDiffRows.getLibrarySpace(0,1));
