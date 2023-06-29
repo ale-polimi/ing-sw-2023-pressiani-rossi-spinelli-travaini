@@ -505,10 +505,6 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void showCommonObjectives(String player, CommonObjective commonObjective1, CommonObjective commonObjective2, int[] completedCommonObjectives, int[] availableCommonObjectivePoints) {
 
-        /* TODO - Debug print */
-        out.println("FIRST CO VALUE: " + completedCommonObjectives[0] + " SECOND CO VALUE: " + completedCommonObjectives[1]);
-        out.println("FIRST AVAILABLE CO VALUE: " + availableCommonObjectivePoints[0] + " SECOND AVAILABLE CO VALUE: " + availableCommonObjectivePoints[1]);
-
         out.println("The common objectives are:");
         switch(commonObjective1.getObjectiveNumeral()){
             case 0:

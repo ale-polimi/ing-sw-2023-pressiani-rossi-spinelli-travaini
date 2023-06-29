@@ -41,7 +41,7 @@ public class ClientSocket extends Observable implements Client {
      * @param port is the port for the connection.
      */
     public ClientSocket(String address, int port){
-        System.out.println("Entrato in client");
+        //System.out.println("Entrato in client");
         this.address=address;
         this.port = port;
         try{connection();}
@@ -97,8 +97,6 @@ public class ClientSocket extends Observable implements Client {
             message = (Message) ois.readObject();
             //LOGGER.info("Received: "+ message);
 
-            /* TODO - Debug print */
-            //System.out.println(message.getSender()+" "+ message.getType());
             notifyObserver(message);
         }
         catch (IOException e) {

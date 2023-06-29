@@ -30,7 +30,6 @@ import view.gui.JavaFXGUI;
 public class ClientMain {
     public static void main(String[] args) {
 
-        /* TODO - REMOVE COMMENT HERE FOR FINAL DEPLOYMENT */
         boolean isCli = true;
         boolean isSocket = true;
         boolean failedArgs = false;
@@ -74,23 +73,6 @@ public class ClientMain {
         } else {
             System.exit(2);
         }
-
-        /*
-        *//* TODO - REMOVE THIS! ONLY FOR DEBUG *//*
-        boolean isCli = false;
-        boolean isSocket = false;
-
-        if (isCli) {
-            Cli view = new Cli(isSocket);
-            ClientController clientController = new ClientController(view, isSocket);
-            view.addObserver(clientController);
-            view.initCli();
-        } else {
-            *//* TODO - GUI application launch *//*
-            JavaFXGUI.setIsSocket(isSocket);
-            Application.launch(JavaFXGUI.class);
-        }
-        */
     }
 
 }

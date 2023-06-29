@@ -520,7 +520,7 @@ public class Controller implements Observer {
      * This method will create the common objectives for the game.
      */
     private void setupCommonObjectives(){
-        /* TODO - La combinazione rand1 = 7/6 e rand2 = 3 ogni tanto causa il crash del controller */
+
         int rand1 = new Random().nextInt(availableCommonObjectives.size());
         int rand2;
         do{
