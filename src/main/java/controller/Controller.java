@@ -51,6 +51,8 @@ public class Controller implements Observer {
 
     /**
      * Constructor for the controller.
+     * @param server is the server hosting this controller.
+     * @throws IOException if it can't reach the server.
      */
     public Controller(StartServerImpl server) throws IOException {
         this.game = new Game();

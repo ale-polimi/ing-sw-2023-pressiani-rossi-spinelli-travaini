@@ -13,16 +13,18 @@ import view.gui.JavaFXGUI;
 /**
  * Main class of the client application. The user can decide what type of client to launch with the following command line parameters:
  * <ul>
- *     <li>First parameter:</li>
+ *     <li>First parameter:
  *     <ul>
  *         <li>"{@code -cli}" or "{@code -c}" will start the CLI game;</li>
  *         <li>"{@code -gui}" or "{@code -g}" will start the GUI game;</li>
  *     </ul>
- *     <li>Second parameter:</li>
+ *     </li>
+ *     <li>Second parameter:
  *     <ul>
  *         <li>"{@code -socket}" or "{@code -s}" will start the game based on a socket connection;</li>
  *         <li>"{@code -rmi}" or "{@code -r}" will start the game based on a RMI connection;</li>
  *     </ul>
+ *     </li>
  * </ul>
  */
 public class ClientMain {

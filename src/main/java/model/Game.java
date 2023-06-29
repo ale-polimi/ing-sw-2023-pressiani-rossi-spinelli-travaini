@@ -148,10 +148,18 @@ public class Game extends Observable implements Observer {
         return this.gameState;
     }
 
+    /**
+     * Getter method that returns the player currently in turn.
+     * @return the {@link Player player} that is in turn.
+     */
     public Player getPlayerInTurn() {
         return playerInTurn;
     }
 
+    /**
+     * Setter method that changes the player in turn.
+     * @param playerInTurn is the new player in turn.
+     */
     public void setPlayerInTurn(Player playerInTurn) {
         this.playerInTurn = playerInTurn;
     }

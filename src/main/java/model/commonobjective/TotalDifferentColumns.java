@@ -31,7 +31,7 @@ public class TotalDifferentColumns extends CommonObjective {
 
         count = 0;
         ArrayList<ObjectColour> firstSet;
-        boolean different;
+        boolean different=true;
         for (int col = 0; col < 5; col++) {
             different = true;
             firstSet = new ArrayList<>();

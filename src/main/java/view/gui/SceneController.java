@@ -43,10 +43,9 @@ public class SceneController extends ViewObservable {
     /**
      * when called change the scene
      * @param observerList is the list of the observers
-     * @param scene is the scene that replace the current scene
-     * @param fxml
-     * @return the controller
-     * @param <P>
+     * @param scene is the scene that replace the current scene.
+     * @param fxml is the path to the FXML library.
+     * @return the controller.
      */
     public static <P> P changeRootPane(List<ViewObserver> observerList, Scene scene, String fxml){
       P controller = null;
@@ -70,9 +69,8 @@ public class SceneController extends ViewObservable {
      * when called change the scene
      * @param observerList is the list of the observers
      * @param event is the event that caused the scene change
-     * @param fxml
-     * @return
-     * @param <P>
+     * @param fxml is the path to the FXML library.
+     * @return the updated root panel.
      */
     public static <P> P changeRootPane(List<ViewObserver> observerList, Event event, String fxml){
         Scene scene = ((Node) event.getSource()).getScene();
@@ -80,11 +78,10 @@ public class SceneController extends ViewObservable {
     }
 
     /**
-     * when called change the scene
+     * When called change the scene
      * @param observerList is the list of the observers
-     * @param
-     * @return
-     * @param <P>
+     * @param fxml is the path to the FXML library.
+     * @return the updated root panel.
      */
     public static <P> P changeRootPane(List<ViewObserver> observerList, String fxml){
         return changeRootPane(observerList,activeScene,fxml);
@@ -94,7 +91,7 @@ public class SceneController extends ViewObservable {
      * when called change the scene
      * @param controller is the gui controller
      * @param scene is the scene that replace the current scene
-     * @param fxml
+     * @param fxml is the path to the FXML library.
      */
 
     public static void changeRootPane(GenericSceneController controller, Scene scene, String fxml){
@@ -123,7 +120,7 @@ public class SceneController extends ViewObservable {
     /**
      * when called change the scene
      * @param controller is the gui controller
-     * @param fxml
+     * @param fxml is the path to the FXML library.
      */
 
     public static void changeRootPane(GenericSceneController controller, String fxml){
