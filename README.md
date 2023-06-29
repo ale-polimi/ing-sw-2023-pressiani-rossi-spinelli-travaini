@@ -21,7 +21,7 @@ I requisiti del progetto sono disponibili qui: [requisiti](https://github.com/al
 ## Documentazione
 ### UML
 - [UML iniziali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/uml/UML-iniziali.png);
-- [UML finali]();
+- [UML finali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/uml/final);
 
 ### JavaDoc
 
@@ -65,7 +65,7 @@ Legenda:
 ## Compilazione file sorgente
 ### Utilizzando i jar precompilati (consigliato)
 
-Si possono utilizzare i jar precompilati che possono essere trovati qui: [client](), [server]().
+Si possono utilizzare i jar precompilati che possono essere trovati qui: [jars](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/jars).
 
 ### Compilazione manuale
 
@@ -156,7 +156,7 @@ The project's requirements are available here: [requirements](https://github.com
 ### UML
 
 - [Initial UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/uml/UML-iniziali.png);
-- [Completed UML]();
+- [Completed UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/uml/final);
 
 ### JavaDoc
 
@@ -201,7 +201,7 @@ Legend:
 ## Compiling sources
 ### Using precompiled jars (recommended)
 
-The already packaged jars can be found here: [client](), [server]().
+The already packaged jars can be found here: [jars](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/jars).
 
 ### Manual packaging
 You can compile the sources on your machine using [Maven](https://maven.apache.org/)<sup>(<i>opens external site</i>)</sup> (must be installed on your computer).<br>
