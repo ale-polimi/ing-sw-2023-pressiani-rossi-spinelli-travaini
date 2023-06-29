@@ -20,12 +20,12 @@ I requisiti del progetto sono disponibili qui: [requisiti](https://github.com/al
 
 ## Documentazione
 ### UML
-- [UML iniziali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/uml/UML-iniziali.png);
-- [UML finali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/uml/final);
+- [UML iniziali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/uml/UML-iniziali.png);
+- [UML finali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/uml/final/UML_Diagrams_Final.png);
 
 ### JavaDoc
 
-La maggior parte delle classi e dei metodi sono stati commentati e descritti seguendo lo standard Java con JavaDoc. La documentazione è disponibile qui: [report JavaDoc](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/javadoc).
+La maggior parte delle classi e dei metodi sono stati commentati e descritti seguendo lo standard Java con JavaDoc. La documentazione è disponibile qui: [report JavaDoc](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/tree/master/deliverables/javadoc).
 
 ### JUnit testing
 
@@ -65,7 +65,7 @@ Legenda:
 ## Compilazione file sorgente
 ### Utilizzando i jar precompilati (consigliato)
 
-Si possono utilizzare i jar precompilati che possono essere trovati qui: [jars](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/jars).
+Si possono utilizzare i jar precompilati che possono essere trovati qui: [jars](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/tree/master/deliverables/jars).
 
 ### Compilazione manuale
 
@@ -155,12 +155,12 @@ The project's requirements are available here: [requirements](https://github.com
 ## Documentation
 ### UML
 
-- [Initial UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/uml/UML-iniziali.png);
-- [Completed UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/uml/final);
+- [Initial UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/uml/UML-iniziali.png);
+- [Completed UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/deliverables/uml/final/UML_Diagrams_Final.png);
 
 ### JavaDoc
 
-The vast majority of the classes and methods of the application are commented and described following the Java standards with JavaDoc. The docs are available here: [JavaDoc report](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/javadoc).
+The vast majority of the classes and methods of the application are commented and described following the Java standards with JavaDoc. The docs are available here: [JavaDoc report](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/tree/master/deliverables/javadoc).
 
 ### Junit testing
 
@@ -201,7 +201,7 @@ Legend:
 ## Compiling sources
 ### Using precompiled jars (recommended)
 
-The already packaged jars can be found here: [jars](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/0bb7b8cf9f675e1f5172879bb5560ff64466555e/deliverables/jars).
+The already packaged jars can be found here: [jars](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/tree/master/deliverables/jars).
 
 ### Manual packaging
 You can compile the sources on your machine using [Maven](https://maven.apache.org/)<sup>(<i>opens external site</i>)</sup> (must be installed on your computer).<br>
