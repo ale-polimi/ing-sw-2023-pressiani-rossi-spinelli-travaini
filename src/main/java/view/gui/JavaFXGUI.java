@@ -9,6 +9,9 @@ import view.gui.scene.StartSceneController;
 
 import java.io.IOException;
 
+/**
+ * Main class for the GUI application.
+ */
 public class JavaFXGUI extends Application {
 
     public static boolean isSocket;

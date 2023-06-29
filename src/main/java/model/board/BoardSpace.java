@@ -6,6 +6,9 @@ import observer.Observable;
 
 import java.io.Serializable;
 
+/**
+ * This class represents the single tile (called board space) of the {@link Board}.
+ */
 public class BoardSpace extends Observable implements Serializable {
     private TypeSpace typeSpace;
     private ObjectCard objectContained;

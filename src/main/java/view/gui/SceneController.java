@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Main controller for the GUI scenes.
+ */
 public class SceneController extends ViewObservable {
 
     private static Scene activeScene;

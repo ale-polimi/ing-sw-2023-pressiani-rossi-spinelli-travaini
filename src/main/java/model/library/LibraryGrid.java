@@ -5,6 +5,9 @@ import model.objects.ObjectCard;
 
 import java.io.Serializable;
 
+/**
+ * This class represents the grid inside the {@link Library library}.
+ */
 public class LibraryGrid implements Serializable {
     protected LibrarySpace[][] libraryGrid = new LibrarySpace[6][5];
 

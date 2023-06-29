@@ -1,6 +1,9 @@
 package model.objects;
 import java.util.ArrayList;
 
+/**
+ * This class represents the deck of cards as specified by the rules of the game. It contains 132 {@link ObjectCard cards}.
+ */
 public class ObjectsDeck {
     private ArrayList<ObjectCard> objectsDeck;
     private int availableObjects ;

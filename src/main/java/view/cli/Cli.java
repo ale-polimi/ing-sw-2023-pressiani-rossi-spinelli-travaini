@@ -708,6 +708,7 @@ public class Cli extends ViewObservable implements View {
     public void setMyTurn(boolean turn) {this.myTurn=turn;}
     @Override
     public void askChat() {
+        out.print(Colours.SHOW_CURSOR);
         if(myTurn)return;
         boolean validInput;
         do{
@@ -722,6 +723,7 @@ public class Cli extends ViewObservable implements View {
                 switch (text[0]) {
                     case "EXIT" -> {
                         out.println("Exiting chat service");
+                        out.print(Colours.HIDE_CURSOR);
                         chatAbilitator = false;
                         return;
                     }

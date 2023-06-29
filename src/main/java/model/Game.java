@@ -21,6 +21,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * This class represents the game. It will contain the main components for the game, such as:
+ * <ul>
+ *     <li>A {@link Board board};</li>
+ *     <li>An {@link ArrayList} of {@link Player players};</li>
+ *     <li>The {@link ObjectsDeck deck} of object cards;</li>
+ * </ul>
+ */
 public class Game extends Observable implements Observer {
     private Board board;
     private GameState gameState;

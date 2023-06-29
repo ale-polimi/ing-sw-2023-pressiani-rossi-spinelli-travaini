@@ -9,6 +9,9 @@ import observer.Observer;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 
+/**
+ * This class represents the board of the game.
+ */
 public class Board extends Observable implements Serializable, Observer {
     private BoardSpace[][] boardSpaces;
     PropertyChangeListener listener;

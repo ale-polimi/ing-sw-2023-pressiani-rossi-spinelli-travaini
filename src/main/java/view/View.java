@@ -54,7 +54,7 @@ public interface View {
      * @param completedCommonObjectives      is the array of points for each completed common objective.
      * @param availableCommonObjectivePoints is the array of available points for each common objective.
      * @param firstPlayerToEnd               is the nickname of the first player that has finished the game.
-     * @param playerNickname
+     * @param playerNickname                 is the nickname of the player. Needed for the GUI.
      */
     void showTurn(String player, Board gameBoard, Library playerLibrary, ArrayList<ObjectCard> playerObjInHand, int[] completedCommonObjectives, int[] availableCommonObjectivePoints, String firstPlayerToEnd, String playerNickname);
 

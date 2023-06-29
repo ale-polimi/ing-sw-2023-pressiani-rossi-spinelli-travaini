@@ -6,6 +6,9 @@ import model.objects.ObjectCard;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * This class represents the single space (called library space) inside the {@link Library}. The library space will contain one {@link ObjectCard object}.
+ */
 public class LibrarySpace implements Serializable {
     private ObjectCard objectContained;
     private int group = 0;

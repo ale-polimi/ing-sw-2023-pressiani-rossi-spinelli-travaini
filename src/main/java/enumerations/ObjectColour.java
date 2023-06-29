@@ -2,6 +2,9 @@ package enumerations;
 
 import model.objects.ObjectCard;
 
+/**
+ * This enumeration contains all the different types of objects.
+ */
 public enum ObjectColour {
     /**
      * GREEN1 is Gatti1.1.png
@@ -76,10 +79,15 @@ public enum ObjectColour {
      */
     PINK3,
     /**
-     * Fake colour used in the View.
+     * Fake colour used in the {@link model.library.Library library}.
      */
     EMPTY;
 
+    /**
+     * This method checks if a colour is equal to another colour.
+     * @param objectColour is the colour to compare.
+     * @return {@code true} if the colours are of the same type (e.g. {@code GREEN1.isEquals(GREEN2) = TRUE}), {@code false} otherwise (e.g. {@code GREEN1.isEquals(BLUE1) = FALSE}.
+     */
     public boolean isEquals(ObjectColour objectColour){
         switch (this){
             case GREEN1,GREEN2,GREEN3 -> {

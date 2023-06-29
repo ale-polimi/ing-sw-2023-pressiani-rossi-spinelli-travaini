@@ -9,7 +9,6 @@ import java.rmi.RemoteException;
 /**
  * This interface represents a generic client.
  */
-
 public interface Client extends Remote{
 
     /**

@@ -4,6 +4,9 @@ import model.library.Library;
 
 import java.io.Serializable;
 
+/**
+ * Abstract class for the common objectives. The specialized objectives will extend this.
+ */
 public abstract class CommonObjective implements Serializable {
     ObjectiveNumeral objectiveNumeral;
     String description;

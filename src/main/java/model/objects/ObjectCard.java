@@ -5,6 +5,9 @@ import enumerations.ObjectColour;
 import java.io.Serializable;
 import java.util.Random;
 
+/**
+ * This class represents the single object card. Each card has a {@link ObjectColour type}.
+ */
 public class ObjectCard implements Serializable {
     private final ObjectColour objectColour;
 

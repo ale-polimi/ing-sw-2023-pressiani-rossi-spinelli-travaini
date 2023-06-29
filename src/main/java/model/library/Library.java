@@ -3,6 +3,9 @@ package model.library;
 import enumerations.ObjectColour;
 import model.objects.ObjectCard;
 
+/**
+ * This class represents the library of a player.
+ */
 public class Library extends LibraryGrid {
 
     /**

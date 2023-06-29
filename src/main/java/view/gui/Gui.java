@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Graphical interface (GUI) for the game.
+ */
 public class Gui extends ViewObservable implements View {
 
     private  boolean myTurn= true;

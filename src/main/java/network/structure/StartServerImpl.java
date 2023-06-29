@@ -20,6 +20,18 @@ import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Main class for the server application. The user can decide the ports to use with the following command line parameters:
+ * <ul>
+ *     <li>[OPTIONAL] First parameter: will define the port for the socket connection.</li>
+ *     <li>[OPTIONAL] Second parameter: will define the port for the RMI connection.</li>
+ * </ul>
+ * If <b>both</b> parameters are not set, the server will start using the following ports:
+ * <ul>
+ *     <li>12345 for the socket;</li>
+ *     <li>1099 for the client;</li>
+ * </ul>
+ */
 public class StartServerImpl implements Observer, Runnable {
     private ServerRMI serverRMI;
     private SocketServer socketServer;

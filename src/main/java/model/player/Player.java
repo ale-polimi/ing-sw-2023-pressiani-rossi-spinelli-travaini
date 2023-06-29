@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class represents a player.
+ */
 public class Player extends Observable {
     private final String nickname;
     private boolean firstPlayer;
