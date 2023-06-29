@@ -20,12 +20,12 @@ I requisiti del progetto sono disponibili qui: [requisiti](https://github.com/al
 
 ## Documentazione
 ### UML
-- [UML iniziali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/9b9074f8e68b82d4b1df46013449e0ffbcf4ba67/deliverables/junit-testing/JUnit_report.PNG);
+- [UML iniziali](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/uml/UML-iniziali.png);
 - [UML finali]();
 
 ### JavaDoc
 
-La maggior parte delle classi e dei metodi sono stati commentati e descritti seguendo lo standard Java con JavaDoc. La documentazione è disponibile qui:
+La maggior parte delle classi e dei metodi sono stati commentati e descritti seguendo lo standard Java con JavaDoc. La documentazione è disponibile qui: [report JavaDoc](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/javadoc).
 
 ### JUnit testing
 
@@ -155,12 +155,12 @@ The project's requirements are available here: [requirements](https://github.com
 ## Documentation
 ### UML
 
-- [Initial UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/9b9074f8e68b82d4b1df46013449e0ffbcf4ba67/deliverables/junit-testing/JUnit_report.PNG);
+- [Initial UML](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/uml/UML-iniziali.png);
 - [Completed UML]();
 
 ### JavaDoc
 
-The vast majority of the classes and methods of the application are commented and described following the Java standards with JavaDoc. The docs are available here:
+The vast majority of the classes and methods of the application are commented and described following the Java standards with JavaDoc. The docs are available here: [JavaDoc report](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/43b7121047d1c5d788177db73249ba1ed56e0abc/deliverables/javadoc).
 
 ### Junit testing
 
