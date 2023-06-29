@@ -718,33 +718,30 @@ public class Cli extends ViewObservable implements View {
                          "Type -c_-p_Receiver_message to send a private message\n" +
                          "Type SEE to see the chat log\n"+
                          "Type EXIT to exit chat");
-            try {
-                String[] text = readLine().split("_");
-                switch (text[0]) {
-                    case "EXIT" -> {
-                        out.println("Exiting chat service");
-                        out.print(Colours.HIDE_CURSOR);
-                        chatAbilitator = false;
-                        return;
-                    }
-                    case "-c" -> {
-                        validInput = true;
-                        if (text[1].equals("-p"))
-                            notifyObserver(viewObserver -> viewObserver.onChatMessage(null, text[2], text[3]));
-                        else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", text[1]));
-                    }
-                    case "SEE" -> {
-                        validInput = true;
-                        notifyObserver(viewObserver -> viewObserver.onChatLogMessage());
-                    }
-                    default -> {
-                        out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
-                        out.print(Colours.RESET);
-                        validInput = false;
-                    }
+            Scanner textScanner = new Scanner(System.in);
+            String[] text = textScanner.nextLine().split("_");
+            switch (text[0]) {
+                case "EXIT" -> {
+                    out.println("Exiting chat service");
+                    out.print(Colours.HIDE_CURSOR);
+                    chatAbilitator = false;
+                    return;
                 }
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
+                case "-c" -> {
+                    validInput = true;
+                    if (text[1].equals("-p"))
+                        notifyObserver(viewObserver -> viewObserver.onChatMessage(null, text[2], text[3]));
+                    else notifyObserver(viewObserver -> viewObserver.onChatMessage(null, "all", text[1]));
+                }
+                case "SEE" -> {
+                    validInput = true;
+                    notifyObserver(viewObserver -> viewObserver.onChatLogMessage());
+                }
+                default -> {
+                    out.println("" + Colours.RED + Colours.BOLD + "Invalid input!");
+                    out.print(Colours.RESET);
+                    validInput = false;
+                }
             }
         }while(!validInput);
     }
