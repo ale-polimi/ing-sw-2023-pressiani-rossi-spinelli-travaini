@@ -268,7 +268,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     this.commonObjective2 = commonObjectiveMessage.getCommonObjective2();
 
                 } else {
-                    System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
+                    //System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
                 }
                 break;
             case SHOW_PERSONAL_OBJECTIVE:
@@ -279,7 +279,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     // view.showPersonalObjective(personalObjectiveMessage.getSender(), personalObjectiveMessage.getPersonalObjective());
 
                 } else {
-                    System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
+                    //System.out.println("Ignoring message to: " + message.getSender() + " of type: " + message.getType().toString());
                 }
                 break;
             case SHOW_OTHERS_LIBRARY:
@@ -300,7 +300,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                 view.showWinner(endGameMessage.getWinner(), sortedLeaderboard);
                 break;
             case GENERIC_ERROR:
-                System.out.println(this.getClass().toString() + " I've received an error!");
+                //System.out.println(this.getClass().toString() + " I've received an error!");
                 String typeErr = parseType(message.getSender());
                 String senderErr = parseSender((message.getSender()));
                 if(senderErr.equals(nickname)) {
@@ -308,14 +308,14 @@ public class ClientController extends Observable implements ViewObserver, Observ
                     switch (typeErr) {
                         case "BOARD" -> {
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
-                            System.out.println(this.getClass().toString() + " The error is for the board!");
+                            //System.out.println(this.getClass().toString() + " The error is for the board!");
                             inLibrary = false;
                             inPickup = true;
                             view.askBoardMove();
                         }
                         case "LIBRARY" -> {
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
-                            System.out.println(this.getClass().toString() + " The error is for the library!");
+                            //System.out.println(this.getClass().toString() + " The error is for the library!");
                             inLibrary = true;
                             inPickup = false;
                             view.askLibraryMove();
@@ -331,7 +331,7 @@ public class ClientController extends Observable implements ViewObserver, Observ
                             view.askMaxPlayer();
                         }
                         case "GENERIC" -> {
-                            System.out.println(this.getClass().toString() + " The error is generic :(");
+                            //System.out.println(this.getClass().toString() + " The error is generic :(");
                             view.showGenericError(senderErr, genericErrorMessage.getPayload());
                         }
                         default -> {
