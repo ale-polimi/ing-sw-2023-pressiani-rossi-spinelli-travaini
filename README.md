@@ -87,7 +87,7 @@ Se <b>entrambi</b> i valori non sono impostati, il server partirà con i valori 
 - 12345 per socket;
 - 1099 per RMI;
 
-:warning: Si consiglia di disabilitare le schede di rete virtuali o inutilizzate, altrimenti il server RMI potrebbe non funzionare correttamente.<br>
+:warning: Si consiglia di disabilitare le schede di rete virtuali o inutilizzate, altrimenti la connessione RMI potrebbe non funzionare correttamente.<br>
 
 Si consiglia di non utilizzare porte già usate da altre applicazioni e di consentire le connessioni su tali porte nel vostro firewall e router.
 
@@ -106,7 +106,8 @@ Connessione:
 - ```-socket``` o ```-s``` per utilizzare la connessione socket;
 - ```-rmi``` o ```-r``` per utilizzare la connessione RMI;
 
-Si consiglia di consentire le connessioni su tali porte nel vostro firewall e router.
+Si consiglia di consentire le connessioni su tali porte nel vostro firewall e router.<br>
+:warning: Si consiglia di disabilitare le schede di rete virtuali o inutilizzate, altrimenti la connessione RMI potrebbe non funzionare correttamente.<br>
 
 ## Requisiti di sistema
 
@@ -119,6 +120,7 @@ Per l'interfaccia CLI:
 
 Per l'interfaccia GUI:
 - Uno schermo con risoluzione maggiore di 1366x768 px;
+- Per una maggiore uniformità dell'interfaccia, è consigliata l'installazione di questo font: [Rancho](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/tree/master/src/main/resources/fonts/Rancho);
 
 ### Compatibilità dell'applicazione
 
@@ -222,7 +224,7 @@ If <b>both</b> are not set the server will start using the default ports:
 - 12345 for socket;
 - 1099 for RMI;
 
-:warning: Disable all your virtual and unused NICs otherwise the RMI server may not work correctly.<br>
+:warning: Disable all your virtual and unused NICs otherwise the RMI connection may not work correctly.<br>
 
 Please be sure that the ports are not used by another application and are allowed through your firewall and router.
 
@@ -241,7 +243,8 @@ Connection:
 - ```-socket``` or ```-s``` will use the socket connection;
 - ```-rmi``` or ```-r``` will use the RMI connection;
 
-Please make sure the ports are open on your firewall and router.
+Please make sure the ports are open on your firewall and router.<br>
+:warning: Disable all your virtual and unused NICs otherwise the RMI connection may not work correctly.<br>
 
 ## System Requirements
 
@@ -254,6 +257,7 @@ For CLI game:
 
 For GUI game:
  - A screen larger than 1366x768 px;
+ - For a better uniformity of the application, it's recommended to install this font: [Rancho](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/tree/master/src/main/resources/fonts/Rancho);
 
 ### Application Compatibility
 
