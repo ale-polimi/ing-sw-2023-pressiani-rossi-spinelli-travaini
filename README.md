@@ -138,7 +138,7 @@ La compatibilità con altri sistemi operativi non è stata collaudata, la vostra
 
 ## Copyright e licenza
 
-Il progetto è distribuito sotto **[licenza MIT](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/LICENSE.md)**, si applicano le limitazioni descritte in tale licenza.<br>
+Il progetto è distribuito sotto **[licenza MIT](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/LICENSE.md)**, si applicano le limitazioni descritte in tale licenza.<br>
 **NOTA:** My Shelfie è un gioco da tavolo sviluppato ed edito da Cranio Creations Srl. I contenuti grafici di questo progetto riconducibili al prodotto editoriale da tavolo sono utilizzati previa approvazione di Cranio Creations Srl a solo scopo didattico. È vietata la distribuzione, la copia o la riproduzione dei contenuti e immagini in qualsiasi forma al di fuori del progetto, così come la redistribuzione e la pubblicazione dei contenuti e immagini a fini diversi da quello sopracitato. È inoltre vietato l'utilizzo commerciale di suddetti contenuti.
 
 <hr></hr>
@@ -281,7 +281,7 @@ Compatibility with other OSes has not been tested, your experience may vary.
 ## Copyright and license
 
 **The following translation does not hold any legal value, always refer to the [Italian version](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini#copyright-e-licenza)**<br>
-This project is distributed under **[MIT license](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/LICENSE.md)**, all the limitations described in said license apply.<br>
+This project is distributed under **[MIT license](https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/LICENSE.md)**, all the limitations described in said license apply.<br>
 **NOTE:** My Shelfie is a board game developed and edited by Cranio Creations Srl. The graphic contents of this project related to the tabletop publishing product are used with the prior approval of Cranio Creations Srl for educational purposes only. The distribution, copying or reproduction of the contents and images in any form outside of the project is prohibited, as is the redistribution and publication of the contents and images for purposes other than those stated above. The commercial use of said contents is also prohibited.
 
 
