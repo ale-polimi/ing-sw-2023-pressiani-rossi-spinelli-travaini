@@ -286,5 +286,5 @@ This project is distributed under **[MIT license](https://github.com/ale-polimi/
 
 
 
-[license]: https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/LICENSE.md
+[license]: https://github.com/ale-polimi/ing-sw-2023-pressiani-rossi-spinelli-travaini/blob/master/LICENSE.md
 [license-image]: https://img.shields.io/badge/License-MIT-blue.svg
